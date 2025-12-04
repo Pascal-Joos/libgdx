@@ -33,12 +33,7 @@ public class TextureRegion {
   int regionWidth, regionHeight;
 
   /** Constructs a region that cannot be used until a texture and texture coordinates are set. */
-  public TextureRegion() {
-    this.texture =
-        new com.badlogic.gdx.graphics.Texture(
-            new com.badlogic.gdx.graphics.Pixmap(
-                1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888));
-  }
+  public TextureRegion() {}
 
   /** Constructs a region the size of the specified texture. */
   public TextureRegion(@Nullable Texture texture) {
