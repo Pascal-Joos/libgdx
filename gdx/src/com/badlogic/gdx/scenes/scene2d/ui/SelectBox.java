@@ -687,11 +687,7 @@ public class SelectBox<T> extends Widget implements Disableable {
     public ListStyle listStyle;
     @Nullable public @Null Drawable backgroundOver, backgroundOpen, backgroundDisabled;
 
-    public SelectBoxStyle() {
-      this.font = new com.badlogic.gdx.graphics.g2d.BitmapFont();
-      this.scrollStyle = new com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle();
-      this.listStyle = new com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle();
-    }
+    public SelectBoxStyle() {}
 
     public SelectBoxStyle(
         BitmapFont font,
