@@ -87,7 +87,6 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
   @Override
   public Vector2 set(@Nullable Vector2 v) {
-    if (v == null) throw new NullPointerException("v cannot be null");
     x = v.x;
     y = v.y;
     return this;
