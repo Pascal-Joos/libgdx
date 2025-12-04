@@ -153,9 +153,6 @@ public class PointSpriteParticleBatch
     for (PointSpriteControllerRenderData data : renderData) {
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
-      if (regionChannel == null) {
-        continue;
-      }
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
