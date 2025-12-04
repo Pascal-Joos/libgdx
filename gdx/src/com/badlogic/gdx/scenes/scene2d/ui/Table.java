@@ -69,10 +69,9 @@ public class Table extends WidgetGroup {
   private final Cell cellDefaults;
   private final Array<Cell> columnDefaults = new Array(2);
   @Nullable private Cell rowDefaults;
-
   private boolean sizeInvalid = true;
   private float[] columnMinWidth, rowMinHeight;
-  private float[] columnPrefWidth, rowPrefHeight;
+  private float[] columnPrefWidth = new float[0], rowPrefHeight = new float[0];
   private float tableMinWidth, tableMinHeight;
   private float tablePrefWidth, tablePrefHeight;
   private float[] columnWidth, rowHeight;
