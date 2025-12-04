@@ -851,7 +851,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getSpaceRight() {
-    return actor == null ? 0 : spaceRight.get(actor);
+    return spaceRight.get(actor);
   }
 
   /**
