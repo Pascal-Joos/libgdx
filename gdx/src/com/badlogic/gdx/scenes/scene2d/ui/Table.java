@@ -71,7 +71,7 @@ public class Table extends WidgetGroup {
   @Nullable private Cell rowDefaults;
 
   private boolean sizeInvalid = true;
-  private float[] columnMinWidth, rowMinHeight;
+  private @Nullable float[] columnMinWidth, rowMinHeight;
   private float[] columnPrefWidth, rowPrefHeight;
   private float tableMinWidth, tableMinHeight;
   private float tablePrefWidth, tablePrefHeight;
@@ -820,8 +820,10 @@ public class Table extends WidgetGroup {
   }
 
   /** Returns the min height of the specified row. */
+  /** Returns the min height of the specified row. */
   public float getRowMinHeight(int rowIndex) {
     if (sizeInvalid) computeSize();
+    if (rowMinHeight == null) return 0;
     return rowMinHeight[rowIndex];
   }
 
@@ -1068,9 +1070,13 @@ public class Table extends WidgetGroup {
       rowWeightedHeight = Table.rowWeightedHeight = ensureSize(Table.rowWeightedHeight, rows);
       float extraHeight = Math.min(totalGrowHeight, Math.max(0, layoutHeight - tableMinHeight));
       float[] rowMinHeight = this.rowMinHeight, rowPrefHeight = this.rowPrefHeight;
+      if (rowMinHeight == null || rowPrefHeight == null) return;
       for (int i = 0; i < rows; i++) {
         float growHeight = rowPrefHeight[i] - rowMinHeight[i];
         float growRatio = growHeight / totalGrowHeight;
+        rowWeightedHeight[i] = rowMinHeight[i] + extraHeight * growRatio;
+      }
+    }
         rowWeightedHeight[i] = rowMinHeight[i] + extraHeight * growRatio;
       }
     }
