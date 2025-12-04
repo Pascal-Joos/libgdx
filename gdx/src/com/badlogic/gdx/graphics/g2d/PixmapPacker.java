@@ -484,7 +484,7 @@ public class PixmapPacker implements Disposable {
           atlas.getRegions().add(region);
         }
         page.addedRects.clear();
-        if (page.texture != null) atlas.getTextures().add(page.texture);
+        atlas.getTextures().add(page.texture);
       }
     }
   }
