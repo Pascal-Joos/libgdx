@@ -165,7 +165,6 @@ public class TextureArray extends GLTexture {
    * @return the number of managed TextureArrays currently loaded
    */
   public static int getNumManagedTextureArrays() {
-    Array<TextureArray> arrays = managedTextureArrays.get(Gdx.app);
-    return arrays == null ? 0 : arrays.size;
+    return managedTextureArrays.get(Gdx.app).size;
   }
 }
