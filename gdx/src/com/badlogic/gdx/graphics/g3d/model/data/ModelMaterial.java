@@ -26,7 +26,7 @@ public class ModelMaterial {
     Phong
   }
 
-  public String id;
+  public String id = "";
 
   @Nullable public MaterialType type;
 
