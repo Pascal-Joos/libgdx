@@ -93,7 +93,8 @@ public class ProgressBar extends Widget implements Disableable {
     if (min > max)
       throw new IllegalArgumentException("max must be > min. min,max: " + min + ", " + max);
     if (stepSize <= 0) throw new IllegalArgumentException("stepSize must be > 0: " + stepSize);
-    setStyle(style);
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
     this.min = min;
     this.max = max;
     this.stepSize = stepSize;
