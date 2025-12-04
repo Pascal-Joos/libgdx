@@ -97,30 +97,28 @@ public class PointSpriteParticleBatch
       @Nullable BlendingAttribute blendingAttribute,
       @Nullable DepthTestAttribute depthTestAttribute) {
     super(PointSpriteControllerRenderData.class);
+
+    if (!pointSpritesEnabled) enablePointSprites();
+
     this.blendingAttribute = blendingAttribute;
     this.depthTestAttribute = depthTestAttribute;
+
+    if (this.blendingAttribute == null)
+      this.blendingAttribute = new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f);
+    if (this.depthTestAttribute == null)
+      this.depthTestAttribute = new DepthTestAttribute(GL20.GL_LEQUAL, false);
+
     allocRenderable();
     ensureCapacity(capacity);
+    renderable.shader = new ParticleShader(renderable, shaderConfig);
+    renderable.shader.init();
   }
 
   @Override
-  public void allocParticlesData(int capacity) {
+  protected void allocParticlesData(int capacity) {
     vertices = new float[capacity * CPU_VERTEX_SIZE];
+    if (renderable.meshPart.mesh != null) renderable.meshPart.mesh.dispose();
     renderable.meshPart.mesh = new Mesh(false, capacity, 0, CPU_ATTRIBUTES);
-  }
-
-  @Override
-  public void ensureCapacity(int capacity) {
-    if (vertices == null || vertices.length < capacity * CPU_VERTEX_SIZE) {
-      float[] newVertices = new float[capacity * CPU_VERTEX_SIZE];
-      if (vertices != null) {
-        System.arraycopy(vertices, 0, newVertices, 0, vertices.length);
-      }
-      vertices = newVertices;
-      Mesh oldMesh = renderable.meshPart.mesh;
-      renderable.meshPart.mesh = new Mesh(false, capacity, 0, CPU_ATTRIBUTES);
-      oldMesh.dispose();
-    }
   }
 
   protected void allocRenderable() {
@@ -157,81 +155,43 @@ public class PointSpriteParticleBatch
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
-      @Nullable FloatChannel rotationChannel = data.rotationChannel;
-      if (rotationChannel == null) {
-        // No rotation data; skip writing rotation for these particles
-        for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
-          int offset = offsets[tp] * CPU_VERTEX_SIZE;
-          int regionOffset = p * regionChannel.strideSize;
-          int positionOffset = p * positionChannel.strideSize;
-          int colorOffset = p * colorChannel.strideSize;
+      FloatChannel rotationChannel = data.rotationChannel;
 
-          vertices[offset + CPU_POSITION_OFFSET] =
-              positionChannel.data[positionOffset + ParticleChannels.XOffset];
-          vertices[offset + CPU_POSITION_OFFSET + 1] =
-              positionChannel.data[positionOffset + ParticleChannels.YOffset];
-          vertices[offset + CPU_POSITION_OFFSET + 2] =
-              positionChannel.data[positionOffset + ParticleChannels.ZOffset];
-          vertices[offset + CPU_COLOR_OFFSET] =
-              colorChannel.data[colorOffset + ParticleChannels.RedOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 1] =
-              colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 2] =
-              colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 3] =
-              colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
-              scaleChannel.data[p * scaleChannel.strideSize];
-          // Default rotation: cos = 1, sin = 0
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] = 1f;
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] = 0f;
-          vertices[offset + CPU_REGION_OFFSET] =
-              regionChannel.data[regionOffset + ParticleChannels.UOffset];
-          vertices[offset + CPU_REGION_OFFSET + 1] =
-              regionChannel.data[regionOffset + ParticleChannels.VOffset];
-          vertices[offset + CPU_REGION_OFFSET + 2] =
-              regionChannel.data[regionOffset + ParticleChannels.U2Offset];
-          vertices[offset + CPU_REGION_OFFSET + 3] =
-              regionChannel.data[regionOffset + ParticleChannels.V2Offset];
-        }
-      } else {
-        FloatChannel rotationChannelNonNull = rotationChannel;
-        for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
-          int offset = offsets[tp] * CPU_VERTEX_SIZE;
-          int regionOffset = p * regionChannel.strideSize;
-          int positionOffset = p * positionChannel.strideSize;
-          int colorOffset = p * colorChannel.strideSize;
-          int rotationOffset = p * rotationChannelNonNull.strideSize;
+      for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
+        int offset = offsets[tp] * CPU_VERTEX_SIZE;
+        int regionOffset = p * regionChannel.strideSize;
+        int positionOffset = p * positionChannel.strideSize;
+        int colorOffset = p * colorChannel.strideSize;
+        int rotationOffset = p * rotationChannel.strideSize;
 
-          vertices[offset + CPU_POSITION_OFFSET] =
-              positionChannel.data[positionOffset + ParticleChannels.XOffset];
-          vertices[offset + CPU_POSITION_OFFSET + 1] =
-              positionChannel.data[positionOffset + ParticleChannels.YOffset];
-          vertices[offset + CPU_POSITION_OFFSET + 2] =
-              positionChannel.data[positionOffset + ParticleChannels.ZOffset];
-          vertices[offset + CPU_COLOR_OFFSET] =
-              colorChannel.data[colorOffset + ParticleChannels.RedOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 1] =
-              colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 2] =
-              colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
-          vertices[offset + CPU_COLOR_OFFSET + 3] =
-              colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
-              scaleChannel.data[p * scaleChannel.strideSize];
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
-              rotationChannelNonNull.data[rotationOffset + ParticleChannels.CosineOffset];
-          vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
-              rotationChannelNonNull.data[rotationOffset + ParticleChannels.SineOffset];
-          vertices[offset + CPU_REGION_OFFSET] =
-              regionChannel.data[regionOffset + ParticleChannels.UOffset];
-          vertices[offset + CPU_REGION_OFFSET + 1] =
-              regionChannel.data[regionOffset + ParticleChannels.VOffset];
-          vertices[offset + CPU_REGION_OFFSET + 2] =
-              regionChannel.data[regionOffset + ParticleChannels.U2Offset];
-          vertices[offset + CPU_REGION_OFFSET + 3] =
-              regionChannel.data[regionOffset + ParticleChannels.V2Offset];
-        }
+        vertices[offset + CPU_POSITION_OFFSET] =
+            positionChannel.data[positionOffset + ParticleChannels.XOffset];
+        vertices[offset + CPU_POSITION_OFFSET + 1] =
+            positionChannel.data[positionOffset + ParticleChannels.YOffset];
+        vertices[offset + CPU_POSITION_OFFSET + 2] =
+            positionChannel.data[positionOffset + ParticleChannels.ZOffset];
+        vertices[offset + CPU_COLOR_OFFSET] =
+            colorChannel.data[colorOffset + ParticleChannels.RedOffset];
+        vertices[offset + CPU_COLOR_OFFSET + 1] =
+            colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
+        vertices[offset + CPU_COLOR_OFFSET + 2] =
+            colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
+        vertices[offset + CPU_COLOR_OFFSET + 3] =
+            colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
+            scaleChannel.data[p * scaleChannel.strideSize];
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
+            rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
+            rotationChannel.data[rotationOffset + ParticleChannels.SineOffset];
+        vertices[offset + CPU_REGION_OFFSET] =
+            regionChannel.data[regionOffset + ParticleChannels.UOffset];
+        vertices[offset + CPU_REGION_OFFSET + 1] =
+            regionChannel.data[regionOffset + ParticleChannels.VOffset];
+        vertices[offset + CPU_REGION_OFFSET + 2] =
+            regionChannel.data[regionOffset + ParticleChannels.U2Offset];
+        vertices[offset + CPU_REGION_OFFSET + 3] =
+            regionChannel.data[regionOffset + ParticleChannels.V2Offset];
       }
     }
 
