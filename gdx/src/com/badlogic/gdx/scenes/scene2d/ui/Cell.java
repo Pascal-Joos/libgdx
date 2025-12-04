@@ -39,6 +39,7 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable Boolean uniformX, uniformY;
 
   @Nullable @Null Actor actor;
+  private static final Actor DUMMY_ACTOR = new Actor();
   float actorX, actorY;
   float actorWidth, actorHeight;
 
@@ -873,7 +874,8 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPadLeft() {
-    return padLeft.get(actor);
+    Actor nonNullActor = actor != null ? actor : DUMMY_ACTOR;
+    return padLeft.get(nonNullActor);
   }
 
   /**
