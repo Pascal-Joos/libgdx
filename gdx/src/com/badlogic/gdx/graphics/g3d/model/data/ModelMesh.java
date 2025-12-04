@@ -23,5 +23,5 @@ public class ModelMesh {
   @Nullable public String id;
   @Nullable public VertexAttribute[] attributes;
   @Nullable public float[] vertices;
-  public ModelMeshPart[] parts;
+  public ModelMeshPart[] parts = new ModelMeshPart[0];
 }
