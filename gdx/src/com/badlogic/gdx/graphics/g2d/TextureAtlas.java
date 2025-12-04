@@ -497,7 +497,7 @@ public class TextureAtlas implements Disposable {
               region.originalWidth = region.width;
               region.originalHeight = region.height;
             }
-            if (names != null && values != null && names.size > 0) {
+            if (names != null && names.size > 0) {
               region.names = names.toArray(String.class);
               region.values = values.toArray(int[].class);
               names.clear();
