@@ -53,7 +53,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Initializer
     @Override
-    @Initializer
     public void allocateChannels() {
       rotationChannel = controller.particles.addChannel(ParticleChannels.Rotation3D);
       accellerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
@@ -93,7 +92,7 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   public abstract static class Strength extends DynamicsModifier {
-    @Nullable protected FloatChannel strengthChannel;
+    protected FloatChannel strengthChannel;
     public ScaledNumericValue strengthValue;
 
     public Strength() {
@@ -107,7 +106,6 @@ public abstract class DynamicsModifier extends Influencer {
     }
 
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       ParticleChannels.Interpolation.id = controller.particleChannels.newId();
@@ -165,7 +163,6 @@ public abstract class DynamicsModifier extends Influencer {
     }
 
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       ParticleChannels.Interpolation4.id = controller.particleChannels.newId();
@@ -222,7 +219,6 @@ public abstract class DynamicsModifier extends Influencer {
     }
 
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       rotationalVelocity2dChannel =
@@ -262,7 +258,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Initializer
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       rotationChannel = controller.particles.addChannel(ParticleChannels.Rotation3D);
@@ -353,7 +348,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Initializer
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       accelerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
@@ -413,7 +407,6 @@ public abstract class DynamicsModifier extends Influencer {
     }
 
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       directionalVelocityChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
@@ -478,7 +471,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Initializer
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       directionalVelocityChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
@@ -550,7 +542,6 @@ public abstract class DynamicsModifier extends Influencer {
     }
 
     @Override
-    @Initializer
     public void allocateChannels() {
       super.allocateChannels();
       accelerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
@@ -594,7 +585,6 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   @Override
-  @Initializer
   public void allocateChannels() {
     lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
   }
