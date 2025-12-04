@@ -756,7 +756,6 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   /**
-   * @return May be null if this cell is row defaults. /**
    * @return May be null if this cell is row defaults.
    */
   public @Null Value getMinHeightValue() {
@@ -775,8 +774,6 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPrefWidth() {
-    if (actor == null)
-      throw new IllegalStateException("actor cannot be null when getting prefWidth");
     return prefWidth.get(actor);
   }
 
