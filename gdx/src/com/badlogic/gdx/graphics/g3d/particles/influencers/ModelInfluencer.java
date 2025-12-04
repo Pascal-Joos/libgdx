@@ -122,10 +122,12 @@ public abstract class ModelInfluencer extends Influencer {
   ObjectChannel<ModelInstance> modelChannel;
 
   public ModelInfluencer() {
+    allocateChannels();
     this.models = new Array<Model>(true, 1, Model.class);
   }
 
   public ModelInfluencer(Model... models) {
+    allocateChannels();
     this.models = new Array<Model>(models);
   }
 
