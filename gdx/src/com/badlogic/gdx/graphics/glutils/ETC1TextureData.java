@@ -105,6 +105,7 @@ public class ETC1TextureData implements TextureData {
       if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
     }
     data.dispose();
+    data = null;
     isPrepared = false;
   }
 
