@@ -267,7 +267,6 @@ public class ModelCache implements Disposable, RenderableProvider {
     result.bones = null;
     result.environment = null;
     result.material = material;
-    result.meshPart.mesh = null;
     result.meshPart.offset = 0;
     result.meshPart.size = 0;
     result.meshPart.primitiveType = primitiveType;
