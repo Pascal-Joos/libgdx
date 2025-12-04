@@ -380,7 +380,9 @@ public class TextField extends Widget implements Disableable {
             width - bgLeftWidth - bgRightWidth);
       }
     } else {
-      font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * color.a * parentAlpha);
+      if (fontColor != null)
+        font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * color.a * parentAlpha);
+      else font.setColor(color.r, color.g, color.b, color.a * parentAlpha);
       drawText(batch, font, x + bgLeftWidth, y + textY + yOffset);
     }
     if (!disabled && cursorOn && cursorPatch != null) {
