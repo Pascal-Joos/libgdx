@@ -25,13 +25,16 @@ import com.badlogic.gdx.graphics.g3d.particles.batches.ModelInstanceParticleBatc
 import com.badlogic.gdx.graphics.g3d.particles.batches.ParticleBatch;
 import javax.annotation.Nullable;
 
+/**
+ * A {@link ParticleControllerRenderer} which will render particles as {@link ModelInstance} to a
+ * {@link ModelInstanceParticleBatch}.
+ *
+ * @author Inferno
+ */
 public class ModelInstanceRenderer
     extends ParticleControllerRenderer<
         ModelInstanceControllerRenderData, ModelInstanceParticleBatch> {
-
-  private boolean hasColor;
-  private boolean hasScale;
-  private boolean hasRotation;
+  private boolean hasColor, hasScale, hasRotation;
 
   public ModelInstanceRenderer() {
     super(new ModelInstanceControllerRenderData());
@@ -68,11 +71,13 @@ public class ModelInstanceRenderer
       float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
       if (hasRotation && renderData.rotationChannel != null) {
-        int rotationOffset = i * renderData.rotationChannel.strideSize;
-        qx = renderData.rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
-        qy = renderData.rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
-        qz = renderData.rotationChannel.data[rotationOffset + ParticleChannels.ZOffset];
-        qw = renderData.rotationChannel.data[rotationOffset + ParticleChannels.WOffset];
+        final com.badlogic.gdx.utils.Array.ParallelArray.FloatChannel rotationChannel = renderData.rotationChannel;
+        int rotationOffset = i * rotationChannel.strideSize;
+        qx = rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
+        qy = rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
+        qz = rotationChannel.data[rotationOffset + ParticleChannels.ZOffset];
+        qw = rotationChannel.data[rotationOffset + ParticleChannels.WOffset];
+      }
       }
 
       instance.transform.set(
