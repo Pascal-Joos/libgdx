@@ -905,7 +905,7 @@ public class Table extends WidgetGroup {
 
       // Determine minimum and preferred cell sizes.
       float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
+      float minWidth = c.minWidth.get(), minHeight = c.minHeight.get();
       float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
