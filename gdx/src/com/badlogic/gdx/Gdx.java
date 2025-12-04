@@ -39,6 +39,6 @@ public class Gdx {
   @Nullable public static Net net;
 
   public static GL20 gl;
-  public static GL20 gl20 = new com.badlogic.gdx.graphics.GL20Mock();
+  public static GL20 gl20;
   public static GL30 gl30;
 }
