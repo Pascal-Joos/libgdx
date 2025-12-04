@@ -57,7 +57,6 @@ public abstract class ParticleSorter {
     private float[] distances;
     private int[] particleIndices, particleOffsets;
     private int currentSize = 0;
-
     @Override
     public void ensureCapacity(int capacity) {
       if (currentSize < capacity) {
@@ -70,6 +69,9 @@ public abstract class ParticleSorter {
 
     @Override
     public <T extends ParticleControllerRenderData> int[] sort(Array<T> renderData) {
+      if (camera == null) {
+        return particleOffsets;
+      }
       float[] val = camera.view.val;
       float cx = val[Matrix4.M20], cy = val[Matrix4.M21], cz = val[Matrix4.M22];
       int count = 0, i = 0;
@@ -118,9 +120,37 @@ public abstract class ParticleSorter {
         // Quick
         float pivot = distances[si];
         int i = si + 1;
-        particlesPivotIndex = particleIndices[si];
+        int j = ei;
+        while (i <= j) {
+          while (i <= ei && distances[i] <= pivot) i++;
+          while (distances[j] > pivot) j--;
+          if (i < j) {
+            tmp = distances[i];
+            distances[i] = distances[j];
+            distances[j] = tmp;
 
-        // partition array
+            // Swap indices
+            tmpIndex = particleIndices[i];
+            particleIndices[i] = particleIndices[j];
+            particleIndices[j] = tmpIndex;
+          }
+        }
+
+        // Swap with pivot
+        tmp = distances[si];
+        distances[si] = distances[j];
+        distances[j] = tmp;
+
+        // Swap indices
+        particlesPivotIndex = particleIndices[si];
+        particleIndices[si] = particleIndices[j];
+        particleIndices[j] = particlesPivotIndex;
+
+        // Recurse
+        qsort(si, j - 1);
+        qsort(j + 1, ei);
+      }
+    }
         for (int j = si + 1; j <= ei; j++) {
           if (pivot > distances[j]) {
             if (j > i) {
