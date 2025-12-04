@@ -147,11 +147,7 @@ public class MeshPart {
    * @return this MeshPart, for chaining.
    */
   public MeshPart set(
-      final String id,
-      @Nullable final Mesh mesh,
-      final int offset,
-      final int size,
-      final int type) {
+      final String id, final Mesh mesh, final int offset, final int size, final int type) {
     this.id = id;
     this.mesh = mesh;
     this.offset = offset;
