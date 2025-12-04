@@ -75,7 +75,7 @@ public class TextureLoader
       info.data = parameter.textureData;
       info.texture = parameter.texture;
     }
-    if (!info.data.isPrepared()) info.data.prepare();
+    if (info.data != null && !info.data.isPrepared()) info.data.prepare();
   }
 
   @Nullable
@@ -85,7 +85,7 @@ public class TextureLoader
       String fileName,
       FileHandle file,
       @Nullable TextureParameter parameter) {
-    if (info == null) return null;
+    if (info == null || info.data == null) return null;
     Texture texture = info.texture;
     if (texture != null) {
       texture.load(info.data);
@@ -97,34 +97,3 @@ public class TextureLoader
       texture.setWrap(parameter.wrapU, parameter.wrapV);
     }
     return texture;
-  }
-
-  @Nullable
-  @Override
-  public Array<AssetDescriptor> getDependencies(
-      String fileName, FileHandle file, @Nullable TextureParameter parameter) {
-    return null;
-  }
-
-  public static class TextureParameter extends AssetLoaderParameters<Texture> {
-    /** the format of the final Texture. Uses the source images format if null * */
-    @Nullable public Format format = null;
-
-    /** whether to generate mipmaps * */
-    public boolean genMipMaps = false;
-
-    /** The texture to put the {@link TextureData} in, optional. * */
-    @Nullable public Texture texture = null;
-
-    /**
-     * TextureData for textures created on the fly, optional. When set, all format and genMipMaps
-     * are ignored
-     */
-    @Nullable public TextureData textureData = null;
-
-    public TextureFilter minFilter = TextureFilter.Nearest;
-    public TextureFilter magFilter = TextureFilter.Nearest;
-    public TextureWrap wrapU = TextureWrap.ClampToEdge;
-    public TextureWrap wrapV = TextureWrap.ClampToEdge;
-  }
-}
