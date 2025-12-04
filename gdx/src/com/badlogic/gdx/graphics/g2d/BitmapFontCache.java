@@ -82,8 +82,11 @@ public class BitmapFontCache {
 
     pageVertices = new float[pageCount][];
     idx = new int[pageCount];
-    pageGlyphIndices = new IntArray[pageCount];
-    for (int i = 0, n = pageGlyphIndices.length; i < n; i++) pageGlyphIndices[i] = new IntArray();
+    if (pageCount > 1) {
+      // Contains the indices of the glyph in the cache as they are added.
+      pageGlyphIndices = new IntArray[pageCount];
+      for (int i = 0, n = pageGlyphIndices.length; i < n; i++) pageGlyphIndices[i] = new IntArray();
+    }
     tempGlyphCount = new int[pageCount];
   }
 
