@@ -74,13 +74,11 @@ public class Touchpad extends Widget {
    */
   public Touchpad(float deadzoneRadius, TouchpadStyle style) {
     if (deadzoneRadius < 0) throw new IllegalArgumentException("deadzoneRadius must be > 0");
-    if (style == null) throw new IllegalArgumentException("style cannot be null");
     this.deadzoneRadius = deadzoneRadius;
-    this.style = style;
 
     knobPosition.set(getWidth() / 2f, getHeight() / 2f);
 
-    invalidateHierarchy();
+    setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
 
     addListener(
