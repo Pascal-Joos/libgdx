@@ -105,6 +105,7 @@ public class Vector3 implements Serializable, Vector<Vector3> {
 
   @Override
   public Vector3 set(@Nullable final Vector3 vector) {
+    if (vector == null) return this;
     return this.set(vector.x, vector.y, vector.z);
   }
 
