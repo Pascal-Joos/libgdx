@@ -43,7 +43,7 @@ public class CubemapLoader
     extends AsynchronousAssetLoader<Cubemap, CubemapLoader.CubemapParameter> {
   public static class CubemapLoaderInfo {
     @Nullable String filename;
-    @Nullable CubemapData data;
+    CubemapData data;
     @Nullable Cubemap cubemap;
   }
   ;
@@ -73,14 +73,12 @@ public class CubemapLoader
 
       if (fileName.contains(".ktx") || fileName.contains(".zktx")) {
         info.data = new KTXTextureData(file, genMipMaps);
-      } else {
-        info.data = null;
       }
     } else {
       info.data = parameter.cubemapData;
       info.cubemap = parameter.cubemap;
     }
-    if (info.data != null && !info.data.isPrepared()) info.data.prepare();
+    if (!info.data.isPrepared()) info.data.prepare();
   }
 
   @Nullable
@@ -90,7 +88,7 @@ public class CubemapLoader
       String fileName,
       FileHandle file,
       @Nullable CubemapParameter parameter) {
-    if (info == null || info.data == null) return null;
+    if (info == null) return null;
     Cubemap cubemap = info.cubemap;
     if (cubemap != null) {
       cubemap.load(info.data);
