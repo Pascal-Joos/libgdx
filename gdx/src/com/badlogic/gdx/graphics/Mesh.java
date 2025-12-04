@@ -752,7 +752,7 @@ public class Mesh implements Disposable {
       }
     } else {
       int numInstances = 0;
-      if (isInstanced) numInstances = instances.getNumInstances();
+      if (isInstanced && instances != null) numInstances = instances.getNumInstances();
 
       if (indices.getNumIndices() > 0) {
         if (count + offset > indices.getNumMaxIndices()) {
