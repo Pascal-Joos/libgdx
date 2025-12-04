@@ -651,7 +651,6 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    * @author Nathan Sweet
    */
   public abstract static class Node<N extends Node, V, A extends Actor> {
-    private static final Actor DUMMY_ACTOR = new Actor();
     A actor;
     @Nullable N parent;
     final Array<N> children = new Array(0);
@@ -670,9 +669,7 @@ public class Tree<N extends Node, V> extends WidgetGroup {
      * Creates a node without an actor. An actor must be set using {@link #setActor(Actor)} before
      * this node can be used.
      */
-    public Node() {
-      this.actor = (A) DUMMY_ACTOR;
-    }
+    public Node() {}
 
     public void setExpanded(boolean expanded) {
       if (expanded == this.expanded) return;
