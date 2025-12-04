@@ -97,9 +97,6 @@ public class DecalBatch implements Disposable {
    */
   @Initializer
   public void initialize(int size) {
-    if (groupStrategy == null) {
-      groupStrategy = new CameraGroupStrategy(new com.badlogic.gdx.graphics.PerspectiveCamera());
-    }
     vertices = new float[size * Decal.SIZE];
 
     Mesh.VertexDataType vertexDataType = Mesh.VertexDataType.VertexArray;
