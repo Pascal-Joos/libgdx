@@ -265,13 +265,15 @@ public class Model implements Disposable {
     }
     boolean hasIndices = numIndices > 0;
     VertexAttributes attributes = new VertexAttributes(modelMesh.attributes);
-    int numVertices = modelMesh.vertices.length / (attributes.vertexSize / 4);
+    int numVertices =
+        (modelMesh.vertices == null ? 0 : modelMesh.vertices.length) / (attributes.vertexSize / 4);
 
     Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
     meshes.add(mesh);
     disposables.add(mesh);
 
-    BufferUtils.copy(modelMesh.vertices, mesh.getVerticesBuffer(), modelMesh.vertices.length, 0);
+    if (modelMesh.vertices != null)
+      BufferUtils.copy(modelMesh.vertices, mesh.getVerticesBuffer(), modelMesh.vertices.length, 0);
     int offset = 0;
     ((Buffer) mesh.getIndicesBuffer()).clear();
     for (ModelMeshPart part : modelMesh.parts) {
