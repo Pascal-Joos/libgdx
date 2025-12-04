@@ -28,7 +28,7 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable private static Cell defaults;
 
   Value minWidth, minHeight;
-  Value prefWidth, prefHeight;
+  @Nullable Value prefWidth, prefHeight;
   Value maxWidth, maxHeight;
   Value spaceTop, spaceLeft, spaceBottom, spaceRight;
   Value padTop, padLeft, padBottom, padRight;
