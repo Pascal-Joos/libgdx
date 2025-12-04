@@ -155,9 +155,7 @@ public class ModelBuilder {
    */
   public void part(final MeshPart meshpart, final Material material) {
     if (node == null) node();
-    final Node currentNode = node;
-    if (currentNode == null) throw new GdxRuntimeException("Call begin() first");
-    currentNode.parts.add(new NodePart(meshpart, material));
+    node.parts.add(new NodePart(meshpart, material));
   }
 
   /**
