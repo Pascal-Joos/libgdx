@@ -270,16 +270,14 @@ public class ModelBatch implements Disposable {
    * called after the call to {@link #begin(Camera)} and before the call to {@link #end()}.
    */
   public void flush() {
-    if (camera == null) return;
-    final Camera cam = camera;
-    sorter.sort(cam, renderables);
+    sorter.sort(camera, renderables);
     Shader currentShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final Renderable renderable = renderables.get(i);
       if (currentShader != renderable.shader) {
         if (currentShader != null) currentShader.end();
         currentShader = renderable.shader;
-        currentShader.begin(cam, context);
+        currentShader.begin(camera, context);
       }
       currentShader.render(renderable);
     }
