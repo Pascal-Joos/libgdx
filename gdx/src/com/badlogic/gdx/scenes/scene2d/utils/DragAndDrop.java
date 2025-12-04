@@ -132,13 +132,9 @@ public class DragAndDrop {
             if (actor != oldDragActor) {
               if (oldDragActor != null && removeDragActor) oldDragActor.remove();
               dragActor = actor;
-              if (actor != null) {
-                removeDragActor =
-                    actor.getStage() == null; // Only remove later if not already in the stage now.
-                if (removeDragActor) stage.addActor(actor);
-              } else {
-                removeDragActor = false;
-              }
+              removeDragActor =
+                  actor.getStage() == null; // Only remove later if not already in the stage now.
+              if (removeDragActor) stage.addActor(actor);
             }
             if (actor == null) return;
 
@@ -169,7 +165,7 @@ public class DragAndDrop {
               isValidTarget = target.drag(source, payload, tmpVector.x, tmpVector.y, pointer);
             }
             if (dragActor != null && removeDragActor) dragActor.remove();
-            if (isValidTarget && target != null) {
+            if (isValidTarget) {
               float stageX = event.getStageX() + touchOffsetX,
                   stageY = event.getStageY() + touchOffsetY;
               target.actor.stageToLocalCoordinates(tmpVector.set(stageX, stageY));
