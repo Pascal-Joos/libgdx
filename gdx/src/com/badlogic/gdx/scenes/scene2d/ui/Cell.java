@@ -30,8 +30,7 @@ public class Cell<T extends Actor> implements Poolable {
   Value minWidth, minHeight;
   Value prefWidth, prefHeight;
   Value maxWidth, maxHeight;
-  Value spaceTop, spaceLeft, spaceBottom;
-  @Nullable Value spaceRight;
+  Value spaceTop, spaceLeft, spaceBottom, spaceRight;
   Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
@@ -990,6 +989,8 @@ public class Cell<T extends Actor> implements Poolable {
     spaceTop = null;
     spaceLeft = null;
     spaceBottom = null;
+    spaceRight = null;
+    padTop = null;
     padLeft = null;
     padBottom = null;
     padRight = null;
