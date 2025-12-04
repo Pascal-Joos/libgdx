@@ -1,18 +1,16 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS file.
+/*
+ * Copyright 2011-2022 See AUTHORS file.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
 
 package com.badlogic.gdx.scenes.scene2d.ui;
 
@@ -45,6 +43,66 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Slider extends ProgressBar {
+
+  private static final Drawable EMPTY_BACKGROUND =
+      new Drawable() {
+        @Override
+        public void draw(
+            com.badlogic.gdx.graphics.g2d.Batch batch,
+            float x,
+            float y,
+            float width,
+            float height) {}
+
+        @Override
+        public float getLeftWidth() {
+          return 0;
+        }
+
+        @Override
+        public void setLeftWidth(float leftWidth) {}
+
+        @Override
+        public float getRightWidth() {
+          return 0;
+        }
+
+        @Override
+        public void setRightWidth(float rightWidth) {}
+
+        @Override
+        public float getTopHeight() {
+          return 0;
+        }
+
+        @Override
+        public void setTopHeight(float topHeight) {}
+
+        @Override
+        public float getBottomHeight() {
+          return 0;
+        }
+
+        @Override
+        public void setBottomHeight(float bottomHeight) {}
+
+        @Override
+        public float getMinWidth() {
+          return 0;
+        }
+
+        @Override
+        public void setMinWidth(float minWidth) {}
+
+        @Override
+        public float getMinHeight() {
+          return 0;
+        }
+
+        @Override
+        public void setMinHeight(float minHeight) {}
+      };
+
   int button = -1;
   int draggingPointer = -1;
   boolean mouseOver;
@@ -134,12 +192,11 @@ public class Slider extends ProgressBar {
     return mouseOver;
   }
 
+  /** Returns a non-null background drawable, falling back to a no-op drawable if unset. */
   protected @Null Drawable getBackgroundDrawable() {
     SliderStyle style = (SliderStyle) super.getStyle();
-    if (disabled && style.disabledBackground != null) return style.disabledBackground;
-    if (isDragging() && style.backgroundDown != null) return style.backgroundDown;
-    if (mouseOver && style.backgroundOver != null) return style.backgroundOver;
-    return style.background;
+    if (style.background != null) return style.background;
+    return EMPTY_BACKGROUND;
   }
 
   @Nullable
@@ -222,77 +279,79 @@ public class Slider extends ProgressBar {
     return bestDiff == -1 ? value : bestValue;
   }
 
-  /**
-   * Will make this progress bar snap to the specified values, if the knob is within the threshold.
-   *
-   * @param values May be null.
-   */
-  public void setSnapToValues(@Null float[] values, float threshold) {
+  public void setSnapToValues(@Nullable float[] values, float threshold) {
     this.snapValues = values;
     this.threshold = threshold;
   }
 
-  /** Returns true if the slider is being dragged. */
   public boolean isDragging() {
     return draggingPointer != -1;
   }
 
-  /**
-   * Sets the mouse button, which can trigger a change of the slider. Is -1, so every button, by
-   * default.
-   */
+  public int getButton() {
+    return button;
+  }
+
   public void setButton(int button) {
     this.button = button;
   }
 
-  /**
-   * Sets the inverse interpolation to use for display. This should perform the inverse of the
-   * {@link #setVisualInterpolation(Interpolation) visual interpolation}.
-   */
+  public Interpolation getVisualInterpolationInverse() {
+    return visualInterpolationInverse;
+  }
+
   public void setVisualInterpolationInverse(Interpolation interpolation) {
+    if (interpolation == null)
+      throw new IllegalArgumentException("visualInterpolationInverse cannot be null.");
     this.visualInterpolationInverse = interpolation;
   }
 
-  /**
-   * Sets the value using the specified visual percent.
-   *
-   * @see #setVisualInterpolation(Interpolation)
-   */
   public void setVisualPercent(float percent) {
-    setValue(min + (max - min) * visualInterpolationInverse.apply(percent));
+    if (percent < 0 || percent > 1)
+      throw new IllegalArgumentException("percent must be >= 0 and <= 1: " + percent);
+    position = (vertical ? getHeight() : getWidth()) * percent;
   }
 
-  /**
-   * The style for a slider, see {@link Slider}.
-   *
-   * @author mzechner
-   * @author Nathan Sweet
-   */
+  public float getVisualPercent() {
+    float min = getMinValue();
+    float max = getMaxValue();
+    if (max <= min) return 0;
+    return (getValue() - min) / (max - min);
+  }
+
+  /** The style for a slider, see {@link Slider}. */
   public static class SliderStyle extends ProgressBarStyle {
-    @Nullable public @Null Drawable backgroundOver, backgroundDown;
-    @Nullable public @Null Drawable knobOver, knobDown;
-    @Nullable public @Null Drawable knobBeforeOver, knobBeforeDown;
-    @Nullable public @Null Drawable knobAfterOver, knobAfterDown;
+    public @Null Drawable backgroundDown, backgroundOver;
+    public @Null Drawable knob, knobDown, knobOver;
+    public @Null Drawable disabledBackground, disabledKnob;
+    public @Null Drawable knobBefore, knobBeforeDown, knobBeforeOver;
+    public @Null Drawable knobAfter, knobAfterDown, knobAfterOver;
+    public @Null Drawable disabledKnobBefore, disabledKnobAfter;
 
     public SliderStyle() {}
 
     public SliderStyle(@Null Drawable background, @Null Drawable knob) {
-      super(background, knob);
+      this.background = background;
+      this.knob = knob;
     }
 
     public SliderStyle(SliderStyle style) {
       super(style);
-      backgroundOver = style.backgroundOver;
-      backgroundDown = style.backgroundDown;
-
-      knobOver = style.knobOver;
-      knobDown = style.knobDown;
-
-      knobBeforeOver = style.knobBeforeOver;
-      knobBeforeDown = style.knobBeforeDown;
-
-      knobAfterOver = style.knobAfterOver;
-      knobAfterDown = style.knobAfterDown;
+      this.backgroundDown = style.backgroundDown;
+      this.backgroundOver = style.backgroundOver;
+      this.knob = style.knob;
+      this.knobDown = style.knobDown;
+      this.knobOver = style.knobOver;
+      this.disabledBackground = style.disabledBackground;
+      this.disabledKnob = style.disabledKnob;
+      this.knobBefore = style.knobBefore;
+      this.knobBeforeDown = style.knobBeforeDown;
+      this.knobBeforeOver = style.knobBeforeOver;
+      this.knobAfter = style.knobAfter;
+      this.knobAfterDown = style.knobAfterDown;
+      this.knobAfterOver = style.knobAfterOver;
+      this.disabledKnobBefore = style.disabledKnobBefore;
+      this.disabledKnobAfter = style.disabledKnobAfter;
     }
   }
 }
