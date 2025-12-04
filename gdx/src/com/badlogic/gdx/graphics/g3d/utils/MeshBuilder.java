@@ -73,7 +73,7 @@ public class MeshBuilder implements MeshPartBuilder {
   private final Color tempC1 = new Color();
 
   /** The vertex attributes of the resulting mesh */
-  @Nullable private VertexAttributes attributes;
+  private VertexAttributes attributes;
 
   /** The vertices to construct, no size checking is done */
   private FloatArray vertices = new FloatArray();
