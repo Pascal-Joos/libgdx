@@ -483,7 +483,66 @@ public class SplitPane extends WidgetGroup {
   public static class SplitPaneStyle {
     public Drawable handle;
 
-    public SplitPaneStyle() {}
+    public SplitPaneStyle() {
+      this.handle =
+          new Drawable() {
+            @Override
+            public void draw(
+                com.badlogic.gdx.graphics.g2d.Batch batch,
+                float x,
+                float y,
+                float width,
+                float height) {}
+
+            @Override
+            public float getLeftWidth() {
+              return 0;
+            }
+
+            @Override
+            public void setLeftWidth(float leftWidth) {}
+
+            @Override
+            public float getRightWidth() {
+              return 0;
+            }
+
+            @Override
+            public void setRightWidth(float rightWidth) {}
+
+            @Override
+            public float getTopHeight() {
+              return 0;
+            }
+
+            @Override
+            public void setTopHeight(float topHeight) {}
+
+            @Override
+            public float getBottomHeight() {
+              return 0;
+            }
+
+            @Override
+            public void setBottomHeight(float bottomHeight) {}
+
+            @Override
+            public float getMinWidth() {
+              return 0;
+            }
+
+            @Override
+            public void setMinWidth(float minWidth) {}
+
+            @Override
+            public float getMinHeight() {
+              return 0;
+            }
+
+            @Override
+            public void setMinHeight(float minHeight) {}
+          };
+    }
 
     public SplitPaneStyle(Drawable handle) {
       this.handle = handle;
