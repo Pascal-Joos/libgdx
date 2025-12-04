@@ -55,7 +55,7 @@ public abstract class ParticleSorter {
   /** This class will sort all the particles using the distance from camera. */
   public static class Distance extends ParticleSorter {
     private float[] distances;
-    private int[] particleIndices, particleOffsets;
+    private int[] particleIndices, particleOffsets = new int[0];
     private int currentSize = 0;
 
     @Override
