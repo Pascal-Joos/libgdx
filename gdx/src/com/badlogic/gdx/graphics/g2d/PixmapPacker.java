@@ -32,7 +32,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.OrderedMap;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -485,7 +484,7 @@ public class PixmapPacker implements Disposable {
           atlas.getRegions().add(region);
         }
         page.addedRects.clear();
-        atlas.getTextures().add(Objects.requireNonNull(page.texture));
+        atlas.getTextures().add(page.texture);
       }
     }
   }
@@ -603,7 +602,6 @@ public class PixmapPacker implements Disposable {
      *
      * @see #updateTexture(TextureFilter, TextureFilter, boolean)
      */
-    @Nullable
     public Texture getTexture() {
       return texture;
     }
@@ -695,7 +693,6 @@ public class PixmapPacker implements Disposable {
         packer.pages.add(page);
         node = insert(page.root, rect);
       }
-      if (node == null) return (GuillotinePage) packer.pages.peek();
       node.full = true;
       rect.set(node.rect.x, node.rect.y, node.rect.width - padding, node.rect.height - padding);
       return page;
