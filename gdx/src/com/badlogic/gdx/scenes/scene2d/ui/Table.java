@@ -71,12 +71,12 @@ public class Table extends WidgetGroup {
   @Nullable private Cell rowDefaults;
 
   private boolean sizeInvalid = true;
-  private float[] columnMinWidth = new float[0], rowMinHeight = new float[0];
-  private float[] columnPrefWidth = new float[0], rowPrefHeight = new float[0];
+  private float[] columnMinWidth, rowMinHeight;
+  private float[] columnPrefWidth, rowPrefHeight;
   private float tableMinWidth, tableMinHeight;
   private float tablePrefWidth, tablePrefHeight;
-  private float[] columnWidth = new float[0], rowHeight = new float[0];
-  private float[] expandWidth = new float[0], expandHeight = new float[0];
+  private float[] columnWidth, rowHeight;
+  private float[] expandWidth, expandHeight;
   Value padTop = backgroundTop,
       padLeft = backgroundLeft,
       padBottom = backgroundBottom,
