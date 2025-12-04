@@ -53,7 +53,7 @@ public class RegularEmitter extends Emitter implements Json.Serializable {
   private boolean continuous;
   private EmissionMode emissionMode;
 
-  @javax.annotation.Nullable private FloatChannel lifeChannel;
+  private FloatChannel lifeChannel;
 
   public RegularEmitter() {
     delayValue = new RangedNumericValue();
@@ -117,16 +117,12 @@ public class RegularEmitter extends Emitter implements Json.Serializable {
     }
     float lifePercent = 1 - currentLife / (float) currentTotaLife;
 
-    for (int i = startIndex * java.util.Objects.requireNonNull(lifeChannel).strideSize,
-            c = i + count * java.util.Objects.requireNonNull(lifeChannel).strideSize;
+    for (int i = startIndex * lifeChannel.strideSize, c = i + count * lifeChannel.strideSize;
         i < c;
-        i += java.util.Objects.requireNonNull(lifeChannel).strideSize) {
-      java.util.Objects.requireNonNull(lifeChannel).data[i + ParticleChannels.CurrentLifeOffset] =
-          currentLife;
-      java.util.Objects.requireNonNull(lifeChannel).data[i + ParticleChannels.TotalLifeOffset] =
-          currentTotaLife;
-      java.util.Objects.requireNonNull(lifeChannel).data[i + ParticleChannels.LifePercentOffset] =
-          lifePercent;
+        i += lifeChannel.strideSize) {
+      lifeChannel.data[i + ParticleChannels.CurrentLifeOffset] = currentLife;
+      lifeChannel.data[i + ParticleChannels.TotalLifeOffset] = currentTotaLife;
+      lifeChannel.data[i + ParticleChannels.LifePercentOffset] = lifePercent;
     }
   }
 
@@ -168,26 +164,17 @@ public class RegularEmitter extends Emitter implements Json.Serializable {
     // Update particles
     int activeParticles = controller.particles.size;
     for (int i = 0, k = 0; i < controller.particles.size; ) {
-      if ((java.util.Objects.requireNonNull(java.util.Objects.requireNonNull(lifeChannel))
-                  .data[k + ParticleChannels.CurrentLifeOffset] -=
-              deltaMillis)
-          <= 0) {
+      if ((lifeChannel.data[k + ParticleChannels.CurrentLifeOffset] -= deltaMillis) <= 0) {
         controller.particles.removeElement(i);
         continue;
       } else {
-        java.util.Objects.requireNonNull(java.util.Objects.requireNonNull(lifeChannel))
-                .data[k + ParticleChannels.LifePercentOffset] =
+        lifeChannel.data[k + ParticleChannels.LifePercentOffset] =
             1
-                - java.util.Objects.requireNonNull(java.util.Objects.requireNonNull(lifeChannel))
-                        .data[k + ParticleChannels.CurrentLifeOffset]
-                    / java.util.Objects.requireNonNull(
-                            java.util.Objects.requireNonNull(lifeChannel))
-                        .data[k + ParticleChannels.TotalLifeOffset];
+                - lifeChannel.data[k + ParticleChannels.CurrentLifeOffset]
+                    / lifeChannel.data[k + ParticleChannels.TotalLifeOffset];
       }
       ++i;
-      k +=
-          java.util.Objects.requireNonNull(java.util.Objects.requireNonNull(lifeChannel))
-              .strideSize;
+      k += lifeChannel.strideSize;
     }
 
     if (controller.particles.size < activeParticles) {
