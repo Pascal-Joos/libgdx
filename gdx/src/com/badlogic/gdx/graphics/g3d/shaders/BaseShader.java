@@ -238,9 +238,14 @@ public abstract class BaseShader implements Shader {
     this.camera = camera;
     this.context = context;
     program.bind();
+    final com.badlogic.gdx.graphics.g3d.Renderable globalRenderable =
+        new com.badlogic.gdx.graphics.g3d.Renderable();
+    final com.badlogic.gdx.graphics.g3d.Attributes globalAttributes =
+        new com.badlogic.gdx.graphics.g3d.Attributes();
     currentMesh = null;
     for (int u, i = 0; i < globalUniforms.size; ++i)
-      if (setters.get(u = globalUniforms.get(i)) != null) setters.get(u).set(this, u, null, null);
+      if (setters.get(u = globalUniforms.get(i)) != null)
+        setters.get(u).set(this, u, globalRenderable, globalAttributes);
   }
 
   private final IntArray tempArray = new IntArray();
