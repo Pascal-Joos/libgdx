@@ -114,7 +114,7 @@ public class TextureAtlas implements Disposable {
               region.rotate ? region.height : region.width, //
               region.rotate ? region.width : region.height);
       atlasRegion.index = region.index;
-      atlasRegion.name = region.name;
+      atlasRegion.name = region.name != null ? region.name : "";
       atlasRegion.offsetX = region.offsetX;
       atlasRegion.offsetY = region.offsetY;
       atlasRegion.originalHeight = region.originalHeight;
