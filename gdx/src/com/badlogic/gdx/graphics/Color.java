@@ -115,17 +115,10 @@ public class Color {
    * @param color the Color
    */
   public Color set(@Nullable Color color) {
-    if (color == null) {
-      this.r = 0f;
-      this.g = 0f;
-      this.b = 0f;
-      this.a = 0f;
-    } else {
-      this.r = color.r;
-      this.g = color.g;
-      this.b = color.b;
-      this.a = color.a;
-    }
+    this.r = color.r;
+    this.g = color.g;
+    this.b = color.b;
+    this.a = color.a;
     return this;
   }
 
