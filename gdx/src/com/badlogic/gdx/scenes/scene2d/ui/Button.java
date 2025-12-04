@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Button extends Table implements Disableable {
-  private ButtonStyle style = new ButtonStyle();
+  private ButtonStyle style;
   boolean isChecked, isDisabled;
   @Nullable ButtonGroup buttonGroup;
   private ClickListener clickListener;
