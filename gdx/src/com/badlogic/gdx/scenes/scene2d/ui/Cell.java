@@ -807,7 +807,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getMaxHeight() {
-    return maxHeight.get(actor);
+    return actor == null ? 0f : maxHeight.get(actor);
   }
 
   /**
