@@ -75,7 +75,9 @@ public class TextureLoader
       info.data = parameter.textureData;
       info.texture = parameter.texture;
     }
-    if (!info.data.isPrepared()) info.data.prepare();
+    if (info.data == null) return;
+    TextureData data = info.data;
+    if (!data.isPrepared()) data.prepare();
   }
 
   @Nullable
@@ -85,12 +87,13 @@ public class TextureLoader
       String fileName,
       FileHandle file,
       @Nullable TextureParameter parameter) {
-    if (info == null) return null;
+    if (info == null || info.data == null) return null;
+    TextureData data = info.data;
     Texture texture = info.texture;
     if (texture != null) {
-      texture.load(info.data);
+      texture.load(data);
     } else {
-      texture = new Texture(info.data);
+      texture = new Texture(data);
     }
     if (parameter != null) {
       texture.setFilter(parameter.minFilter, parameter.magFilter);
