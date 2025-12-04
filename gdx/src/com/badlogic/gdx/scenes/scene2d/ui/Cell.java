@@ -763,7 +763,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getMinHeight() {
-    return actor == null ? minHeight.get() : minHeight.get(actor);
+    return minHeight.get(actor);
   }
 
   /**
