@@ -73,7 +73,7 @@ public class ModelInstance implements RenderableProvider {
    * @param model The {@link Model} to create an instance of.
    */
   public ModelInstance(final Model model) {
-    this(model, (String[]) null);
+    this(model, new String[0]);
   }
 
   /**
@@ -283,7 +283,7 @@ public class ModelInstance implements RenderableProvider {
 
   /** Constructs a new ModelInstance with the specified transform. */
   public ModelInstance(final Model model, Matrix4 transform) {
-    this(model, transform, (String[]) null);
+    this(model, transform, new String[0]);
   }
 
   /** Constructs a new ModelInstance which is an copy of the specified ModelInstance. */
