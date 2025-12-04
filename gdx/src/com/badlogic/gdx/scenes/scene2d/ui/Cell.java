@@ -785,7 +785,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPrefHeight() {
-    return actor == null ? 0 : prefHeight.get(actor);
+    return prefHeight.get(actor);
   }
 
   /**
