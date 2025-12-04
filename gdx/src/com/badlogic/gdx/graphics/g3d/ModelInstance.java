@@ -212,9 +212,8 @@ public class ModelInstance implements RenderableProvider {
       copy.translation.set(0, 0, 0);
       copy.rotation.idt();
       copy.scale.set(1, 1, 1);
-    } else if (parentTransform) {
-      this.transform.mul(copy.globalTransform);
-    }
+    } else if (parentTransform && copy.hasParent())
+      this.transform.mul(node.getParent().globalTransform);
     invalidate();
     copyAnimations(model.animations, shareKeyframes);
     calculateTransforms();
