@@ -248,11 +248,11 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
             firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
           } else if (name.equals("Null")) {
             x += currentChild.getIntAttribute("Count");
-          } else if (name.equals("Static") && currentTileSet != null) {
+          } else if (name.equals("Static")) {
             Cell cell = new Cell();
             cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
             layer.setCell(x++, y, cell);
-          } else if (name.equals("Animated") && currentTileSet != null) {
+          } else if (name.equals("Animated")) {
             // Create an AnimatedTile
             int interval = currentChild.getInt("Interval");
             Element frames = currentChild.getChildByName("Frames");
@@ -268,9 +268,7 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
               } else if (frameName.equals("Static")) {
                 frameTiles.add(
                     (StaticTiledMapTile)
-                        ((currentTileSet != null)
-                            ? currentTileSet.getTile(firstgid + frame.getIntAttribute("Index"))
-                            : null));
+                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
               }
             }
             Cell cell = new Cell();
