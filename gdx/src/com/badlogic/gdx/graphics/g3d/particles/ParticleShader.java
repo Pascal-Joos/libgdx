@@ -302,7 +302,9 @@ public class ParticleShader extends BaseShader {
 
   @Override
   public void init() {
-    init(this.program, renderable);
+    final ShaderProgram program = this.program;
+    this.program = null;
+    init(program, renderable);
     renderable = null;
   }
 
