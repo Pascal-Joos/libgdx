@@ -46,7 +46,7 @@ public class RenderableShapeBuilder extends BaseShapeBuilder {
     public Renderable obtain() {
       Renderable renderable = super.obtain();
       renderable.environment = null;
-      renderable.material = new com.badlogic.gdx.graphics.g3d.Material();
+      renderable.material = null;
       renderable.meshPart.set("", null, 0, 0, 0);
       renderable.shader = null;
       renderable.userData = null;
@@ -54,8 +54,8 @@ public class RenderableShapeBuilder extends BaseShapeBuilder {
     }
   }
 
-  private static short[] indices = new short[0];
-  private static float[] vertices = new float[0];
+  private static short[] indices;
+  private static float[] vertices;
   private static final RenderablePool renderablesPool = new RenderablePool();
   private static final Array<Renderable> renderables = new Array<Renderable>();
   private static final int FLOAT_BYTES = 4;
