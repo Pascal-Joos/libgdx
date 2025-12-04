@@ -44,6 +44,7 @@ public abstract class ColorInfluencer extends Influencer {
 
     @Override
     public void activateParticles(int startIndex, int count) {
+      if (colorChannel == null) return;
       for (int i = startIndex * colorChannel.strideSize, c = i + count * colorChannel.strideSize;
           i < c;
           i += colorChannel.strideSize) {
@@ -152,6 +153,7 @@ public abstract class ColorInfluencer extends Influencer {
 
   FloatChannel colorChannel;
 
+  @Initializer
   @Override
   public void allocateChannels() {
     colorChannel = controller.particles.addChannel(ParticleChannels.Color);
