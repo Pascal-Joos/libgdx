@@ -55,7 +55,7 @@ public class RenderableShapeBuilder extends BaseShapeBuilder {
   }
 
   private static short[] indices;
-  private static float[] vertices;
+  private static float[] vertices = new float[0];
   private static final RenderablePool renderablesPool = new RenderablePool();
   private static final Array<Renderable> renderables = new Array<Renderable>();
   private static final int FLOAT_BYTES = 4;
