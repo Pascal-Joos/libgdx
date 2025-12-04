@@ -65,10 +65,10 @@ public class FileTextureData implements TextureData {
     isPrepared = true;
   }
 
+  @Nullable
   @Override
   public Pixmap consumePixmap() {
     if (!isPrepared) throw new GdxRuntimeException("Call prepare() before calling getPixmap()");
-    if (this.pixmap == null) throw new GdxRuntimeException("Pixmap is not available");
     isPrepared = false;
     Pixmap pixmap = this.pixmap;
     this.pixmap = null;
