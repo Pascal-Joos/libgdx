@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 public class Cell<T extends Actor> implements Poolable {
   private static final Float zerof = 0f, onef = 1f;
   private static final Integer zeroi = 0, onei = 1;
+  private static final Value zerov = Fixed.valueOf(0f);
   private static final Integer centeri = onei,
       topi = Align.top,
       bottomi = Align.bottom,
@@ -27,11 +28,11 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable private static Files files;
   @Nullable private static Cell defaults;
 
-  Value minWidth, minHeight;
-  Value prefWidth, prefHeight;
-  Value maxWidth, maxHeight;
-  Value spaceTop, spaceLeft, spaceBottom, spaceRight;
-  Value padTop, padLeft, padBottom, padRight;
+  @Nullable Value minWidth, minHeight;
+  @Nullable Value prefWidth, prefHeight;
+  @Nullable Value maxWidth, maxHeight;
+  @Nullable Value spaceTop, spaceLeft, spaceBottom, spaceRight;
+  @Nullable Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
   Integer expandX, expandY;
