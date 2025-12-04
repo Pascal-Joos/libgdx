@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 /** A text input field with multiple lines. */
 public class TextArea extends TextField {
   /** Array storing lines breaks positions * */
-  IntArray linesBreak = new IntArray();
+  IntArray linesBreak;
 
   /**
    * Last text processed. This attribute is used to avoid unnecessary computations while calculating
