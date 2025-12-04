@@ -69,7 +69,7 @@ public class ParticleEmitter {
   private Particle[] particles;
   private int minParticleCount, maxParticleCount = 4;
   private float x, y;
-  private String name = "";
+  @Nullable private String name;
   private Array<String> imagePaths;
   private int activeCount;
   private boolean[] active;
