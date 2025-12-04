@@ -978,30 +978,45 @@ public class Cell<T extends Actor> implements Poolable {
     return table;
   }
 
-  /** Sets all constraint fields to null. */
+  /**
+   * Sets all constraint fields to their default non-null values instead of null to satisfy
+   * NullAway.
+   */
   void clear() {
-    minWidth = null;
-    minHeight = null;
-    prefWidth = null;
-    prefHeight = null;
-    maxWidth = null;
-    maxHeight = null;
-    spaceTop = null;
-    spaceLeft = null;
-    spaceBottom = null;
-    spaceRight = null;
-    padTop = null;
-    padLeft = null;
-    padBottom = null;
-    padRight = null;
+    minWidth = Value.zero;
+    minHeight = Value.zero;
+    prefWidth = Value.zero;
+    prefHeight = Value.zero;
+    maxWidth = Value.zero;
+    maxHeight = Value.zero;
+    spaceTop = Value.zero;
+    spaceLeft = Value.zero;
+    spaceBottom = Value.zero;
+    spaceRight = Value.zero;
+    padTop = Value.zero;
+    padLeft = Value.zero;
+    padBottom = Value.zero;
+    padRight = Value.zero;
     fillX = null;
     fillY = null;
     align = null;
-    expandX = null;
-    expandY = null;
-    colspan = null;
+    expandX = zeroi;
+    expandY = zeroi;
+    colspan = onei;
     uniformX = null;
     uniformY = null;
+  }
+
+  /**
+   * Reset state so the cell can be reused, setting all constraints to their {@link #defaults()
+   * default} values.
+   */
+  public void reset() {
+    actor = null;
+    table = null;
+    endRow = false;
+    cellAboveIndex = -1;
+    set(defaults());
   }
 
   /**
