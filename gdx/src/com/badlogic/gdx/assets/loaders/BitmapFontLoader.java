@@ -46,7 +46,7 @@ public class BitmapFontLoader
     super(resolver);
   }
 
-  BitmapFontData data = new BitmapFontData();
+  BitmapFontData data;
 
   @Override
   public Array<AssetDescriptor> getDependencies(
