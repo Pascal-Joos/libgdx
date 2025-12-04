@@ -150,7 +150,7 @@ public abstract class ColorInfluencer extends Influencer {
     }
   }
 
-  @Nullable FloatChannel colorChannel;
+  FloatChannel colorChannel;
 
   @Override
   public void allocateChannels() {
