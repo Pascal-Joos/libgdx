@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class TextureRegion {
-  Texture texture;
+  @Nullable Texture texture;
   float u, v;
   float u2, v2;
   int regionWidth, regionHeight;
@@ -78,6 +78,7 @@ public class TextureRegion {
    * @param height The height of the texture region. May be negative to flip the sprite when drawn.
    */
   public TextureRegion(TextureRegion region, int x, int y, int width, int height) {
+    if (region == null) throw new IllegalArgumentException("region cannot be null.");
     setRegion(region, x, y, width, height);
   }
 
