@@ -705,10 +705,8 @@ public class ParticleEmitter {
           sprite = sprites.get(particle.frame);
           break;
       }
-      if (sprite != null) {
-        particle.setRegion(sprite);
-        particle.setOrigin(sprite.getOriginX(), sprite.getOriginY());
-      }
+      particle.setRegion(sprite);
+      particle.setOrigin(sprite.getOriginX(), sprite.getOriginY());
     }
   }
 
