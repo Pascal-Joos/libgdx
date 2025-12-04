@@ -49,7 +49,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  private HttpRequest httpRequest = Pools.obtain(HttpRequest.class);
+  private HttpRequest httpRequest;
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
@@ -179,7 +179,7 @@ public class HttpRequestBuilder {
   public HttpRequest build() {
     validate();
     HttpRequest request = httpRequest;
-    httpRequest = Pools.obtain(HttpRequest.class);
+    httpRequest = null;
     return request;
   }
 
