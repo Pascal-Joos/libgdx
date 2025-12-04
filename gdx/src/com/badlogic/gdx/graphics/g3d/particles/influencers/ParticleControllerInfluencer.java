@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Pool;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 /**
  * It's an {@link Influencer} which controls which {@link ParticleController} will be assigned to a
@@ -167,7 +168,7 @@ public abstract class ParticleControllerInfluencer extends Influencer {
   }
 
   public Array<ParticleController> templates;
-  ObjectChannel<ParticleController> particleControllerChannel;
+  @Nullable ObjectChannel<ParticleController> particleControllerChannel;
 
   public ParticleControllerInfluencer() {
     this.templates = new Array<ParticleController>(true, 1, ParticleController.class);
