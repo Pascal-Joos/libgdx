@@ -47,6 +47,7 @@ public class ImageButton extends Button {
 
   public ImageButton(ImageButtonStyle style) {
     super(style);
+    this.style = style;
     image = newImage();
     add(image);
     setStyle(style);
