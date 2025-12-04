@@ -698,6 +698,8 @@ public class TextureAtlas implements Disposable {
       packedWidth = region.getRegionWidth();
       packedHeight = region.getRegionHeight();
       originalWidth = packedWidth;
+      name = "";
+      values = new int[0][0];
       originalHeight = packedHeight;
     }
 
