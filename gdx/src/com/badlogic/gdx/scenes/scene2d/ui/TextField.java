@@ -84,18 +84,18 @@ public class TextField extends Widget implements Disableable {
   public static float keyRepeatInitialTime = 0.4f;
   public static float keyRepeatTime = 0.1f;
 
-  protected String text;
+  protected String text = "";
   protected int cursor, selectionStart;
   protected boolean hasSelection;
   protected boolean writeEnters;
   protected final GlyphLayout layout = new GlyphLayout();
   protected final FloatArray glyphPositions = new FloatArray();
 
-  TextFieldStyle style;
-  private String messageText;
-  protected CharSequence displayText;
+  TextFieldStyle style = new TextFieldStyle();
+  private String messageText = "";
+  protected CharSequence displayText = "";
   Clipboard clipboard;
-  InputListener inputListener;
+  InputListener inputListener = new InputListener() {};
   @Nullable @Null TextFieldListener listener;
   @Nullable @Null TextFieldFilter filter;
   OnscreenKeyboard keyboard = new DefaultOnscreenKeyboard();
