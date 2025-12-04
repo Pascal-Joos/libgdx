@@ -51,7 +51,7 @@ public class Polyline implements Shape2D {
 
   /** Returns vertices scaled, rotated, and offset by the polygon position. */
   public float[] getTransformedVertices() {
-    if (!dirty && worldVertices != null) return worldVertices;
+    if (!dirty) return worldVertices;
     dirty = false;
 
     final float[] localVertices = this.localVertices;
