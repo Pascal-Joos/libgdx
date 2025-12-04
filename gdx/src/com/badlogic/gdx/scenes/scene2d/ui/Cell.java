@@ -993,7 +993,7 @@ public class Cell<T extends Actor> implements Poolable {
     padTop = null;
     padLeft = null;
     padBottom = null;
-    padRight = Value.zero;
+    padRight = null;
     fillX = null;
     fillY = null;
     align = null;
