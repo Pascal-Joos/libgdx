@@ -149,11 +149,6 @@ public class PointSpriteParticleBatch
 
   @Override
   protected void flush(int[] offsets) {
-    float[] localVertices = vertices;
-    if (localVertices == null) {
-      throw new IllegalStateException("vertices must be allocated before flush");
-    }
-
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
       FloatChannel scaleChannel = data.scaleChannel;
@@ -169,40 +164,39 @@ public class PointSpriteParticleBatch
         int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
 
-        localVertices[offset + CPU_POSITION_OFFSET] =
+        vertices[offset + CPU_POSITION_OFFSET] =
             positionChannel.data[positionOffset + ParticleChannels.XOffset];
-        localVertices[offset + CPU_POSITION_OFFSET + 1] =
+        vertices[offset + CPU_POSITION_OFFSET + 1] =
             positionChannel.data[positionOffset + ParticleChannels.YOffset];
-        localVertices[offset + CPU_POSITION_OFFSET + 2] =
+        vertices[offset + CPU_POSITION_OFFSET + 2] =
             positionChannel.data[positionOffset + ParticleChannels.ZOffset];
-        localVertices[offset + CPU_COLOR_OFFSET] =
+        vertices[offset + CPU_COLOR_OFFSET] =
             colorChannel.data[colorOffset + ParticleChannels.RedOffset];
-        localVertices[offset + CPU_COLOR_OFFSET + 1] =
+        vertices[offset + CPU_COLOR_OFFSET + 1] =
             colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
-        localVertices[offset + CPU_COLOR_OFFSET + 2] =
+        vertices[offset + CPU_COLOR_OFFSET + 2] =
             colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
-        localVertices[offset + CPU_COLOR_OFFSET + 3] =
+        vertices[offset + CPU_COLOR_OFFSET + 3] =
             colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-        localVertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
             scaleChannel.data[p * scaleChannel.strideSize];
-        localVertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
             rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
-        localVertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
             rotationChannel.data[rotationOffset + ParticleChannels.SineOffset];
-        localVertices[offset + CPU_REGION_OFFSET] =
+        vertices[offset + CPU_REGION_OFFSET] =
             regionChannel.data[regionOffset + ParticleChannels.UOffset];
-        localVertices[offset + CPU_REGION_OFFSET + 1] =
+        vertices[offset + CPU_REGION_OFFSET + 1] =
             regionChannel.data[regionOffset + ParticleChannels.VOffset];
-        localVertices[offset + CPU_REGION_OFFSET + 2] =
+        vertices[offset + CPU_REGION_OFFSET + 2] =
             regionChannel.data[regionOffset + ParticleChannels.U2Offset];
-        localVertices[offset + CPU_REGION_OFFSET + 3] =
+        vertices[offset + CPU_REGION_OFFSET + 3] =
             regionChannel.data[regionOffset + ParticleChannels.V2Offset];
       }
     }
 
     renderable.meshPart.size = bufferedParticlesCount;
-    renderable.meshPart.mesh.setVertices(
-        localVertices, 0, bufferedParticlesCount * CPU_VERTEX_SIZE);
+    renderable.meshPart.mesh.setVertices(vertices, 0, bufferedParticlesCount * CPU_VERTEX_SIZE);
     renderable.meshPart.update();
   }
 
