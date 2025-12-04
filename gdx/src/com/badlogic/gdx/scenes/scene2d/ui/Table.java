@@ -883,7 +883,6 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
       Actor a = c.actor;
-      if (a == null) continue;
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -899,7 +898,7 @@ public class Table extends WidgetGroup {
         Cell above = (Cell) cells[c.cellAboveIndex];
         c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
       }
-      float spaceRight = c.spaceRight.get(a != null ? a : Table.this);
+      float spaceRight = c.spaceRight.get(a);
       c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
       c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
       spaceRightLast = spaceRight;
