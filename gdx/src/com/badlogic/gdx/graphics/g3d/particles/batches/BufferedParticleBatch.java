@@ -34,9 +34,8 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
   protected Camera camera;
 
   protected BufferedParticleBatch(Class<T> type) {
-    this.camera = new DummyCamera();
     this.sorter = new ParticleSorter.Distance();
-    renderData = new Array<T>(false, 10, type);
+    renderData = new com.badlogic.gdx.utils.Array<T>(false, 10, type);
   }
 
   public void begin() {
@@ -56,10 +55,7 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
   public void end() {
     if (bufferedParticlesCount > 0) {
       ensureCapacity(bufferedParticlesCount);
-      int[] offsets = sorter.sort(renderData);
-      if (offsets != null) {
-        flush(offsets);
-      }
+      flush(sorter.sort(renderData));
     }
   }
 
@@ -103,21 +99,5 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
 
   public int getBufferedCount() {
     return bufferedParticlesCount;
-  }
-
-  /**
-   * Dummy camera used to satisfy NullAway's non-null initialization requirements. It is replaced as
-   * soon as {@link #setCamera(Camera)} is called.
-   */
-  private static final class DummyCamera extends Camera {
-    @Override
-    public void update() {
-      // no-op dummy implementation
-    }
-
-    @Override
-    public void update(boolean updateFrustum) {
-      // no-op dummy implementation
-    }
   }
 }
