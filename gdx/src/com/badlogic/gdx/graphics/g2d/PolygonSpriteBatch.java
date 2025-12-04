@@ -1435,7 +1435,7 @@ public class PolygonSpriteBatch implements PolygonBatch {
     }
   }
 
-  private void switchTexture(Texture texture) {
+  private void switchTexture(@Nullable Texture texture) {
     flush();
     lastTexture = texture;
     invTexWidth = 1.0f / texture.getWidth();
