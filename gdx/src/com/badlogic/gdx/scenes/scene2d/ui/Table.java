@@ -1089,9 +1089,12 @@ public class Table extends WidgetGroup {
         spannedWeightedWidth += columnWeightedWidth[ii];
       float weightedHeight = rowWeightedHeight[row];
 
-      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
-      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
+      float prefWidth = a == null ? 0 : c.prefWidth.get(a),
+          prefHeight = a == null ? 0 : c.prefHeight.get(a);
+      float minWidth = a == null ? 0 : c.minWidth.get(a),
+          minHeight = a == null ? 0 : c.minHeight.get(a);
+      float maxWidth = a == null ? 0 : c.maxWidth.get(a),
+          maxHeight = a == null ? 0 : c.maxHeight.get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
