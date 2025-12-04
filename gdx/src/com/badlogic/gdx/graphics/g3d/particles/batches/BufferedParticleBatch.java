@@ -55,7 +55,10 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
   public void end() {
     if (bufferedParticlesCount > 0) {
       ensureCapacity(bufferedParticlesCount);
-      flush(sorter.sort(renderData));
+      int[] offsets = sorter.sort(renderData);
+      if (offsets != null) {
+        flush(offsets);
+      }
     }
   }
 
