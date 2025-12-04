@@ -26,7 +26,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData;
 import com.badlogic.gdx.graphics.g3d.particles.batches.ParticleBatch;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -138,10 +137,6 @@ public class ParticleEffectLoader
           break;
         }
       }
-    }
-    if (effectData == null || effectData.resource == null) {
-      throw new GdxRuntimeException(
-          "ParticleEffect resource data not found or resource is null for file: " + fileName);
     }
 
     effectData.resource.load(manager, effectData);
