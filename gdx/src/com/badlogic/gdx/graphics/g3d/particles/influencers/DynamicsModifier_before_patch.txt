@@ -1,0 +1,81 @@
+   520	          TMP_V3.mul(TMP_Q);
+   521	        }
+   522	        TMP_V3.crs(TMP_V1).nor().scl(strength);
+   523	        directionalVelocityChannel.data[i + ParticleChannels.XOffset] += TMP_V3.x;
+   524	        directionalVelocityChannel.data[i + ParticleChannels.YOffset] += TMP_V3.y;
+   525	        directionalVelocityChannel.data[i + ParticleChannels.ZOffset] += TMP_V3.z;
+   526	      }
+   527	    }
+   528	
+   529	    @Override
+   530	    public TangentialAcceleration copy() {
+   531	      return new TangentialAcceleration(this);
+   532	    }
+   533	  }
+   534	
+   535	  public static class BrownianAcceleration extends Strength {
+   536	    @Nullable FloatChannel accelerationChannel;
+   537	
+   538	        @SuppressWarnings("NullAway")
+   539	        private FloatChannel requireAccelerationChannel() {
+   540	          if (accelerationChannel == null) {
+   541	            throw new IllegalStateException("Acceleration channel not allocated");
+   542	          }
+   543	          return accelerationChannel;
+   544	        }
+   545	    public BrownianAcceleration() {}
+   546	
+   547	    public BrownianAcceleration(BrownianAcceleration rotation) {
+   548	      super(rotation);
+   549	    }
+   550	
+   551	    @Override
+   552	        final FloatChannel nonNullAccelerationChannel = requireAccelerationChannel();
+   553	    public void allocateChannels() {
+   554	      super.allocateChannels();
+   555	      accelerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
+   556	    }
+   557	        @SuppressWarnings("NullAway")
+   558	        private FloatChannel requireAccelerationChannel() {
+   559	          if (accelerationChannel == null) {
+   560	        final FloatChannel nonNullAccelerationChannel = requireAccelerationChannel();
+   561	            throw new IllegalStateException("Acceleration channel not allocated");
+   562	          }
+   563	          return accelerationChannel;
+   564	        }
+   565	
+   566	    @Override
+   567	    public void update() {
+   568	      int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
+   569	      for (int i = 0, c = controller.particles.size;
+   570	          i < c;
+   571	          ++i, strengthOffset += strengthChannel.strideSize,
+   572	              forceOffset += accelerationChannel.strideSize, lifeOffset += lifeChannel.strideSize) {
+   573	
+   574	        float strength =
+   575	            strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
+   576	                + strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
+   577	                    * strengthValue.getScale(lifeChannel.data[lifeOffset]);
+   578	        TMP_V3
+   579	            .set(MathUtils.random(-1, 1f), MathUtils.random(-1, 1f), MathUtils.random(-1, 1f))
+   580	            .nor()
+   581	            .scl(strength);
+   582	        accelerationChannel.data[forceOffset + ParticleChannels.XOffset] += TMP_V3.x;
+   583	        accelerationChannel.data[forceOffset + ParticleChannels.YOffset] += TMP_V3.y;
+   584	        accelerationChannel.data[forceOffset + ParticleChannels.ZOffset] += TMP_V3.z;
+   585	      }
+   586	    }
+   587	
+   588	    @Override
+   589	    public BrownianAcceleration copy() {
+   590	      return new BrownianAcceleration(this);
+   591	    }
+   592	  }
+   593	
+   594	  public boolean isGlobal = false;
+   595	  protected FloatChannel lifeChannel;
+   596	
+   597	  public DynamicsModifier() {}
+   598	
+   599	  public DynamicsModifier(DynamicsModifier modifier) {
+   600	    this.isGlobal = modifier.isGlobal;
