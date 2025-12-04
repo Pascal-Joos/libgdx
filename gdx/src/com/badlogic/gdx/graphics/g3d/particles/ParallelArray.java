@@ -280,8 +280,7 @@ public class ParallelArray {
     for (Channel array : arrays) {
       if (array.id == descriptor.id) return (T) array;
     }
-    throw new com.badlogic.gdx.utils.GdxRuntimeException(
-        "Channel not found for descriptor: " + descriptor.id);
+    return null;
   }
 
   /** Removes all the channels and sets size to 0 */
