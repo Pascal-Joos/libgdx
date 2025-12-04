@@ -192,7 +192,6 @@ public class Matrix4 implements Serializable {
    * @return This matrix for the purpose of chaining methods together.
    */
   public Matrix4 set(@Nullable Matrix4 matrix) {
-    if (matrix == null) return idt();
     return set(matrix.val);
   }
 
