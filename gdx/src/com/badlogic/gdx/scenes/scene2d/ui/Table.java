@@ -84,7 +84,7 @@ public class Table extends WidgetGroup {
   int align = Align.center;
 
   Debug debug = Debug.none;
-  @Nullable Array<DebugRect> debugRects;
+  Array<DebugRect> debugRects = new Array<DebugRect>();
 
   @Nullable @Null Drawable background;
   private boolean clip;
