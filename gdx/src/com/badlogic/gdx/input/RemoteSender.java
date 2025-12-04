@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputProcessor;
 import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -55,6 +56,16 @@ public class RemoteSender implements InputProcessor {
       connected = true;
       Gdx.input.setInputProcessor(this);
     } catch (Exception e) {
+      // Fallback to a no-op stream so that 'out' is always initialized
+      out =
+          new DataOutputStream(
+              new OutputStream() {
+                @Override
+                public void write(int b) {
+                  // ignore
+                }
+              });
+      connected = false;
       Gdx.app.log("RemoteSender", "couldn't connect to " + ip + ":" + port);
     }
   }
@@ -80,7 +91,6 @@ public class RemoteSender implements InputProcessor {
       out.writeFloat(Gdx.input.getGyroscopeY());
       out.writeFloat(Gdx.input.getGyroscopeZ());
     } catch (Throwable t) {
-      out = null;
       connected = false;
     }
   }
@@ -199,18 +209,12 @@ public class RemoteSender implements InputProcessor {
   }
 
   @Override
-  public boolean mouseMoved(int x, int y) {
-    return false;
-  }
-
-  @Override
   public boolean scrolled(float amountX, float amountY) {
     return false;
   }
 
-  public boolean isConnected() {
-    synchronized (this) {
-      return connected;
-    }
+  @Override
+  public boolean mouseMoved(int screenX, int screenY) {
+    return false;
   }
 }
