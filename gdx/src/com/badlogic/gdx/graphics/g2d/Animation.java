@@ -96,7 +96,12 @@ public class Animation<T> {
    */
   public Animation(float frameDuration, T... keyFrames) {
     this.frameDuration = frameDuration;
-    setKeyFrames(keyFrames);
+    if (keyFrames == null) {
+      this.keyFrames = (T[]) new Object[0];
+    } else {
+      this.keyFrames = keyFrames;
+    }
+    this.animationDuration = this.keyFrames.length * frameDuration;
   }
 
   /**
