@@ -289,7 +289,7 @@ public abstract class BaseShader implements Shader {
 
   @Override
   public void dispose() {
-    // program is intentionally kept non-null; ShaderProgram lifecycle is managed externally.
+    program = null;
     uniforms.clear();
     validators.clear();
     setters.clear();
