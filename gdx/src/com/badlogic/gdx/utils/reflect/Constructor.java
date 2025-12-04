@@ -17,7 +17,6 @@
 package com.badlogic.gdx.utils.reflect;
 
 import java.lang.reflect.InvocationTargetException;
-import javax.annotation.Nullable;
 
 /**
  * Provides information about, and access to, a single constructor for a Class.
@@ -57,7 +56,7 @@ public final class Constructor {
    * Uses the constructor to create and initialize a new instance of the constructor's declaring
    * class, with the supplied initialization parameters.
    */
-  public Object newInstance(@Nullable Object... args) throws ReflectionException {
+  public Object newInstance(Object... args) throws ReflectionException {
     try {
       return constructor.newInstance(args);
     } catch (IllegalArgumentException e) {
