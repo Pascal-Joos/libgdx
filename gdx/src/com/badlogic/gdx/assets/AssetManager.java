@@ -158,7 +158,7 @@ public class AssetManager implements Disposable {
    * @throws GdxRuntimeException if the asset is not loaded
    */
   public synchronized <T> T get(String fileName, Class<T> type) {
-    return java.util.Objects.requireNonNull(get(fileName, type, true));
+    return get(fileName, type, true);
   }
 
   /**
@@ -204,9 +204,8 @@ public class AssetManager implements Disposable {
    * @return the asset
    * @throws GdxRuntimeException if the asset is not loaded
    */
-  public synchronized <T> T get(AssetDescriptor<T> assetDescriptor) {
-    return java.util.Objects.requireNonNull(
-        get(assetDescriptor.fileName, assetDescriptor.type, true));
+  public synchronized <T> T get(@Nullable AssetDescriptor<T> assetDescriptor) {
+    return get(assetDescriptor.fileName, assetDescriptor.type, true);
   }
 
   /**
