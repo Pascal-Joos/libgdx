@@ -42,6 +42,7 @@ public class Cell<T extends Actor> implements Poolable {
   float actorX, actorY;
   float actorWidth, actorHeight;
 
+  private static final Actor DUMMY_ACTOR = new Actor();
   private Table table;
   boolean endRow;
   int column, row;
@@ -796,7 +797,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getMaxWidth() {
-    return maxWidth.get(actor);
+    return maxWidth.get(actor != null ? actor : DUMMY_ACTOR);
   }
 
   /**
