@@ -562,7 +562,7 @@ public class TextureAtlas implements Disposable {
        * May be null if this page isn't associated with a file. In that case, {@link #texture} must
        * be set.
        */
-      @Nullable public @Null FileHandle textureFile;
+      public @Null FileHandle textureFile;
 
       /** May be null if the texture is not yet loaded. */
       @Nullable public @Null Texture texture;
