@@ -51,6 +51,7 @@ public class HorizontalGroup extends WidgetGroup {
   private float space, wrapSpace, fill, padTop, padLeft, padBottom, padRight;
 
   public HorizontalGroup() {
+    rowSizes = new FloatArray();
     setTouchable(Touchable.childrenOnly);
   }
 
@@ -66,8 +67,7 @@ public class HorizontalGroup extends WidgetGroup {
     prefHeight = 0;
     if (wrap) {
       prefWidth = 0;
-      if (rowSizes == null) rowSizes = new FloatArray();
-      else rowSizes.clear();
+      rowSizes.clear();
       FloatArray rowSizes = this.rowSizes;
       float space = this.space, wrapSpace = this.wrapSpace;
       float pad = padLeft + padRight, groupWidth = getWidth() - pad, x = 0, y = 0, rowHeight = 0;
