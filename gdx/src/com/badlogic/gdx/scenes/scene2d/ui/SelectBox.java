@@ -87,9 +87,14 @@ public class SelectBox<T> extends Widget implements Disableable {
   }
 
   public SelectBox(SelectBoxStyle style) {
-    setStyle(style);
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
     setSize(getPrefWidth(), getPrefHeight());
 
+    selection.setActor(this);
+    selection.setRequired(true);
+
+    scrollPane = newScrollPane();
     selection.setActor(this);
     selection.setRequired(true);
 
