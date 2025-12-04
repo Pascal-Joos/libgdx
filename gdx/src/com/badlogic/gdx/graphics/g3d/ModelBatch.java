@@ -228,7 +228,7 @@ public class ModelBatch implements Disposable {
    * @return The current camera being used or null if called outside {@link #begin(Camera)} and
    *     {@link #end()}.
    */
-  public @Nullable Camera getCamera() {
+  public Camera getCamera() {
     return camera;
   }
 
