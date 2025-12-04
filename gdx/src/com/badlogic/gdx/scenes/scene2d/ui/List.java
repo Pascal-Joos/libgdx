@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -70,6 +71,7 @@ public class List<T> extends Widget implements Cullable {
   }
 
   public List(ListStyle style) {
+    Objects.requireNonNull(style, "style cannot be null");
     selection.setActor(this);
     selection.setRequired(true);
 
