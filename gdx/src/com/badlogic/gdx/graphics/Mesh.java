@@ -335,12 +335,7 @@ public class Mesh implements Disposable {
    * @param count the number of floats to update
    */
   public Mesh updateInstanceData(int targetOffset, float[] source, int sourceOffset, int count) {
-    if (instances != null) {
-      this.instances.updateInstanceData(targetOffset, source, sourceOffset, count);
-    } else {
-      throw new GdxRuntimeException(
-          "An InstanceBufferObject must be set before updating instance data!");
-    }
+    this.instances.updateInstanceData(targetOffset, source, sourceOffset, count);
     return this;
   }
 
