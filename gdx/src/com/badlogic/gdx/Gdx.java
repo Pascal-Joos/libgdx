@@ -35,7 +35,7 @@ public class Gdx {
   public static Graphics graphics;
   public static Audio audio;
   public static Input input;
-  @Nullable public static Files files;
+  public static Files files;
   @Nullable public static Net net;
 
   public static GL20 gl;
