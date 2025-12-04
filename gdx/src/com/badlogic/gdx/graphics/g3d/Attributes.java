@@ -19,7 +19,6 @@ package com.badlogic.gdx.graphics.g3d;
 import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 public class Attributes
     implements Iterable<Attribute>, Comparator<Attribute>, Comparable<Attributes> {
@@ -48,7 +47,7 @@ public class Attributes
    *
    * @return The attribute (which can safely be cast) if any, otherwise null
    */
-  public final @Nullable Attribute get(final long type) {
+  public final Attribute get(final long type) {
     if (has(type))
       for (int i = 0; i < attributes.size; i++)
         if (attributes.get(i).type == type) return attributes.get(i);
@@ -60,7 +59,7 @@ public class Attributes
    *
    * @return The attribute if any, otherwise null
    */
-  public final @Nullable <T extends Attribute> T get(Class<T> clazz, final long type) {
+  public final <T extends Attribute> T get(Class<T> clazz, final long type) {
     return (T) get(type);
   }
 
