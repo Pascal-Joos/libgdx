@@ -176,15 +176,23 @@ public class Window extends Table {
             if ((edge & Align.right) != 0) {
               float amountX = x - lastX - width;
               if (width + amountX < minWidth) amountX = minWidth - width;
-              if (clampPosition && windowX + width + amountX > stage.getWidth())
-                amountX = stage.getWidth() - windowX - width;
+              if (clampPosition) {
+                Stage nonNullStage = java.util.Objects.requireNonNull(stage);
+                if (windowX + width + amountX > nonNullStage.getWidth())
+                  amountX = nonNullStage.getWidth() - windowX - width;
+              }
+
               width += amountX;
             }
             if ((edge & Align.top) != 0) {
               float amountY = y - lastY - height;
               if (height + amountY < minHeight) amountY = minHeight - height;
-              if (clampPosition && windowY + height + amountY > stage.getHeight())
-                amountY = stage.getHeight() - windowY - height;
+              if (clampPosition) {
+                Stage nonNullStage = java.util.Objects.requireNonNull(stage);
+                if (windowY + height + amountY > nonNullStage.getHeight())
+                  amountY = nonNullStage.getHeight() - windowY - height;
+              }
+
               height += amountY;
             }
             setBounds(
