@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class Tooltip<T extends Actor> extends InputListener {
   static Vector2 tmp = new Vector2();
 
-  private final TooltipManager manager;
+  @Nullable private final TooltipManager manager;
   final Container<T> container;
   boolean instant, always, touchIndependent;
   @Nullable Actor targetActor;
@@ -50,7 +50,7 @@ public class Tooltip<T extends Actor> extends InputListener {
    * @param contents May be null.
    */
   public Tooltip(@Nullable @Null T contents, @Nullable TooltipManager manager) {
-    this.manager = manager;
+    this.manager = manager != null ? manager : TooltipManager.getInstance();
 
     container =
         new Container(contents) {
@@ -62,7 +62,7 @@ public class Tooltip<T extends Actor> extends InputListener {
     container.setTouchable(Touchable.disabled);
   }
 
-  public TooltipManager getManager() {
+  public @Nullable TooltipManager getManager() {
     return manager;
   }
 
