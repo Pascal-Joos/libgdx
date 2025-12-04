@@ -95,6 +95,7 @@ public final class VertexAttributes
    *
    * @param usage The usage of the VertexAttribute to find.
    */
+  @Nullable
   public VertexAttribute findByUsage(int usage) {
     int len = size();
     for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
@@ -258,7 +259,7 @@ public final class VertexAttributes
 
   private static class ReadonlyIterable<T> implements Iterable<T> {
     private final T[] array;
-    private ReadonlyIterator iterator1, iterator2;
+    @Nullable private ReadonlyIterator iterator1, iterator2;
 
     public ReadonlyIterable(T[] array) {
       this.array = array;
@@ -267,20 +268,24 @@ public final class VertexAttributes
     @Override
     public Iterator<T> iterator() {
       if (Collections.allocateIterators) return new ReadonlyIterator(array);
-      if (iterator1 == null) {
-        iterator1 = new ReadonlyIterator(array);
-        iterator2 = new ReadonlyIterator(array);
+      ReadonlyIterator it1 = iterator1;
+      ReadonlyIterator it2 = iterator2;
+      if (it1 == null || it2 == null) {
+        it1 = new ReadonlyIterator(array);
+        it2 = new ReadonlyIterator(array);
+        iterator1 = it1;
+        iterator2 = it2;
       }
-      if (!iterator1.valid) {
-        iterator1.index = 0;
-        iterator1.valid = true;
-        iterator2.valid = false;
-        return iterator1;
+      if (!it1.valid) {
+        it1.index = 0;
+        it1.valid = true;
+        it2.valid = false;
+        return it1;
       }
-      iterator2.index = 0;
-      iterator2.valid = true;
-      iterator1.valid = false;
-      return iterator2;
+      it2.index = 0;
+      it2.valid = true;
+      it1.valid = false;
+      return it2;
     }
   }
 }
