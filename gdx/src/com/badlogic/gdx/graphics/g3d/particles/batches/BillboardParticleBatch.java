@@ -157,9 +157,6 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
       @Nullable BlendingAttribute blendingAttribute,
       @Nullable DepthTestAttribute depthTestAttribute) {
     super(BillboardControllerRenderData.class);
-    this.vertices = new float[0];
-    this.currentAttributes = new VertexAttributes();
-    this.texture = new Texture(1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
     renderables = new Array<Renderable>();
     renderablePool = new RenderablePool();
     this.blendingAttribute = blendingAttribute;
