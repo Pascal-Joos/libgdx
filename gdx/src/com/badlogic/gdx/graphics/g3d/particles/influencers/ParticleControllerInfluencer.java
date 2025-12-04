@@ -167,8 +167,6 @@ public abstract class ParticleControllerInfluencer extends Influencer {
   }
 
   public Array<ParticleController> templates;
-
-  @SuppressWarnings("NullAway")
   ObjectChannel<ParticleController> particleControllerChannel;
 
   public ParticleControllerInfluencer() {
