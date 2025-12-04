@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Pools;
 import java.io.InputStream;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * A builder for {@link HttpRequest}s.
@@ -49,7 +50,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  private HttpRequest httpRequest;
+  @Nullable private HttpRequest httpRequest;
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
