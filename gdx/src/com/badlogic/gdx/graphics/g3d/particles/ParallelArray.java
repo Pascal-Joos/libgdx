@@ -200,6 +200,9 @@ public class ParallelArray {
    * same id already exists, no allocation is performed and that channel is returned.
    */
   public <T extends Channel> T addChannel(@Nullable ChannelDescriptor channelDescriptor) {
+    if (channelDescriptor == null) {
+      throw new IllegalArgumentException("channelDescriptor cannot be null");
+    }
     return addChannel(channelDescriptor, null);
   }
 
