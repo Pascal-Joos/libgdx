@@ -275,7 +275,6 @@ public class PixmapIO {
         curLine = (curLineBytes = new ByteArray(lineLen)).items;
         prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
       } else {
-        if (prevLineBytes == null) prevLineBytes = new ByteArray(lineLen);
         lineOut = lineOutBytes.ensureCapacity(lineLen);
         curLine = curLineBytes.ensureCapacity(lineLen);
         prevLine = prevLineBytes.ensureCapacity(lineLen);
