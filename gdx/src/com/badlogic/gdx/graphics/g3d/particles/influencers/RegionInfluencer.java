@@ -139,13 +139,11 @@ public abstract class RegionInfluencer extends Influencer {
 
     @Override
     public void update() {
-      if (lifeChannel == null) return;
-      final int lifeStrideSize = lifeChannel.strideSize;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               c = controller.particles.size * regionChannel.strideSize;
           i < c;
-          i += regionChannel.strideSize, l += lifeStrideSize) {
+          i += regionChannel.strideSize, l += lifeChannel.strideSize) {
         AspectTextureRegion region = regions.get((int) (lifeChannel.data[l] * (regions.size - 1)));
         regionChannel.data[i + ParticleChannels.UOffset] = region.u;
         regionChannel.data[i + ParticleChannels.VOffset] = region.v;
