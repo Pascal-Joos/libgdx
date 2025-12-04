@@ -67,6 +67,15 @@ public class CheckBox extends TextButton {
     if (!(style instanceof CheckBoxStyle))
       throw new IllegalArgumentException("style must be a CheckBoxStyle.");
     this.style = (CheckBoxStyle) style;
+    super.setStyle(style);
+  }
+
+  /**
+   * Returns the checkbox's style. Modifying the returned style may not have an effect until {@link
+   * #setStyle(ButtonStyle)} is called.
+   */
+  public CheckBoxStyle getStyle() {
+    return style;
   }
 
   public void draw(Batch batch, float parentAlpha) {
