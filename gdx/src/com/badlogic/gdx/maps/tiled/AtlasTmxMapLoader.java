@@ -186,10 +186,7 @@ public class AtlasTmxMapLoader
       int imageHeight,
       @Nullable FileHandle image) {
 
-    TextureAtlas atlas =
-        java.util.Objects.requireNonNull(
-                atlasResolver, "atlasResolver must be initialized before addStaticTiles")
-            .getAtlas();
+    TextureAtlas atlas = atlasResolver.getAtlas();
     String regionsName = name;
 
     for (Texture texture : atlas.getTextures()) {
