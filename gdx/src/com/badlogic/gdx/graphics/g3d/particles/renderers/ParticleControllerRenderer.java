@@ -31,7 +31,7 @@ public abstract class ParticleControllerRenderer<
         D extends ParticleControllerRenderData, T extends ParticleBatch<D>>
     extends ParticleControllerComponent {
   @Nullable protected T batch;
-  protected D renderData;
+  @Nullable protected D renderData;
 
   protected ParticleControllerRenderer() {}
 
@@ -41,7 +41,9 @@ public abstract class ParticleControllerRenderer<
 
   @Override
   public void update() {
-    batch.draw(renderData);
+    if (batch != null && renderData != null) {
+      batch.draw(renderData);
+    }
   }
 
   @SuppressWarnings("unchecked")
