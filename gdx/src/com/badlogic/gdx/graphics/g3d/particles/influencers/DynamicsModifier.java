@@ -162,7 +162,6 @@ public abstract class DynamicsModifier extends Influencer {
       phiValue.load(value.phiValue);
     }
 
-    @Initializer
     @Override
     public void allocateChannels() {
       super.allocateChannels();
@@ -170,7 +169,6 @@ public abstract class DynamicsModifier extends Influencer {
       angularChannel = controller.particles.addChannel(ParticleChannels.Interpolation4);
     }
 
-    @Initializer
     @Override
     public void activateParticles(int startIndex, int count) {
       super.activateParticles(startIndex, count);
