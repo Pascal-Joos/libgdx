@@ -319,7 +319,6 @@ public class BaseAnimationController {
       for (final NodeAnimation nodeAnim : animation.nodeAnimations)
         applyNodeAnimationDirectly(nodeAnim, time);
     } else {
-      java.util.Objects.requireNonNull(pool, "pool must not be null when out is non-null");
       for (final Node node : out.keys()) node.isAnimated = false;
       for (final NodeAnimation nodeAnim : animation.nodeAnimations)
         applyNodeAnimationBlending(nodeAnim, out, pool, alpha, time);
