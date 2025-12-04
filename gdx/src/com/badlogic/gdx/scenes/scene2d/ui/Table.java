@@ -885,7 +885,6 @@ public class Table extends WidgetGroup {
       Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
-      // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
       if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
         expandWidth[column] = c.expandX;
@@ -901,8 +900,7 @@ public class Table extends WidgetGroup {
       }
       float spaceRight = c.spaceRight.get(a);
       c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
-      c.computedPadBottom =
-          (a == null ? 0 : c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a)));
+      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
