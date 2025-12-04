@@ -165,7 +165,7 @@ public class DragAndDrop {
               isValidTarget = target.drag(source, payload, tmpVector.x, tmpVector.y, pointer);
             }
             if (dragActor != null && removeDragActor) dragActor.remove();
-            if (isValidTarget && target != null) {
+            if (isValidTarget) {
               float stageX = event.getStageX() + touchOffsetX,
                   stageY = event.getStageY() + touchOffsetY;
               target.actor.stageToLocalCoordinates(tmpVector.set(stageX, stageY));
