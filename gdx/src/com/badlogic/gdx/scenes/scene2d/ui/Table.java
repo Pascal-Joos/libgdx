@@ -983,9 +983,9 @@ public class Table extends WidgetGroup {
       int column = c.column;
 
       Actor a = c.actor;
-      float minWidth = c.minWidth.get(a),
-          prefWidth = c.prefWidth.get(a),
-          maxWidth = c.maxWidth.get(a);
+      float minWidth = (a == null ? 0 : c.minWidth.get(a)),
+          prefWidth = (a == null ? 0 : c.prefWidth.get(a)),
+          maxWidth = (a == null ? 0 : c.maxWidth.get(a));
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
       if (round) {
