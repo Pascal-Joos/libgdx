@@ -264,6 +264,9 @@ public class Model implements Disposable {
       numIndices += part.indices.length;
     }
     boolean hasIndices = numIndices > 0;
+    if (modelMesh.attributes == null) {
+      throw new IllegalArgumentException("ModelMesh.attributes cannot be null");
+    }
     VertexAttributes attributes = new VertexAttributes(modelMesh.attributes);
     int numVertices = modelMesh.vertices.length / (attributes.vertexSize / 4);
 
