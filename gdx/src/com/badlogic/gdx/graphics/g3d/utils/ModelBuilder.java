@@ -117,6 +117,7 @@ public class ModelBuilder {
    * @return The node being created.
    */
   public Node node() {
+    if (model == null) throw new GdxRuntimeException("Call begin() first");
     final Node node = new Node();
     node(node);
     node.id = "node" + model.nodes.size;
