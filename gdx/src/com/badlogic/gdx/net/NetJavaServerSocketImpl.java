@@ -81,7 +81,11 @@ public class NetJavaServerSocketImpl implements ServerSocket {
   @Override
   public Socket accept(SocketHints hints) {
     try {
-      return new NetJavaSocketImpl(server.accept(), hints);
+      java.net.ServerSocket localServer = server;
+      if (localServer == null) {
+        throw new GdxRuntimeException("Error accepting socket: server socket is disposed.");
+      }
+      return new NetJavaSocketImpl(localServer.accept(), hints);
     } catch (Exception e) {
       throw new GdxRuntimeException("Error accepting socket.", e);
     }
