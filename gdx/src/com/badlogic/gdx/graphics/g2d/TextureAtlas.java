@@ -106,13 +106,9 @@ public class TextureAtlas implements Disposable {
 
     regions.ensureCapacity(data.regions.size);
     for (Region region : data.regions) {
-      Page page = region.page;
-      if (page == null) {
-        throw new IllegalStateException("Region has no page associated: " + region.name);
-      }
       AtlasRegion atlasRegion =
           new AtlasRegion(
-              page.texture,
+              region.page.texture,
               region.left,
               region.top, //
               region.rotate ? region.height : region.width, //
