@@ -75,7 +75,6 @@ public class Tree<N extends Node, V> extends WidgetGroup {
   }
 
   public Tree(TreeStyle style) {
-    this.style = style;
     selection =
         new Selection<N>() {
           protected void changed() {
