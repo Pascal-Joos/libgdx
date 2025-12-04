@@ -798,6 +798,7 @@ public class Mesh implements Disposable {
    * @param usage the Usage.
    * @return the VertexAttribute or null if no attribute with that usage was found.
    */
+  @Nullable
   public VertexAttribute getVertexAttribute(int usage) {
     VertexAttributes attributes = vertices.getAttributes();
     int len = attributes.size();
