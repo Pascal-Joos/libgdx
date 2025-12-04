@@ -138,9 +138,6 @@ public class ParticleEffectLoader
         }
       }
     }
-    if (effectData == null)
-      throw new com.badlogic.gdx.utils.GdxRuntimeException(
-          "No ResourceData found for ParticleEffect: " + fileName);
 
     effectData.resource.load(manager, effectData);
     if (parameter != null) {
