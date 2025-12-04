@@ -169,8 +169,7 @@ public class NetJavaImpl {
     }
 
     try {
-      final String method =
-          httpRequest.getMethod() == null ? HttpMethods.GET : httpRequest.getMethod();
+      final String method = httpRequest.getMethod();
       URL url;
 
       final boolean doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
