@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class ETC1TextureData implements TextureData {
   @Nullable FileHandle file;
-  ETC1Data data;
+  @Nullable ETC1Data data;
   boolean useMipMaps;
   int width = 0;
   int height = 0;
@@ -38,6 +38,7 @@ public class ETC1TextureData implements TextureData {
     this(file, false);
   }
 
+  @SuppressWarnings("NullAway.Init")
   public ETC1TextureData(FileHandle file, boolean useMipMaps) {
     this.file = file;
     this.useMipMaps = useMipMaps;
@@ -66,6 +67,7 @@ public class ETC1TextureData implements TextureData {
     if (file != null) {
       data = new ETC1Data(file);
     }
+    if (data == null) throw new GdxRuntimeException("ETC1Data not prepared");
     width = data.width;
     height = data.height;
     isPrepared = true;
@@ -75,6 +77,7 @@ public class ETC1TextureData implements TextureData {
   public void consumeCustomData(int target) {
     if (!isPrepared)
       throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
+    if (data == null) throw new GdxRuntimeException("ETC1Data not prepared");
 
     if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
       Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
