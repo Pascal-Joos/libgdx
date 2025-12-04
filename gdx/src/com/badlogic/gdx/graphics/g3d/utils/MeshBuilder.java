@@ -636,8 +636,6 @@ public class MeshBuilder implements MeshPartBuilder {
   @Override
   public short vertex(
       @Nullable Vector3 pos, @Nullable Vector3 nor, @Nullable Color col, @Nullable Vector2 uv) {
-    if (pos == null)
-      throw new com.badlogic.gdx.utils.GdxRuntimeException("Position must not be null");
     if (vindex > MAX_INDEX) throw new GdxRuntimeException("Too many vertices used");
 
     vertex[posOffset] = pos.x;
