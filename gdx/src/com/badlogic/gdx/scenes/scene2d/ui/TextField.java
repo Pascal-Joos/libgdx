@@ -312,7 +312,7 @@ public class TextField extends Widget implements Disableable {
     }
   }
 
-  protected @Null Drawable getBackgroundDrawable() {
+  protected @Nullable @Null Drawable getBackgroundDrawable() {
     if (disabled && style.disabledBackground != null) return style.disabledBackground;
     if (style.focusedBackground != null && hasKeyboardFocus()) return style.focusedBackground;
     return style.background;
@@ -388,7 +388,7 @@ public class TextField extends Widget implements Disableable {
     }
   }
 
-  protected float getTextY(BitmapFont font, @Null Drawable background) {
+  protected float getTextY(BitmapFont font, @Nullable @Null Drawable background) {
     float height = getHeight();
     float textY = textHeight / 2 + font.getDescent();
     if (background != null) {
