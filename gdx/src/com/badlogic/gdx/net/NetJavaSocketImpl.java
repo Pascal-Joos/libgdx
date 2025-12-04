@@ -112,7 +112,7 @@ public class NetJavaSocketImpl implements Socket {
     if (socket != null) {
       try {
         socket.close();
-        // Do not assign null to socket to satisfy NullAway's non-null field contract.
+        socket = null;
       } catch (Exception e) {
         throw new GdxRuntimeException("Error closing socket.", e);
       }
