@@ -54,9 +54,8 @@ public class Button extends Table implements Disableable {
   private boolean programmaticChangeEvents = true;
 
   public Button(Skin skin) {
-    super(skin);
-    initialize();
-    setStyle(skin.get(ButtonStyle.class));
+    this(skin.get(ButtonStyle.class));
+    setSkin(skin);
     setSize(getPrefWidth(), getPrefHeight());
   }
 
