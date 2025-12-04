@@ -61,14 +61,14 @@ public class Table extends WidgetGroup {
           return new Cell();
         }
       };
-  @Nullable private static float[] columnWeightedWidth, rowWeightedHeight;
+  private static float[] columnWeightedWidth, rowWeightedHeight;
   private int columns, rows;
   private boolean implicitEndRow;
 
   private final Array<Cell> cells = new Array(4);
   private final Cell cellDefaults;
   private final Array<Cell> columnDefaults = new Array(2);
-  @Nullable private Cell rowDefaults;
+  private Cell rowDefaults;
 
   private boolean sizeInvalid = true;
   private float[] columnMinWidth, rowMinHeight;
@@ -84,11 +84,11 @@ public class Table extends WidgetGroup {
   int align = Align.center;
 
   Debug debug = Debug.none;
-  @Nullable Array<DebugRect> debugRects;
+  Array<DebugRect> debugRects;
 
-  @Nullable @Null Drawable background;
+  @Null Drawable background;
   private boolean clip;
-  @Nullable private @Null Skin skin;
+  private @Null Skin skin;
   boolean round = true;
 
   public Table() {
@@ -99,7 +99,7 @@ public class Table extends WidgetGroup {
    * Creates a table with a skin, which is required to use {@link #add(CharSequence)} or {@link
    * #add(CharSequence, String)}.
    */
-  public Table(@Nullable @Null Skin skin) {
+  public Table(@Null Skin skin) {
     this.skin = skin;
 
     cellDefaults = obtainCell();
@@ -166,7 +166,7 @@ public class Table extends WidgetGroup {
   /**
    * @param background May be null to clear the background.
    */
-  public void setBackground(@Nullable @Null Drawable background) {
+  public void setBackground(@Null Drawable background) {
     if (this.background == background) return;
     float padTopOld = getPadTop(),
         padLeftOld = getPadLeft(),
@@ -246,7 +246,7 @@ public class Table extends WidgetGroup {
   }
 
   /** Adds a new cell to the table with the specified actor. */
-  public <T extends Actor> Cell<T> add(@Nullable @Null T actor) {
+  public <T extends Actor> Cell<T> add(@Null T actor) {
     Cell<T> cell = obtainCell();
     cell.actor = actor;
 
@@ -468,7 +468,7 @@ public class Table extends WidgetGroup {
   }
 
   /** Returns the cell for the specified actor in this table, or null. */
-  public @Null <T extends Actor> Cell<T> getCell(T actor) {
+  public @javax.annotation.Nullable @Null <T extends Actor> Cell<T> getCell(T actor) {
     if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
     Object[] cells = this.cells.items;
     for (int i = 0, n = this.cells.size; i < n; i++) {
@@ -849,7 +849,7 @@ public class Table extends WidgetGroup {
     return columnPrefWidth[columnIndex];
   }
 
-  private float[] ensureSize(@Nullable float[] array, int size) {
+  private float[] ensureSize(float[] array, int size) {
     if (array == null || array.length < size) return new float[size];
     Arrays.fill(array, 0, size, 0);
     return array;
@@ -1350,7 +1350,7 @@ public class Table extends WidgetGroup {
    */
   public static class DebugRect extends Rectangle {
     static Pool<DebugRect> pool = Pools.get(DebugRect.class);
-    @Nullable Color color;
+    Color color;
   }
 
   /**
