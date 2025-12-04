@@ -560,7 +560,7 @@ public class Skin implements Disposable {
                     SerializationException se =
                         new SerializationException(
                             "Unable to find parent resource with name: " + parentName);
-                    se.addTrace((jsonMap.child != null ? jsonMap.child.trace() : jsonMap.trace()));
+                    se.addTrace(jsonMap.child.trace());
                     throw se;
                   }
                 }
