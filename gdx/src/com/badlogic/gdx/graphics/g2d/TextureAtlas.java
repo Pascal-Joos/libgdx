@@ -585,7 +585,7 @@ public class TextureAtlas implements Disposable {
       public boolean rotate;
       public int index = -1;
       @Nullable public @Null String[] names;
-      public @Null int[][] values = new int[0][];
+      public @Null int[][] values;
       public boolean flip;
 
       @Nullable
