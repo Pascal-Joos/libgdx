@@ -50,7 +50,7 @@ public class Animation<T> {
    * Length must not be modified without updating {@link #animationDuration}. See {@link
    * #setKeyFrames(T[])}.
    */
-  T[] keyFrames;
+  T[] keyFrames = (T[]) new Object[0];
 
   private float frameDuration;
   private float animationDuration;
