@@ -57,7 +57,7 @@ public class ModelBatch implements Disposable {
     public Renderable obtain() {
       Renderable renderable = super.obtain();
       renderable.environment = null;
-      // material must be non-null; do not reset to null here
+      renderable.material = null;
       renderable.meshPart.set("", null, 0, 0, 0);
       renderable.shader = null;
       renderable.userData = null;
