@@ -980,20 +980,20 @@ public class Cell<T extends Actor> implements Poolable {
 
   /** Sets all constraint fields to null. */
   void clear() {
-    minWidth = null;
-    minHeight = null;
-    prefWidth = null;
-    prefHeight = null;
-    maxWidth = null;
-    maxHeight = null;
-    spaceTop = null;
-    spaceLeft = null;
-    spaceBottom = null;
-    spaceRight = null;
-    padTop = null;
-    padLeft = null;
-    padBottom = null;
-    padRight = null;
+    minWidth = com.badlogic.gdx.scenes.scene2d.ui.Value.minWidth;
+    minHeight = com.badlogic.gdx.scenes.scene2d.ui.Value.minHeight;
+    prefWidth = com.badlogic.gdx.scenes.scene2d.ui.Value.prefWidth;
+    prefHeight = com.badlogic.gdx.scenes.scene2d.ui.Value.prefHeight;
+    maxWidth = com.badlogic.gdx.scenes.scene2d.ui.Value.maxWidth;
+    maxHeight = com.badlogic.gdx.scenes.scene2d.ui.Value.maxHeight;
+    spaceTop = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    spaceLeft = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    spaceBottom = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    spaceRight = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    padTop = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    padLeft = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    padBottom = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
+    padRight = com.badlogic.gdx.scenes.scene2d.ui.Value.zero;
     fillX = null;
     fillY = null;
     align = null;
