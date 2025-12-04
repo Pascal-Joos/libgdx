@@ -971,11 +971,67 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    * @author Nathan Sweet
    */
   public static class TreeStyle {
+    private static final Drawable EMPTY_DRAWABLE =
+        new Drawable() {
+          @Override
+          public void draw(Batch batch, float x, float y, float width, float height) {}
+
+          @Override
+          public float getLeftWidth() {
+            return 0;
+          }
+
+          @Override
+          public void setLeftWidth(float leftWidth) {}
+
+          @Override
+          public float getRightWidth() {
+            return 0;
+          }
+
+          @Override
+          public void setRightWidth(float rightWidth) {}
+
+          @Override
+          public float getTopHeight() {
+            return 0;
+          }
+
+          @Override
+          public void setTopHeight(float topHeight) {}
+
+          @Override
+          public float getBottomHeight() {
+            return 0;
+          }
+
+          @Override
+          public void setBottomHeight(float bottomHeight) {}
+
+          @Override
+          public float getMinWidth() {
+            return 0;
+          }
+
+          @Override
+          public void setMinWidth(float minWidth) {}
+
+          @Override
+          public float getMinHeight() {
+            return 0;
+          }
+
+          @Override
+          public void setMinHeight(float minHeight) {}
+        };
     public Drawable plus, minus;
     @Nullable public @Null Drawable plusOver, minusOver;
     @Nullable public @Null Drawable over, selection, background;
 
-    public TreeStyle() {}
+    public TreeStyle() {
+      this.plus = EMPTY_DRAWABLE;
+      this.minus = EMPTY_DRAWABLE;
+    }
 
     public TreeStyle(Drawable plus, Drawable minus, @Null Drawable selection) {
       this.plus = plus;
