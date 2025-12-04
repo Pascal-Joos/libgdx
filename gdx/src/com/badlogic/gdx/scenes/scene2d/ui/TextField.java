@@ -164,7 +164,7 @@ public class TextField extends Widget implements Disableable {
             - style.font.getData().cursorX
             - glyphPositions.get(visibleTextStart);
     Drawable background = getBackgroundDrawable();
-    if (background != null) x -= style.background.getLeftWidth();
+    if (background != null) x -= background.getLeftWidth();
     int n = this.glyphPositions.size;
     float[] glyphPositions = this.glyphPositions.items;
     for (int i = 1; i < n; i++) {
