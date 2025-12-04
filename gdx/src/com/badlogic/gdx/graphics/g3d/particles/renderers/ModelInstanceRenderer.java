@@ -90,22 +90,20 @@ public class ModelInstanceRenderer
           scale,
           scale);
       if (hasColor) {
-        // hasColor is true only when renderData.colorChannel was observed non-null in init()
-        final com.badlogic.gdx.graphics.g3d.particles.ParallelArray.FloatChannel colorChannel =
-            renderData.colorChannel;
-        if (colorChannel != null) {
-          int colorOffset = i * colorChannel.strideSize;
-          ColorAttribute colorAttribute =
-              (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
-          BlendingAttribute blendingAttribute =
-              (BlendingAttribute) instance.materials.get(0).get(BlendingAttribute.Type);
-          colorAttribute.color.r = colorChannel.data[colorOffset + ParticleChannels.RedOffset];
-          colorAttribute.color.g = colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
-          colorAttribute.color.b = colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
-          if (blendingAttribute != null)
-            blendingAttribute.opacity =
-                colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-        }
+        int colorOffset = i * renderData.colorChannel.strideSize;
+        ColorAttribute colorAttribute =
+            (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
+        BlendingAttribute blendingAttribute =
+            (BlendingAttribute) instance.materials.get(0).get(BlendingAttribute.Type);
+        colorAttribute.color.r =
+            renderData.colorChannel.data[colorOffset + ParticleChannels.RedOffset];
+        colorAttribute.color.g =
+            renderData.colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
+        colorAttribute.color.b =
+            renderData.colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
+        if (blendingAttribute != null)
+          blendingAttribute.opacity =
+              renderData.colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
       }
     }
     super.update();
