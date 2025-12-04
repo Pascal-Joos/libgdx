@@ -97,11 +97,7 @@ public class SplitPane extends WidgetGroup {
   public SplitPane(
       @Null Actor firstWidget, @Null Actor secondWidget, boolean vertical, SplitPaneStyle style) {
     this.vertical = vertical;
-    if (style == null) {
-      throw new IllegalArgumentException("style cannot be null.");
-    }
-    this.style = style;
-    invalidateHierarchy();
+    setStyle(style);
     setFirstWidget(firstWidget);
     setSecondWidget(secondWidget);
     setSize(getPrefWidth(), getPrefHeight());
@@ -163,9 +159,6 @@ public class SplitPane extends WidgetGroup {
   }
 
   public void setStyle(SplitPaneStyle style) {
-    if (style == null) {
-      throw new IllegalArgumentException("style cannot be null.");
-    }
     this.style = style;
     invalidateHierarchy();
   }
