@@ -20,10 +20,8 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Pools;
-import com.uber.nullaway.annotations.EnsuresNonNull;
 import java.io.InputStream;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * A builder for {@link HttpRequest}s.
@@ -51,7 +49,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  @Nullable private HttpRequest httpRequest;
+  private HttpRequest httpRequest;
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
@@ -185,7 +183,6 @@ public class HttpRequestBuilder {
     return request;
   }
 
-  @EnsuresNonNull("httpRequest")
   private void validate() {
     if (httpRequest == null) {
       throw new IllegalStateException(
