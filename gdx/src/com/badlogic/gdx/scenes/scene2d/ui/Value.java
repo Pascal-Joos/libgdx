@@ -19,6 +19,7 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Null;
+import javax.annotation.Nullable;
 
 /**
  * Value placeholder, allowing the value to be computed on request. Values can be provided an actor
@@ -36,7 +37,7 @@ public abstract class Value {
   /**
    * @param context May be null.
    */
-  public abstract float get(@Null Actor context);
+  public abstract float get(@Null @Nullable Actor context);
 
   /** A value that is always zero. */
   public static final Fixed zero = new Fixed(0);
@@ -55,7 +56,7 @@ public abstract class Value {
       this.value = value;
     }
 
-    public float get(@Null Actor context) {
+    public float get(@Null @Nullable Actor context) {
       return value;
     }
 
@@ -77,7 +78,7 @@ public abstract class Value {
   /** Value that is the minWidth of the actor in the cell. */
   public static Value minWidth =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getMinWidth();
           return context == null ? 0 : context.getWidth();
         }
@@ -86,7 +87,7 @@ public abstract class Value {
   /** Value that is the minHeight of the actor in the cell. */
   public static Value minHeight =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getMinHeight();
           return context == null ? 0 : context.getHeight();
         }
@@ -95,7 +96,7 @@ public abstract class Value {
   /** Value that is the prefWidth of the actor in the cell. */
   public static Value prefWidth =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getPrefWidth();
           return context == null ? 0 : context.getWidth();
         }
@@ -104,7 +105,7 @@ public abstract class Value {
   /** Value that is the prefHeight of the actor in the cell. */
   public static Value prefHeight =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getPrefHeight();
           return context == null ? 0 : context.getHeight();
         }
@@ -113,7 +114,7 @@ public abstract class Value {
   /** Value that is the maxWidth of the actor in the cell. */
   public static Value maxWidth =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getMaxWidth();
           return context == null ? 0 : context.getWidth();
         }
@@ -122,7 +123,7 @@ public abstract class Value {
   /** Value that is the maxHeight of the actor in the cell. */
   public static Value maxHeight =
       new Value() {
-        public float get(@Null Actor context) {
+        public float get(@Null @Nullable Actor context) {
           if (context instanceof Layout) return ((Layout) context).getMaxHeight();
           return context == null ? 0 : context.getHeight();
         }
@@ -153,7 +154,7 @@ public abstract class Value {
   public static Value percentWidth(final float percent, final Actor actor) {
     if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
     return new Value() {
-      public float get(@Null Actor context) {
+      public float get(@Null @Nullable Actor context) {
         return actor.getWidth() * percent;
       }
     };
@@ -166,7 +167,7 @@ public abstract class Value {
   public static Value percentHeight(final float percent, final Actor actor) {
     if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
     return new Value() {
-      public float get(@Null Actor context) {
+      public float get(@Null @Nullable Actor context) {
         return actor.getHeight() * percent;
       }
     };
