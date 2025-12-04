@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 /**
  * It's an {@link Influencer} which controls the particles dynamics (movement, rotations).
@@ -33,11 +34,11 @@ import java.util.Arrays;
  */
 public class DynamicsInfluencer extends Influencer {
   public Array<DynamicsModifier> velocities;
-  private FloatChannel accellerationChannel,
-      positionChannel,
-      previousPositionChannel,
-      rotationChannel,
-      angularVelocityChannel;
+  private FloatChannel accellerationChannel;
+  @Nullable private FloatChannel positionChannel;
+  @Nullable private FloatChannel previousPositionChannel;
+  @Nullable private FloatChannel rotationChannel;
+  private FloatChannel angularVelocityChannel;
   boolean hasAcceleration, has2dAngularVelocity, has3dAngularVelocity;
 
   public DynamicsInfluencer() {
