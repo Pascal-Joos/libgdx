@@ -67,7 +67,6 @@ public class ResourceData<T> implements Json.Serializable {
     private int loadIndex;
     protected ResourceData resources;
 
-    @SuppressWarnings("NullAway")
     public SaveData() {
       data = new ObjectMap<String, Object>();
       assets = new IntArray();
