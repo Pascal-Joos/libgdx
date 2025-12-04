@@ -63,7 +63,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
   protected static final int MASK_CLEAR = 0xE0000000;
 
   protected XmlReader xml = new XmlReader();
-  protected Element root;
+  protected Element root = new Element("map", null);
   protected boolean convertObjectToTileSpace;
   protected boolean flipY = true;
 
@@ -72,7 +72,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
   protected int mapWidthInPixels;
   protected int mapHeightInPixels;
 
-  protected TiledMap map;
+  protected TiledMap map = new TiledMap();
 
   public BaseTmxMapLoader(FileHandleResolver resolver) {
     super(resolver);
