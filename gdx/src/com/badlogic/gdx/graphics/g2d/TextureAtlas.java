@@ -669,7 +669,7 @@ public class TextureAtlas implements Disposable {
      */
     public @Null int[][] values;
 
-    public AtlasRegion(@Nullable Texture texture, int x, int y, int width, int height) {
+    public AtlasRegion(Texture texture, int x, int y, int width, int height) {
       super(texture, x, y, width, height);
       originalWidth = width;
       originalHeight = height;
