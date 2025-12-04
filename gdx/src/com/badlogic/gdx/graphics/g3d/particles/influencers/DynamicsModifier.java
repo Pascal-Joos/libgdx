@@ -92,17 +92,15 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   public abstract static class Strength extends DynamicsModifier {
-    FloatChannel strengthChannel;
+    protected FloatChannel strengthChannel;
     public ScaledNumericValue strengthValue;
 
     public Strength() {
-      strengthChannel = new FloatChannel();
       strengthValue = new ScaledNumericValue();
     }
 
     public Strength(Strength rotation) {
       super(rotation);
-      strengthChannel = new FloatChannel();
       strengthValue = new ScaledNumericValue();
       strengthValue.load(rotation.strengthValue);
     }
