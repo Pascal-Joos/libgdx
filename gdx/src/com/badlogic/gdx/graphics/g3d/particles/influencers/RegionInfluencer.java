@@ -115,7 +115,7 @@ public abstract class RegionInfluencer extends Influencer {
    * index in the {@link RegionInfluencer#regions} array.
    */
   public static class Animated extends RegionInfluencer {
-    @Nullable FloatChannel lifeChannel;
+    FloatChannel lifeChannel;
 
     public Animated() {}
 
@@ -134,7 +134,11 @@ public abstract class RegionInfluencer extends Influencer {
     @Override
     public void allocateChannels() {
       super.allocateChannels();
-      lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
+      @Nullable FloatChannel life = controller.particles.addChannel(ParticleChannels.Life);
+      if (life == null) {
+        throw new IllegalStateException("Life channel must not be null");
+      }
+      lifeChannel = life;
     }
 
     @Override
