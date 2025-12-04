@@ -637,9 +637,7 @@ public interface Input {
      */
     public static int valueOf(String keyname) {
       if (keyNames == null) initializeKeyNames();
-      ObjectIntMap<String> localKeyNames = keyNames;
-      if (localKeyNames == null) return -1;
-      return localKeyNames.get(keyname, -1);
+      return keyNames.get(keyname, -1);
     }
 
     /** lazily intialized in {@link Keys#valueOf(String)} */
