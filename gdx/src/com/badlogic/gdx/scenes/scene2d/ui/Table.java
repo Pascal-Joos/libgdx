@@ -904,8 +904,7 @@ public class Table extends WidgetGroup {
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
-      float prefWidth = (a == null ? 0 : c.prefWidth.get(a)),
-          prefHeight = (a == null ? 0 : c.prefHeight.get(a));
+      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
       float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
       float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
