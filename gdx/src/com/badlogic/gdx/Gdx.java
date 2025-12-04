@@ -34,7 +34,7 @@ public class Gdx {
   public static Application app;
   public static Graphics graphics;
   public static Audio audio;
-  @Nullable public static Input input;
+  public static Input input;
   public static Files files;
   @Nullable public static Net net;
 
