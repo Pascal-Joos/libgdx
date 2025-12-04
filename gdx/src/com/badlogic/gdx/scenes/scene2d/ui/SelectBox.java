@@ -542,7 +542,7 @@ public class SelectBox<T> extends Widget implements Disableable {
                   // Fall thru.
                 case Keys.ESCAPE:
                   hide();
-                  event.stop();
+                  if (event != null) event.stop();
                   return true;
               }
               return false;
