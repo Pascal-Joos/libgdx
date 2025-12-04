@@ -27,15 +27,15 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable private static Files files;
   @Nullable private static Cell defaults;
 
-  Value minWidth, minHeight;
-  Value prefWidth, prefHeight;
-  Value maxWidth, maxHeight;
-  Value spaceTop, spaceLeft, spaceBottom, spaceRight;
-  Value padTop, padLeft, padBottom, padRight;
+  @Nullable Value minWidth, minHeight;
+  @Nullable Value prefWidth, prefHeight;
+  @Nullable Value maxWidth, maxHeight;
+  @Nullable Value spaceTop, spaceLeft, spaceBottom, spaceRight;
+  @Nullable Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
-  Integer expandX, expandY;
-  Integer colspan;
+  @Nullable Integer expandX, expandY;
+  @Nullable Integer colspan;
   @Nullable Boolean uniformX, uniformY;
 
   @Nullable @Null Actor actor;
