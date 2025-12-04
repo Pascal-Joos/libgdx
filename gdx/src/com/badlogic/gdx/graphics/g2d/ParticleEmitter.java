@@ -438,10 +438,10 @@ public class ParticleEmitter {
       particle.angleCos = MathUtils.cosDeg(angle);
       particle.angleSin = MathUtils.sinDeg(angle);
     }
+    Sprite nonNullSprite = sprite != null ? sprite : sprites.first();
 
-    float spriteWidth = sprite.getWidth();
-    float spriteHeight = sprite.getHeight();
-
+    float spriteWidth = nonNullSprite.getWidth();
+    float spriteHeight = nonNullSprite.getHeight();
     particle.xScale = xScaleValue.newLowValue() / spriteWidth;
     particle.xScaleDiff = xScaleValue.newHighValue() / spriteWidth;
     if (!xScaleValue.isRelative()) particle.xScaleDiff -= particle.xScale;
