@@ -48,6 +48,6 @@ public class AfterAction extends DelegateAction {
       if (index == -1) waitForActions.removeIndex(i);
     }
     if (waitForActions.size > 0) return false;
+    if (action == null) return true;
     return action.act(delta);
-  }
 }
