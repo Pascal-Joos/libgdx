@@ -161,9 +161,8 @@ public class Texture extends GLTexture {
     this(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture(), data);
   }
 
-  protected Texture(int glTarget, int glHandle, @Nullable TextureData data) {
+  protected Texture(int glTarget, int glHandle, TextureData data) {
     super(glTarget, glHandle);
-    if (data == null) throw new GdxRuntimeException("TextureData must not be null");
     load(data);
     if (data.isManaged()) addManagedTexture(Gdx.app, this);
   }
