@@ -33,6 +33,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should cover
@@ -522,9 +523,9 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
     protected Array<FrameBufferTextureAttachmentSpec> textureAttachmentSpecs =
         new Array<FrameBufferTextureAttachmentSpec>();
 
-    protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
-    protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
-    protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
 
     protected boolean hasStencilRenderBuffer;
     protected boolean hasDepthRenderBuffer;
