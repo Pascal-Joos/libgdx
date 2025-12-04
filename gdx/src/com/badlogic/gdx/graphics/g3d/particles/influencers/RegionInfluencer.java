@@ -213,7 +213,7 @@ public abstract class RegionInfluencer extends Influencer {
   }
 
   public Array<AspectTextureRegion> regions;
-  FloatChannel regionChannel = new FloatChannel(0, 0);
+  FloatChannel regionChannel;
   @Nullable public String atlasName;
 
   public RegionInfluencer(int regionsCount) {
