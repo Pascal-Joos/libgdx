@@ -25,13 +25,16 @@ import com.badlogic.gdx.graphics.g3d.particles.batches.ModelInstanceParticleBatc
 import com.badlogic.gdx.graphics.g3d.particles.batches.ParticleBatch;
 import javax.annotation.Nullable;
 
+/**
+ * A {@link ParticleControllerRenderer} which will render particles as {@link ModelInstance} to a
+ * {@link ModelInstanceParticleBatch}.
+ *
+ * @author Inferno
+ */
 public class ModelInstanceRenderer
     extends ParticleControllerRenderer<
         ModelInstanceControllerRenderData, ModelInstanceParticleBatch> {
-
-  private boolean hasColor;
-  private boolean hasScale;
-  private boolean hasRotation;
+  private boolean hasColor, hasScale, hasRotation;
 
   public ModelInstanceRenderer() {
     super(new ModelInstanceControllerRenderData());
@@ -67,7 +70,7 @@ public class ModelInstanceRenderer
       ModelInstance instance = renderData.modelInstanceChannel.data[i];
       float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
-      if (hasRotation && renderData.rotationChannel != null) {
+      if (hasRotation) {
         int rotationOffset = i * renderData.rotationChannel.strideSize;
         qx = renderData.rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
         qy = renderData.rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
