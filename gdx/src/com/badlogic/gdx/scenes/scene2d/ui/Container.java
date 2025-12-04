@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Container<T extends Actor> extends WidgetGroup {
-  @Nullable private @Null T actor;
+  private @Null T actor;
   private Value minWidth = Value.minWidth, minHeight = Value.minHeight;
   private Value prefWidth = Value.prefWidth, prefHeight = Value.prefHeight;
   private Value maxWidth = Value.zero, maxHeight = Value.zero;
@@ -189,7 +189,6 @@ public class Container<T extends Actor> extends WidgetGroup {
   /**
    * @return May be null.
    */
-  @Nullable
   public @Null T getActor() {
     return actor;
   }
@@ -665,7 +664,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMinWidth() {
-    return (actor == null ? 0 : minWidth.get(actor)) + padLeft.get(this) + padRight.get(this);
+    return minWidth.get(actor) + padLeft.get(this) + padRight.get(this);
   }
 
   public Value getMinHeightValue() {
@@ -673,7 +672,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMinHeight() {
-    return (actor == null ? 0 : minHeight.get(actor)) + padTop.get(this) + padBottom.get(this);
+    return minHeight.get(actor) + padTop.get(this) + padBottom.get(this);
   }
 
   public Value getPrefWidthValue() {
@@ -681,7 +680,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getPrefWidth() {
-    float v = (actor == null ? 0 : prefWidth.get(actor));
+    float v = prefWidth.get(actor);
     if (background != null) v = Math.max(v, background.getMinWidth());
     return Math.max(getMinWidth(), v + padLeft.get(this) + padRight.get(this));
   }
@@ -691,7 +690,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getPrefHeight() {
-    float v = (actor == null ? 0 : prefHeight.get(actor));
+    float v = prefHeight.get(actor);
     if (background != null) v = Math.max(v, background.getMinHeight());
     return Math.max(getMinHeight(), v + padTop.get(this) + padBottom.get(this));
   }
@@ -701,7 +700,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMaxWidth() {
-    float v = (actor == null ? 0 : maxWidth.get(actor));
+    float v = maxWidth.get(actor);
     if (v > 0) v += padLeft.get(this) + padRight.get(this);
     return v;
   }
@@ -711,7 +710,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMaxHeight() {
-    float v = (actor == null ? 0 : maxHeight.get(actor));
+    float v = maxHeight.get(actor);
     if (v > 0) v += padTop.get(this) + padBottom.get(this);
     return v;
   }
