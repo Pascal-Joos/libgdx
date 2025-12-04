@@ -365,6 +365,7 @@ public class Cubemap extends GLTexture {
    * @return the number of managed cubemaps currently loaded
    */
   public static int getNumManagedCubemaps() {
-    return managedCubemaps.get(Gdx.app).size;
+    com.badlogic.gdx.utils.Array<Cubemap> cubemaps = managedCubemaps.get(Gdx.app);
+    return cubemaps == null ? 0 : cubemaps.size;
   }
 }
