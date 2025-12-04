@@ -75,7 +75,7 @@ public class PointSpriteParticleBatch
   }
 
   @Nullable private float[] vertices;
-  Renderable renderable;
+  Renderable renderable = new Renderable();
   @Nullable protected BlendingAttribute blendingAttribute;
   @Nullable protected DepthTestAttribute depthTestAttribute;
 
