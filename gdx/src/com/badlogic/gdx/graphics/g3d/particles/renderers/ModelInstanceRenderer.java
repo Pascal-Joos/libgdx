@@ -67,6 +67,7 @@ public class ModelInstanceRenderer
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
         ++i, positionOffset += renderData.positionChannel.strideSize) {
+      if (renderData.modelInstanceChannel == null) continue;
       ModelInstance instance = renderData.modelInstanceChannel.data[i];
       float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;

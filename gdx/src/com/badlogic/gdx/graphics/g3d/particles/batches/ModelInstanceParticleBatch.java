@@ -38,6 +38,7 @@ public class ModelInstanceParticleBatch
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
     for (ModelInstanceControllerRenderData data : controllersRenderData) {
       for (int i = 0, count = data.controller.particles.size; i < count; ++i) {
+        if (data.modelInstanceChannel == null) continue;
         data.modelInstanceChannel.data[i].getRenderables(renderables, pool);
       }
     }
