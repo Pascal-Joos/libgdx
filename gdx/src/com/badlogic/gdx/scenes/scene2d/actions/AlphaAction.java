@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Null;
  */
 public class AlphaAction extends TemporalAction {
   private float start, end;
-  private Color color = Color.WHITE;
+  private @Null Color color;
 
   protected void begin() {
     if (color == null) color = target.getColor();
@@ -44,10 +44,10 @@ public class AlphaAction extends TemporalAction {
 
   public void reset() {
     super.reset();
-    color = Color.WHITE;
+    color = null;
   }
 
-  public Color getColor() {
+  public @Null Color getColor() {
     return color;
   }
 
