@@ -1017,7 +1017,8 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   @Initializer
-  void set(@Nullable Cell cell) {
+  void set(Cell cell) {
+    table = cell.table;
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;
@@ -1039,6 +1040,8 @@ public class Cell<T extends Actor> implements Poolable {
     expandY = cell.expandY;
     colspan = cell.colspan;
     uniformX = cell.uniformX;
+    uniformY = cell.uniformY;
+  }
     uniformY = cell.uniformY;
   }
 
