@@ -43,8 +43,7 @@ public class RunnableAction extends Action {
     Pool pool = getPool();
     setPool(null); // Ensure this action can't be returned to the pool inside the runnable.
     try {
-      Runnable runnable = this.runnable;
-      if (runnable != null) runnable.run();
+      runnable.run();
     } finally {
       setPool(pool);
     }
