@@ -892,7 +892,8 @@ public class Table extends WidgetGroup {
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
       c.computedPadLeft =
-          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+          (a == null ? 0 : c.padLeft.get(a))
+              + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
       c.computedPadTop = c.padTop.get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
