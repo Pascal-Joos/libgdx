@@ -227,16 +227,14 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
-      java.util.Objects.requireNonNull(
-          rotationalVelocity2dChannel, "rotationalVelocity2dChannel not allocated");
-      final FloatChannel rotVel2d = rotationalVelocity2dChannel;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
-              c = i + controller.particles.size * rotVel2d.strideSize;
+              c = i + controller.particles.size * rotationalVelocity2dChannel.strideSize;
           i < c;
-          s += strengthChannel.strideSize, i += rotVel2d.strideSize, l += lifeChannel.strideSize) {
-        rotVel2d.data[i] +=
+          s += strengthChannel.strideSize, i += rotationalVelocity2dChannel.strideSize,
+              l += lifeChannel.strideSize) {
+        rotationalVelocity2dChannel.data[i] +=
             strengthChannel.data[s + ParticleChannels.VelocityStrengthStartOffset]
                 + strengthChannel.data[s + ParticleChannels.VelocityStrengthDiffOffset]
                     * strengthValue.getScale(lifeChannel.data[l]);
