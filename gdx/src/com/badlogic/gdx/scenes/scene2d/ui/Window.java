@@ -151,9 +151,8 @@ public class Window extends Table {
             float minWidth = getMinWidth(), maxWidth = getMaxWidth();
             float minHeight = getMinHeight(), maxHeight = getMaxHeight();
             Stage stage = getStage();
-            Stage clampStage =
-                keepWithinStage && stage != null && getParent() == stage.getRoot() ? stage : null;
-            boolean clampPosition = clampStage != null;
+            boolean clampPosition =
+                keepWithinStage && stage != null && getParent() == stage.getRoot();
 
             if ((edge & MOVE) != 0) {
               float amountX = x - startX, amountY = y - startY;
@@ -177,15 +176,15 @@ public class Window extends Table {
             if ((edge & Align.right) != 0) {
               float amountX = x - lastX - width;
               if (width + amountX < minWidth) amountX = minWidth - width;
-              if (clampPosition && windowX + width + amountX > clampStage.getWidth())
-                amountX = clampStage.getWidth() - windowX - width;
+              if (clampPosition && windowX + width + amountX > stage.getWidth())
+                amountX = stage.getWidth() - windowX - width;
               width += amountX;
             }
             if ((edge & Align.top) != 0) {
               float amountY = y - lastY - height;
               if (height + amountY < minHeight) amountY = minHeight - height;
-              if (clampPosition && windowY + height + amountY > clampStage.getHeight())
-                amountY = clampStage.getHeight() - windowY - height;
+              if (clampPosition && windowY + height + amountY > stage.getHeight())
+                amountY = stage.getHeight() - windowY - height;
               height += amountY;
             }
             setBounds(
