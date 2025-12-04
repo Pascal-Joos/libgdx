@@ -51,6 +51,8 @@ public class VerticalGroup extends WidgetGroup {
   private float space, wrapSpace, fill, padTop, padLeft, padBottom, padRight;
 
   public VerticalGroup() {
+    columnSizes = new FloatArray();
+    columnSizes = new FloatArray();
     setTouchable(Touchable.childrenOnly);
   }
 
