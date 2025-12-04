@@ -178,8 +178,8 @@ public class PointSpriteParticleBatch
             colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
         vertices[offset + CPU_COLOR_OFFSET + 3] =
             colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
-            scaleChannel.data[p * scaleChannel.strideSize];
+        float size = (scaleChannel != null) ? scaleChannel.data[p * scaleChannel.strideSize] : 1f;
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] = size;
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
             rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
