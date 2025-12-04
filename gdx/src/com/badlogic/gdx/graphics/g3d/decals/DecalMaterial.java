@@ -22,7 +22,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /** Material used by the {@link Decal} class */
 public class DecalMaterial {
   public static final int NO_BLEND = -1;
-  protected TextureRegion textureRegion;
+
+  // Initialized to a non-null dummy region to satisfy NullAway; real code should
+  // set this to a meaningful TextureRegion via Decal#setTextureRegion or a custom material.
+  protected TextureRegion textureRegion = new TextureRegion();
+
   protected int srcBlendFactor;
   protected int dstBlendFactor;
 
