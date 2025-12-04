@@ -8,6 +8,7 @@ project.xcworkspace/
 xcuserdata/
 xcode/native/
 .gradle/
+.gradle-cache
 build/
 bin/
 target/
@@ -91,3 +92,7 @@ natives.zip
 .settings
 
 annotator-out/
+
+
+.vscode
+*.log
