@@ -581,6 +581,7 @@ public abstract class DynamicsModifier extends Influencer {
   public DynamicsModifier() {}
 
   public DynamicsModifier(DynamicsModifier modifier) {
+    this();
     this.isGlobal = modifier.isGlobal;
   }
 
