@@ -76,7 +76,7 @@ public class Table extends WidgetGroup {
   private float tableMinWidth, tableMinHeight;
   private float tablePrefWidth, tablePrefHeight;
   private float[] columnWidth, rowHeight;
-  private float[] expandWidth = new float[0], expandHeight = new float[0];
+  private float[] expandWidth, expandHeight;
   Value padTop = backgroundTop,
       padLeft = backgroundLeft,
       padBottom = backgroundBottom,
