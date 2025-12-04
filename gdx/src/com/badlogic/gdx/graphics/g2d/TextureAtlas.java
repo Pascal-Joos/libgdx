@@ -619,7 +619,7 @@ public class TextureAtlas implements Disposable {
      * If the name ends with an underscore followed by only numbers, that part is excluded:
      * underscores denote special instructions to the texture packer.
      */
-    public String name;
+    public String name = "";
 
     /**
      * The offset from the left of the original image to the left of the packed image, after
@@ -667,9 +667,9 @@ public class TextureAtlas implements Disposable {
      * Values for name/value pairs other than the fields provided on this class, each entry
      * corresponding to {@link #names}.
      */
-    public @Null int[][] values;
+    public @Null int[][] values = new int[0][0];
 
-    public AtlasRegion(@Nullable Texture texture, int x, int y, int width, int height) {
+    public AtlasRegion(Texture texture, int x, int y, int width, int height) {
       super(texture, x, y, width, height);
       originalWidth = width;
       originalHeight = height;
