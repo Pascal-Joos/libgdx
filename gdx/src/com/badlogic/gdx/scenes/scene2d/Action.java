@@ -33,7 +33,7 @@ public abstract class Action implements Poolable {
   @Nullable protected Actor actor;
 
   /** The actor this action targets, or null if a target has not been set. */
-  @Nullable protected Actor target;
+  protected Actor target;
 
   @Nullable private @Null Pool pool;
 
@@ -66,7 +66,7 @@ public abstract class Action implements Poolable {
    */
   public void setActor(@Nullable Actor actor) {
     this.actor = actor;
-    if (target == null && actor != null) setTarget(actor);
+    if (target == null) setTarget(actor);
     if (actor == null) {
       if (pool != null) {
         pool.free(this);
@@ -94,7 +94,6 @@ public abstract class Action implements Poolable {
   /**
    * @return null if the action has no target.
    */
-  @Nullable
   public Actor getTarget() {
     return target;
   }
