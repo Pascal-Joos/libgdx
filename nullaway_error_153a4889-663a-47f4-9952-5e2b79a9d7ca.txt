@@ -1,4 +1,0 @@
-/home/nima/Developer/nullness-benchmarks/libgdx/gdx/src/com/badlogic/gdx/utils/Json.java:260: warning: [removal] AccessControlException in java.security has been deprecated and marked for removal
-        } catch (AccessControlException ex) {
-                 ^
-/home/nima/Developer/nullness-benchmarks/libgdx/gdx/src/com/badlogic/gdx/files/FileHandle.java:63: error: [NullAway] initializer method does not guarantee @NonNull fields file (line 60), type (line 61) are initialized along all control-flow paths (remember to check for exceptions or early returns).
