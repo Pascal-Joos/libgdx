@@ -161,7 +161,6 @@ public class PointSpriteParticleBatch
         int offset = offsets[tp] * CPU_VERTEX_SIZE;
         int regionOffset = p * regionChannel.strideSize;
         int positionOffset = p * positionChannel.strideSize;
-        int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
 
         vertices[offset + CPU_POSITION_OFFSET] =
@@ -170,14 +169,19 @@ public class PointSpriteParticleBatch
             positionChannel.data[positionOffset + ParticleChannels.YOffset];
         vertices[offset + CPU_POSITION_OFFSET + 2] =
             positionChannel.data[positionOffset + ParticleChannels.ZOffset];
-        vertices[offset + CPU_COLOR_OFFSET] =
-            colorChannel.data[colorOffset + ParticleChannels.RedOffset];
-        vertices[offset + CPU_COLOR_OFFSET + 1] =
-            colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
-        vertices[offset + CPU_COLOR_OFFSET + 2] =
-            colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
-        vertices[offset + CPU_COLOR_OFFSET + 3] =
-            colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
+
+        if (colorChannel != null) {
+          int colorOffset = p * colorChannel.strideSize;
+          vertices[offset + CPU_COLOR_OFFSET] =
+              colorChannel.data[colorOffset + ParticleChannels.RedOffset];
+          vertices[offset + CPU_COLOR_OFFSET + 1] =
+              colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
+          vertices[offset + CPU_COLOR_OFFSET + 2] =
+              colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
+          vertices[offset + CPU_COLOR_OFFSET + 3] =
+              colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
+        }
+
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
             scaleChannel.data[p * scaleChannel.strideSize];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
@@ -200,7 +204,6 @@ public class PointSpriteParticleBatch
     renderable.meshPart.update();
   }
 
-  @Override
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
     if (bufferedParticlesCount > 0) renderables.add(pool.obtain().set(renderable));
   }
