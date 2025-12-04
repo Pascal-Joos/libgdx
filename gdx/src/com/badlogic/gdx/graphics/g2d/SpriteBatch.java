@@ -1159,10 +1159,8 @@ public class SpriteBatch implements Batch {
   protected void switchTexture(@Nullable Texture texture) {
     flush();
     lastTexture = texture;
-    if (texture != null) {
-      invTexWidth = 1.0f / texture.getWidth();
-      invTexHeight = 1.0f / texture.getHeight();
-    }
+    invTexWidth = 1.0f / texture.getWidth();
+    invTexHeight = 1.0f / texture.getHeight();
   }
 
   @Override
