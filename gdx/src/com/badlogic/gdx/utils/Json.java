@@ -46,7 +46,6 @@ import javax.annotation.Nullable;
  *
  * @author Nathan Sweet
  */
-  private static final java.io.Writer NULL_WRITER = new java.io.Writer() {     @Override public void write(char[] cbuf, int off, int len) {}     @Override public void flush() {}     @Override public void close() {}   };
 public class Json {
   private static final boolean debug = false;
 
@@ -69,12 +68,10 @@ public class Json {
   private final Object[] equals1 = {null}, equals2 = {null};
 
   public Json() {
-    this.writer = new JsonWriter(NULL_WRITER);
     outputType = OutputType.minimal;
   }
 
   public Json(OutputType outputType) {
-    this.writer = new JsonWriter(NULL_WRITER);
     this.outputType = outputType;
   }
 
