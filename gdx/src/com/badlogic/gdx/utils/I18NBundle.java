@@ -483,11 +483,17 @@ public class I18NBundle {
    * Sets the bundle locale. This method is private because a bundle can't change the locale during
    * its life.
    *
-   * @param locale
+   * @param locale the locale to set; must not be {@code null}
    */
   @Initializer
   private void setLocale(Locale locale) {
+    if (locale == null) {
+      throw new NullPointerException("locale cannot be null");
+    }
     this.locale = locale;
+    if (this.properties == null) {
+      this.properties = new ObjectMap<String, String>();
+    }
     this.formatter = new TextFormatter(locale, !simpleFormatter);
   }
 
