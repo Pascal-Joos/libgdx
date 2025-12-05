@@ -35,10 +35,6 @@ public class InWindow {
 
   public void ReadBlock() throws IOException {
     if (_streamEndWasReached) return;
-    if (_stream == null) {
-      _streamEndWasReached = true;
-      return;
-    }
     while (true) {
       int size = (0 - _bufferOffset) + _blockSize - _streamPos;
       if (size == 0) return;
