@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 package com.badlogic.gdx.scenes.scene2d.utils;
-import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,12 +45,7 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
 
   public TextureRegionDrawable(TextureRegionDrawable drawable) {
     super(drawable);
-    TextureRegion otherRegion = drawable.region;
-    if (otherRegion == null) {
-      throw new IllegalArgumentException("drawable.region must not be null");
-    }
-    setRegion(otherRegion);
-  }
+    setRegion(drawable.region);
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
