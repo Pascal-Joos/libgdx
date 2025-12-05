@@ -49,7 +49,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  private HttpRequest httpRequest;
+  @javax.annotation.Nullable private HttpRequest httpRequest;
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
@@ -179,8 +179,12 @@ public class HttpRequestBuilder {
   public HttpRequest build() {
     validate();
     HttpRequest request = httpRequest;
+    if (request == null) {
+      throw new IllegalStateException("Request has already been built.");
+    }
     httpRequest = null;
     return request;
+  }
   }
 
   private void validate() {
