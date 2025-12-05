@@ -101,6 +101,12 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    *     next power of two.
    */
   public ObjectFloatMap(int initialCapacity, float loadFactor) {
+    entries1 = new Entries<>(this);
+    entries2 = new Entries<>(this);
+    values1 = new Values(this);
+    values2 = new Values(this);
+    keys1 = new Keys<>(this);
+    keys2 = new Keys<>(this);
     if (loadFactor <= 0f || loadFactor >= 1f)
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
     this.loadFactor = loadFactor;
