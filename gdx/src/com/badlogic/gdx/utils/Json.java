@@ -1160,7 +1160,7 @@ public class Json {
    * @param elementType May be null if the type is unknown.
    * @return May be null.
    */
-  public @Null <T> T readValue(
+  public @Nullable @Null <T> T readValue(
       @Null Class<T> type, @Null Class elementType, T defaultValue, @Nullable JsonValue jsonData) {
     if (jsonData == null) return defaultValue;
     return readValue(type, elementType, jsonData);
@@ -1179,7 +1179,7 @@ public class Json {
    * @param elementType May be null if the type is unknown.
    * @return May be null.
    */
-  public @Null <T> T readValue(
+  public @Nullable @Null <T> T readValue(
       @Nullable @Null Class<T> type,
       @Nullable @Null Class elementType,
       @Nullable JsonValue jsonData) {
