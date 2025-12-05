@@ -47,7 +47,7 @@ public class JsonValue implements Iterable<JsonValue> {
   private ValueType type;
 
   /** May be null. */
-  @Nullable private String stringValue;
+  private String stringValue;
 
   private double doubleValue;
   private long longValue;
@@ -335,6 +335,23 @@ public class JsonValue implements Iterable<JsonValue> {
   }
 
   /**
+   * Returns this value as a boolean.
+   *
+   * @throws IllegalStateException if this an array or object.
+   */
+  public boolean asBoolean() {
+    switch (type) {
+      case stringValue:
+        return stringValue.equalsIgnoreCase("true");
+      case doubleValue:
+        return doubleValue != 0;
+      case longValue:
+        return longValue != 0;
+      case booleanValue:
+        return longValue != 0;
+    }
+    throw new IllegalStateException("Value cannot be converted to boolean: " + type);
+  }
 
   /**
    * Returns this value as a byte.
@@ -382,7 +399,7 @@ public class JsonValue implements Iterable<JsonValue> {
   public char asChar() {
     switch (type) {
       case stringValue:
-        return (stringValue == null || stringValue.length() == 0) ? 0 : stringValue.charAt(0);
+        return stringValue.length() == 0 ? 0 : stringValue.charAt(0);
       case doubleValue:
         return (char) doubleValue;
       case longValue:
@@ -665,7 +682,7 @@ public class JsonValue implements Iterable<JsonValue> {
       char v;
       switch (value.type) {
         case stringValue:
-          v = (value.stringValue == null || value.stringValue.length() == 0) ? 0 : value.stringValue.charAt(0);
+          v = value.stringValue.length() == 0 ? 0 : value.stringValue.charAt(0);
           break;
         case doubleValue:
           v = (char) value.doubleValue;
@@ -1487,22 +1504,3 @@ public class JsonValue implements Iterable<JsonValue> {
     public boolean wrapNumericArrays;
   }
 }
-   * Returns this value as a boolean.
-  /**
-   * Returns this value as a boolean.
-   *
-   * @throws IllegalStateException if this an array or object.
-   */
-  public boolean asBoolean() {
-    switch (type) {
-      case stringValue:
-        return stringValue != null && stringValue.equalsIgnoreCase("true");
-      case doubleValue:
-        return doubleValue != 0;
-      case longValue:
-        return longValue != 0;
-      case booleanValue:
-        return longValue != 0;
-    }
-    throw new IllegalStateException("Value cannot be converted to boolean: " + type);
-  }
