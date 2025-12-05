@@ -35,13 +35,7 @@ public class Decoder {
   }
 
   public final void ReleaseStream() {
-    Stream =
-        new java.io.InputStream() {
-          @Override
-          public int read() {
-            return -1;
-          }
-        };
+    Stream = null;
   }
 
   public final void Init() throws IOException {
