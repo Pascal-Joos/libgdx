@@ -183,10 +183,11 @@ public class PooledLinkedList<T> {
 
     if (size == 0) {
       head = null;
+      head = null;
       tail = null;
     } else {
       tail = p;
-      tail.next = null;
+      if (tail != null) tail.next = null;
     }
 
     return payload;
