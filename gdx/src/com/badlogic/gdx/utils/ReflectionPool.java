@@ -29,8 +29,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class ReflectionPool<T> extends Pool<T> {
-  // May be null if no suitable constructor is found; guarded by runtime checks.
-  private final @Nullable Constructor constructor;
+  private final Constructor constructor;
 
   public ReflectionPool(Class<T> type) {
     this(type, 16, Integer.MAX_VALUE);
@@ -51,11 +50,10 @@ public class ReflectionPool<T> extends Pool<T> {
   @Nullable
   private @Null Constructor findConstructor(Class<T> type) {
     try {
-      // Use the no-arg overload instead of passing a null Class[] to a non-null varargs parameter.
-      return ClassReflection.getConstructor(type);
+      return ClassReflection.getConstructor(type, (Class[]) null);
     } catch (Exception ex1) {
       try {
-        Constructor constructor = ClassReflection.getDeclaredConstructor(type);
+        Constructor constructor = ClassReflection.getDeclaredConstructor(type, (Class[]) null);
         constructor.setAccessible(true);
         return constructor;
       } catch (ReflectionException ex2) {
@@ -64,15 +62,9 @@ public class ReflectionPool<T> extends Pool<T> {
     }
   }
 
-  @SuppressWarnings("ConstantConditions") // constructor is checked for null in the constructor.
   protected T newObject() {
     try {
-      if (constructor == null) {
-        throw new GdxRuntimeException(
-            "Constructor for pooled type was not found: " + getClass().getName());
-      }
-      // No-arg constructor; avoid passing a nullable varargs array.
-      return (T) constructor.newInstance();
+      return (T) constructor.newInstance((Object[]) null);
     } catch (Exception ex) {
       throw new GdxRuntimeException(
           "Unable to create new instance: " + constructor.getDeclaringClass().getName(), ex);
