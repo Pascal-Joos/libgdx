@@ -1124,7 +1124,7 @@ public class Json {
    * @return May be null.
    */
   public @Null <T> T readValue(
-      String name, @Null Class<T> type, @Nullable T defaultValue, JsonValue jsonMap) {
+      String name, @Null Class<T> type, @Null T defaultValue, JsonValue jsonMap) {
     JsonValue jsonValue = jsonMap.get(name);
     if (jsonValue == null) return defaultValue;
     return readValue(type, null, jsonValue);
