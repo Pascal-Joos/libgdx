@@ -64,8 +64,10 @@ public class PooledLinkedList<T> {
       return;
     }
 
-    item.prev = tail;
-    tail.next = item;
+    if (tail != null) {
+      item.prev = tail;
+      tail.next = item;
+    }
     tail = item;
     size++;
   }
