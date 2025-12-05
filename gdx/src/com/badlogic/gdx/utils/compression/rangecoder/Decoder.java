@@ -17,6 +17,7 @@
 package com.badlogic.gdx.utils.compression.rangecoder;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class Decoder {
   static final int kTopMask = ~((1 << 24) - 1);
@@ -27,8 +28,7 @@ public class Decoder {
 
   int Range;
   int Code;
-
-  java.io.InputStream Stream;
+  @Nullable java.io.InputStream Stream;
 
   public final void SetStream(java.io.InputStream stream) {
     Stream = stream;
@@ -39,12 +39,18 @@ public class Decoder {
   }
 
   public final void Init() throws IOException {
+    if (Stream == null) {
+      throw new IllegalStateException("Stream must be set before calling Init()");
+    }
     Code = 0;
     Range = -1;
     for (int i = 0; i < 5; i++) Code = (Code << 8) | Stream.read();
   }
 
   public final int DecodeDirectBits(int numTotalBits) throws IOException {
+    if (Stream == null) {
+      throw new IllegalStateException("Stream must be set before calling DecodeDirectBits()");
+    }
     int result = 0;
     for (int i = numTotalBits; i != 0; i--) {
       Range >>>= 1;
@@ -61,6 +67,9 @@ public class Decoder {
   }
 
   public int DecodeBit(short[] probs, int index) throws IOException {
+    if (Stream == null) {
+      throw new IllegalStateException("Stream must be set before calling DecodeBit()");
+    }
     int prob = probs[index];
     int newBound = (Range >>> kNumBitModelTotalBits) * prob;
     if ((Code ^ 0x80000000) < (newBound ^ 0x80000000)) {
