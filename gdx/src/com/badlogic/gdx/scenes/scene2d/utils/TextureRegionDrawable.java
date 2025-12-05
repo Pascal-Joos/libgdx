@@ -33,25 +33,18 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
   private TextureRegion region;
 
   /** Creates an uninitialized TextureRegionDrawable. The texture region must be set before use. */
-  public TextureRegionDrawable() {
-    // Initialize with an empty region to satisfy nullness guarantees; user should call setRegion
-    // before use.
-    this.region = new TextureRegion();
-  }
+  public TextureRegionDrawable() {}
 
   public TextureRegionDrawable(Texture texture) {
-    this.region = new TextureRegion(texture);
-    setRegion(this.region);
+    setRegion(new TextureRegion(texture));
   }
 
   public TextureRegionDrawable(TextureRegion region) {
-    this.region = region != null ? region : new TextureRegion();
     setRegion(region);
   }
 
   public TextureRegionDrawable(TextureRegionDrawable drawable) {
     super(drawable);
-    this.region = drawable.region;
     setRegion(drawable.region);
   }
 
