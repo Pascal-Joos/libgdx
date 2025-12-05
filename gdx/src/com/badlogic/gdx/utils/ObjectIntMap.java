@@ -107,6 +107,12 @@ public class ObjectIntMap<K> implements Iterable<ObjectIntMap.Entry<K>> {
 
     int tableSize = tableSize(initialCapacity, loadFactor);
     threshold = (int) (tableSize * loadFactor);
+    entries1 = new Entries(this);
+    entries2 = new Entries(this);
+    values1 = new Values(this);
+    values2 = new Values(this);
+    keys1 = new Keys(this);
+    keys2 = new Keys(this);
     mask = tableSize - 1;
     shift = Long.numberOfLeadingZeros(mask);
 
