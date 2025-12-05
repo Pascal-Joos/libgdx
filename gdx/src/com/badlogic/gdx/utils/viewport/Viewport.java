@@ -20,6 +20,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
@@ -38,6 +39,10 @@ public abstract class Viewport {
   private Camera camera;
   private float worldWidth, worldHeight;
   private int screenX, screenY, screenWidth, screenHeight;
+
+  protected Viewport() {
+    this.camera = new OrthographicCamera();
+  }
 
   private final Vector3 tmp = new Vector3();
 
