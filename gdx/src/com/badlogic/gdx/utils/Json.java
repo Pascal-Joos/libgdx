@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 public class Json {
   private static final boolean debug = false;
 
-  private JsonWriter writer;
+  @Nullable private JsonWriter writer;
   @Nullable private String typeName = "class";
   private boolean usePrototypes = true;
   private OutputType outputType;
