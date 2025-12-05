@@ -527,7 +527,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
 
   public static class Entry<K, V> {
     public K key;
-    public @Nullable V value;
+    public @Null V value;
 
     public String toString() {
       return key + "=" + value;
