@@ -526,8 +526,17 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   }
 
   public static class Entry<K, V> {
-    public K key;
+    public @Nullable K key;
     public @Null V value;
+
+    public Entry() {
+      this(null, null);
+    }
+
+    public Entry(@Nullable K key, @Null V value) {
+      this.key = key;
+      this.value = value;
+    }
 
     public String toString() {
       return key + "=" + value;
@@ -588,7 +597,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   }
 
   public static class Entries<K, V> extends MapIterator<K, V, Entry<K, V>> {
-    Entry<K, V> entry = new Entry<K, V>();
+    Entry<K, V> entry = new Entry<K, V>(null, null);
 
     public Entries(ObjectMap<K, V> map) {
       super(map);
