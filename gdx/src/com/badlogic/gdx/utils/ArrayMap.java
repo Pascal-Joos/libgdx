@@ -40,9 +40,9 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   public int size;
   public boolean ordered;
 
-  @Nullable private transient Entries entries1 = null, entries2 = null;
-  @Nullable private transient Values values1 = null, values2 = null;
-  @Nullable private transient Keys keys1 = null, keys2 = null;
+  private transient Entries entries1, entries2;
+  private transient Values values1, values2;
+  private transient Keys keys1, keys2;
 
   /** Creates an ordered map with a capacity of 16. */
   public ArrayMap() {
@@ -531,50 +531,43 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
       entries1 = new Entries(this);
       entries2 = new Entries(this);
     }
-    Entries<K, V> e1 = entries1;
-    Entries<K, V> e2 = entries2;
-    if (!e1.valid) {
-      e1.index = 0;
-      e1.valid = true;
-      if (e2 == null) throw new IllegalStateException("entries2 not initialized");
-      e2.valid = false;
-      return e1;
+    if (!entries1.valid) {
+      entries1.index = 0;
+      entries1.valid = true;
+      entries2.valid = false;
+      return entries1;
     }
-    if (e2 == null) throw new IllegalStateException("entries2 not initialized");
-    e2.index = 0;
-    e2.valid = true;
-    e1.valid = false;
-    return e2;
-  }
+    entries2.index = 0;
+    entries2.valid = true;
+    entries1.valid = false;
+    return entries2;
   }
 
   /**
    * Returns an iterator for the values in the map. Remove is supported.
    *
    * <p>If {@link Collections#allocateIterators} is false, the same iterator instance is returned
+   * each time this method is called. Use the {@link Entries} constructor for nested or
+   * multithreaded iteration.
+   *
+   * @see Collections#allocateIterators
+   */
   public Values<V> values() {
     if (Collections.allocateIterators) return new Values(this);
     if (values1 == null) {
       values1 = new Values(this);
       values2 = new Values(this);
     }
-    Values<V> v1 = values1;
-    Values<V> v2 = values2;
-    if (!v1.valid) {
-      v1.index = 0;
-      v1.valid = true;
-      if (v2 == null) throw new IllegalStateException("values2 not initialized");
-      v2.valid = false;
-      return v1;
+    if (!values1.valid) {
+      values1.index = 0;
+      values1.valid = true;
+      values2.valid = false;
+      return values1;
     }
-    if (v2 == null) throw new IllegalStateException("values2 not initialized");
-    v2.index = 0;
-    v2.valid = true;
-    v1.valid = false;
-    return v2;
-  }
-    v1.valid = false;
-    return v2;
+    values2.index = 0;
+    values2.valid = true;
+    values1.valid = false;
+    return values2;
   }
 
   /**
@@ -583,31 +576,26 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
    * <p>If {@link Collections#allocateIterators} is false, the same iterator instance is returned
    * each time this method is called. Use the {@link Entries} constructor for nested or
    * multithreaded iteration.
+   *
+   * @see Collections#allocateIterators
+   */
   public Keys<K> keys() {
     if (Collections.allocateIterators) return new Keys(this);
     if (keys1 == null) {
       keys1 = new Keys(this);
       keys2 = new Keys(this);
     }
-    Keys<K> k1 = keys1;
-    Keys<K> k2 = keys2;
-    if (!k1.valid) {
-      k1.index = 0;
-      k1.valid = true;
-      if (k2 == null) throw new IllegalStateException("keys2 not initialized");
-      k2.valid = false;
-      return k1;
+    if (!keys1.valid) {
+      keys1.index = 0;
+      keys1.valid = true;
+      keys2.valid = false;
+      return keys1;
     }
-    if (k2 == null) throw new IllegalStateException("keys2 not initialized");
-    k2.index = 0;
-    k2.valid = true;
-    k1.valid = false;
-    return k2;
+    keys2.index = 0;
+    keys2.valid = true;
+    keys1.valid = false;
+    return keys2;
   }
-    k1.valid = false;
-    return k2;
-  }
-
 
   public static class Entries<K, V> implements Iterable<Entry<K, V>>, Iterator<Entry<K, V>> {
     private final ArrayMap<K, V> map;
