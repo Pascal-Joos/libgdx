@@ -56,7 +56,7 @@ public final class ClassReflection {
    * Class parameter.
    */
   public static boolean isAssignableFrom(Class c1, @Nullable Class c2) {
-    return c2 != null && c1.isAssignableFrom(c2);
+    return c1.isAssignableFrom(c2);
   }
 
   /** Returns true if the class or interface represented by the supplied Class is a member class. */
