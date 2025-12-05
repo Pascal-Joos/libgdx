@@ -171,9 +171,6 @@ public class OrderedSet<T> extends ObjectSet<T> {
       iterator1 = new OrderedSetIterator(this);
       iterator2 = new OrderedSetIterator(this);
     }
-    if (iterator2 == null) {
-      throw new IllegalStateException("iterator2 should have been initialized");
-    }
     if (!iterator1.valid) {
       iterator1.reset();
       iterator1.valid = true;
