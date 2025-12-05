@@ -1393,12 +1393,7 @@ public class Json {
           "Unable to convert value to required type: " + jsonData + " (" + type.getName() + ")");
     }
 
-    throw new SerializationException(
-        "Unable to convert value to required type: "
-            + jsonData
-            + " ("
-            + (type == null ? "unknown" : type.getName())
-            + ")");
+    return null;
   }
 
   /**
