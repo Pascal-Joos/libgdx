@@ -41,7 +41,11 @@ public class ReflectionPool<T> extends Pool<T> {
 
   public ReflectionPool(Class<T> type, int initialCapacity, int max) {
     super(initialCapacity, max);
-    constructor = findConstructor(type);
+    Constructor ctor = findConstructor(type);
+    if (ctor == null)
+      throw new RuntimeException(
+          "Class cannot be created (missing no-arg constructor): " + type.getName());
+    constructor = ctor;
     if (constructor == null)
       throw new RuntimeException(
           "Class cannot be created (missing no-arg constructor): " + type.getName());
