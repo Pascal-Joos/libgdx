@@ -72,7 +72,7 @@ public class IntSet {
    */
   protected int mask;
 
-  private transient IntSetIterator iterator1, iterator2;
+  @javax.annotation.Nullable private transient IntSetIterator iterator1, iterator2;
 
   /** Creates a new set with an initial capacity of 51 and a load factor of 0.8. */
   public IntSet() {
