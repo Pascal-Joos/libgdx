@@ -158,6 +158,7 @@ public class PooledLinkedList<T> {
     }
 
     if (c == tail) {
+      if (p == null) return;
       p.next = null;
       tail = p;
       return;
