@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.SortedIntList;
 import com.uber.nullaway.annotations.Initializer;
-import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -169,9 +168,9 @@ public class DecalBatch implements Disposable {
   protected void render() {
     groupStrategy.beforeGroups();
     for (SortedIntList.Node<Array<Decal>> group : groupList) {
-      groupStrategy.beforeGroup(group.index, Objects.requireNonNull(group.value));
+      groupStrategy.beforeGroup(group.index, group.value);
       ShaderProgram shader = groupStrategy.getGroupShader(group.index);
-      render(shader, Objects.requireNonNull(group.value));
+      render(shader, group.value);
       groupStrategy.afterGroup(group.index);
     }
     groupStrategy.afterGroups();

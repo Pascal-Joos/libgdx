@@ -185,10 +185,6 @@ public class SortedIntList<E> implements Iterable<SortedIntList.Node<E>> {
   }
 
   public static class Node<E> {
-    protected Node() {
-      this.value = null;
-    }
-
     /** Node previous to this */
     @Nullable protected Node<E> p;
 
@@ -196,7 +192,7 @@ public class SortedIntList<E> implements Iterable<SortedIntList.Node<E>> {
     @Nullable protected Node<E> n;
 
     /** Value held */
-    @Nullable public E value;
+    public E value;
 
     /** Index value in list */
     public int index;
