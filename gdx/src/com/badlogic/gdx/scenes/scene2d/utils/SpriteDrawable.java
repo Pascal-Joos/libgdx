@@ -43,6 +43,9 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
+    if (sprite == null) {
+      throw new IllegalStateException("Sprite must be set before calling draw.");
+    }
     Color spriteColor = sprite.getColor();
     float oldColor = spriteColor.toFloatBits();
     sprite.setColor(spriteColor.mul(batch.getColor()));
@@ -67,6 +70,10 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
       float scaleY,
       float rotation) {
 
+    if (sprite == null) {
+      throw new IllegalStateException("Sprite must be set before calling draw.");
+    }
+
     Color spriteColor = sprite.getColor();
     float oldColor = spriteColor.toFloatBits();
     sprite.setColor(spriteColor.mul(batch.getColor()));
@@ -81,6 +88,9 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
   }
 
   public void setSprite(@Nullable Sprite sprite) {
+    if (sprite == null) {
+      throw new IllegalArgumentException("Sprite cannot be null.");
+    }
     this.sprite = sprite;
     setMinWidth(sprite.getWidth());
     setMinHeight(sprite.getHeight());
