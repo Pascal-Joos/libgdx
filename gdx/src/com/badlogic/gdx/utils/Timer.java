@@ -99,9 +99,7 @@ public class Timer {
           task.timer = this;
           long timeMillis = System.nanoTime() / 1000000;
           long executeTimeMillis = timeMillis + (long) (delaySeconds * 1000);
-          TimerThread currentThread = thread();
-          if (currentThread.pauseTimeMillis > 0)
-            executeTimeMillis -= timeMillis - currentThread.pauseTimeMillis;
+          if (thread.pauseTimeMillis > 0) executeTimeMillis -= timeMillis - thread.pauseTimeMillis;
           task.executeTimeMillis = executeTimeMillis;
           task.intervalMillis = (long) (intervalSeconds * 1000);
           task.repeatCount = repeatCount;
