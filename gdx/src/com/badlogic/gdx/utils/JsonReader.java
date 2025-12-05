@@ -574,6 +574,9 @@ public class JsonReader implements BaseJsonReader {
     }
     if (parseRuntimeEx != null)
       throw new SerializationException("Error parsing JSON: " + new String(data), parseRuntimeEx);
+    if (root == null) throw new SerializationException("Error parsing JSON: root is null");
+    if (parseRuntimeEx != null)
+      throw new SerializationException("Error parsing JSON: " + new String(data), parseRuntimeEx);
     return root;
   }
 
