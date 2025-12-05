@@ -560,8 +560,6 @@ public class Queue<T> implements Iterable<T> {
     public QueueIterable(Queue<T> queue, boolean allowRemove) {
       this.queue = queue;
       this.allowRemove = allowRemove;
-      this.iterator1 = new QueueIterator(queue, allowRemove);
-      this.iterator2 = new QueueIterator(queue, allowRemove);
     }
 
     /**
