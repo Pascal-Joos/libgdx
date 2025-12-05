@@ -19,7 +19,6 @@ package com.badlogic.gdx.scenes.scene2d.utils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import javax.annotation.Nullable;
 
 /**
  * Drawable for a {@link NinePatch}.
@@ -35,7 +34,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class NinePatchDrawable extends BaseDrawable implements TransformDrawable {
-  @Nullable private NinePatch patch;
+  private NinePatch patch;
 
   /**
    * Creates an uninitialized NinePatchDrawable. The ninepatch must be {@link #setPatch(NinePatch)
@@ -53,9 +52,6 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
-    if (patch == null) {
-      throw new IllegalStateException("NinePatchDrawable is not initialized with a NinePatch");
-    }
     patch.draw(batch, x, y, width, height);
   }
 
@@ -70,9 +66,6 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
       float scaleX,
       float scaleY,
       float rotation) {
-    if (patch == null) {
-      throw new IllegalStateException("NinePatchDrawable is not initialized with a NinePatch");
-    }
     patch.draw(batch, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
   }
 
@@ -80,7 +73,7 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
    * Sets this drawable's ninepatch and set the min width, min height, top height, right width,
    * bottom height, and left width to the patch's padding.
    */
-  public void setPatch(@Nullable NinePatch patch) {
+  public void setPatch(NinePatch patch) {
     this.patch = patch;
     if (patch != null) {
       setMinWidth(patch.getTotalWidth());
@@ -93,9 +86,6 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
   }
 
   public NinePatch getPatch() {
-    if (patch == null) {
-      throw new IllegalStateException("NinePatchDrawable is not initialized with a NinePatch");
-    }
     return patch;
   }
 
