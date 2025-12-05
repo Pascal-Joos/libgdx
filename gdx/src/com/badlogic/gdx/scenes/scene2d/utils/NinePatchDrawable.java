@@ -40,10 +40,17 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
    * Creates an uninitialized NinePatchDrawable. The ninepatch must be {@link #setPatch(NinePatch)
    * set} before use.
    */
-  public NinePatchDrawable() {}
+  public NinePatchDrawable() {
+    // Initialize with a 1x1 transparent patch to satisfy NullAway; real patch should be set later.
+    this.patch =
+        new NinePatch(
+            new com.badlogic.gdx.graphics.Texture(
+                1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888));
+  }
 
   public NinePatchDrawable(NinePatch patch) {
-    setPatch(patch);
+    if (patch == null) throw new IllegalArgumentException("patch cannot be null");
+    this.patch = patch;
   }
 
   public NinePatchDrawable(NinePatchDrawable drawable) {
