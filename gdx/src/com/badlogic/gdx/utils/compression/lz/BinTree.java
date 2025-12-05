@@ -10,7 +10,7 @@ public class BinTree extends InWindow {
   int _matchMaxLen;
 
   int[] _son;
-  int[] _hash = new int[0];
+  int[] _hash;
 
   int _cutValue = 0xFF;
   int _hashMask;
