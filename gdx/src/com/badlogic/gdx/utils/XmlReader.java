@@ -552,7 +552,7 @@ public class XmlReader {
     }
 
     public String getText() {
-      return text != null ? text : "";
+      return text;
     }
 
     public void setText(@Nullable String text) {
