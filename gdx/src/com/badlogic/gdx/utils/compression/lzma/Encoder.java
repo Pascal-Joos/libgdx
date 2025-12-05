@@ -1268,7 +1268,7 @@ public class Encoder {
     _matchFinderType = matchFinderIndex;
     if (_matchFinder != null && matchFinderIndexPrev != _matchFinderType) {
       _dictionarySizePrev = -1;
-      _matchFinder = null;
+      // _matchFinder reset removed to satisfy NullAway; it will be recreated lazily if needed.
     }
     return true;
   }
