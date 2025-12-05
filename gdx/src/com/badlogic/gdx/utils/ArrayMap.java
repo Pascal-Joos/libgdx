@@ -44,6 +44,15 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   private transient Values values1, values2;
   private transient Keys keys1, keys2;
 
+  private void initIterators() {
+    entries1 = new Entries(this);
+    entries2 = new Entries(this);
+    values1 = new Values(this);
+    values2 = new Values(this);
+    keys1 = new Keys(this);
+    keys2 = new Keys(this);
+  }
+
   /** Creates an ordered map with a capacity of 16. */
   public ArrayMap() {
     this(true, 16);
@@ -65,8 +74,10 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
     values = (V[]) new Object[capacity];
   }
 
+  initIterators();
+
   /**
-   * Creates a new map with {@link #keys} and {@link #values} of the specified type.
+   * initIterators();
    *
    * @param ordered If false, methods that remove elements may change the order of other elements in
    *     the arrays, which avoids a memory copy.
@@ -76,6 +87,7 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
     this.ordered = ordered;
     keys = (K[]) ArrayReflection.newInstance(keyArrayType, capacity);
     values = (V[]) ArrayReflection.newInstance(valueArrayType, capacity);
+    initIterators();
   }
 
   /**
