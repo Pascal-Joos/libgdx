@@ -344,7 +344,6 @@ public class Json {
       writeValue(object, knownType, elementType);
     } finally {
       StreamUtils.closeQuietly(this.writer);
-      this.writer = null;
     }
   }
 
