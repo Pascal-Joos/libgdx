@@ -113,15 +113,6 @@ class TimSort<T> {
   private static final boolean DEBUG = false;
 
   TimSort() {
-    this.a = (T[]) new Object[0];
-    this.c =
-        new Comparator<T>() {
-          @Override
-          public int compare(T o1, T o2) {
-            return 0;
-          }
-        };
-
     tmp = (T[]) new Object[INITIAL_TMP_STORAGE_LENGTH];
     runBase = new int[40];
     runLen = new int[40];
