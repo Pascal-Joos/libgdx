@@ -152,11 +152,6 @@ public class PooledLinkedList<T> {
     }
 
     if (c == head) {
-      if (n == null) {
-        head = null;
-        tail = p;
-        return;
-      }
       n.prev = null;
       head = n;
       return;
