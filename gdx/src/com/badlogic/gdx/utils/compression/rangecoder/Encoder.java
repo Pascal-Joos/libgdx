@@ -56,9 +56,7 @@ public class Encoder {
   }
 
   public void FlushStream() throws IOException {
-    if (Stream != null) {
-      Stream.flush();
-    }
+    Stream.flush();
   }
 
   public void ShiftLow() throws IOException {
