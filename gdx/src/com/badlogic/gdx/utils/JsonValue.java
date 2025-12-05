@@ -1495,7 +1495,7 @@ public class JsonValue implements Iterable<JsonValue> {
   }
 
   public static class PrettyPrintSettings {
-    public OutputType outputType;
+    public OutputType outputType = OutputType.json;
 
     /** If an object on a single line fits this many columns, it won't wrap. */
     public int singleLineColumns;
