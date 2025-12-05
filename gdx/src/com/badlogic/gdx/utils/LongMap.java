@@ -115,6 +115,12 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
 
     keyTable = new long[tableSize];
     valueTable = (V[]) new Object[tableSize];
+    entries1 = new Entries(this);
+    entries2 = new Entries(this);
+    values1 = new Values(this);
+    values2 = new Values(this);
+    keys1 = new Keys(this);
+    keys2 = new Keys(this);
   }
 
   /** Creates a new map identical to the specified map. */
