@@ -79,15 +79,11 @@ public class NetJavaServerSocketImpl implements ServerSocket {
   }
 
   @Override
-  @Override
   public Socket accept(SocketHints hints) {
     try {
-      if (server == null) throw new GdxRuntimeException("Server socket is closed.");
       return new NetJavaSocketImpl(server.accept(), hints);
     } catch (Exception e) {
       throw new GdxRuntimeException("Error accepting socket.", e);
-    }
-  }
     }
   }
 

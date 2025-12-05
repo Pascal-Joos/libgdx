@@ -170,13 +170,10 @@ public class NetJavaImpl {
 
     try {
       final String method = httpRequest.getMethod();
-      if (method == null) {
-        httpResponseListener.failed(new GdxRuntimeException("HTTP method cannot be null"));
-        return;
-      }
       URL url;
 
       final boolean doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
+      // should be enabled to upload data.
       final boolean doingOutPut =
           method.equalsIgnoreCase(HttpMethods.POST)
               || method.equalsIgnoreCase(HttpMethods.PUT)
