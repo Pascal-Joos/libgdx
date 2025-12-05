@@ -76,9 +76,9 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
    */
   protected int mask;
 
-  transient Entries entries1, entries2;
-  transient Values values1, values2;
-  transient Keys keys1, keys2;
+  transient Entries entries1 = new Entries(this), entries2 = new Entries(this);
+  transient Values values1 = new Values(this), values2 = new Values(this);
+  transient Keys keys1 = new Keys(this), keys2 = new Keys(this);
 
   /** Creates a new map with an initial capacity of 51 and a load factor of 0.8. */
   public ObjectMap() {
