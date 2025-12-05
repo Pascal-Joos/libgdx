@@ -82,13 +82,8 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
 
   public void setSprite(@Nullable Sprite sprite) {
     this.sprite = sprite;
-    if (sprite != null) {
-      setMinWidth(sprite.getWidth());
-      setMinHeight(sprite.getHeight());
-    } else {
-      setMinWidth(0);
-      setMinHeight(0);
-    }
+    setMinWidth(sprite.getWidth());
+    setMinHeight(sprite.getHeight());
   }
 
   @Nullable
