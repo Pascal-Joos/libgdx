@@ -154,7 +154,7 @@ public class PointSpriteParticleBatch
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
       FloatChannel scaleChannel = data.scaleChannel;
-      FloatChannel regionChannel = data.regionChannel;
+      FloatChannel regionChannel = java.util.Objects.requireNonNull(data.regionChannel);
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
