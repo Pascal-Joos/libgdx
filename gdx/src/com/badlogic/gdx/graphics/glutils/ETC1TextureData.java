@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class ETC1TextureData implements TextureData {
   @Nullable FileHandle file;
-  ETC1Data data;
+  @Nullable ETC1Data data;
   boolean useMipMaps;
   int width = 0;
   int height = 0;
@@ -66,8 +66,12 @@ public class ETC1TextureData implements TextureData {
     if (file != null) {
       data = new ETC1Data(file);
     }
-    width = data.width;
-    height = data.height;
+    ETC1Data localData = data;
+    if (localData == null) {
+      throw new GdxRuntimeException("ETC1Data is null in prepare()");
+    }
+    width = localData.width;
+    height = localData.height;
     isPrepared = true;
   }
 
@@ -76,8 +80,13 @@ public class ETC1TextureData implements TextureData {
     if (!isPrepared)
       throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
+    ETC1Data localData = data;
+    if (localData == null) {
+      throw new GdxRuntimeException("ETC1Data is null in consumeCustomData()");
+    }
+
     if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
-      Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
+      Pixmap pixmap = ETC1.decodeImage(localData, Format.RGB565);
       Gdx.gl.glTexImage2D(
           target,
           0,
@@ -100,11 +109,11 @@ public class ETC1TextureData implements TextureData {
           width,
           height,
           0,
-          data.compressedData.capacity() - data.dataOffset,
-          data.compressedData);
+          localData.compressedData.capacity() - localData.dataOffset,
+          localData.compressedData);
       if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
     }
-    data.dispose();
+    localData.dispose();
     data = null;
     isPrepared = false;
   }
