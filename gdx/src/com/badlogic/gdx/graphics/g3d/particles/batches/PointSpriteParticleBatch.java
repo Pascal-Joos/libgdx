@@ -153,11 +153,11 @@ public class PointSpriteParticleBatch
   protected void flush(int[] offsets) {
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
-      FloatChannel scaleChannel = data.scaleChannel;
+      FloatChannel scaleChannel = java.util.Objects.requireNonNull(data.scaleChannel);
       FloatChannel regionChannel = java.util.Objects.requireNonNull(data.regionChannel);
       FloatChannel positionChannel = data.positionChannel;
-      FloatChannel colorChannel = data.colorChannel;
-      FloatChannel rotationChannel = data.rotationChannel;
+      FloatChannel colorChannel = java.util.Objects.requireNonNull(data.colorChannel);
+      FloatChannel rotationChannel = java.util.Objects.requireNonNull(data.rotationChannel);
 
       for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
         int offset = offsets[tp] * CPU_VERTEX_SIZE;
@@ -166,7 +166,7 @@ public class PointSpriteParticleBatch
         int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
 
-        vertices[offset + CPU_POSITION_OFFSET] =
+        java.util.Objects.requireNonNull(vertices)[offset + CPU_POSITION_OFFSET] =
             positionChannel.data[positionOffset + ParticleChannels.XOffset];
         vertices[offset + CPU_POSITION_OFFSET + 1] =
             positionChannel.data[positionOffset + ParticleChannels.YOffset];
