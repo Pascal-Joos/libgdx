@@ -35,7 +35,22 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
 
   protected BufferedParticleBatch(Class<T> type) {
     this.sorter = new ParticleSorter.Distance();
-    renderData = new com.badlogic.gdx.utils.Array<T>(false, 10, type);
+    renderData = new Array<T>(false, 10, type);
+    // Initialize camera to a non-null default to satisfy NullAway; real camera should be set via
+    // setCamera().
+    this.camera =
+        new Camera() {
+          {
+            this.near = 0.1f;
+            this.far = 100f;
+          }
+
+          @Override
+          public void update() {}
+
+          @Override
+          public void update(boolean updateFrustum) {}
+        };
   }
 
   public void begin() {
@@ -55,7 +70,10 @@ public abstract class BufferedParticleBatch<T extends ParticleControllerRenderDa
   public void end() {
     if (bufferedParticlesCount > 0) {
       ensureCapacity(bufferedParticlesCount);
-      flush(sorter.sort(renderData));
+      int[] offsets = sorter.sort(renderData);
+      if (offsets != null) {
+        flush(offsets);
+      }
     }
   }
 
