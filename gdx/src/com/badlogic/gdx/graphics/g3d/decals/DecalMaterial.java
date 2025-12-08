@@ -17,6 +17,8 @@
 package com.badlogic.gdx.graphics.g3d.decals;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /** Material used by the {@link Decal} class */
@@ -25,6 +27,12 @@ public class DecalMaterial {
   protected TextureRegion textureRegion;
   protected int srcBlendFactor;
   protected int dstBlendFactor;
+
+  public DecalMaterial() {
+    this.textureRegion = new TextureRegion(new Texture(1, 1, Pixmap.Format.RGBA8888));
+    this.srcBlendFactor = NO_BLEND;
+    this.dstBlendFactor = NO_BLEND;
+  }
 
   /**
    * Binds the material's texture to the OpenGL context and changes the glBlendFunc to the values
