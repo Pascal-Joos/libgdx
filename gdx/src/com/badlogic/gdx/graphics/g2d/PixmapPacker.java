@@ -484,7 +484,7 @@ public class PixmapPacker implements Disposable {
           atlas.getRegions().add(region);
         }
         page.addedRects.clear();
-        atlas.getTextures().add(page.texture);
+        if (page.texture != null) atlas.getTextures().add(page.texture);
       }
     }
   }
@@ -602,6 +602,7 @@ public class PixmapPacker implements Disposable {
      *
      * @see #updateTexture(TextureFilter, TextureFilter, boolean)
      */
+    @Nullable
     public Texture getTexture() {
       return texture;
     }
@@ -693,6 +694,7 @@ public class PixmapPacker implements Disposable {
         packer.pages.add(page);
         node = insert(page.root, rect);
       }
+      if (node == null) return page;
       node.full = true;
       rect.set(node.rect.x, node.rect.y, node.rect.width - padding, node.rect.height - padding);
       return page;
