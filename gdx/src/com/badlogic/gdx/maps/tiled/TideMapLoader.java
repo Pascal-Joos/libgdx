@@ -250,7 +250,10 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
             x += currentChild.getIntAttribute("Count");
           } else if (name.equals("Static")) {
             Cell cell = new Cell();
-            cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+            cell.setTile(
+                currentTileSet == null
+                    ? null
+                    : currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
             layer.setCell(x++, y, cell);
           } else if (name.equals("Animated")) {
             // Create an AnimatedTile
