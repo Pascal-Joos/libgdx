@@ -33,6 +33,8 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import javax.annotation.Nullable;
 
 /**
  * Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should cover
@@ -153,7 +155,10 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
       depthbufferHandle = gl.glGenRenderbuffer();
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, depthbufferHandle);
       gl.glRenderbufferStorage(
-          GL20.GL_RENDERBUFFER, bufferBuilder.depthRenderBufferSpec.internalFormat, width, height);
+          GL20.GL_RENDERBUFFER,
+          Objects.requireNonNull(bufferBuilder.depthRenderBufferSpec).internalFormat,
+          width,
+          height);
     }
 
     if (bufferBuilder.hasStencilRenderBuffer) {
@@ -161,7 +166,7 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, stencilbufferHandle);
       gl.glRenderbufferStorage(
           GL20.GL_RENDERBUFFER,
-          bufferBuilder.stencilRenderBufferSpec.internalFormat,
+          Objects.requireNonNull(bufferBuilder.stencilRenderBufferSpec).internalFormat,
           width,
           height);
     }
@@ -171,7 +176,7 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, depthStencilPackedBufferHandle);
       gl.glRenderbufferStorage(
           GL20.GL_RENDERBUFFER,
-          bufferBuilder.packedStencilDepthRenderBufferSpec.internalFormat,
+          Objects.requireNonNull(bufferBuilder.packedStencilDepthRenderBufferSpec).internalFormat,
           width,
           height);
     }
@@ -531,9 +536,9 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
     protected Array<FrameBufferTextureAttachmentSpec> textureAttachmentSpecs =
         new Array<FrameBufferTextureAttachmentSpec>();
 
-    protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
-    protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
-    protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
+    @Nullable protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
 
     protected boolean hasStencilRenderBuffer;
     protected boolean hasDepthRenderBuffer;
