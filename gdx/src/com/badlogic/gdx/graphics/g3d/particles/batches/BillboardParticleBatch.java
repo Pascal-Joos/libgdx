@@ -130,13 +130,13 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 
   private RenderablePool renderablePool;
   private Array<Renderable> renderables;
-  private float[] vertices;
+  private float[] vertices = new float[0];
   private short[] indices;
   private int currentVertexSize = 0;
-  private VertexAttributes currentAttributes;
+  private VertexAttributes currentAttributes = CPU_ATTRIBUTES;
   protected boolean useGPU = false;
   @Nullable protected AlignMode mode = AlignMode.Screen;
-  protected Texture texture;
+  protected Texture texture = new Texture(1, 1, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
   @Nullable protected BlendingAttribute blendingAttribute;
   @Nullable protected DepthTestAttribute depthTestAttribute;
   @Nullable Shader shader;
