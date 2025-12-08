@@ -261,6 +261,8 @@ public class Model implements Disposable {
   protected void convertMesh(ModelMesh modelMesh) {
     if (modelMesh.vertices == null)
       throw new GdxRuntimeException("Invalid mesh: vertices array is null");
+    if (modelMesh.attributes == null)
+      throw new GdxRuntimeException("Invalid mesh: attributes array is null");
     int numIndices = 0;
     for (ModelMeshPart part : modelMesh.parts) {
       numIndices += part.indices.length;
