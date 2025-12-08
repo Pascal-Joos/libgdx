@@ -1323,6 +1323,7 @@ public class PolygonSpriteBatch implements PolygonBatch {
     int trianglesInBatch = triangleIndex;
     if (trianglesInBatch > maxTrianglesInBatch) maxTrianglesInBatch = trianglesInBatch;
 
+    if (lastTexture == null) return;
     lastTexture.bind();
     Mesh mesh = this.mesh;
     mesh.setVertices(vertices, 0, vertexIndex);
