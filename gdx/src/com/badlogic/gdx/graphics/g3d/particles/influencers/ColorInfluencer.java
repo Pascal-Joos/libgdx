@@ -24,7 +24,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
-import javax.annotation.Nullable;
 
 /**
  * It's an {@link Influencer} which controls particles color and transparency.
@@ -35,12 +34,6 @@ public abstract class ColorInfluencer extends Influencer {
 
   /** It's an {@link Influencer} which assigns a random color when a particle is activated. */
   public static class Random extends ColorInfluencer {
-    @Nullable FloatChannel colorChannel;
-
-    @Override
-    public void allocateChannels() {
-      colorChannel = controller.particles.addChannel(ParticleChannels.Color);
-    }
 
     @Override
     public void activateParticles(int startIndex, int count) {
