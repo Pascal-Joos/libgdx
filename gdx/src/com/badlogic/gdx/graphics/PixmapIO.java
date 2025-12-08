@@ -227,6 +227,9 @@ public class PixmapIO {
     public PNG(int initialBufferSize) {
       buffer = new ChunkBuffer(initialBufferSize);
       deflater = new Deflater();
+      lineOutBytes = new ByteArray(1);
+      curLineBytes = new ByteArray(1);
+      prevLineBytes = new ByteArray(1);
     }
 
     /** If true, the resulting PNG is flipped vertically. Default is true. */
