@@ -837,7 +837,7 @@ public class PolygonSpriteBatch implements PolygonBatch {
 
     int triangleCount = count / SPRITE_SIZE * 6;
     int batch;
-    if (texture != lastTexture) {
+    if (texture != null && texture != lastTexture) {
       switchTexture(texture);
       batch =
           Math.min(
@@ -1436,7 +1436,7 @@ public class PolygonSpriteBatch implements PolygonBatch {
     }
   }
 
-  private void switchTexture(@Nullable Texture texture) {
+  private void switchTexture(Texture texture) {
     flush();
     lastTexture = texture;
     invTexWidth = 1.0f / texture.getWidth();
