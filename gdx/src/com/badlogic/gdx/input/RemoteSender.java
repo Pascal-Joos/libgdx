@@ -21,6 +21,7 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputProcessor;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import javax.annotation.Nullable;
 
 /**
  * Sends all inputs from touch, key, accelerometer and compass to a {@link RemoteInput} at the given
@@ -29,7 +30,7 @@ import java.net.Socket;
  * @author mzechner
  */
 public class RemoteSender implements InputProcessor {
-  private DataOutputStream out;
+  @Nullable private DataOutputStream out;
   private boolean connected = false;
 
   public static final int KEY_DOWN = 0;
@@ -64,6 +65,7 @@ public class RemoteSender implements InputProcessor {
       if (!connected) return;
     }
     try {
+      if (out == null) return;
       out.writeInt(ACCEL);
       out.writeFloat(Gdx.input.getAccelerometerX());
       out.writeFloat(Gdx.input.getAccelerometerY());
@@ -80,7 +82,7 @@ public class RemoteSender implements InputProcessor {
       out.writeFloat(Gdx.input.getGyroscopeY());
       out.writeFloat(Gdx.input.getGyroscopeZ());
     } catch (Throwable t) {
-      out = null;
+
       connected = false;
     }
   }
@@ -92,6 +94,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(KEY_DOWN);
       out.writeInt(keycode);
     } catch (Throwable t) {
@@ -109,6 +112,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(KEY_UP);
       out.writeInt(keycode);
     } catch (Throwable t) {
@@ -126,6 +130,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(KEY_TYPED);
       out.writeChar(character);
     } catch (Throwable t) {
@@ -143,6 +148,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(TOUCH_DOWN);
       out.writeInt(x);
       out.writeInt(y);
@@ -162,6 +168,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(TOUCH_UP);
       out.writeInt(x);
       out.writeInt(y);
@@ -186,6 +193,7 @@ public class RemoteSender implements InputProcessor {
     }
 
     try {
+      if (out == null) return false;
       out.writeInt(TOUCH_DRAGGED);
       out.writeInt(x);
       out.writeInt(y);
