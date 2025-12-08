@@ -240,7 +240,7 @@ public class Mesh implements Disposable {
   }
 
   public Mesh disableInstancedRendering() {
-    if (isInstanced) {
+    if (isInstanced && instances != null) {
       isInstanced = false;
       instances.dispose();
       instances = null;
@@ -249,7 +249,8 @@ public class Mesh implements Disposable {
   }
 
   /**
-   * Sets the instance data of this Mesh. The attributes are assumed to be given in float format.
+   * /** Sets the instance data of this Mesh. The attributes are assumed to be given in float
+   * format.
    *
    * @param instanceData the instance data.
    * @param offset the offset into the vertices array
