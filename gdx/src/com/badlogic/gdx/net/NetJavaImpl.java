@@ -169,17 +169,19 @@ public class NetJavaImpl {
     }
 
     try {
-      final String method = httpRequest.getMethod();
+      final String requestMethod =
+          httpRequest.getMethod() == null ? HttpMethods.GET : httpRequest.getMethod();
       URL url;
 
-      final boolean doInput = !HttpMethods.HEAD.equalsIgnoreCase(method);
+      final boolean doInput = !HttpMethods.HEAD.equalsIgnoreCase(requestMethod);
       // should be enabled to upload data.
       final boolean doingOutPut =
-          HttpMethods.POST.equalsIgnoreCase(method)
-              || HttpMethods.PUT.equalsIgnoreCase(method)
-              || HttpMethods.PATCH.equalsIgnoreCase(method);
+          HttpMethods.POST.equalsIgnoreCase(requestMethod)
+              || HttpMethods.PUT.equalsIgnoreCase(requestMethod)
+              || HttpMethods.PATCH.equalsIgnoreCase(requestMethod);
 
-      if (HttpMethods.GET.equalsIgnoreCase(method) || HttpMethods.HEAD.equalsIgnoreCase(method)) {
+      if (HttpMethods.GET.equalsIgnoreCase(requestMethod)
+          || HttpMethods.HEAD.equalsIgnoreCase(requestMethod)) {
         String queryString = "";
         String value = httpRequest.getContent();
         if (value != null && !"".equals(value)) queryString = "?" + value;
@@ -191,7 +193,7 @@ public class NetJavaImpl {
       final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setDoOutput(doingOutPut);
       connection.setDoInput(doInput);
-      connection.setRequestMethod(method);
+      connection.setRequestMethod(requestMethod);
       HttpURLConnection.setFollowRedirects(httpRequest.getFollowRedirects());
 
       putIntoConnectionsAndListeners(httpRequest, httpResponseListener, connection);
