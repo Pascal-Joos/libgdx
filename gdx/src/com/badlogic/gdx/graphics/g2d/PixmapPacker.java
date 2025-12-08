@@ -695,8 +695,13 @@ public class PixmapPacker implements Disposable {
         node = insert(page.root, rect);
       }
       if (node == null) return page;
-      node.full = true;
-      rect.set(node.rect.x, node.rect.y, node.rect.width - padding, node.rect.height - padding);
+      Node nonNullNode = node;
+      nonNullNode.full = true;
+      rect.set(
+          nonNullNode.rect.x,
+          nonNullNode.rect.y,
+          nonNullNode.rect.width - padding,
+          nonNullNode.rect.height - padding);
       return page;
     }
 

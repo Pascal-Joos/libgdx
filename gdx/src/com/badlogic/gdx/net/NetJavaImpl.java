@@ -172,14 +172,14 @@ public class NetJavaImpl {
       final String method = httpRequest.getMethod();
       URL url;
 
-      final boolean doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
+      final boolean doInput = !HttpMethods.HEAD.equalsIgnoreCase(method);
       // should be enabled to upload data.
       final boolean doingOutPut =
-          method.equalsIgnoreCase(HttpMethods.POST)
-              || method.equalsIgnoreCase(HttpMethods.PUT)
-              || method.equalsIgnoreCase(HttpMethods.PATCH);
+          HttpMethods.POST.equalsIgnoreCase(method)
+              || HttpMethods.PUT.equalsIgnoreCase(method)
+              || HttpMethods.PATCH.equalsIgnoreCase(method);
 
-      if (method.equalsIgnoreCase(HttpMethods.GET) || method.equalsIgnoreCase(HttpMethods.HEAD)) {
+      if (HttpMethods.GET.equalsIgnoreCase(method) || HttpMethods.HEAD.equalsIgnoreCase(method)) {
         String queryString = "";
         String value = httpRequest.getContent();
         if (value != null && !"".equals(value)) queryString = "?" + value;
