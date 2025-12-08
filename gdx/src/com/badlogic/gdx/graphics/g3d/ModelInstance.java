@@ -73,7 +73,11 @@ public class ModelInstance implements RenderableProvider {
    * @param model The {@link Model} to create an instance of.
    */
   public ModelInstance(final Model model) {
-    this(model, (String[]) null);
+    this.model = model;
+    this.transform = new Matrix4();
+    copyNodes(model.nodes);
+    copyAnimations(model.animations, defaultShareKeyframes);
+    calculateTransforms();
   }
 
   /**
@@ -222,7 +226,7 @@ public class ModelInstance implements RenderableProvider {
   /**
    * Constructs a new ModelInstance with only the specified nodes and materials of the given model.
    */
-  public ModelInstance(final Model model, final String... rootNodeIds) {
+  public ModelInstance(final Model model, @Nullable final String... rootNodeIds) {
     this(model, null, rootNodeIds);
   }
 
