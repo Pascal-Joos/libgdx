@@ -31,7 +31,8 @@ import com.uber.nullaway.annotations.Initializer;
  * @author Inferno
  */
 public class ParticleControllerFinalizerInfluencer extends Influencer {
-  FloatChannel positionChannel, scaleChannel, rotationChannel;
+  @javax.annotation.Nullable FloatChannel positionChannel;
+  FloatChannel scaleChannel, rotationChannel;
   ObjectChannel<ParticleController> controllerChannel;
   boolean hasScale, hasRotation;
 
@@ -57,9 +58,14 @@ public class ParticleControllerFinalizerInfluencer extends Influencer {
 
   @Override
   public void update() {
+    FloatChannel pos = positionChannel;
+    if (pos == null) {
+      throw new GdxRuntimeException(
+          "Position channel not allocated; call allocateChannels() before update().");
+    }
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
-        ++i, positionOffset += positionChannel.strideSize) {
+        ++i, positionOffset += pos.strideSize) {
       ParticleController particleController = controllerChannel.data[i];
       float scale = hasScale ? scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
@@ -71,9 +77,9 @@ public class ParticleControllerFinalizerInfluencer extends Influencer {
         qw = rotationChannel.data[rotationOffset + ParticleChannels.WOffset];
       }
       particleController.setTransform(
-          positionChannel.data[positionOffset + ParticleChannels.XOffset],
-          positionChannel.data[positionOffset + ParticleChannels.YOffset],
-          positionChannel.data[positionOffset + ParticleChannels.ZOffset],
+          pos.data[positionOffset + ParticleChannels.XOffset],
+          pos.data[positionOffset + ParticleChannels.YOffset],
+          pos.data[positionOffset + ParticleChannels.ZOffset],
           qx,
           qy,
           qz,
