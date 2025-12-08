@@ -304,6 +304,7 @@ public class Actor {
   }
 
   public void addAction(@Nullable Action action) {
+    if (action == null) return;
     action.setActor(this);
     actions.add(action);
 
