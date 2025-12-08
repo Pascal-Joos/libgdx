@@ -125,7 +125,7 @@ public class ResourceData<T> implements Json.Serializable {
     public AssetData() {}
 
     public AssetData(@Nullable String filename, Class<T> type) {
-      this.filename = filename;
+      this.filename = (filename == null ? "" : filename);
       this.type = type;
     }
 
