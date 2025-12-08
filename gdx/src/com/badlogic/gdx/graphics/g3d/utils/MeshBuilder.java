@@ -636,6 +636,7 @@ public class MeshBuilder implements MeshPartBuilder {
   public short vertex(
       @Nullable Vector3 pos, @Nullable Vector3 nor, @Nullable Color col, @Nullable Vector2 uv) {
     if (vindex > MAX_INDEX) throw new GdxRuntimeException("Too many vertices used");
+    if (pos == null) pos = Vector3.Zero;
 
     vertex[posOffset] = pos.x;
     if (posSize > 1) vertex[posOffset + 1] = pos.y;
