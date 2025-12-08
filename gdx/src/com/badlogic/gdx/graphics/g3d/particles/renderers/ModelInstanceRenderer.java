@@ -68,7 +68,8 @@ public class ModelInstanceRenderer
         i < c;
         ++i, positionOffset += renderData.positionChannel.strideSize) {
       ModelInstance instance = renderData.modelInstanceChannel.data[i];
-      float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
+      float scale =
+          hasScale ? java.util.Objects.requireNonNull(renderData.scaleChannel).data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
       if (hasRotation) {
         int rotationOffset = i * renderData.rotationChannel.strideSize;
