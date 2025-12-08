@@ -83,6 +83,8 @@ public class TextureRegion {
    * @param height The height of the texture region. May be negative to flip the sprite when drawn.
    */
   public TextureRegion(TextureRegion region, int x, int y, int width, int height) {
+    if (region == null) throw new IllegalArgumentException("region cannot be null.");
+    this.texture = region.texture;
     setRegion(region, x, y, width, height);
   }
 
@@ -129,6 +131,7 @@ public class TextureRegion {
 
   /** Sets the texture and coordinates to the specified region. */
   public void setRegion(@Nullable TextureRegion region) {
+    if (region == null) throw new IllegalArgumentException("region cannot be null.");
     texture = region.texture;
     setRegion(region.u, region.v, region.u2, region.v2);
   }
