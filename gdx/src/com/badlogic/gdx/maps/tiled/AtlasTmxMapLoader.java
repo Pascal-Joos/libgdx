@@ -186,6 +186,10 @@ public class AtlasTmxMapLoader
       int imageHeight,
       @Nullable FileHandle image) {
 
+    if (atlasResolver == null) {
+      throw new GdxRuntimeException("Atlas resolver not initialized");
+    }
+
     TextureAtlas atlas = atlasResolver.getAtlas();
     String regionsName = name;
 
