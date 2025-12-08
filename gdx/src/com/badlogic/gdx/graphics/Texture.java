@@ -138,7 +138,10 @@ public class Texture extends GLTexture {
   }
 
   public Texture(FileHandle file, @Nullable Format format, boolean useMipMaps) {
-    this(TextureData.Factory.loadFromFile(file, format, useMipMaps));
+    this(
+        java.util.Objects.requireNonNull(
+            TextureData.Factory.loadFromFile(file, format, useMipMaps),
+            "TextureData.Factory.loadFromFile() returned null for file: " + file));
   }
 
   public Texture(Pixmap pixmap) {
@@ -157,12 +160,17 @@ public class Texture extends GLTexture {
     this(new PixmapTextureData(new Pixmap(width, height, format), null, false, true));
   }
 
-  public Texture(@Nullable TextureData data) {
-    this(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture(), data);
+  public Texture(TextureData data) {
+    super(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture());
+    if (data == null) throw new GdxRuntimeException("TextureData must not be null");
+    this.data = data;
+    load(data);
+    if (data.isManaged()) addManagedTexture(Gdx.app, this);
   }
 
   protected Texture(int glTarget, int glHandle, TextureData data) {
     super(glTarget, glHandle);
+    this.data = data;
     load(data);
     if (data.isManaged()) addManagedTexture(Gdx.app, this);
   }
