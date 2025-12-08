@@ -91,7 +91,9 @@ public class AnimationController extends BaseAnimationController {
     /** The number of remaining loops, negative for continuous, zero if stopped. */
     public int loopCount;
 
-    protected AnimationDesc() {}
+    protected AnimationDesc() {
+      this.animation = new com.badlogic.gdx.graphics.g3d.model.Animation();
+    }
 
     /**
      * @param delta delta time, must be positive.
