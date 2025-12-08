@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import javax.annotation.Nullable;
 
 /**
  * Socket implementation using java.net.Socket.
@@ -30,7 +31,7 @@ import java.net.InetSocketAddress;
 public class NetJavaSocketImpl implements Socket {
 
   /** Our socket or null for disposed, aka closed. */
-  private java.net.Socket socket;
+  @Nullable private java.net.Socket socket;
 
   public NetJavaSocketImpl(Protocol protocol, String host, int port, SocketHints hints) {
     try {
@@ -56,7 +57,7 @@ public class NetJavaSocketImpl implements Socket {
   }
 
   private void applyHints(SocketHints hints) {
-    if (hints != null) {
+    if (hints != null && socket != null) {
       try {
         socket.setPerformancePreferences(
             hints.performancePrefConnectionTime,
@@ -87,6 +88,9 @@ public class NetJavaSocketImpl implements Socket {
   @Override
   public InputStream getInputStream() {
     try {
+      if (socket == null) {
+        throw new GdxRuntimeException("Error getting input stream from socket: socket is closed.");
+      }
       return socket.getInputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting input stream from socket.", e);
@@ -96,6 +100,9 @@ public class NetJavaSocketImpl implements Socket {
   @Override
   public OutputStream getOutputStream() {
     try {
+      if (socket == null) {
+        throw new GdxRuntimeException("Error getting output stream from socket: socket is closed.");
+      }
       return socket.getOutputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting output stream from socket.", e);
@@ -104,6 +111,9 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public String getRemoteAddress() {
+    if (socket == null) {
+      throw new GdxRuntimeException("Error getting remote address from socket: socket is closed.");
+    }
     return socket.getRemoteSocketAddress().toString();
   }
 
