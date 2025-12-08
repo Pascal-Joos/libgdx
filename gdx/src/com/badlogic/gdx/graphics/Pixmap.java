@@ -255,6 +255,10 @@ public class Pixmap implements Disposable {
    */
   public static void downloadFromUrl(
       String url, final DownloadPixmapResponseListener responseListener) {
+    if (Gdx.net == null) {
+      responseListener.downloadFailed(new IllegalStateException("Gdx.net is not initialized"));
+      return;
+    }
     Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
     request.setUrl(url);
     Gdx.net.sendHttpRequest(
