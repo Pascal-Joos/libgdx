@@ -75,6 +75,8 @@ public class TextureLoader
       info.data = parameter.textureData;
       info.texture = parameter.texture;
     }
+    if (info.data == null)
+      throw new IllegalStateException("TextureData must not be null in loadAsync");
     if (!info.data.isPrepared()) info.data.prepare();
   }
 
