@@ -1013,13 +1013,20 @@ public class Stage extends InputAdapter implements Disposable {
    * @author Nathan Sweet
    */
   public static final class TouchFocus implements Poolable {
-    EventListener listener;
+    EventListener listener = NOOP_LISTENER;
     @Nullable Actor listenerActor, target;
     int pointer, button;
 
+    private static final EventListener NOOP_LISTENER =
+        new EventListener() {
+          @Override
+          public boolean handle(Event event) {
+            return false;
+          }
+        };
+
     public void reset() {
       listenerActor = null;
-      listener = null;
       target = null;
     }
   }
