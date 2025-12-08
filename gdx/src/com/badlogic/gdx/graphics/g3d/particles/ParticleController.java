@@ -366,10 +366,30 @@ public class ParticleController implements Json.Serializable, ResourceData.Confi
   @Initializer
   @Override
   public void read(Json json, JsonValue jsonMap) {
+    // Ensure core fields are initialized after deserialization
+    if (particleChannels == null) {
+      particleChannels = new ParticleChannels();
+    }
+    if (boundingBox == null) {
+      boundingBox = new BoundingBox();
+    }
+    // Ensure particles is non-null on all control-flow paths, even if deserialization throws
+    if (particles == null) {
+      allocateChannels(1);
+    }
+    // Ensure core fields are initialized after deserialization
+    if (particleChannels == null) {
+      particleChannels = new ParticleChannels();
+    }
+    if (boundingBox == null) {
+      boundingBox = new BoundingBox();
+    }
     name = json.readValue("name", String.class, jsonMap);
     emitter = json.readValue("emitter", Emitter.class, jsonMap);
     influencers.addAll(json.readValue("influencers", Array.class, Influencer.class, jsonMap));
     renderer = json.readValue("renderer", ParticleControllerRenderer.class, jsonMap);
+    // Allocate particle storage after deserialization to ensure particles is non-null
+    allocateChannels(emitter.maxParticleCount);
   }
 
   @Override
