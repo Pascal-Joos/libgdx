@@ -18,6 +18,7 @@ package com.badlogic.gdx.scenes.scene2d;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -161,6 +162,6 @@ public class Event implements Poolable {
 
   /** The stage for the actor the event was fired on. */
   public Stage getStage() {
-    return stage;
+    return Objects.requireNonNull(stage);
   }
 }
