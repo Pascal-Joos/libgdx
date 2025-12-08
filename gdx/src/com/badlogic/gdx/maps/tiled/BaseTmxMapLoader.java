@@ -401,16 +401,22 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
           TiledMapTileMapObject tiledMapTileMapObject =
               new TiledMapTileMapObject(tile, flipHorizontally, flipVertically);
           TextureRegion textureRegion = tiledMapTileMapObject.getTextureRegion();
-          tiledMapTileMapObject.getProperties().put("gid", id);
-          tiledMapTileMapObject.setX(x);
-          tiledMapTileMapObject.setY(flipY ? y : y - height);
-          float objectWidth = element.getFloatAttribute("width", textureRegion.getRegionWidth());
-          float objectHeight = element.getFloatAttribute("height", textureRegion.getRegionHeight());
-          tiledMapTileMapObject.setScaleX(scaleX * (objectWidth / textureRegion.getRegionWidth()));
-          tiledMapTileMapObject.setScaleY(
-              scaleY * (objectHeight / textureRegion.getRegionHeight()));
-          tiledMapTileMapObject.setRotation(element.getFloatAttribute("rotation", 0));
-          object = tiledMapTileMapObject;
+          if (textureRegion == null) {
+            object = new RectangleMapObject(x, flipY ? y - height : y, width, height);
+          } else {
+            tiledMapTileMapObject.getProperties().put("gid", id);
+            tiledMapTileMapObject.setX(x);
+            tiledMapTileMapObject.setY(flipY ? y : y - height);
+            float objectWidth = element.getFloatAttribute("width", textureRegion.getRegionWidth());
+            float objectHeight =
+                element.getFloatAttribute("height", textureRegion.getRegionHeight());
+            tiledMapTileMapObject.setScaleX(
+                scaleX * (objectWidth / textureRegion.getRegionWidth()));
+            tiledMapTileMapObject.setScaleY(
+                scaleY * (objectHeight / textureRegion.getRegionHeight()));
+            tiledMapTileMapObject.setRotation(element.getFloatAttribute("rotation", 0));
+            object = tiledMapTileMapObject;
+          }
         } else {
           object = new RectangleMapObject(x, flipY ? y - height : y, width, height);
         }
