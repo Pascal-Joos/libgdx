@@ -1263,6 +1263,7 @@ public class ParticleEmitter {
 
     public Particle(@Nullable Sprite sprite) {
       super(sprite);
+      this.tint = new float[] {1f, 1f, 1f};
     }
   }
 
