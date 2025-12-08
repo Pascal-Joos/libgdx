@@ -109,6 +109,8 @@ public class PointSpriteParticleBatch
       this.depthTestAttribute = new DepthTestAttribute(GL20.GL_LEQUAL, false);
 
     allocRenderable();
+    if (renderable == null)
+      throw new com.badlogic.gdx.utils.GdxRuntimeException("Renderable not allocated");
     ensureCapacity(capacity);
     renderable.shader = new ParticleShader(renderable, shaderConfig);
     renderable.shader.init();
