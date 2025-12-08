@@ -270,7 +270,9 @@ public class ModelBatch implements Disposable {
    * called after the call to {@link #begin(Camera)} and before the call to {@link #end()}.
    */
   public void flush() {
-    sorter.sort(camera, renderables);
+    if (camera == null) throw new GdxRuntimeException("Call begin() first.");
+    final Camera cam = camera;
+    sorter.sort(cam, renderables);
     Shader currentShader = null;
     for (int i = 0; i < renderables.size; i++) {
       final Renderable renderable = renderables.get(i);
@@ -279,8 +281,10 @@ public class ModelBatch implements Disposable {
         currentShader = renderable.shader;
         if (currentShader == null)
           throw new IllegalStateException("Shader must not be null when beginning rendering");
-        currentShader.begin(camera, context);
+        currentShader.begin(cam, context);
       }
+      if (currentShader == null)
+        throw new IllegalStateException("Shader must not be null when rendering");
       if (currentShader == null)
         throw new IllegalStateException("Shader must not be null when rendering");
       currentShader.render(renderable);
