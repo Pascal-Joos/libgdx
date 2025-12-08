@@ -52,9 +52,11 @@ public abstract class ModelInfluencer extends Influencer {
 
     @Override
     public void init() {
+      ObjectChannel<ModelInstance> localModelChannel = modelChannel;
+      if (localModelChannel == null) throw new IllegalStateException("Model channel not allocated");
       Model first = models.first();
       for (int i = 0, c = controller.emitter.maxParticleCount; i < c; ++i) {
-        modelChannel.data[i] = new ModelInstance(first);
+        localModelChannel.data[i] = new ModelInstance(first);
       }
     }
 
@@ -94,21 +96,25 @@ public abstract class ModelInfluencer extends Influencer {
 
     @Override
     public void init() {
-      pool.clear();
+      // nothing to do; instances are created on activation
     }
 
     @Override
     public void activateParticles(int startIndex, int count) {
+      ObjectChannel<ModelInstance> localModelChannel = modelChannel;
+      if (localModelChannel == null) throw new IllegalStateException("Model channel not allocated");
       for (int i = startIndex, c = startIndex + count; i < c; ++i) {
-        modelChannel.data[i] = pool.obtain();
+        localModelChannel.data[i] = pool.obtain();
       }
     }
 
     @Override
     public void killParticles(int startIndex, int count) {
+      ObjectChannel<ModelInstance> localModelChannel = modelChannel;
+      if (localModelChannel == null) throw new IllegalStateException("Model channel not allocated");
       for (int i = startIndex, c = startIndex + count; i < c; ++i) {
-        pool.free(modelChannel.data[i]);
-        modelChannel.data[i] = null;
+        pool.free(localModelChannel.data[i]);
+        localModelChannel.data[i] = null;
       }
     }
 
@@ -119,7 +125,7 @@ public abstract class ModelInfluencer extends Influencer {
   }
 
   public Array<Model> models;
-  ObjectChannel<ModelInstance> modelChannel;
+  @javax.annotation.Nullable ObjectChannel<ModelInstance> modelChannel;
 
   public ModelInfluencer() {
     this.models = new Array<Model>(true, 1, Model.class);
