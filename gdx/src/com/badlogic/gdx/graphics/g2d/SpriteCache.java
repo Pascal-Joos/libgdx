@@ -1066,6 +1066,8 @@ public class SpriteCache implements Disposable {
     public Cache(int id, int offset) {
       this.id = id;
       this.offset = offset;
+      this.textures = new Texture[0];
+      this.counts = new int[0];
     }
   }
 
