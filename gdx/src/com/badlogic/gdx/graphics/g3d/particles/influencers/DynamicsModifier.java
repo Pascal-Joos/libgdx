@@ -105,6 +105,7 @@ public abstract class DynamicsModifier extends Influencer {
       strengthValue.load(rotation.strengthValue);
     }
 
+    @Initializer
     @Override
     public void allocateChannels() {
       super.allocateChannels();
@@ -210,7 +211,7 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   public static class Rotational2D extends Strength {
-    @Nullable FloatChannel rotationalVelocity2dChannel;
+    FloatChannel rotationalVelocity2dChannel;
 
     public Rotational2D() {}
 
@@ -218,6 +219,7 @@ public abstract class DynamicsModifier extends Influencer {
       super(rotation);
     }
 
+    @Initializer
     @Override
     public void allocateChannels() {
       super.allocateChannels();
