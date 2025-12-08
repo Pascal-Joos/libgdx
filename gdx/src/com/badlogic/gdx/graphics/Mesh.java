@@ -709,6 +709,7 @@ public class Mesh implements Disposable {
    * @param count number of vertices or indices to use
    */
   public void render(@Nullable ShaderProgram shader, int primitiveType, int offset, int count) {
+    if (shader == null) return;
     render(shader, primitiveType, offset, count, autoBind);
   }
 
