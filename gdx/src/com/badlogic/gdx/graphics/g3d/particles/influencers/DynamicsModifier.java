@@ -549,11 +549,13 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      final FloatChannel accelChannelNonNull =
+          java.util.Objects.requireNonNull(accelerationChannel);
       int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
       for (int i = 0, c = controller.particles.size;
           i < c;
           ++i, strengthOffset += strengthChannel.strideSize,
-              forceOffset += accelerationChannel.strideSize, lifeOffset += lifeChannel.strideSize) {
+              forceOffset += accelChannelNonNull.strideSize, lifeOffset += lifeChannel.strideSize) {
 
         float strength =
             strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
@@ -563,9 +565,9 @@ public abstract class DynamicsModifier extends Influencer {
             .set(MathUtils.random(-1, 1f), MathUtils.random(-1, 1f), MathUtils.random(-1, 1f))
             .nor()
             .scl(strength);
-        accelerationChannel.data[forceOffset + ParticleChannels.XOffset] += TMP_V3.x;
-        accelerationChannel.data[forceOffset + ParticleChannels.YOffset] += TMP_V3.y;
-        accelerationChannel.data[forceOffset + ParticleChannels.ZOffset] += TMP_V3.z;
+        accelChannelNonNull.data[forceOffset + ParticleChannels.XOffset] += TMP_V3.x;
+        accelChannelNonNull.data[forceOffset + ParticleChannels.YOffset] += TMP_V3.y;
+        accelChannelNonNull.data[forceOffset + ParticleChannels.ZOffset] += TMP_V3.z;
       }
     }
 
