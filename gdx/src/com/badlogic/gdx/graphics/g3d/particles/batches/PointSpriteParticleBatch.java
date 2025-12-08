@@ -214,6 +214,7 @@ public class PointSpriteParticleBatch
   @Override
   public void load(AssetManager manager, ResourceData resources) {
     SaveData data = resources.getSaveData("pointSpriteBatch");
-    if (data != null) setTexture((Texture) manager.get(data.loadAsset()));
+    if (data != null)
+      setTexture(java.util.Objects.requireNonNull((Texture) manager.get(data.loadAsset())));
   }
 }

@@ -274,7 +274,7 @@ public abstract class RegionInfluencer extends Influencer {
       return;
     }
     TextureAtlas atlas;
-    atlas = (TextureAtlas) manager.get(data.loadAsset());
+    atlas = java.util.Objects.requireNonNull((TextureAtlas) manager.get(data.loadAsset()));
     for (AspectTextureRegion atr : regions) {
       atr.updateUV(atlas);
     }

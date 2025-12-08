@@ -125,7 +125,7 @@ public abstract class MeshSpawnShapeValue extends SpawnShapeValue {
     SaveData saveData = data.getSaveData();
     AssetDescriptor descriptor = saveData.loadAsset();
     if (descriptor != null) {
-      Model model = (Model) manager.get(descriptor);
+      Model model = java.util.Objects.requireNonNull((Model) manager.get(descriptor));
       setMesh(model.meshes.get((Integer) saveData.load("index")), model);
     }
   }
