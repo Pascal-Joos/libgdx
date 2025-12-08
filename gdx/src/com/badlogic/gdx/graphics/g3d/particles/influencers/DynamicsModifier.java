@@ -584,6 +584,7 @@ public abstract class DynamicsModifier extends Influencer {
     this.isGlobal = modifier.isGlobal;
   }
 
+  @Initializer
   @Override
   public void allocateChannels() {
     lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
