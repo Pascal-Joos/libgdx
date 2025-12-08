@@ -138,17 +138,24 @@ public class ParticleEffectLoader
         }
       }
     }
-
-    effectData.resource.load(manager, effectData);
+    if (effectData == null) {
+      throw new IllegalStateException("No ResourceData found for ParticleEffect: " + fileName);
+    }
+    ParticleEffect effect = effectData.resource;
+    if (effect == null) {
+      throw new IllegalStateException(
+          "ResourceData for " + fileName + " has null ParticleEffect resource");
+    }
+    effect.load(manager, effectData);
     if (parameter != null) {
       if (parameter.batches != null) {
         for (ParticleBatch<?> batch : parameter.batches) {
           batch.load(manager, effectData);
         }
       }
-      effectData.resource.setBatch(parameter.batches);
+      effect.setBatch(parameter.batches);
     }
-    return effectData.resource;
+    return effect;
   }
 
   @Nullable
