@@ -271,7 +271,9 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
               } else if (frameName.equals("Static")) {
                 frameTiles.add(
                     (StaticTiledMapTile)
-                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                        (currentTileSet == null
+                            ? null
+                            : currentTileSet.getTile(firstgid + frame.getIntAttribute("Index"))));
               }
             }
             Cell cell = new Cell();
