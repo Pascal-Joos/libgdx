@@ -49,6 +49,10 @@ public class TextureAtlasLoader
       String fileName,
       FileHandle file,
       @Nullable TextureAtlasParameter parameter) {
+    if (data == null) {
+      throw new IllegalStateException(
+          "TextureAtlasData must be set before calling load; getDependencies should be invoked first.");
+    }
     for (Page page : data.getPages()) {
       Texture texture =
           assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
