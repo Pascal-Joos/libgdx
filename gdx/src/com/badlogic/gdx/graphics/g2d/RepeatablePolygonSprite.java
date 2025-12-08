@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.ShortArray;
  */
 public class RepeatablePolygonSprite {
 
-  private TextureRegion region;
+  private TextureRegion region = new TextureRegion();
   private float density;
 
   private boolean dirty = true;
