@@ -91,20 +91,24 @@ public class ModelInstanceRenderer
           scale,
           scale);
       if (hasColor) {
-        int colorOffset = i * renderData.colorChannel.strideSize;
+        int colorOffset = i * java.util.Objects.requireNonNull(renderData.colorChannel).strideSize;
         ColorAttribute colorAttribute =
             (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
         BlendingAttribute blendingAttribute =
             (BlendingAttribute) instance.materials.get(0).get(BlendingAttribute.Type);
         colorAttribute.color.r =
-            renderData.colorChannel.data[colorOffset + ParticleChannels.RedOffset];
+            java.util.Objects.requireNonNull(renderData.colorChannel)
+                .data[colorOffset + ParticleChannels.RedOffset];
         colorAttribute.color.g =
-            renderData.colorChannel.data[colorOffset + ParticleChannels.GreenOffset];
+            java.util.Objects.requireNonNull(renderData.colorChannel)
+                .data[colorOffset + ParticleChannels.GreenOffset];
         colorAttribute.color.b =
-            renderData.colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
+            java.util.Objects.requireNonNull(renderData.colorChannel)
+                .data[colorOffset + ParticleChannels.BlueOffset];
         if (blendingAttribute != null)
           blendingAttribute.opacity =
-              renderData.colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
+              java.util.Objects.requireNonNull(renderData.colorChannel)
+                  .data[colorOffset + ParticleChannels.AlphaOffset];
       }
     }
     super.update();
