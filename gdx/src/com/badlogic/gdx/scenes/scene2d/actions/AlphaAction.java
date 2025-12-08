@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Null;
  */
 public class AlphaAction extends TemporalAction {
   private float start, end;
-  private @Null Color color;
+  private @javax.annotation.Nullable Color color;
 
   protected void begin() {
     if (color == null) color = target.getColor();
@@ -37,9 +37,11 @@ public class AlphaAction extends TemporalAction {
   }
 
   protected void update(float percent) {
-    if (percent == 0) color.a = start;
-    else if (percent == 1) color.a = end;
-    else color.a = start + (end - start) * percent;
+    if (color == null) throw new IllegalStateException("color must not be null in update()");
+    Color c = color;
+    if (percent == 0) c.a = start;
+    else if (percent == 1) c.a = end;
+    else c.a = start + (end - start) * percent;
   }
 
   public void reset() {
