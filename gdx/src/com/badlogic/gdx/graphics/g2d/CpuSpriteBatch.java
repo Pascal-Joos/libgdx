@@ -760,7 +760,10 @@ public class CpuSpriteBatch extends SpriteBatch {
     if (!drawing)
       throw new IllegalStateException("CpuSpriteBatch.begin must be called before draw.");
 
-    if (texture != lastTexture) switchTexture(texture);
+    if (texture != lastTexture) {
+      if (texture == null) return;
+      switchTexture(texture);
+    }
 
     Affine2 t = adjustAffine;
 

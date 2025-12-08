@@ -626,8 +626,10 @@ public class SpriteBatch implements Batch {
 
     int verticesLength = vertices.length;
     int remainingVertices = verticesLength;
-    if (texture != lastTexture) switchTexture(texture);
-    else {
+    if (texture != lastTexture) {
+      if (texture == null) return;
+      switchTexture(texture);
+    } else {
       remainingVertices -= idx;
       if (remainingVertices == 0) {
         flush();
@@ -1158,7 +1160,7 @@ public class SpriteBatch implements Batch {
     }
   }
 
-  protected void switchTexture(@Nullable Texture texture) {
+  protected void switchTexture(Texture texture) {
     flush();
     lastTexture = texture;
     invTexWidth = 1.0f / texture.getWidth();
