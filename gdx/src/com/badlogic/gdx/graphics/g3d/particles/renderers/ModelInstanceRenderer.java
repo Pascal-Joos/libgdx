@@ -72,11 +72,20 @@ public class ModelInstanceRenderer
           hasScale ? java.util.Objects.requireNonNull(renderData.scaleChannel).data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
       if (hasRotation) {
-        int rotationOffset = i * renderData.rotationChannel.strideSize;
-        qx = renderData.rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
-        qy = renderData.rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
-        qz = renderData.rotationChannel.data[rotationOffset + ParticleChannels.ZOffset];
-        qw = renderData.rotationChannel.data[rotationOffset + ParticleChannels.WOffset];
+        int rotationOffset =
+            i * java.util.Objects.requireNonNull(renderData.rotationChannel).strideSize;
+        qx =
+            java.util.Objects.requireNonNull(renderData.rotationChannel)
+                .data[rotationOffset + ParticleChannels.XOffset];
+        qy =
+            java.util.Objects.requireNonNull(renderData.rotationChannel)
+                .data[rotationOffset + ParticleChannels.YOffset];
+        qz =
+            java.util.Objects.requireNonNull(renderData.rotationChannel)
+                .data[rotationOffset + ParticleChannels.ZOffset];
+        qw =
+            java.util.Objects.requireNonNull(renderData.rotationChannel)
+                .data[rotationOffset + ParticleChannels.WOffset];
       }
 
       instance.transform.set(
