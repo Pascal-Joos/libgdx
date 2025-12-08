@@ -30,10 +30,16 @@ import javax.annotation.Nullable;
 public abstract class ParticleControllerRenderer<
         D extends ParticleControllerRenderData, T extends ParticleBatch<D>>
     extends ParticleControllerComponent {
+
+  private static final class EmptyRenderData extends ParticleControllerRenderData {}
+
   @Nullable protected T batch;
   protected D renderData;
 
-  protected ParticleControllerRenderer() {}
+  @SuppressWarnings("unchecked")
+  protected ParticleControllerRenderer() {
+    this((D) new EmptyRenderData());
+  }
 
   protected ParticleControllerRenderer(D renderData) {
     this.renderData = renderData;
@@ -41,7 +47,9 @@ public abstract class ParticleControllerRenderer<
 
   @Override
   public void update() {
-    batch.draw(renderData);
+    if (batch != null) {
+      batch.draw(renderData);
+    }
   }
 
   @SuppressWarnings("unchecked")
