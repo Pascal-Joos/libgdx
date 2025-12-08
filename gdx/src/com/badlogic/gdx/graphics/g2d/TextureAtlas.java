@@ -456,7 +456,6 @@ public class TextureAtlas implements Disposable {
         }
         // Page and region entries.
         Page page = null;
-        Array<Object> names = null, values = null;
         while (true) {
           if (line == null) break;
           if (line.trim().length() == 0) {
@@ -476,6 +475,8 @@ public class TextureAtlas implements Disposable {
             region.page = page;
             region.name = line.trim();
             if (flip) region.flip = true;
+            Array<Object> names = null;
+            Array<Object> values = new Array(8);
             while (true) {
               int count = readEntry(entry, line = reader.readLine());
               if (count == 0) break;
@@ -484,7 +485,6 @@ public class TextureAtlas implements Disposable {
               else {
                 if (names == null) {
                   names = new Array(8);
-                  values = new Array(8);
                 }
                 names.add(entry[0]);
                 int[] entryValues = new int[count];
@@ -501,11 +501,9 @@ public class TextureAtlas implements Disposable {
               region.originalWidth = region.width;
               region.originalHeight = region.height;
             }
-            if (names != null && names.size > 0) {
+            if (names != null && values != null && names.size > 0) {
               region.names = names.toArray(String.class);
               region.values = values.toArray(int[].class);
-              names.clear();
-              values.clear();
             }
             regions.add(region);
           }
