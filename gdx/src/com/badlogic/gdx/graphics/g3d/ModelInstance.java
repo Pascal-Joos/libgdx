@@ -365,7 +365,7 @@ public class ModelInstance implements RenderableProvider {
       ArrayMap<Node, Matrix4> bindPose = part.invBoneBindTransforms;
       if (bindPose != null) {
         for (int j = 0; j < bindPose.size; ++j) {
-          bindPose.keys[j] = getNode(bindPose.keys[j].id);
+          if (bindPose.keys[j].id != null) bindPose.keys[j] = getNode(bindPose.keys[j].id);
         }
       }
       if (!materials.contains(part.material, true)) {
