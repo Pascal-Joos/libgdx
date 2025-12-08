@@ -216,6 +216,7 @@ public abstract class RegionInfluencer extends Influencer {
   FloatChannel regionChannel;
   @Nullable public String atlasName;
 
+  @SuppressWarnings("NullAway.Init")
   public RegionInfluencer(int regionsCount) {
     this.regions = new Array<AspectTextureRegion>(false, regionsCount, AspectTextureRegion.class);
   }
@@ -231,6 +232,10 @@ public abstract class RegionInfluencer extends Influencer {
 
   /** All the regions must be defined on the same Texture */
   public RegionInfluencer(TextureRegion... regions) {
+    // Initialize regionChannel to a non-null dummy channel; it will be properly
+    // reallocated later in allocateChannels().
+    regionChannel =
+        new com.badlogic.gdx.graphics.g3d.particles.ParallelArray(0).new FloatChannel(0, 1, 0);
     setAtlasName(null);
     this.regions = new Array<AspectTextureRegion>(false, regions.length, AspectTextureRegion.class);
     add(regions);
