@@ -987,7 +987,7 @@ public class Cell<T extends Actor> implements Poolable {
     maxWidth = null;
     maxHeight = null;
     spaceTop = Fixed.valueOf(0);
-    spaceLeft = null;
+    spaceLeft = Fixed.valueOf(0);
     spaceBottom = null;
     spaceRight = null;
     padTop = null;
