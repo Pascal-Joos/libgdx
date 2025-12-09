@@ -70,12 +70,13 @@ public class List<T> extends Widget implements Cullable {
   }
 
   public List(ListStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
     selection.setActor(this);
     selection.setRequired(true);
 
     setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
-
     addListener(
         keyListener =
             new InputListener() {
