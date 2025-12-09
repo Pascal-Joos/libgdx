@@ -900,12 +900,12 @@ public class Cell<T extends Actor> implements Poolable {
 
   /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
   public float getPadX() {
-    return padLeft.get(actor) + padRight.get(actor);
+    return padLeft.get(actor != null ? actor : table) + padRight.get(actor != null ? actor : table);
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
   public float getPadY() {
-    return padTop.get(actor) + padBottom.get(actor);
+    return padTop.get(actor != null ? actor : table) + padBottom.get(actor != null ? actor : table);
   }
 
   @Nullable
