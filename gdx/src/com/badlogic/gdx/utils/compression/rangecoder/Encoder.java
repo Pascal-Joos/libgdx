@@ -66,10 +66,14 @@ public class Encoder {
     if (LowHi != 0 || Low < 0xFF000000L) {
       _position += _cacheSize;
       int temp = _cache;
-      do {
-        Stream.write(temp + LowHi);
-        temp = 0xFF;
-      } while (--_cacheSize != 0);
+      if (Stream != null) {
+        do {
+          Stream.write(temp + LowHi);
+          temp = 0xFF;
+        } while (--_cacheSize != 0);
+      } else {
+        _cacheSize = 0;
+      }
       _cache = (((int) Low) >>> 24);
     }
     _cacheSize++;
