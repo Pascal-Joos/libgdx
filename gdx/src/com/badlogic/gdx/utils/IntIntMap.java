@@ -113,6 +113,12 @@ public class IntIntMap implements Iterable<IntIntMap.Entry> {
     shift = Long.numberOfLeadingZeros(mask);
 
     keyTable = new int[tableSize];
+    entries1 = new Entries(this);
+    entries2 = new Entries(this);
+    values1 = new Values(this);
+    values2 = new Values(this);
+    keys1 = new Keys(this);
+    keys2 = new Keys(this);
     valueTable = new int[tableSize];
   }
 
