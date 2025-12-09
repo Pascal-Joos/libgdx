@@ -51,6 +51,7 @@ public class HorizontalGroup extends WidgetGroup {
   private float space, wrapSpace, fill, padTop, padLeft, padBottom, padRight;
 
   public HorizontalGroup() {
+    this.rowSizes = new FloatArray();
     setTouchable(Touchable.childrenOnly);
   }
 
