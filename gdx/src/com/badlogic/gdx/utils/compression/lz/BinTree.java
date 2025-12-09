@@ -9,7 +9,7 @@ public class BinTree extends InWindow {
   int _cyclicBufferSize = 0;
   int _matchMaxLen;
 
-  int[] _son;
+  int[] _son = new int[0];
   int[] _hash = new int[0];
 
   int _cutValue = 0xFF;
