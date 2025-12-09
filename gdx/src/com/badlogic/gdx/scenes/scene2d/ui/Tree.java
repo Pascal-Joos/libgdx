@@ -108,7 +108,8 @@ public class Tree<N extends Node, V> extends WidgetGroup {
                   if (rangeStart == null) rangeStart = node;
                   N rangeStart = Tree.this.rangeStart;
                   if (!UIUtils.ctrl()) selection.clear();
-                  float start = rangeStart.actor.getY(), end = node.actor.getY();
+                  float start = (rangeStart != null ? rangeStart : node).actor.getY(),
+                      end = node.actor.getY();
                   if (start > end) selectNodes(rootNodes, end, start);
                   else {
                     selectNodes(rootNodes, start, end);
