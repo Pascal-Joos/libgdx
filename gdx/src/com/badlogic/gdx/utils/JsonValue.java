@@ -1067,7 +1067,7 @@ public class JsonValue implements Iterable<JsonValue> {
    * @param name May be null.
    */
   public void setName(@Nullable @Null String name) {
-    this.name = name;
+    this.name = name != null ? name : "";
   }
 
   /**
