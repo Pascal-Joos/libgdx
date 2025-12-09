@@ -345,6 +345,9 @@ public class XmlReader {
       throw new SerializationException("Error parsing XML, unclosed element: " + element.getName());
     }
     Element root = this.root;
+    if (root == null) {
+      throw new SerializationException("Error parsing XML: no root element found");
+    }
     this.root = null;
     return root;
   }
