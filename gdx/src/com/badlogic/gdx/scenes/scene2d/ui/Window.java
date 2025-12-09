@@ -70,6 +70,8 @@ public class Window extends Table {
   }
 
   public Window(String title, WindowStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
     if (title == null) throw new IllegalArgumentException("title cannot be null.");
     setTouchable(Touchable.enabled);
     setClip(true);
