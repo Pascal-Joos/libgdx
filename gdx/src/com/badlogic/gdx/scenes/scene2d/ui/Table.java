@@ -882,7 +882,8 @@ public class Table extends WidgetGroup {
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
-      Actor a = c.actor;
+      @Nullable Actor a = c.actor;
+      if (a == null) continue;
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -892,7 +893,8 @@ public class Table extends WidgetGroup {
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
       c.computedPadLeft =
-          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+          c.padLeft.get((Actor) a)
+              + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get((Actor) a) - spaceRightLast));
       c.computedPadTop = c.padTop.get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
