@@ -239,7 +239,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   public boolean removeActor(Actor actor, boolean unfocus) {
     if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
     if (actor != this.actor) return false;
-    this.actor = null;
+    setActor(null);
     return super.removeActor(actor, unfocus);
   }
 
