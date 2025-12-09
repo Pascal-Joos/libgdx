@@ -166,12 +166,14 @@ public class SortedIntList<E> implements Iterable<SortedIntList.Node<E>> {
         // if we are at the second element set it as the first element
         if (previousPosition == first) {
           first = position;
-        }
-        // else remove last returned element by changing the chain
-        else {
-          previousPosition.p.n = position;
-          if (position != null) {
-            position.p = previousPosition.p;
+        } else {
+          // else remove last returned element by changing the chain
+          Node<E> prevPrev = previousPosition.p;
+          if (prevPrev != null) {
+            prevPrev.n = position;
+            if (position != null) {
+              position.p = prevPrev;
+            }
           }
         }
         size--;
