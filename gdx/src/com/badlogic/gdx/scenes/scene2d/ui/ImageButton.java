@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
  */
 public class ImageButton extends Button {
   private final Image image;
-  private ImageButtonStyle style;
+  @Nullable private ImageButtonStyle style;
 
   public ImageButton(Skin skin) {
     this(skin.get(ImageButtonStyle.class));
@@ -80,12 +80,14 @@ public class ImageButton extends Button {
   }
 
   public ImageButtonStyle getStyle() {
+    if (style == null) throw new IllegalStateException("style has not been set");
     return style;
   }
 
   /** Returns the appropriate image drawable from the style based on the current button state. */
   @Nullable
   protected @Null Drawable getImageDrawable() {
+    if (style == null) return null;
     if (isDisabled() && style.imageDisabled != null) return style.imageDisabled;
     if (isPressed()) {
       if (isChecked() && style.imageCheckedDown != null) return style.imageCheckedDown;
