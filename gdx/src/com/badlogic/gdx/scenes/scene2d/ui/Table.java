@@ -1088,7 +1088,9 @@ public class Table extends WidgetGroup {
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row;
-      Actor a = c.actor;
+      @Nullable Actor a = c.actor;
+      if (a == null) continue;
+      Actor actorNonNull = a;
 
       float spannedWeightedWidth = 0;
       int colspan = c.colspan;
@@ -1096,9 +1098,11 @@ public class Table extends WidgetGroup {
         spannedWeightedWidth += columnWeightedWidth[ii];
       float weightedHeight = rowWeightedHeight[row];
 
-      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
-      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
+      float prefWidth = c.prefWidth.get(actorNonNull), prefHeight = c.prefHeight.get(actorNonNull);
+      float minWidth = c.minWidth.get(actorNonNull), minHeight = c.minHeight.get(actorNonNull);
+      float maxWidth = c.maxWidth.get(actorNonNull), maxHeight = c.maxHeight.get(actorNonNull);
+      if (prefWidth < minWidth) prefWidth = minWidth;
+      if (prefHeight < minHeight) prefHeight = minHeight;
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
