@@ -342,6 +342,8 @@ public class TextField extends Widget implements Disableable {
             : ((focused && style.focusedFontColor != null)
                 ? style.focusedFontColor
                 : style.fontColor);
+    final com.badlogic.gdx.graphics.Color effectiveFontColor =
+        fontColor != null ? fontColor : com.badlogic.gdx.graphics.Color.WHITE;
     final Drawable selection = style.selection;
     final Drawable cursorPatch = style.cursor;
     final Drawable background = getBackgroundDrawable();
@@ -386,11 +388,12 @@ public class TextField extends Widget implements Disableable {
             width - bgLeftWidth - bgRightWidth);
       }
     } else {
-      font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * color.a * parentAlpha);
+      font.setColor(
+          effectiveFontColor.r,
+          effectiveFontColor.g,
+          effectiveFontColor.b,
+          effectiveFontColor.a * color.a * parentAlpha);
       drawText(batch, font, x + bgLeftWidth, y + textY + yOffset);
-    }
-    if (!disabled && cursorOn && cursorPatch != null) {
-      drawCursor(cursorPatch, batch, font, x + bgLeftWidth, y + textY);
     }
   }
 
