@@ -142,6 +142,12 @@ public class TextField extends Widget implements Disableable {
   }
 
   public TextField(@Null String text, TextFieldStyle style) {
+    // Ensure @NonNull fields are initialized on all paths before any calls that may throw.
+    this.text = "";
+    this.style = style;
+    this.messageText = "";
+    this.displayText = "";
+    this.inputListener = new InputListener() {};
     setStyle(style);
     clipboard = Gdx.app.getClipboard();
     initialize();
