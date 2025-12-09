@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.reflect.ArrayReflection;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -40,9 +41,9 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   public int size;
   public boolean ordered;
 
-  private transient Entries entries1, entries2;
-  private transient Values values1, values2;
-  private transient Keys keys1, keys2;
+  @Nullable private transient Entries entries1, entries2;
+  @Nullable private transient Values values1, values2;
+  @Nullable private transient Keys keys1, keys2;
 
   /** Creates an ordered map with a capacity of 16. */
   public ArrayMap() {
@@ -526,21 +527,23 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
    * @see Collections#allocateIterators
    */
   public Entries<K, V> entries() {
-    if (Collections.allocateIterators) return new Entries(this);
+    if (Collections.allocateIterators) return new Entries<>(this);
     if (entries1 == null) {
-      entries1 = new Entries(this);
-      entries2 = new Entries(this);
+      entries1 = new Entries<>(this);
+      entries2 = new Entries<>(this);
     }
-    if (!entries1.valid) {
-      entries1.index = 0;
-      entries1.valid = true;
-      entries2.valid = false;
-      return entries1;
+    Entries<K, V> e1 = Objects.requireNonNull(entries1);
+    Entries<K, V> e2 = Objects.requireNonNull(entries2);
+    if (!e1.valid) {
+      e1.index = 0;
+      e1.valid = true;
+      e2.valid = false;
+      return e1;
     }
-    entries2.index = 0;
-    entries2.valid = true;
-    entries1.valid = false;
-    return entries2;
+    e2.index = 0;
+    e2.valid = true;
+    e1.valid = false;
+    return e2;
   }
 
   /**
@@ -558,16 +561,18 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
       values1 = new Values(this);
       values2 = new Values(this);
     }
-    if (!values1.valid) {
-      values1.index = 0;
-      values1.valid = true;
-      values2.valid = false;
-      return values1;
+    Values<V> v1 = Objects.requireNonNull(values1);
+    Values<V> v2 = Objects.requireNonNull(values2);
+    if (!v1.valid) {
+      v1.index = 0;
+      v1.valid = true;
+      v2.valid = false;
+      return v1;
     }
-    values2.index = 0;
-    values2.valid = true;
-    values1.valid = false;
-    return values2;
+    v2.index = 0;
+    v2.valid = true;
+    v1.valid = false;
+    return v2;
   }
 
   /**
@@ -585,16 +590,18 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
       keys1 = new Keys(this);
       keys2 = new Keys(this);
     }
-    if (!keys1.valid) {
-      keys1.index = 0;
-      keys1.valid = true;
-      keys2.valid = false;
-      return keys1;
+    Keys<K> k1 = Objects.requireNonNull(keys1);
+    Keys<K> k2 = Objects.requireNonNull(keys2);
+    if (!k1.valid) {
+      k1.index = 0;
+      k1.valid = true;
+      k2.valid = false;
+      return k1;
     }
-    keys2.index = 0;
-    keys2.valid = true;
-    keys1.valid = false;
-    return keys2;
+    k2.index = 0;
+    k2.valid = true;
+    k1.valid = false;
+    return k2;
   }
 
   public static class Entries<K, V> implements Iterable<Entry<K, V>>, Iterator<Entry<K, V>> {
