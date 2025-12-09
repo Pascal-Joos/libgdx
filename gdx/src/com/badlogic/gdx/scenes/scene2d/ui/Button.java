@@ -90,7 +90,7 @@ public class Button extends Table implements Disableable {
    * this button.
    */
   public Button() {
-    initialize();
+    this(new ButtonStyle(null, null, null));
   }
 
   private void initialize() {
