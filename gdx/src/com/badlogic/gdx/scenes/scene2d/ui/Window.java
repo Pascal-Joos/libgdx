@@ -395,7 +395,9 @@ public class Window extends Table {
     public @Null Color titleFontColor = new Color(1, 1, 1, 1);
     @Nullable public @Null Drawable stageBackground;
 
-    public WindowStyle() {}
+    public WindowStyle() {
+      this.titleFont = new com.badlogic.gdx.graphics.g2d.BitmapFont();
+    }
 
     public WindowStyle(BitmapFont titleFont, Color titleFontColor, @Null Drawable background) {
       this.titleFont = titleFont;
