@@ -991,7 +991,7 @@ public class Cell<T extends Actor> implements Poolable {
     spaceBottom = Fixed.valueOf(0);
     spaceRight = Fixed.valueOf(0);
     padTop = Fixed.valueOf(0);
-    padLeft = null;
+    padLeft = Fixed.valueOf(0);
     padBottom = null;
     padRight = null;
     fillX = null;
