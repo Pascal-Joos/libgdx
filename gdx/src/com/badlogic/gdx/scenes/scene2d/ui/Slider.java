@@ -134,7 +134,7 @@ public class Slider extends ProgressBar {
     return mouseOver;
   }
 
-  protected @Null Drawable getBackgroundDrawable() {
+  protected @Nullable @Null Drawable getBackgroundDrawable() {
     SliderStyle style = (SliderStyle) super.getStyle();
     if (disabled && style.disabledBackground != null) return style.disabledBackground;
     if (isDragging() && style.backgroundDown != null) return style.backgroundDown;
@@ -173,6 +173,7 @@ public class Slider extends ProgressBar {
     SliderStyle style = getStyle();
     Drawable knob = style.knob;
     Drawable bg = getBackgroundDrawable();
+    if (bg == null) return false;
 
     float value;
     float oldPosition = position;
