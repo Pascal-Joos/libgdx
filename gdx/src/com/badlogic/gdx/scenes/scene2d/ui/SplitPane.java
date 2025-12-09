@@ -96,8 +96,10 @@ public class SplitPane extends WidgetGroup {
    */
   public SplitPane(
       @Null Actor firstWidget, @Null Actor secondWidget, boolean vertical, SplitPaneStyle style) {
+    this.style = style;
+    if (style == null) throw new GdxRuntimeException("style cannot be null.");
     this.vertical = vertical;
-    setStyle(style);
+    invalidateHierarchy();
     setFirstWidget(firstWidget);
     setSecondWidget(secondWidget);
     setSize(getPrefWidth(), getPrefHeight());
