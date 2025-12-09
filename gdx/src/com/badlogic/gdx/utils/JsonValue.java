@@ -1187,7 +1187,7 @@ public class JsonValue implements Iterable<JsonValue> {
   public void set(long value, @Nullable @Null String stringValue) {
     longValue = value;
     doubleValue = value;
-    this.stringValue = stringValue;
+    this.stringValue = stringValue != null ? stringValue : Long.toString(value);
     type = ValueType.longValue;
   }
 
