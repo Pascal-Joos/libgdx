@@ -81,6 +81,7 @@ public class Button extends Table implements Disableable {
   }
 
   public Button(ButtonStyle style) {
+    this.style = style;
     initialize();
     setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
