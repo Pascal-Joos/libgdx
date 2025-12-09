@@ -549,7 +549,7 @@ public class Queue<T> implements Iterable<T> {
   public static class QueueIterable<T> implements Iterable<T> {
     private final Queue<T> queue;
     private final boolean allowRemove;
-    private QueueIterator iterator1, iterator2;
+    @Nullable private QueueIterator iterator1, iterator2;
 
     // java.io.StringWriter lastAcquire = new java.io.StringWriter();
 
@@ -578,13 +578,21 @@ public class Queue<T> implements Iterable<T> {
       if (!iterator1.valid) {
         iterator1.index = 0;
         iterator1.valid = true;
-        iterator2.valid = false;
+        QueueIterator it2 = iterator2;
+        if (it2 == null) throw new IllegalStateException("iterator2 should have been initialized");
+        it2.valid = false;
         return iterator1;
       }
-      iterator2.index = 0;
-      iterator2.valid = true;
+      QueueIterator it2 = iterator2;
+      if (it2 == null) throw new IllegalStateException("iterator2 should have been initialized");
+      it2.index = 0;
+      it2.valid = true;
       iterator1.valid = false;
-      return iterator2;
+      return it2;
+      iterator1.valid = false;
+      return it2;
+      iterator1.valid = false;
+      return it2;
     }
   }
 }
