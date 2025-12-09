@@ -174,11 +174,11 @@ public class OrderedSet<T> extends ObjectSet<T> {
     if (!iterator1.valid) {
       iterator1.reset();
       iterator1.valid = true;
-      iterator2.valid = false;
+      java.util.Objects.requireNonNull(iterator2, "iterator2 must not be null").valid = false;
       return iterator1;
     }
-    iterator2.reset();
-    iterator2.valid = true;
+    java.util.Objects.requireNonNull(iterator2, "iterator2 must not be null").reset();
+    java.util.Objects.requireNonNull(iterator2, "iterator2 must not be null").valid = true;
     iterator1.valid = false;
     return iterator2;
   }
