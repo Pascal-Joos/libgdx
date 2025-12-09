@@ -114,6 +114,15 @@ class TimSort<T> {
 
   TimSort() {
     tmp = (T[]) new Object[INITIAL_TMP_STORAGE_LENGTH];
+    // Initialize to safe non-null defaults; real values are set in doSort
+    a = (T[]) new Object[0];
+    c =
+        new Comparator<T>() {
+          @Override
+          public int compare(T o1, T o2) {
+            throw new IllegalStateException("Comparator not initialized");
+          }
+        };
     runBase = new int[40];
     runLen = new int[40];
   }
