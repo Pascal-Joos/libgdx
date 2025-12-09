@@ -653,7 +653,8 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    * @author Nathan Sweet
    */
   public abstract static class Node<N extends Node, V, A extends Actor> {
-    A actor;
+    private static final Actor DUMMY_ACTOR = new Actor() {};
+    A actor = (A) DUMMY_ACTOR;
     @Nullable N parent;
     final Array<N> children = new Array(0);
     boolean selectable = true;
