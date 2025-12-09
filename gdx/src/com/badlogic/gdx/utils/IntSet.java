@@ -107,6 +107,9 @@ public class IntSet {
     shift = Long.numberOfLeadingZeros(mask);
 
     keyTable = new int[tableSize];
+
+    iterator1 = new IntSetIterator(this);
+    iterator2 = new IntSetIterator(this);
   }
 
   /** Creates a new set identical to the specified set. */
