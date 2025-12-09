@@ -55,15 +55,19 @@ public class Button extends Table implements Disableable {
 
   public Button(Skin skin) {
     super(skin);
+    ButtonStyle style = skin.get(ButtonStyle.class);
+    this.style = style;
     initialize();
-    setStyle(skin.get(ButtonStyle.class));
+    setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
   }
 
   public Button(Skin skin, String styleName) {
     super(skin);
+    ButtonStyle style = skin.get(styleName, ButtonStyle.class);
+    this.style = style;
     initialize();
-    setStyle(skin.get(styleName, ButtonStyle.class));
+    setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
   }
 
