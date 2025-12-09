@@ -68,11 +68,12 @@ public class Json {
   private final Object[] equals1 = {null}, equals2 = {null};
 
   public Json() {
-    outputType = OutputType.minimal;
+    this(OutputType.minimal);
   }
 
   public Json(OutputType outputType) {
     this.outputType = outputType;
+    this.writer = new JsonWriter(new StringWriter());
   }
 
   /**
