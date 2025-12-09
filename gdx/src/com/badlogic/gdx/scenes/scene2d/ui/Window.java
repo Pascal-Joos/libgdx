@@ -178,14 +178,14 @@ public class Window extends Table {
             if ((edge & Align.right) != 0) {
               float amountX = x - lastX - width;
               if (width + amountX < minWidth) amountX = minWidth - width;
-              if (clampPosition && windowX + width + amountX > stage.getWidth())
+              if (clampPosition && stage != null && windowX + width + amountX > stage.getWidth())
                 amountX = stage.getWidth() - windowX - width;
               width += amountX;
             }
             if ((edge & Align.top) != 0) {
               float amountY = y - lastY - height;
               if (height + amountY < minHeight) amountY = minHeight - height;
-              if (clampPosition && windowY + height + amountY > stage.getHeight())
+              if (clampPosition && stage != null && windowY + height + amountY > stage.getHeight())
                 amountY = stage.getHeight() - windowY - height;
               height += amountY;
             }
