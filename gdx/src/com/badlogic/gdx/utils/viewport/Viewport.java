@@ -20,6 +20,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
@@ -40,6 +41,14 @@ public abstract class Viewport {
   private int screenX, screenY, screenWidth, screenHeight;
 
   private final Vector3 tmp = new Vector3();
+
+  public Viewport() {
+    this(new OrthographicCamera());
+  }
+
+  protected Viewport(Camera camera) {
+    this.camera = camera;
+  }
 
   /** Calls {@link #apply(boolean)} with false. */
   public void apply() {
@@ -252,10 +261,6 @@ public abstract class Viewport {
    * Sets the viewport's size in screen coordinates. This is typically set by {@link #update(int,
    * int, boolean)}.
    */
-  public void setScreenSize(int screenWidth, int screenHeight) {
-    this.screenWidth = screenWidth;
-    this.screenHeight = screenHeight;
-  }
 
   /**
    * Sets the viewport's bounds in screen coordinates. This is typically set by {@link #update(int,
@@ -268,33 +273,12 @@ public abstract class Viewport {
     this.screenHeight = screenHeight;
   }
 
-  /** Returns the left gutter (black bar) width in screen coordinates. */
-  public int getLeftGutterWidth() {
-    return screenX;
-  }
-
-  /** Returns the right gutter (black bar) x in screen coordinates. */
-  public int getRightGutterX() {
-    return screenX + screenWidth;
-  }
-
-  /** Returns the right gutter (black bar) width in screen coordinates. */
-  public int getRightGutterWidth() {
-    return Gdx.graphics.getWidth() - (screenX + screenWidth);
-  }
-
-  /** Returns the bottom gutter (black bar) height in screen coordinates. */
-  public int getBottomGutterHeight() {
-    return screenY;
-  }
-
-  /** Returns the top gutter (black bar) y in screen coordinates. */
-  public int getTopGutterY() {
-    return screenY + screenHeight;
-  }
-
-  /** Returns the top gutter (black bar) height in screen coordinates. */
-  public int getTopGutterHeight() {
-    return Gdx.graphics.getHeight() - (screenY + screenHeight);
+  /**
+   * Sets the viewport's size in screen coordinates. This is typically set by {@link #update(int,
+   * int, boolean)}.
+   */
+  public void setScreenSize(int screenWidth, int screenHeight) {
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
   }
 }
