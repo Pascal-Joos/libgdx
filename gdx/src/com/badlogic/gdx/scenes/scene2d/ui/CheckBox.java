@@ -44,6 +44,7 @@ public class CheckBox extends TextButton {
     this(text, skin.get(styleName, CheckBoxStyle.class));
   }
 
+  @SuppressWarnings("NullAway.Init")
   public CheckBox(@Null String text, CheckBoxStyle style) {
     super(text, style);
 
