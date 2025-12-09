@@ -155,7 +155,9 @@ public class TextButton extends Button {
         checkedOverFontColor,
         checkedFocusedFontColor;
 
-    public TextButtonStyle() {}
+    public TextButtonStyle() {
+      this.font = new BitmapFont();
+    }
 
     public TextButtonStyle(
         @Null Drawable up, @Null Drawable down, @Null Drawable checked, @Null BitmapFont font) {
