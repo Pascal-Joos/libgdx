@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 public class InWindow {
-  public byte[] _bufferBase; // pointer to buffer with data
+  public byte[] _bufferBase = new byte[0]; // pointer to buffer with data
   @Nullable java.io.InputStream _stream;
   int _posLimit; // offset (from _buffer) of first byte when new block reading must be done
   boolean _streamEndWasReached; // if (true) then _streamPos shows real end of stream
@@ -38,6 +38,15 @@ public class InWindow {
     while (true) {
       int size = (0 - _bufferOffset) + _blockSize - _streamPos;
       if (size == 0) return;
+      if (_stream == null) {
+        _posLimit = _streamPos;
+        int pointerToPostion = _bufferOffset + _posLimit;
+        if (pointerToPostion > _pointerToLastSafePosition) {
+          _posLimit = _pointerToLastSafePosition - _bufferOffset;
+        }
+        _streamEndWasReached = true;
+        return;
+      }
       int numReadBytes = _stream.read(_bufferBase, _bufferOffset + _streamPos, size);
       if (numReadBytes == -1) {
         _posLimit = _streamPos;
