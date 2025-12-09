@@ -132,12 +132,13 @@ public class DragAndDrop {
             if (actor != oldDragActor) {
               if (oldDragActor != null && removeDragActor) oldDragActor.remove();
               dragActor = actor;
-              removeDragActor =
-                  actor.getStage() == null; // Only remove later if not already in the stage now.
-              if (removeDragActor) stage.addActor(actor);
             }
             if (actor == null) return;
-
+            Actor dragActorLocal = actor;
+            removeDragActor =
+                dragActorLocal.getStage()
+                    == null; // Only remove later if not already in the stage now.
+            if (removeDragActor) stage.addActor(dragActorLocal);
             // Position the drag actor.
             float actorX = event.getStageX() - actor.getWidth() + dragActorX;
             float actorY = event.getStageY() + dragActorY;
