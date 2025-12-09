@@ -19,7 +19,6 @@ package com.badlogic.gdx.utils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import javax.annotation.Nullable;
 
 /**
  * Pool that creates new instances of a type using reflection. The type must have a zero argument
@@ -47,24 +46,24 @@ public class ReflectionPool<T> extends Pool<T> {
           "Class cannot be created (missing no-arg constructor): " + type.getName());
   }
 
-  @Nullable
-  private @Null Constructor findConstructor(Class<T> type) {
+  private Constructor findConstructor(Class<T> type) {
     try {
-      return ClassReflection.getConstructor(type, (Class[]) null);
+      return ClassReflection.getConstructor(type);
     } catch (Exception ex1) {
       try {
-        Constructor constructor = ClassReflection.getDeclaredConstructor(type, (Class[]) null);
+        Constructor constructor = ClassReflection.getDeclaredConstructor(type);
         constructor.setAccessible(true);
         return constructor;
       } catch (ReflectionException ex2) {
-        return null;
+        throw new RuntimeException(
+            "Class cannot be created (missing no-arg constructor): " + type.getName(), ex2);
       }
     }
   }
 
   protected T newObject() {
     try {
-      return (T) constructor.newInstance((Object[]) null);
+      return (T) constructor.newInstance();
     } catch (Exception ex) {
       throw new GdxRuntimeException(
           "Unable to create new instance: " + constructor.getDeclaringClass().getName(), ex);
