@@ -16,37 +16,31 @@
 
 package com.badlogic.gdx.utils;
 
-import com.badlogic.gdx.utils.Pool.Poolable;
+import com.uber.nullaway.annotations.Initializer;
 import javax.annotation.Nullable;
 
-/** A pooled, doubly-linked list. */
+/**
+ * A simple linked list that pools its nodes.
+ *
+ * @author mzechner
+ */
 public class PooledLinkedList<T> {
-
-  private static class Item<T> implements Poolable {
-    @Nullable T payload;
-    @Nullable Item<T> next;
-    @Nullable Item<T> prev;
-
-    @Override
-    public void reset() {
-      payload = null;
-      next = null;
-      prev = null;
-    }
+  static final class Item<T> {
+    @Nullable public T payload;
+    @Nullable public Item<T> next;
+    @Nullable public Item<T> prev;
   }
 
-  private final Pool<Item<T>> pool;
   @Nullable private Item<T> head;
   @Nullable private Item<T> tail;
+  @Nullable private Item<T> iter;
   @Nullable private Item<T> curr;
-  private int size;
+  private int size = 0;
 
-  public PooledLinkedList() {
-    this(16);
-  }
+  private final Pool<Item<T>> pool;
 
   public PooledLinkedList(int maxPoolSize) {
-    pool =
+    this.pool =
         new Pool<Item<T>>(16, maxPoolSize) {
           @Override
           protected Item<T> newObject() {
@@ -55,33 +49,94 @@ public class PooledLinkedList<T> {
         };
   }
 
+  /** Adds the specified object to the end of the list regardless of iteration status */
+  @Initializer
   public void add(T object) {
     Item<T> item = pool.obtain();
     item.payload = object;
     item.next = null;
-    item.prev = tail;
+    item.prev = null;
 
     if (head == null) {
       head = item;
       tail = item;
+      size++;
+      return;
+    }
+
+    item.prev = tail;
+    if (tail == null) {
+      // Defensive check: in a consistent list, tail should never be null when head is non-null.
+      // If this happens, treat the list as empty and reset head and tail.
+      head = item;
+      tail = item;
     } else {
-      if (tail != null) {
-        tail.next = item;
-      }
+      tail.next = item;
       tail = item;
     }
     size++;
   }
 
-  public void iter() {
-    curr = head;
+  /** Adds the specified object to the head of the list regardless of iteration status */
+  public void addFirst(T object) {
+    Item<T> item = pool.obtain();
+    item.payload = object;
+    item.next = head;
+    item.prev = null;
+
+    if (head != null) {
+      head.prev = item;
+    } else {
+      tail = item;
+    }
+
+    head = item;
+
+    size++;
   }
 
+  /** Returns the number of items in the list */
+  public int size() {
+    return size;
+  }
+
+  /** Starts iterating over the list's items from the head of the list */
+  public void iter() {
+    iter = head;
+  }
+
+  /** Starts iterating over the list's items from the tail of the list */
+  public void iterReverse() {
+    iter = tail;
+  }
+
+  /**
+   * Gets the next item in the list
+   *
+   * @return the next item in the list or null if there are no more items
+   */
   @Nullable
-  public T next() {
-    if (curr == null) return null;
-    T payload = curr.payload;
-    curr = curr.next;
+  public @Null T next() {
+    if (iter == null) return null;
+
+    T payload = iter.payload;
+    curr = iter;
+    iter = iter.next;
+    return payload;
+  }
+
+  /**
+   * Gets the previous item in the list
+   *
+   * @return the previous item in the list or null if there are no more items
+   */
+  @Nullable
+  public @Null T previous() {
+    if (iter == null) return null;
+
+    T payload = iter.payload;
+    curr = iter;
+    iter = iter.prev;
     return payload;
   }
 
@@ -111,23 +166,18 @@ public class PooledLinkedList<T> {
     }
 
     if (c == tail) {
-      if (p != null) {
-        p.next = null;
-      }
+      p.next = null;
       tail = p;
       return;
     }
 
-    // Middle of the list: both p and n must be non-null, but guard n for NullAway.
-    if (p != null && n != null) {
-      p.next = n;
-      n.prev = p;
-    }
+    p.next = n;
+    n.prev = p;
   }
 
-  /** Removes the tail of the list regardless of iteration status. */
+  /** Removes the tail of the list regardless of iteration status */
   @Nullable
-  public T removeLast() {
+  public @Null T removeLast() {
     if (tail == null) {
       return null;
     }
@@ -144,9 +194,7 @@ public class PooledLinkedList<T> {
       tail = null;
     } else {
       tail = p;
-      if (tail != null) {
-        tail.next = null;
-      }
+      tail.next = null;
     }
 
     return payload;
@@ -154,9 +202,7 @@ public class PooledLinkedList<T> {
 
   public void clear() {
     iter();
-    T v;
-    while ((v = next()) != null) {
-      remove();
-    }
+    T v = null;
+    while ((v = next()) != null) remove();
   }
 }
