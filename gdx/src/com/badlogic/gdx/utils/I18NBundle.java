@@ -91,7 +91,7 @@ public class I18NBundle {
   private Locale locale;
 
   /** The properties for this bundle. */
-  private ObjectMap<String, String> properties;
+  private ObjectMap<String, String> properties = new ObjectMap<String, String>();
 
   /** The formatter used for argument replacement. */
   private TextFormatter formatter;
@@ -487,6 +487,7 @@ public class I18NBundle {
    */
   @Initializer
   private void setLocale(Locale locale) {
+    if (locale == null) throw new NullPointerException("locale cannot be null");
     this.locale = locale;
     this.formatter = new TextFormatter(locale, !simpleFormatter);
   }
