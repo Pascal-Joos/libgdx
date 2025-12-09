@@ -873,7 +873,7 @@ public class Table extends WidgetGroup {
     float[] rowMinHeight = this.rowMinHeight = ensureSize(this.rowMinHeight, rows);
     float[] columnPrefWidth = this.columnPrefWidth = ensureSize(null, columns);
     float[] rowPrefHeight = this.rowPrefHeight = ensureSize(this.rowPrefHeight, rows);
-    float[] columnWidth = this.columnWidth = ensureSize(this.columnWidth, columns);
+    float[] columnWidth = this.columnWidth = ensureSize(null, columns);
     float[] rowHeight = this.rowHeight = ensureSize(this.rowHeight, rows);
     float[] expandWidth = this.expandWidth = ensureSize(this.expandWidth, columns);
     float[] expandHeight = this.expandHeight = ensureSize(this.expandHeight, rows);
