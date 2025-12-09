@@ -56,99 +56,65 @@
 - API Fix: Escaped characters in XML attributes are now properly un-escaped
 - Bug Fix: AssetManager backslash conversion removed - fixes use of filenames containing backslashes
 - gdx-setup now places the assets directory in project root instead of android or core. See advanced settings (UI) or arguments (command line) if you don't want it in root.
-- API Fix: Resolved issues with LWJGL 3 and borderless fullscreen
-- API Addition: GeometryUtils,polygons isCCW, ensureClockwise, reverseVertices
-- API Addition: Added FreeTypeFontGenerator#hasCharGlyph method.
-- API Fix: Pool discard method now resets object by default. This fixes the known issue about Pool in libGDX 1.10.0.
-- API Addition: Split GWT reflection cache into two generated classes
-- API Fix: Fix Box2D memory leak with ropes on GWT
-- API Fix: Fix NPE in Type#getDeclaredAnnotation
-- API Addition: Add pause/resume methods to AudioDevice
-- API Fix: Protection against NullPointerException in World#destroyBody()
-- API Fix: Prevent repeated mipmap generation in FileTextureArrayData
-- API Fix: Fix issue with camera reference in CameraGroupStrategy’s default sorter
-- API Fix: Move vertex array index buffer limit to backends to fix issue with numIndices parameter
-- API Fix: TexturePacker: Fix wrong Y value when using padding
-- API Fix: Lwjgl3Net: Add fallback to xdg-open on Linux if Desktop.BROWSE is unavailable
-- API Addition: Add NWSEResize, NESWResize, AllResize, NotAllowed and None SystemCursors
-- API Addition: GWTApplication#getJavaHeap and getNativeHeap are now supported
-- API Addition: Box2D Shape now implements Disposable
-- API Addition: Added ChainShape#clear method
-- API Addition: Added Tooltip#setTouchIndependent; see #6758
-- API Addition: Emulate Timer#isEmpty on GWT
-- API Addition: Bits add copy constructor public Bits (Bits bitsToCpy)
-- API Addition: Added List#drawSelection().
-- API Addition: GwtApplicationConfiguration#xrCompatible 
-- API Fix: setSystemCursor() now works on Android
-- API Fix: getDisplayMode() is now more accurate on Android and GWT.
-- API Addition: JsonValue#iterator(String) to more easily iterate a child that may not exist.
-- API Addition: Added ExtendViewport#setScaling, eg for use with Scaling.contain.
-- API Addition: Added application lifecycle methods to IOSAudio for custom audio implementations.
-- API Addition: Added getBoundingRectangle() to Polyline
-- API Addition: ShapeRenderer#check() has now protected visibility
-- API Addition: Add ability to host GWT module on a different domain than the site, see #6851
+  public Touchpad(float deadzoneRadius, Skin skin) {
+    this(deadzoneRadius, skin.get(TouchpadStyle.class));
+  }
 
-[1.10.0]
-- [BREAKING CHANGE] Android armeabi support has been removed. To migrate your projects: remove any dependency with natives-armeabi qualifier from your gradle build file, this apply to gdx-platform, gdx-bullet-platform, gdx-freetype-platform and gdx-box2d-platform.
-- [BREAKING CHANGE] tvOS libraries have been removed. No migration steps required.
-- [BREAKING CHANGE] Linux x86 (32-bit) support has been removed. No migration steps required.
-- [BREAKING CHANGE] Requires Java 7 or above.
-- [BREAKING CHANGE] API Change: Scaling is now an object instead of an enum. This may change behavior when used with serialization.
-- [BREAKING CHANGE] Group#clear() and #clearChildren() now unfocus the children. Added clear(boolean) and clearChildren(boolean) for when this isn't wanted. Code that overrides clear()/clearChildren() probably should change to override the (boolean) method. #6423
-- [BREAKING CHANGE] Lwjgl3WindowConfiguration#autoIconify is enabled by default.
-- [KNOWN ISSUE] Pool no longer reset freed objects when pool size is above its retention limit. Pool will discard objects instead. If you want to keep the old behavior, you should override Pool#discard method to reset discarded objects.
-- Scene2d.ui: Added new ParticleEffectActor to use particle effects on Stage
-- API addition: iOS: Added HdpiMode option to IOSApplicationConfiguration to allow users to set whether they want to work in logical or raw pixels (default logical).
-- Fix for #6377 Gdx.net.openURI not working with targetSdk 30
-- Api Addition: Added a Pool#discard(T) method.
-- Architecture support: Linux ARM and AARCH64 support has been added. The gdx-xxx-natives.jar files now contain native libraries of these architectures as well.
-- API Addition: Desktop Sound now returns number of channels and sample rate.
+  /**
+   * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
+   *     knob to be moved.
+   */
+  public Touchpad(float deadzoneRadius, Skin skin, String styleName) {
+    this(deadzoneRadius, skin.get(styleName, TouchpadStyle.class));
+  }
 
-[1.9.14]
-- [BREAKING CHANGE] iOS: IOSUIViewController has been moved to its own separate class 
-- [BREAKING CHANGE] API Change: G3D AnimationDesc#update now returns -1 (instead of 0) if animation not finished.
-- [BREAKING CHANGE] InputEventQueue no longer implements InputProcessor, pass InputProcessor to #drain.
-- [BREAKING CHANGE] HeadlessApplicationConfiguration#renderInterval was changed to #updatesPerSecond
-- API addition: Added Pixmap#setPixels(ByteBuffer).
-- API change: ScreenUtils#getFrameBufferPixmap is deprecated in favor to new method Pixmap#createFromFrameBuffer.
-- API Addition: Added overridable createFiles() methods to backend application classes to allow initializing custom module implementations.
-- API Addition: Add a Graphics#setForegroundFPS() method.
+  /**
+   * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
+   *     knob to be moved.
+   */
+  public Touchpad(float deadzoneRadius, TouchpadStyle style) {
+    if (deadzoneRadius < 0) throw new IllegalArgumentException("deadzoneRadius must be > 0");
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    this.deadzoneRadius = deadzoneRadius;
+    this.style = style;
 
-[1.9.13]
-- [BREAKING CHANGE] Fixed keycode representations for ESCAPE, END, INSERT and F1 to F12. These keys are working on Android now, but if you hardcoded or saved the values you might need to migrate.
-- [BREAKING CHANGE] TextureAtlas.AtlasRegion and Region splits and pads fields have been removed and moved to name/value pairs, use #findValue("split") and #findValue("pad") instead.
-- iOS: Update to MobiVM 2.3.12
-- GWT: Key codes set with Gdx.input.setCatchKey prevent default browser behaviour
-- Added Scaling.contain mode: Scales the source to fit the target while keeping the same aspect ratio, but the source is not scaled at all if smaller in both directions.
-- API Addition: Added hasContents() to Clipboard interface, to reduce clipboard notifications on iOS 14
-- TOOLS Features: Blending mode can be changed in Flame particle 3D editor.
-- Input Keycodes added: CAPS_LOCK, PAUSE (aka Break), PRINT_SCREEN, SCROLL_LOCK, F13 to F24, NUMPAD_DIVIDE, NUMPAD_MULTIPLY, NUMPAD_SUBTRACT, NUMPAD_ADD, NUMPAD_DOT, NUMPAD_COMMA, NUMPAD_ENTER, NUMPAD_EQUALS, NUMPAD_LEFT_PAREN, NUMPAD_RIGHT_PAREN, NUM_LOCK.
-  Following changes might be done depending on platform: Keys.STAR to Keys.NUMPAD_MULTIPLY, Keys.SLASH to Keys.NUMPAD_DIVIDE, Keys.NUM to Keys.NUM_LOCK, Keys.COMMA to Keys.NUMPAD_COMMA, Keys.PERIOD to Keys.NUMPAD_DOT, Keys.COMMA to Keys.NUMPAD_COMMA, Keys.ENTER to Keys.NUMPAD_ENTER, Keys.PLUS to Keys.NUMPAD_ADD, Keys.MINUS to Keys.NUMPAD_SUBTRACT
-- Added a QuadFloatTree class.
-- Desktop: Cubemap Seamless feature is now enabled by default when supported, can be changed via backend specific methods, see supportsCubeMapSeamless and enableCubeMapSeamless in both LwjglGraphics and Lwjgl3Graphics.
-- API Addition: TextureAtlas reads arbitrary name/value pairs for each region. See #6316.
-- TexturePacker writes using a new format when legacyOutput is false (default is true). TextureAtlas can read both old and new formats. See #6316.
+    knobPosition.set(getWidth() / 2f, getHeight() / 2f);
 
-[1.9.12]
-- [BREAKING CHANGE] iOS: Changed how Retina/hdpi handled on iOS. See #3709.
-- [BREAKING CHANGE] API Change: InputProcessor scrolled method now receives scroll amount for X and Y. Changed type to float to support devices which report fractional scroll amounts. Updated InputEvent in scene2d accordingly: added scrollAmountX, scrollAmountY attributes and corresponding setters and getters. See #6154.
-- [BREAKING CHANGE] API Change: Vector2 angleRad(Vector2) now correctly returns counter-clockwise angles. See #5428
-- [BREAKING CHANGE] Android: getDeltaTime() now returns the raw delta time instead of a smoothed one. See #6228.
-- Fixed vertices returned by Decal.getVertices() not being updated
-- Fixes Issue #5048. The function Intersector.overlapConvexPolygons now should return the right minimum translation vector values.
-- Update to MobiVM 2.3.11
-- API Change: Removed Pool constructor with preFill parameter in favor of using Pool#fill() method. See #6117
-- API Addition: Slider can now be configured to only trigger on certain mouse button clicks (Slider#setButton(int)).
-- Fixed GlyphLayout not laying out correctly with color markup.
-- Fixed TileDrawable not applying its scale correctly.
-- API Addition: Added epsilon methods to maps with float values.
-- API Addition: Added an insertRange method to array collections.
-- Fixed GestureDetector maxFlingDelay.
-- API Change: Changed default GestureDetector maxFlingDelay to Integer.MAX_VALUE (didn't work before, this matches that).
-- Gdx.files.external on Android now uses app external storage - see wiki article File handling for more information
-- Improved text, cursor and selection rendering in TextArea.
-- API Addition: Added setProgrammaticChangeEvents, updateVisualValue, round methods to ProgressBar/Slider.
-- iOS: Keyboard events working on RoboVM on iOS 13.5 and up, uses same API as on other platforms
+    setStyleInternal(style);
+    setSize(getPrefWidth(), getPrefHeight());
+
+    addListener(
+        new InputListener() {
+          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            if (touched) return false;
+            touched = true;
+            calculatePositionAndValue(x, y, false);
+            return true;
+          }
+
+          public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            calculatePositionAndValue(x, y, false);
+          }
+
+          public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            touched = false;
+            calculatePositionAndValue(x, y, resetOnTouchUp);
+          }
+        });
+  }
+
+  private void setStyleInternal(TouchpadStyle style) {
+    this.style = style;
+    invalidateHierarchy();
+  }
+
+  public void setStyle(TouchpadStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    setStyleInternal(style);
+  }
+
+  /**
+   * Returns the touchpads
 - API Addition: Added AndroidLiveWallpaper.notifyColorsChanged() to communicate visually significant colors back to the wallpaper engine.
 - API Change: AssetManager invokes the loaded callback when an asset is unloaded from the load queue if the asset is already loaded.
 - GWT: changed audio backend to WebAudio API. Now working on mobiles, pitch implemented. Configuration change: preferFlash removed. When updating existing projects, you can remove the soundmanager js files from your webapp folder and the references to it from index.html

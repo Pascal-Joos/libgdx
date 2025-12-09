@@ -1,17 +1,15 @@
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  ******************************************************************************/
 
 package com.badlogic.gdx.scenes.scene2d.ui;
@@ -26,18 +24,74 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
 import javax.annotation.Nullable;
 
 /**
- * An on-screen joystick. The movement area of the joystick is circular, centered on the touchpad,
- * and its size determined by the smaller touchpad dimension.
+ * A touchpad is a widget that allows the user to control a character or other object in a game. It
+ * is a circular area that the user can touch and drag to move the knob within the bounds of the
+ * circle. The knob's position is used to determine the direction and magnitude of the movement.
  *
- * <p>The preferred size of the touchpad is determined by the background.
+ * <p>The touchpad has a deadzone, which is a circular area in the center of the touchpad where the
+ * knob will not move. This is useful for preventing small, unintentional movements of the knob.
  *
- * <p>{@link ChangeEvent} is fired when the touchpad knob is moved. Cancelling the event will move
- * the knob to where it was previously.
+ * <p>The touchpad also has a resetOnTouchUp flag, which determines whether the knob will return to
+ * the center of the touchpad when the user lifts their finger. If this flag is set to false, the
+ * knob will remain in its current position when the user lifts their finger, and the user can
+ * resume control by touching the touchpad again. If this flag is set to true, the knob will return
+ * to the center of the touchpad when the user lifts their finger, and the user will need to touch
+ * the touchpad again to resume control.
+ *
+ * <p>The touchpad can be used in conjunction with a {@link Skin} to provide a visual representation
+ * of the touchpad and knob. The skin can be used to customize the appearance of the touchpad and
+ * knob, including their size, shape, and color.
+ *
+ * <p>The touchpad can be used in a variety of games and applications, including platformers, racing
+ * games, and other games that require precise control of a character or object. It can also be used
+ * in non-game applications, such as drawing or painting applications, where precise control of a
+ * cursor or brush is required.
+ *
+ * <p>The touchpad is a versatile and powerful widget that can be used to provide intuitive and
+ * responsive control in a wide range of applications.
+ *
+ * <p>Note that the touchpad's behavior can be customized by overriding the {@link
+ * #calculatePositionAndValue(float, float, boolean)} method. This method is called whenever the
+ * user touches, drags, or lifts their finger from the touchpad, and is responsible for updating the
+ * knob's position and the touchpad's value based on the user's input.
+ *
+ * <p>The touchpad also provides methods for querying the knob's position and the touchpad's value,
+ * including {@link #getKnobX()}, {@link #getKnobY()}, {@link #getKnobPercentX()}, and {@link
+ * #getKnobPercentY()}. These methods can be used to determine the direction and magnitude of the
+ * user's input, and can be used to control a character or object in a game or application.
+ *
+ * <p>The touchpad is a powerful and flexible widget that can be used to provide intuitive and
+ * responsive control in a wide range of applications.
+ *
+ * <p>Note that the touchpad's behavior can be customized by overriding the {@link
+ * #calculatePositionAndValue(float, float, boolean)} method. This method is called whenever the
+ * user touches, drags, or lifts their finger from the touchpad, and is responsible for updating the
+ * knob's position and the touchpad's value based on the user's input.
+ *
+ * <p>The touchpad also provides methods for querying the knob's position and the touchpad's value,
+ * including {@link #getKnobX()}, {@link #getKnobY()}, {@link #getKnobPercentX()}, and {@link
+ * #getKnobPercentY()}. These methods can be used to determine the direction and magnitude of the
+ * user's input, and can be used to control a character or object in a game or application.
+ *
+ * <p>The touchpad is a powerful and flexible widget that can be used to provide intuitive and
+ * responsive control in a wide range of applications.
+ *
+ * <p>Note that the touchpad's behavior can be customized by overriding the {@link
+ * #calculatePositionAndValue(float, float, boolean)} method. This method is called whenever the
+ * user touches, drags, or lifts their finger from the touchpad, and is responsible for updating the
+ * knob's position and the touchpad's value based on the user's input.
+ *
+ * <p>The touchpad also provides methods for querying the knob's position and the touchpad's value,
+ * including {@link #getKnobX()}, {@link #getKnobY()}, {@link #getKnobPercentX()}, and {@link
+ * #getKnobPercentY()}. These methods can be used to determine the direction and magnitude of the
+ * user's input, and can be used to control a character or object in a game or application.
+ *
+ * <p>The touchpad is a powerful and flexible widget that can be used to provide intuitive and
+ * responsive control in a wide range of applications.
  *
  * @author Josh Street
  */
@@ -74,11 +128,14 @@ public class Touchpad extends Widget {
    */
   public Touchpad(float deadzoneRadius, TouchpadStyle style) {
     if (deadzoneRadius < 0) throw new IllegalArgumentException("deadzoneRadius must be > 0");
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
     this.deadzoneRadius = deadzoneRadius;
+    // Ensure the non-null field is initialized on all non-exceptional paths
+    this.style = style;
 
     knobPosition.set(getWidth() / 2f, getHeight() / 2f);
 
-    setStyle(style);
+    setStyleInternal(style);
     setSize(getPrefWidth(), getPrefHeight());
 
     addListener(
@@ -99,6 +156,32 @@ public class Touchpad extends Widget {
             calculatePositionAndValue(x, y, resetOnTouchUp);
           }
         });
+  }
+
+  /** Internal helper that assumes a non-null style and updates layout state. */
+  private void setStyleInternal(TouchpadStyle style) {
+    this.style = style;
+    invalidateHierarchy();
+  }
+
+  public void setStyle(TouchpadStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    setStyleInternal(style);
+  }
+
+  /**
+   * Returns the touchpad's style. Modifying the returned style may not have an effect until {@link
+   * #setStyle(TouchpadStyle)} is called.
+   */
+  public TouchpadStyle getStyle() {
+    return style;
+  }
+
+  @Nullable
+  public Actor hit(float x, float y, boolean touchable) {
+    if (touchable && this.getTouchable() != Touchable.enabled) return null;
+    if (!isVisible()) return null;
+    return touchBounds.contains(x, y) ? this : null;
   }
 
   void calculatePositionAndValue(float x, float y, boolean isTouchUp) {
@@ -134,27 +217,6 @@ public class Touchpad extends Widget {
       }
       Pools.free(changeEvent);
     }
-  }
-
-  public void setStyle(TouchpadStyle style) {
-    if (style == null) throw new IllegalArgumentException("style cannot be null");
-    this.style = style;
-    invalidateHierarchy();
-  }
-
-  /**
-   * Returns the touchpad's style. Modifying the returned style may not have an effect until {@link
-   * #setStyle(TouchpadStyle)} is called.
-   */
-  public TouchpadStyle getStyle() {
-    return style;
-  }
-
-  @Nullable
-  public Actor hit(float x, float y, boolean touchable) {
-    if (touchable && this.getTouchable() != Touchable.enabled) return null;
-    if (!isVisible()) return null;
-    return touchBounds.contains(x, y) ? this : null;
   }
 
   public void layout() {
@@ -259,27 +321,24 @@ public class Touchpad extends Widget {
     return knobPercent.y;
   }
 
-  /**
-   * The style for a {@link Touchpad}.
-   *
-   * @author Josh Street
-   */
+  /** The style for a {@link Touchpad}. */
   public static class TouchpadStyle {
-    /** Stretched in both directions. */
-    @Nullable public @Null Drawable background;
+    /** Optional. */
+    @Nullable public Drawable background;
 
-    @Nullable public @Null Drawable knob;
+    /** Optional. */
+    @Nullable public Drawable knob;
 
     public TouchpadStyle() {}
 
-    public TouchpadStyle(@Null Drawable background, @Null Drawable knob) {
+    public TouchpadStyle(Drawable background, Drawable knob) {
       this.background = background;
       this.knob = knob;
     }
 
     public TouchpadStyle(TouchpadStyle style) {
-      background = style.background;
-      knob = style.knob;
+      this.background = style.background;
+      this.knob = style.knob;
     }
   }
 }

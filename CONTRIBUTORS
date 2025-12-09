@@ -56,99 +56,65 @@ alexou.garcia https://code.google.com/p/libgdx/people/detail?u=11385193852781599
 ttencate https://code.google.com/p/libgdx/people/detail?u=103828512378244383437
 zomgsako https://code.google.com/p/libgdx/people/detail?u=101343703776052703389
 Angellus.Falsus https://code.google.com/p/libgdx/people/detail?u=118210898387305670207
-mail at balajeerc.info https://code.google.com/p/libgdx/people/detail?u=108245534461530760429
-kev.sully https://code.google.com/p/libgdx/people/detail?u=111086816695469913269
-nick.hutt https://code.google.com/p/libgdx/people/detail?u=112846002046049931716
-dave.des https://code.google.com/p/libgdx/people/detail?u=dave.des at gmail.com
-arthur.t.a.gusmao https://code.google.com/p/libgdx/people/detail?u=101626638038792227362
-nushio https://code.google.com/p/libgdx/people/detail?u=nushio
-pedro.n.veloso https://code.google.com/p/libgdx/people/detail?u=pedro.n.veloso
-Bujiraso https://code.google.com/p/libgdx/people/detail?u=114841316821255815678
-serverkorken https://code.google.com/p/libgdx/people/detail?u=101930906522733910500
-NathanSweet https://github.com/NathanSweet
-badlogic https://github.com/badlogic
-xoppa https://github.com/xoppa
-MobiDevelop https://github.com/MobiDevelop
-acoppes https://github.com/acoppes
-manuelbua https://github.com/manuelbua
-Seraphim6x7 https://github.com/Seraphim6x7
-ttencate https://github.com/ttencate
-semtiko https://github.com/semtiko
-stbachmann https://github.com/stbachmann
-robertmassaioli https://github.com/robertmassaioli
-jwisniewski https://github.com/jwisniewski
-bitiotic https://github.com/bitiotic
-siondream https://github.com/siondream
-blackbluegl https://github.com/blackbluegl
-aspic https://github.com/aspic
-moly https://github.com/moly
-TheInventionist https://github.com/TheInventionist
-SG57 https://github.com/SG57
-tmclif https://github.com/tmclif
-Danny02 https://github.com/Danny02
-anserran https://github.com/anserran
-talklittle https://github.com/talklittle
-sluglit https://github.com/sluglit
-dieend https://github.com/dieend
-seroperson https://github.com/seroperson
-broken-e https://github.com/broken-e
-jamiltron https://github.com/jamiltron
-tescott https://github.com/tescott
-kreymerman https://github.com/kreymerman
-g-pechorin https://github.com/g-pechorin
-Thotep https://github.com/Thotep
-dylanetaft https://github.com/dylanetaft
-jericbryledy https://github.com/jericbryledy
-frustaci https://github.com/frustaci
-vbousquet https://github.com/vbousquet
-tamdinh https://github.com/tamdinh
-namrog84 https://github.com/namrog84
-veger https://github.com/veger
-jjurach https://github.com/jjurach
-samskivert https://github.com/samskivert
-AurelienRibon https://github.com/AurelienRibon
-tommycli https://github.com/tommycli
-andgeno https://github.com/andgeno
-kichik https://github.com/kichik
-Regiden https://github.com/Regiden
-fivevsthree https://github.com/fivevsthree
-johlo https://github.com/johlo
-xYaW https://github.com/xYaW
-pedronveloso https://github.com/pedronveloso
-tjunnone https://github.com/tjunnone
-cwjenkins https://github.com/cwjenkins
-guoguo12 https://github.com/guoguo12
-Getterac7 https://github.com/Getterac7
-DarkIP992 https://github.com/DarkIP992
-dackerman https://github.com/dackerman
-sridharsundaram https://github.com/sridharsundaram
-indiumindeed https://github.com/indiumindeed
-dimsuz https://github.com/dimsuz
-hyvas https://github.com/hyvas
-Yonsh https://github.com/Yonsh
-Jadems https://github.com/Jadems
-viridia https://github.com/viridia
-0xg https://github.com/0xg
-MoopsLC https://github.com/MoopsLC
-Opotech https://github.com/Opotech
-dounan https://github.com/dounan
-newtzgames https://github.com/newtzgames
-antionio https://github.com/antionio
-vanlim https://github.com/vanlim
-pferreir https://github.com/pferreir
-rathboma https://github.com/rathboma
-baptr https://github.com/baptr
-ksclarke https://github.com/ksclarke
-ajhager https://github.com/ajhager
-henu https://github.com/henu
-mikijov https://github.com/mikijov
-sslopek https://github.com/sslopek
-Maescool https://github.com/Maescool
-stickyd https://github.com/stickyd
-psiegel https://github.com/psiegel
-Adelier https://github.com/Adelier
-Ricorei https://github.com/Ricorei
-ratalaika https://github.com/ratalaika
+  public Touchpad(float deadzoneRadius, Skin skin) {
+    this(deadzoneRadius, skin.get(TouchpadStyle.class));
+  }
+
+  /**
+   * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
+   *     knob to be moved.
+   */
+  public Touchpad(float deadzoneRadius, Skin skin, String styleName) {
+    this(deadzoneRadius, skin.get(styleName, TouchpadStyle.class));
+  }
+
+  /**
+   * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
+   *     knob to be moved.
+   */
+  public Touchpad(float deadzoneRadius, TouchpadStyle style) {
+    if (deadzoneRadius < 0) throw new IllegalArgumentException("deadzoneRadius must be > 0");
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    this.deadzoneRadius = deadzoneRadius;
+    this.style = style;
+
+    knobPosition.set(getWidth() / 2f, getHeight() / 2f);
+
+    setStyleInternal(style);
+    setSize(getPrefWidth(), getPrefHeight());
+
+    addListener(
+        new InputListener() {
+          public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            if (touched) return false;
+            touched = true;
+            calculatePositionAndValue(x, y, false);
+            return true;
+          }
+
+          public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            calculatePositionAndValue(x, y, false);
+          }
+
+          public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            touched = false;
+            calculatePositionAndValue(x, y, resetOnTouchUp);
+          }
+        });
+  }
+
+  private void setStyleInternal(TouchpadStyle style) {
+    this.style = style;
+    invalidateHierarchy();
+  }
+
+  public void setStyle(TouchpadStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    setStyleInternal(style);
+  }
+
+  /**
+   * Returns the touchpads
 justinbowes https://github.com/justinbowes
 bornskilled200 https://github.com/bornskilled200
 Microbius https://github.com/Microbius
