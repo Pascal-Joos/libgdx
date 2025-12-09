@@ -73,6 +73,7 @@ public class Button extends Table implements Disableable {
   }
 
   public Button(Actor child, ButtonStyle style) {
+    this.style = style;
     initialize();
     add(child);
     setStyle(style);
