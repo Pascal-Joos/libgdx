@@ -1173,6 +1173,7 @@ public class JsonValue implements Iterable<JsonValue> {
    */
   @Initializer
   public void set(double value, @Nullable @Null String stringValue) {
+    name = "";
     doubleValue = value;
     longValue = (long) value;
     this.stringValue = stringValue != null ? stringValue : Double.toString(value);
@@ -1249,6 +1250,7 @@ public class JsonValue implements Iterable<JsonValue> {
     } else throw new SerializationException("Unknown object type: " + object);
   }
 
+  /** Iterates the children of this array or object. */
   /** Iterates the children of this array or object. */
   public JsonIterator iterator() {
     return new JsonIterator();
