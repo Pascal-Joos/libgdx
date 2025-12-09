@@ -152,6 +152,7 @@ public class SortedIntList<E> implements Iterable<SortedIntList.Node<E>> {
     @Initializer
     @Override
     public Node<E> next() {
+      if (position == null) return null;
       previousPosition = position;
       position = position.n;
       return previousPosition;
