@@ -796,7 +796,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getMaxWidth() {
-    return maxWidth.get(actor);
+    return actor == null ? 0 : maxWidth.get(actor);
   }
 
   /**
