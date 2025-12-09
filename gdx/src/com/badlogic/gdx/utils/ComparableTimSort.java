@@ -90,6 +90,7 @@ class ComparableTimSort {
   private static final boolean DEBUG = false;
 
   ComparableTimSort() {
+    this.a = new Object[0];
     tmp = new Object[INITIAL_TMP_STORAGE_LENGTH];
     runBase = new int[40];
     runLen = new int[40];
