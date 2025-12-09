@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public class PooledLinkedList<T> {
 
   private static class Item<T> implements Poolable {
-    T payload;
+    @Nullable T payload;
     @Nullable Item<T> next;
     @Nullable Item<T> prev;
 
