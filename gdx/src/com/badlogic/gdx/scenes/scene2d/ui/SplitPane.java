@@ -485,7 +485,9 @@ public class SplitPane extends WidgetGroup {
   public static class SplitPaneStyle {
     public Drawable handle;
 
-    public SplitPaneStyle() {}
+    public SplitPaneStyle() {
+      this(new com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable());
+    }
 
     public SplitPaneStyle(Drawable handle) {
       this.handle = handle;
