@@ -751,7 +751,7 @@ public class Array<T> implements Iterable<T> {
   public static class ArrayIterable<T> implements Iterable<T> {
     private final Array<T> array;
     private final boolean allowRemove;
-    private ArrayIterator iterator1, iterator2;
+    private ArrayIterator<T> iterator1, iterator2;
 
     // java.io.StringWriter lastAcquire = new java.io.StringWriter();
 
@@ -762,21 +762,15 @@ public class Array<T> implements Iterable<T> {
     public ArrayIterable(Array<T> array, boolean allowRemove) {
       this.array = array;
       this.allowRemove = allowRemove;
+      this.iterator1 = new ArrayIterator<T>(array, allowRemove);
+      this.iterator2 = new ArrayIterator<T>(array, allowRemove);
     }
 
     /**
      * @see Collections#allocateIterators
      */
     public ArrayIterator<T> iterator() {
-      if (Collections.allocateIterators) return new ArrayIterator(array, allowRemove);
-      // lastAcquire.getBuffer().setLength(0);
-      // new Throwable().printStackTrace(new java.io.PrintWriter(lastAcquire));
-      if (iterator1 == null) {
-        iterator1 = new ArrayIterator(array, allowRemove);
-        iterator2 = new ArrayIterator(array, allowRemove);
-        // iterator1.iterable = this;
-        // iterator2.iterable = this;
-      }
+      if (Collections.allocateIterators) return new ArrayIterator<T>(array, allowRemove);
       if (!iterator1.valid) {
         iterator1.index = 0;
         iterator1.valid = true;
