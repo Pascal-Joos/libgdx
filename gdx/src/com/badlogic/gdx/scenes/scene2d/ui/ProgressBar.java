@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Disableable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -89,11 +90,12 @@ public class ProgressBar extends Widget implements Disableable {
    * @param style the {@link ProgressBarStyle}
    */
   public ProgressBar(
-      float min, float max, float stepSize, boolean vertical, ProgressBarStyle style) {
+      float min, float max, float stepSize, boolean vertical, @Nonnull ProgressBarStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
     if (min > max)
       throw new IllegalArgumentException("max must be > min. min,max: " + min + ", " + max);
     if (stepSize <= 0) throw new IllegalArgumentException("stepSize must be > 0: " + stepSize);
-    setStyle(style);
     this.min = min;
     this.max = max;
     this.stepSize = stepSize;
