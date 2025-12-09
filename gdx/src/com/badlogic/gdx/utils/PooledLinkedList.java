@@ -65,8 +65,15 @@ public class PooledLinkedList<T> {
     }
 
     item.prev = tail;
-    tail.next = item;
-    tail = item;
+    if (tail == null) {
+      // Defensive check: in a consistent list, tail should never be null when head is non-null.
+      // If this happens, treat the list as empty and reset head and tail.
+      head = item;
+      tail = item;
+    } else {
+      tail.next = item;
+      tail = item;
+    }
     size++;
   }
 
