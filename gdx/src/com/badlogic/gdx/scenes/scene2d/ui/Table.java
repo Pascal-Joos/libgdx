@@ -884,7 +884,7 @@ public class Table extends WidgetGroup {
       int column = c.column, row = c.row, colspan = c.colspan;
       @Nullable Actor a = c.actor;
       if (a == null) continue;
-
+      Actor actorNonNull = a;
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
       if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
@@ -893,22 +893,25 @@ public class Table extends WidgetGroup {
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
       c.computedPadLeft =
-          c.padLeft.get((Actor) a)
-              + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get((Actor) a) - spaceRightLast));
-      c.computedPadTop = c.padTop.get(a);
+          c.padLeft.get(actorNonNull)
+              + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(actorNonNull) - spaceRightLast));
+      c.computedPadTop = c.padTop.get(actorNonNull);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
-        c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
+        c.computedPadTop +=
+            Math.max(0, c.spaceTop.get(actorNonNull) - above.spaceBottom.get(actorNonNull));
       }
-      float spaceRight = c.spaceRight.get(a);
-      c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
-      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
+      float spaceRight = c.spaceRight.get(actorNonNull);
+      c.computedPadRight =
+          c.padRight.get(actorNonNull) + ((column + colspan) == columns ? 0 : spaceRight);
+      c.computedPadBottom =
+          c.padBottom.get(actorNonNull) + (row == rows - 1 ? 0 : c.spaceBottom.get(actorNonNull));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
-      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
-      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
+      float prefWidth = c.prefWidth.get(actorNonNull), prefHeight = c.prefHeight.get(actorNonNull);
+      float minWidth = c.minWidth.get(actorNonNull), minHeight = c.minHeight.get(actorNonNull);
+      float maxWidth = c.maxWidth.get(actorNonNull), maxHeight = c.maxHeight.get(actorNonNull);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
@@ -984,10 +987,12 @@ public class Table extends WidgetGroup {
       if (colspan == 1) continue;
       int column = c.column;
 
-      Actor a = c.actor;
-      float minWidth = c.minWidth.get(a),
-          prefWidth = c.prefWidth.get(a),
-          maxWidth = c.maxWidth.get(a);
+      @Nullable Actor a = c.actor;
+      if (a == null) continue;
+      Actor actorNonNull = a;
+      float minWidth = c.minWidth.get(actorNonNull),
+          prefWidth = c.prefWidth.get(actorNonNull),
+          maxWidth = c.maxWidth.get(actorNonNull);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
       if (round) {
