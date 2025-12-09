@@ -61,11 +61,11 @@ public class TextArea extends TextField {
   private float prefRows;
 
   public TextArea(String text, Skin skin) {
-    super(text, skin);
+    this(text, skin.get(TextFieldStyle.class));
   }
 
   public TextArea(String text, Skin skin, String styleName) {
-    super(text, skin, styleName);
+    this(text, skin.get(styleName, TextFieldStyle.class));
   }
 
   public TextArea(String text, TextFieldStyle style) {
