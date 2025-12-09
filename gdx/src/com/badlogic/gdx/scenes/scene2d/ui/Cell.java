@@ -840,7 +840,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getSpaceBottom() {
-    return spaceBottom.get(actor);
+    return spaceBottom.get(actor != null ? actor : table);
   }
 
   /**
