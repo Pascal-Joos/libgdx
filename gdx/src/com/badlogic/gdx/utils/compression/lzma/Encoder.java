@@ -296,8 +296,7 @@ public class Encoder {
   ;
 
   Optimal[] _optimum = new Optimal[kNumOpts];
-  com.badlogic.gdx.utils.compression.lz.BinTree _matchFinder =
-      new com.badlogic.gdx.utils.compression.lz.BinTree();
+  com.badlogic.gdx.utils.compression.lz.BinTree _matchFinder = null;
   com.badlogic.gdx.utils.compression.rangecoder.Encoder _rangeEncoder =
       new com.badlogic.gdx.utils.compression.rangecoder.Encoder();
 
