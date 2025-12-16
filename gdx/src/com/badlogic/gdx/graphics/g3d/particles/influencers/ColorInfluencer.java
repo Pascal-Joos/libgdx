@@ -150,10 +150,7 @@ public abstract class ColorInfluencer extends Influencer {
     }
   }
 
-  @Override
-  public void allocateChannels() {
-    colorChannel = controller.particles.addChannel(ParticleChannels.Color);
-  }
+  FloatChannel colorChannel;
 
   @Override
   public void allocateChannels() {
