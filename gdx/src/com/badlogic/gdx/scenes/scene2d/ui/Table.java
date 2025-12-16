@@ -1192,7 +1192,10 @@ public class Table extends WidgetGroup {
 
       currentX += c.computedPadLeft;
 
-      float fillX = c.fillX, fillY = c.fillY;
+      Float fillXObj = c.fillX;
+      Float fillYObj = c.fillY;
+      float fillX = fillXObj == null ? 0f : fillXObj;
+      float fillY = fillYObj == null ? 0f : fillYObj;
       if (fillX > 0) {
         c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(c.actor));
         float maxWidth = c.maxWidth.get(c.actor);
