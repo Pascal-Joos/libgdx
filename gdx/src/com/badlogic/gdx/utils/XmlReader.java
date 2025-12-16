@@ -568,9 +568,7 @@ public class XmlReader {
     }
 
     public void remove() {
-      if (parent != null) {
-        parent.removeChild(this);
-      }
+      parent.removeChild(this);
     }
 
     @Nullable
