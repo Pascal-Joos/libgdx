@@ -602,7 +602,15 @@ public class PixmapPacker implements Disposable {
      *
      * @see #updateTexture(TextureFilter, TextureFilter, boolean)
      */
+    /**
+     * Returns the texture for this page, or null if the texture has not been created.
+     *
+     * @see #updateTexture(TextureFilter, TextureFilter, boolean)
+     */
     public Texture getTexture() {
+      if (texture == null) {
+        throw new IllegalStateException("Texture has not been created yet.");
+      }
       return texture;
     }
 
