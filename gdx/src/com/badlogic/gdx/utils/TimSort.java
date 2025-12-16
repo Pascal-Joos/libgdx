@@ -166,7 +166,9 @@ class TimSort<T> {
     if (DEBUG) assert stackSize == 1;
 
     this.a = null;
-    this.c = null;
+    if (c != null) {
+      this.c = c;
+    }
     T[] tmp = this.tmp;
     for (int i = 0, n = tmpCount; i < n; i++) tmp[i] = null;
   }
