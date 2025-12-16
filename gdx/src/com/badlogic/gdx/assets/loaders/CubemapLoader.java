@@ -43,7 +43,13 @@ public class CubemapLoader
     extends AsynchronousAssetLoader<Cubemap, CubemapLoader.CubemapParameter> {
   public static class CubemapLoaderInfo {
     @Nullable String filename;
-    CubemapData data;
+
+    public static class CubemapLoaderInfo {
+      String filename;
+      CubemapData data = null;
+      Cubemap cubemap;
+    }
+
     @Nullable Cubemap cubemap;
   }
   ;
