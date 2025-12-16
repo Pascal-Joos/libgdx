@@ -245,12 +245,18 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
           String name = currentChild.getName();
           if (name.equals("TileSheet")) {
             currentTileSet = tilesets.getTileSet(currentChild.getAttribute("Ref"));
-            firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+            firstgid =
+                currentTileSet != null
+                    ? currentTileSet.getProperties().get("firstgid", Integer.class)
+                    : 0;
           } else if (name.equals("Null")) {
             x += currentChild.getIntAttribute("Count");
           } else if (name.equals("Static")) {
             Cell cell = new Cell();
-            cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+            if (currentTileSet != null) {
+              cell.setTile(
+                  currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+            }
             layer.setCell(x++, y, cell);
           } else if (name.equals("Animated")) {
             // Create an AnimatedTile
@@ -264,11 +270,16 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
               String frameName = frame.getName();
               if (frameName.equals("TileSheet")) {
                 currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
-                firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+                firstgid =
+                    currentTileSet != null
+                        ? currentTileSet.getProperties().get("firstgid", Integer.class)
+                        : 0;
               } else if (frameName.equals("Static")) {
-                frameTiles.add(
-                    (StaticTiledMapTile)
-                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                if (currentTileSet != null) {
+                  frameTiles.add(
+                      (StaticTiledMapTile)
+                          currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                }
               }
             }
             Cell cell = new Cell();
