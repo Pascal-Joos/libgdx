@@ -104,7 +104,7 @@ public class G3dModelLoader extends ModelLoader<ModelLoader.ModelParameters> {
             throw new GdxRuntimeException("Not id given for mesh part");
           }
           for (ModelMeshPart other : parts) {
-            if (other.id.equals(partId)) {
+            if (partId.equals(other.id)) {
               throw new GdxRuntimeException(
                   "Mesh part with id '" + partId + "' already in defined");
             }
