@@ -487,8 +487,9 @@ public class I18NBundle {
    */
   @Initializer
   private void setLocale(Locale locale) {
-    this.locale = locale;
-    this.formatter = new TextFormatter(locale, !simpleFormatter);
+    Locale effectiveLocale = locale != null ? locale : Locale.getDefault();
+    this.locale = effectiveLocale;
+    this.formatter = new TextFormatter(effectiveLocale, !simpleFormatter);
   }
 
   /**
