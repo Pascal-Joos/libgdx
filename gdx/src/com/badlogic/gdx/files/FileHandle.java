@@ -60,7 +60,10 @@ public class FileHandle {
   protected File file;
   protected FileType type;
 
-  protected FileHandle() {}
+  protected FileHandle() {
+    this.file = new File("");
+    this.type = FileType.Absolute;
+  }
 
   /**
    * Creates a new absolute FileHandle for the file name. Use this for tools on the desktop that
