@@ -303,8 +303,7 @@ public class Actor {
     return captureListeners;
   }
 
-  public void addAction(@Nullable @Null Action action) {
-    if (action == null) return;
+  public void addAction(@Nullable Action action) {
     action.setActor(this);
     actions.add(action);
 
