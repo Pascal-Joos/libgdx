@@ -60,9 +60,6 @@ public class Encoder {
   }
 
   public void ShiftLow() throws IOException {
-    if (Stream == null) {
-      return;
-    }
     int LowHi = (int) (Low >>> 32);
     if (LowHi != 0 || Low < 0xFF000000L) {
       _position += _cacheSize;
