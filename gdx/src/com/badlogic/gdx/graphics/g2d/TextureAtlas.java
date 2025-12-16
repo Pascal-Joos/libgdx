@@ -562,7 +562,23 @@ public class TextureAtlas implements Disposable {
        * May be null if this page isn't associated with a file. In that case, {@link #texture} must
        * be set.
        */
-      public @Null FileHandle textureFile;
+      public static class Page {
+        /**
+         * May be null if this page isn't associated with a file. In that case, {@link #texture}
+         * must be set.
+         */
+        public @Null FileHandle textureFile = null;
+
+        /** May be null if the texture is not yet loaded. */
+        public @Null Texture texture;
+
+        public float width, height;
+        public boolean useMipMaps;
+        public Format format = Format.RGBA8888;
+        public TextureFilter minFilter = TextureFilter.Nearest, magFilter = TextureFilter.Nearest;
+        public TextureWrap uWrap = TextureWrap.ClampToEdge, vWrap = TextureWrap.ClampToEdge;
+        public boolean pma;
+      }
 
       /** May be null if the texture is not yet loaded. */
       @Nullable public @Null Texture texture;
