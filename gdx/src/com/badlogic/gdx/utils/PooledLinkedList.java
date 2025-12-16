@@ -134,6 +134,7 @@ public class PooledLinkedList<T> {
   }
 
   /** Removes the current list item based on the iterator position. */
+  /** Removes the current list item based on the iterator position. */
   public void remove() {
     if (curr == null) return;
 
@@ -152,8 +153,10 @@ public class PooledLinkedList<T> {
     }
 
     if (c == head) {
-      n.prev = null;
       head = n;
+      if (n != null) {
+        n.prev = null;
+      }
       return;
     }
 
@@ -164,7 +167,9 @@ public class PooledLinkedList<T> {
     }
 
     p.next = n;
-    n.prev = p;
+    if (n != null) {
+      n.prev = p;
+    }
   }
 
   /** Removes the tail of the list regardless of iteration status */
