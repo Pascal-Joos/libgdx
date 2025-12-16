@@ -402,11 +402,7 @@ public class Actor {
   }
 
   /** Returns the parent actor, or null if not in a group. */
-  /** Returns the parent actor, or null if not in a group. */
-  public Group getParent() {
-    if (parent == null) {
-      throw new IllegalStateException("Parent is null");
-    }
+  public @Null Group getParent() {
     return parent;
   }
 
