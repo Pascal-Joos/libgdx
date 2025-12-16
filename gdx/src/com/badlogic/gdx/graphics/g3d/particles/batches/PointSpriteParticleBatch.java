@@ -162,7 +162,7 @@ public class PointSpriteParticleBatch
         int regionOffset = p * regionChannel.strideSize;
         int positionOffset = p * positionChannel.strideSize;
         int colorOffset = p * colorChannel.strideSize;
-        int rotationOffset = p * rotationChannel.strideSize;
+        int rotationOffset = rotationChannel == null ? 0 : p * rotationChannel.strideSize;
 
         vertices[offset + CPU_POSITION_OFFSET] =
             positionChannel.data[positionOffset + ParticleChannels.XOffset];
@@ -181,9 +181,13 @@ public class PointSpriteParticleBatch
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
             scaleChannel.data[p * scaleChannel.strideSize];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
-            rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
+            rotationChannel == null
+                ? 1f
+                : rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
-            rotationChannel.data[rotationOffset + ParticleChannels.SineOffset];
+            rotationChannel == null
+                ? 0f
+                : rotationChannel.data[rotationOffset + ParticleChannels.SineOffset];
         vertices[offset + CPU_REGION_OFFSET] =
             regionChannel.data[regionOffset + ParticleChannels.UOffset];
         vertices[offset + CPU_REGION_OFFSET + 1] =
