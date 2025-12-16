@@ -43,7 +43,7 @@ public abstract class ParticleControllerComponent
   protected static final Quaternion TMP_Q = new Quaternion(), TMP_Q2 = new Quaternion();
   protected static final Matrix3 TMP_M3 = new Matrix3();
   protected static final Matrix4 TMP_M4 = new Matrix4();
-  protected ParticleController controller = null;
+  protected ParticleController controller;
 
   /** Called to initialize new emitted particles. */
   public void activateParticles(int startIndex, int count) {}
