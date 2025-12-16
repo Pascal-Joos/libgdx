@@ -33,7 +33,8 @@ public abstract class Action implements Poolable {
   @Nullable protected Actor actor;
 
   /** The actor this action targets, or null if a target has not been set. */
-  protected Actor target;
+  /** The actor this action targets, or null if a target has not been set. */
+  @Nullable protected Actor target;
 
   @Nullable private @Null Pool pool;
 
