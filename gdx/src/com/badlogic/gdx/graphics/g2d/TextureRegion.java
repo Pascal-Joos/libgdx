@@ -66,9 +66,7 @@ public class TextureRegion {
   }
 
   /** Constructs a region with the same texture and coordinates of the specified region. */
-  /** Constructs a region with the same texture and coordinates of the specified region. */
   public TextureRegion(TextureRegion region) {
-    this.texture = region.texture;
     setRegion(region);
   }
 
