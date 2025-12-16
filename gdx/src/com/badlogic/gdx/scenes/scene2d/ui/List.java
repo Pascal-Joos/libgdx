@@ -70,6 +70,8 @@ public class List<T> extends Widget implements Cullable {
   }
 
   public List(ListStyle style) {
+    if (style == null) throw new IllegalArgumentException("style cannot be null");
+    this.style = style;
     selection.setActor(this);
     selection.setRequired(true);
 
@@ -80,9 +82,9 @@ public class List<T> extends Widget implements Cullable {
         keyListener =
             new InputListener() {
               long typeTimeout;
-              @Nullable String prefix;
+              String prefix;
 
-              public boolean keyDown(@Nullable InputEvent event, int keycode) {
+              public boolean keyDown(InputEvent event, int keycode) {
                 if (items.isEmpty()) return false;
                 int index;
                 switch (keycode) {
@@ -160,8 +162,7 @@ public class List<T> extends Widget implements Cullable {
             return false;
           }
 
-          public void exit(
-              InputEvent event, float x, float y, int pointer, @Nullable Actor toActor) {
+          public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
             if (pointer == 0) pressedIndex = -1;
             if (pointer == -1) overIndex = -1;
           }
