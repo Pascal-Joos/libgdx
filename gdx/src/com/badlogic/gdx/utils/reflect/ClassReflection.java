@@ -55,13 +55,8 @@ public final class ClassReflection {
    * as, or is a superclass or superinterface of, the class or interface represented by the second
    * Class parameter.
    */
-  /**
-   * Determines if the class or interface represented by first Class parameter is either the same
-   * as, or is a superclass or superinterface of, the class or interface represented by the second
-   * Class parameter.
-   */
   public static boolean isAssignableFrom(Class c1, @Nullable Class c2) {
-    return c2 != null && c1.isAssignableFrom(c2);
+    return c1.isAssignableFrom(c2);
   }
 
   /** Returns true if the class or interface represented by the supplied Class is a member class. */
