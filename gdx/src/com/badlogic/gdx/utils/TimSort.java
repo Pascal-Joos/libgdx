@@ -112,7 +112,9 @@ class TimSort<T> {
    */
   private static final boolean DEBUG = false;
 
-  TimSort() {
+  TimSort(T[] a, Comparator<T> c) {
+    this.a = a;
+    this.c = c;
     tmp = (T[]) new Object[INITIAL_TMP_STORAGE_LENGTH];
     runBase = new int[40];
     runLen = new int[40];
