@@ -303,8 +303,11 @@ public class ParticleShader extends BaseShader {
   @Override
   public void init() {
     final ShaderProgram program = this.program;
-    this.program = null;
+    if (program == null) {
+      throw new IllegalStateException("ShaderProgram must not be null during init");
+    }
     init(program, renderable);
+    this.program = null;
     renderable = null;
   }
 
