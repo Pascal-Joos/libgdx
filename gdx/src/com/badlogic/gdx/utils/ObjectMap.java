@@ -103,11 +103,19 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
    *     next power of two.
    */
   public ObjectMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f)
+    int tableSize;
+    if (loadFactor <= 0f || loadFactor >= 1f) {
+      entries1 = 0;
+      entries2 = 0;
+      values1 = 0;
+      values2 = 0;
+      keys1 = 0;
+      keys2 = 0;
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    }
     this.loadFactor = loadFactor;
 
-    int tableSize = tableSize(initialCapacity, loadFactor);
+    tableSize = tableSize(initialCapacity, loadFactor);
     threshold = (int) (tableSize * loadFactor);
     mask = tableSize - 1;
     shift = Long.numberOfLeadingZeros(mask);
