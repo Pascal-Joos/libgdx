@@ -421,20 +421,11 @@ public class ModelInstance implements RenderableProvider {
    * @param shareKeyframes Shallow copy of {@link NodeKeyframe}'s if it's true, otherwise make a
    *     deep copy.
    */
-  /**
-   * Copy the source animation to this ModelInstance
-   *
-   * @param sourceAnim The source animation {@link Animation}
-   * @param shareKeyframes Shallow copy of {@link NodeKeyframe}'s if it's true, otherwise make a
-   *     deep copy.
-   */
   public void copyAnimation(Animation sourceAnim, boolean shareKeyframes) {
-    if (sourceAnim == null) return;
     Animation animation = new Animation();
     animation.id = sourceAnim.id;
     animation.duration = sourceAnim.duration;
     for (final NodeAnimation nanim : sourceAnim.nodeAnimations) {
-      if (nanim == null || nanim.node == null || nanim.node.id == null) continue;
       final Node node = getNode(nanim.node.id);
       if (node == null) continue;
       NodeAnimation nodeAnim = new NodeAnimation();
