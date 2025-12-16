@@ -227,9 +227,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
-      if (rotationalVelocity2dChannel == null) {
-        return;
-      }
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
