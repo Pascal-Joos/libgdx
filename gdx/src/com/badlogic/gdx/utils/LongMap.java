@@ -104,8 +104,16 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
    *     next power of two.
    */
   public LongMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f)
+    if (loadFactor <= 0f || loadFactor >= 1f) {
+      this.loadFactor = 0.8f;
+      int tableSize = tableSize(51, this.loadFactor);
+      threshold = (int) (tableSize * this.loadFactor);
+      mask = tableSize - 1;
+      shift = Long.numberOfLeadingZeros(mask);
+      keyTable = new long[tableSize];
+      valueTable = (V[]) new Object[tableSize];
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    }
     this.loadFactor = loadFactor;
 
     int tableSize = tableSize(initialCapacity, loadFactor);
