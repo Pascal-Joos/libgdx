@@ -101,6 +101,7 @@ public abstract class DynamicsModifier extends Influencer {
 
     public Strength(Strength rotation) {
       super(rotation);
+      this.strengthChannel = rotation.strengthChannel;
       strengthValue = new ScaledNumericValue();
       strengthValue.load(rotation.strengthValue);
     }
