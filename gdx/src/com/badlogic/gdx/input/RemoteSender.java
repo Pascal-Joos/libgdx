@@ -80,9 +80,8 @@ public class RemoteSender implements InputProcessor {
       out.writeFloat(Gdx.input.getGyroscopeY());
       out.writeFloat(Gdx.input.getGyroscopeZ());
     } catch (Throwable t) {
-      synchronized (this) {
-        connected = false;
-      }
+      out = null;
+      connected = false;
     }
   }
 
