@@ -29,9 +29,8 @@ import com.badlogic.gdx.utils.Null;
  */
 public abstract class Value {
   /** Calls {@link #get(Actor)} with null. */
-  /** Calls {@link #get(Actor)} with null. */
   public float get() {
-    return get((Actor) null);
+    return get(null);
   }
 
   /**
