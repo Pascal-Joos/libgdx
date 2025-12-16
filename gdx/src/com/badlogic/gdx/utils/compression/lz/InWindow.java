@@ -54,7 +54,7 @@ public class InWindow {
   }
 
   void Free() {
-    // Intentionally left blank to avoid assigning null to _bufferBase
+    _bufferBase = null;
   }
 
   public void Create(int keepSizeBefore, int keepSizeAfter, int keepSizeReserv) {
