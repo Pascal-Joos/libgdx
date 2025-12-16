@@ -396,28 +396,19 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
           boolean flipVertically = ((id & FLAG_FLIP_VERTICALLY) != 0);
 
           TiledMapTile tile = map.getTileSets().getTile(id & ~MASK_CLEAR);
-          if (tile != null) {
-            TiledMapTileMapObject tiledMapTileMapObject =
-                new TiledMapTileMapObject(tile, flipHorizontally, flipVertically);
-            TextureRegion textureRegion = tiledMapTileMapObject.getTextureRegion();
-            tiledMapTileMapObject.getProperties().put("gid", id);
-            tiledMapTileMapObject.setX(x);
-            tiledMapTileMapObject.setY(flipY ? y : y - height);
-            if (textureRegion != null) {
-              float objectWidth =
-                  element.getFloatAttribute("width", textureRegion.getRegionWidth());
-              float objectHeight =
-                  element.getFloatAttribute("height", textureRegion.getRegionHeight());
-              tiledMapTileMapObject.setScaleX(
-                  scaleX * (objectWidth / textureRegion.getRegionWidth()));
-              tiledMapTileMapObject.setScaleY(
-                  scaleY * (objectHeight / textureRegion.getRegionHeight()));
-            }
-            tiledMapTileMapObject.setRotation(element.getFloatAttribute("rotation", 0));
-            object = tiledMapTileMapObject;
-          } else {
-            object = new RectangleMapObject(x, flipY ? y - height : y, width, height);
-          }
+          TiledMapTileMapObject tiledMapTileMapObject =
+              new TiledMapTileMapObject(tile, flipHorizontally, flipVertically);
+          TextureRegion textureRegion = tiledMapTileMapObject.getTextureRegion();
+          tiledMapTileMapObject.getProperties().put("gid", id);
+          tiledMapTileMapObject.setX(x);
+          tiledMapTileMapObject.setY(flipY ? y : y - height);
+          float objectWidth = element.getFloatAttribute("width", textureRegion.getRegionWidth());
+          float objectHeight = element.getFloatAttribute("height", textureRegion.getRegionHeight());
+          tiledMapTileMapObject.setScaleX(scaleX * (objectWidth / textureRegion.getRegionWidth()));
+          tiledMapTileMapObject.setScaleY(
+              scaleY * (objectHeight / textureRegion.getRegionHeight()));
+          tiledMapTileMapObject.setRotation(element.getFloatAttribute("rotation", 0));
+          object = tiledMapTileMapObject;
         } else {
           object = new RectangleMapObject(x, flipY ? y - height : y, width, height);
         }
