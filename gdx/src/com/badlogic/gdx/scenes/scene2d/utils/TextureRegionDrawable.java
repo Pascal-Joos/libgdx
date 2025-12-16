@@ -36,8 +36,7 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
   public TextureRegionDrawable() {}
 
   public TextureRegionDrawable(Texture texture) {
-    this.region = new TextureRegion(texture);
-    setRegion(this.region);
+    setRegion(new TextureRegion(texture));
   }
 
   public TextureRegionDrawable(TextureRegion region) {
