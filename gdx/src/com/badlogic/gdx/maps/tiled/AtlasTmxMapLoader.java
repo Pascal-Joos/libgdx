@@ -186,9 +186,7 @@ public class AtlasTmxMapLoader
       int imageHeight,
       @Nullable FileHandle image) {
 
-    if (atlasResolver == null) throw new GdxRuntimeException("atlasResolver is null");
     TextureAtlas atlas = atlasResolver.getAtlas();
-    if (atlas == null) throw new GdxRuntimeException("TextureAtlas is null");
     String regionsName = name;
 
     for (Texture texture : atlas.getTextures()) {
