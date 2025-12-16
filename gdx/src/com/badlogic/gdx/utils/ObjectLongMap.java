@@ -112,6 +112,13 @@ public class ObjectLongMap<K> implements Iterable<ObjectLongMap.Entry<K>> {
 
     keyTable = (K[]) new Object[tableSize];
     valueTable = new long[tableSize];
+
+    entries1 = null;
+    entries2 = null;
+    values1 = null;
+    values2 = null;
+    keys1 = null;
+    keys2 = null;
   }
 
   /** Creates a new map identical to the specified map. */
