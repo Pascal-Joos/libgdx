@@ -49,7 +49,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  private HttpRequest httpRequest;
+  private HttpRequest httpRequest = new HttpRequest();
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
