@@ -74,8 +74,10 @@ public class ArrayMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
    */
   public ArrayMap(boolean ordered, int capacity, Class keyArrayType, Class valueArrayType) {
     this.ordered = ordered;
-    keys = (K[]) ArrayReflection.newInstance(keyArrayType, capacity);
-    values = (V[]) ArrayReflection.newInstance(valueArrayType, capacity);
+    K[] newKeys = (K[]) ArrayReflection.newInstance(keyArrayType, capacity);
+    V[] newValues = (V[]) ArrayReflection.newInstance(valueArrayType, capacity);
+    keys = newKeys;
+    values = newValues;
   }
 
   /**
