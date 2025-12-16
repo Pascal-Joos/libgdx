@@ -490,14 +490,14 @@ public class TextureAtlas implements Disposable {
                   } catch (NumberFormatException ignored) { // Silently ignore non-integer values.
                   }
                 }
-                values.add(entryValues);
+                if (values != null) values.add(entryValues);
               }
             }
             if (region.originalWidth == 0 && region.originalHeight == 0) {
               region.originalWidth = region.width;
               region.originalHeight = region.height;
             }
-            if (names != null && names.size > 0) {
+            if (names != null && values != null && names.size > 0 && values.size > 0) {
               region.names = names.toArray(String.class);
               region.values = values.toArray(int[].class);
               names.clear();
