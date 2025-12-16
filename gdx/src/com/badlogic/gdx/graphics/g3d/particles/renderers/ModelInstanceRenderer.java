@@ -70,7 +70,7 @@ public class ModelInstanceRenderer
       ModelInstance instance = renderData.modelInstanceChannel.data[i];
       float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
-      if (hasRotation) {
+      if (hasRotation && renderData.rotationChannel != null) {
         int rotationOffset = i * renderData.rotationChannel.strideSize;
         qx = renderData.rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
         qy = renderData.rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
