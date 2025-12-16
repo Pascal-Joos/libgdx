@@ -578,9 +578,7 @@ public abstract class DynamicsModifier extends Influencer {
   public boolean isGlobal = false;
   protected FloatChannel lifeChannel;
 
-  public DynamicsModifier() {
-    this.lifeChannel = null;
-  }
+  public DynamicsModifier() {}
 
   public DynamicsModifier(DynamicsModifier modifier) {
     this.isGlobal = modifier.isGlobal;
