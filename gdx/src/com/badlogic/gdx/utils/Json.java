@@ -1183,7 +1183,7 @@ public class Json {
       @Nullable @Null Class<T> type,
       @Nullable @Null Class elementType,
       @Nullable JsonValue jsonData) {
-    if (jsonData == null) throw new SerializationException("jsonData cannot be null");
+    if (jsonData == null) return null;
 
     if (jsonData.isObject()) {
       String className = typeName == null ? null : jsonData.getString(typeName, null);
@@ -1393,7 +1393,7 @@ public class Json {
           "Unable to convert value to required type: " + jsonData + " (" + type.getName() + ")");
     }
 
-    throw new SerializationException("Unable to convert value to required type: " + jsonData);
+    return null;
   }
 
   /**
