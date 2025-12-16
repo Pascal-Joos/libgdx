@@ -62,6 +62,7 @@ public class TextArea extends TextField {
 
   public TextArea(String text, Skin skin) {
     super(text, skin);
+    initialize();
   }
 
   public TextArea(String text, Skin skin, String styleName) {
