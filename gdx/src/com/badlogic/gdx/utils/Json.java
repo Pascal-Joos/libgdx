@@ -1123,12 +1123,8 @@ public class Json {
    * @param type May be null if the type is unknown.
    * @return May be null.
    */
-  /**
-   * @param type May be null if the type is unknown.
-   * @return May be null.
-   */
   public @Null <T> T readValue(
-      String name, @Null Class<T> type, @Nullable @Null T defaultValue, JsonValue jsonMap) {
+      String name, @Null Class<T> type, @Nullable T defaultValue, JsonValue jsonMap) {
     JsonValue jsonValue = jsonMap.get(name);
     if (jsonValue == null) return defaultValue;
     return readValue(type, null, jsonValue);
