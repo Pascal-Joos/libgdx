@@ -505,62 +505,7 @@ public class List<T> extends Widget implements Cullable {
     public Drawable selection;
     @Nullable public @Null Drawable down, over, background;
 
-    public ListStyle() {
-      font = new BitmapFont();
-      selection =
-          new Drawable() {
-            @Override
-            public void draw(Batch batch, float x, float y, float width, float height) {}
-
-            @Override
-            public float getLeftWidth() {
-              return 0;
-            }
-
-            @Override
-            public void setLeftWidth(float leftWidth) {}
-
-            @Override
-            public float getRightWidth() {
-              return 0;
-            }
-
-            @Override
-            public void setRightWidth(float rightWidth) {}
-
-            @Override
-            public float getTopHeight() {
-              return 0;
-            }
-
-            @Override
-            public void setTopHeight(float topHeight) {}
-
-            @Override
-            public float getBottomHeight() {
-              return 0;
-            }
-
-            @Override
-            public void setBottomHeight(float bottomHeight) {}
-
-            @Override
-            public float getMinWidth() {
-              return 0;
-            }
-
-            @Override
-            public void setMinWidth(float minWidth) {}
-
-            @Override
-            public float getMinHeight() {
-              return 0;
-            }
-
-            @Override
-            public void setMinHeight(float minHeight) {}
-          };
-    }
+    public ListStyle() {}
 
     public ListStyle(
         BitmapFont font, Color fontColorSelected, Color fontColorUnselected, Drawable selection) {
