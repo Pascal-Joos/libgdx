@@ -110,15 +110,6 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
    * @param imageResolver the {@link ImageResolver}
    * @return the {@link TiledMap}
    */
-  /**
-   * Loads the map data, given the XML root element and an {@link ImageResolver} used to return the
-   * tileset Textures
-   *
-   * @param root the XML root element
-   * @param tmxFile the Filehandle of the tmx file
-   * @param imageResolver the {@link ImageResolver}
-   * @return the {@link TiledMap}
-   */
   private TiledMap loadMap(
       @Nullable Element root, FileHandle tmxFile, ImageResolver imageResolver) {
     TiledMap map = new TiledMap();
@@ -127,16 +118,12 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
       loadProperties(map.getProperties(), properties);
     }
     Element tilesheets = root.getChildByName("TileSheets");
-    if (tilesheets != null) {
-      for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
-        loadTileSheet(map, tilesheet, tmxFile, imageResolver);
-      }
+    for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+      loadTileSheet(map, tilesheet, tmxFile, imageResolver);
     }
     Element layers = root.getChildByName("Layers");
-    if (layers != null) {
-      for (Element layer : layers.getChildrenByName("Layer")) {
-        loadLayer(map, layer);
-      }
+    for (Element layer : layers.getChildrenByName("Layer")) {
+      loadLayer(map, layer);
     }
     return map;
   }
