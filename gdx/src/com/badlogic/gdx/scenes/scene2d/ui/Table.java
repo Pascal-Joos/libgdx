@@ -869,23 +869,14 @@ public class Table extends WidgetGroup {
     }
 
     int columns = this.columns, rows = this.rows;
-    float[] existingColumnMinWidth = this.columnMinWidth;
-    float[] existingRowMinHeight = this.rowMinHeight;
-    float[] existingColumnPrefWidth = this.columnPrefWidth;
-    float[] existingRowPrefHeight = this.rowPrefHeight;
-    float[] existingColumnWidth = this.columnWidth;
-    float[] existingRowHeight = this.rowHeight;
-    float[] existingExpandWidth = this.expandWidth;
-    float[] existingExpandHeight = this.expandHeight;
-
-    float[] columnMinWidth = this.columnMinWidth = ensureSize(existingColumnMinWidth, columns);
-    float[] rowMinHeight = this.rowMinHeight = ensureSize(existingRowMinHeight, rows);
-    float[] columnPrefWidth = this.columnPrefWidth = ensureSize(existingColumnPrefWidth, columns);
-    float[] rowPrefHeight = this.rowPrefHeight = ensureSize(existingRowPrefHeight, rows);
-    float[] columnWidth = this.columnWidth = ensureSize(existingColumnWidth, columns);
-    float[] rowHeight = this.rowHeight = ensureSize(existingRowHeight, rows);
-    float[] expandWidth = this.expandWidth = ensureSize(existingExpandWidth, columns);
-    float[] expandHeight = this.expandHeight = ensureSize(existingExpandHeight, rows);
+    float[] columnMinWidth = this.columnMinWidth = ensureSize(this.columnMinWidth, columns);
+    float[] rowMinHeight = this.rowMinHeight = ensureSize(this.rowMinHeight, rows);
+    float[] columnPrefWidth = this.columnPrefWidth = ensureSize(this.columnPrefWidth, columns);
+    float[] rowPrefHeight = this.rowPrefHeight = ensureSize(this.rowPrefHeight, rows);
+    float[] columnWidth = this.columnWidth = ensureSize(this.columnWidth, columns);
+    float[] rowHeight = this.rowHeight = ensureSize(this.rowHeight, rows);
+    float[] expandWidth = this.expandWidth = ensureSize(this.expandWidth, columns);
+    float[] expandHeight = this.expandHeight = ensureSize(this.expandHeight, rows);
 
     float spaceRightLast = 0;
     for (int i = 0; i < cellCount; i++) {
