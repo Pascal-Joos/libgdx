@@ -151,8 +151,8 @@ public class Window extends Table {
             float minWidth = getMinWidth(), maxWidth = getMaxWidth();
             float minHeight = getMinHeight(), maxHeight = getMaxHeight();
             Stage stage = getStage();
-            if (stage == null) return;
-            boolean clampPosition = keepWithinStage && getParent() == stage.getRoot();
+            boolean clampPosition =
+                keepWithinStage && stage != null && getParent() == stage.getRoot();
 
             if ((edge & MOVE) != 0) {
               float amountX = x - startX, amountY = y - startY;
