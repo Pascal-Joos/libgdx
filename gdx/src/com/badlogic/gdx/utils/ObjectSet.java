@@ -107,8 +107,6 @@ public class ObjectSet<T> implements Iterable<T> {
     shift = Long.numberOfLeadingZeros(mask);
 
     keyTable = (T[]) new Object[tableSize];
-    iterator1 = new ObjectSetIterator();
-    iterator2 = new ObjectSetIterator();
   }
 
   /** Creates a new set identical to the specified set. */
