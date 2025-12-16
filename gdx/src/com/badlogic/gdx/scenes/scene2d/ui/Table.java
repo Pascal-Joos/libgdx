@@ -869,14 +869,22 @@ public class Table extends WidgetGroup {
     }
 
     int columns = this.columns, rows = this.rows;
-    float[] columnMinWidth = this.columnMinWidth = ensureSize(this.columnMinWidth, columns);
-    float[] rowMinHeight = this.rowMinHeight = ensureSize(this.rowMinHeight, rows);
-    float[] columnPrefWidth = this.columnPrefWidth = ensureSize(this.columnPrefWidth, columns);
-    float[] rowPrefHeight = this.rowPrefHeight = ensureSize(this.rowPrefHeight, rows);
-    float[] columnWidth = this.columnWidth = ensureSize(this.columnWidth, columns);
-    float[] rowHeight = this.rowHeight = ensureSize(this.rowHeight, rows);
-    float[] expandWidth = this.expandWidth = ensureSize(this.expandWidth, columns);
-    float[] expandHeight = this.expandHeight = ensureSize(this.expandHeight, rows);
+    float[] columnMinWidth = ensureSize(this.columnMinWidth, columns);
+    this.columnMinWidth = columnMinWidth;
+    float[] rowMinHeight = ensureSize(this.rowMinHeight, rows);
+    this.rowMinHeight = rowMinHeight;
+    float[] columnPrefWidth = ensureSize(this.columnPrefWidth, columns);
+    this.columnPrefWidth = columnPrefWidth;
+    float[] rowPrefHeight = ensureSize(this.rowPrefHeight, rows);
+    this.rowPrefHeight = rowPrefHeight;
+    float[] columnWidth = ensureSize(this.columnWidth, columns);
+    this.columnWidth = columnWidth;
+    float[] rowHeight = ensureSize(this.rowHeight, rows);
+    this.rowHeight = rowHeight;
+    float[] expandWidth = ensureSize(this.expandWidth, columns);
+    this.expandWidth = expandWidth;
+    float[] expandHeight = ensureSize(this.expandHeight, rows);
+    this.expandHeight = expandHeight;
 
     float spaceRightLast = 0;
     for (int i = 0; i < cellCount; i++) {
