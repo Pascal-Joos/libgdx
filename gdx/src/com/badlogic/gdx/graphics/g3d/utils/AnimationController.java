@@ -702,7 +702,9 @@ public class AnimationController extends BaseAnimationController {
   }
 
   /** Apply an action animation on top of the current animation. */
+  /** Apply an action animation on top of the current animation. */
   protected AnimationDesc action(@Nullable final AnimationDesc anim, float transitionTime) {
+    if (anim == null) throw new GdxRuntimeException("AnimationDesc cannot be null");
     if (anim.loopCount < 0) throw new GdxRuntimeException("An action cannot be continuous");
     if (current == null || current.loopCount == 0) animate(anim, transitionTime);
     else {
