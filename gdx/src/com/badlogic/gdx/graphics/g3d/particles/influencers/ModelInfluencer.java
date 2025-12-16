@@ -123,6 +123,7 @@ public abstract class ModelInfluencer extends Influencer {
 
   public ModelInfluencer() {
     this.models = new Array<Model>(true, 1, Model.class);
+    this.modelChannel = null;
   }
 
   public ModelInfluencer(Model... models) {
