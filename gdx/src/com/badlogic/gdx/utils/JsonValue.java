@@ -242,7 +242,13 @@ public class JsonValue implements Iterable<JsonValue> {
    * @return May be null if this value is null.
    * @throws IllegalStateException if this an array or object.
    */
-  public @Null String asString() {
+  /**
+   * Returns this value as a string.
+   *
+   * @return May be null if this value is null.
+   * @throws IllegalStateException if this an array or object.
+   */
+  public @Nullable String asString() {
     switch (type) {
       case stringValue:
         return stringValue;
