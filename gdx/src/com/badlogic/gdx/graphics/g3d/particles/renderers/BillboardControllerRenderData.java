@@ -24,10 +24,5 @@ import com.badlogic.gdx.graphics.g3d.particles.ParallelArray.FloatChannel;
  * @author Inferno
  */
 public class BillboardControllerRenderData extends ParticleControllerRenderData {
-  public class BillboardControllerRenderData extends ParticleControllerRenderData {
-    public FloatChannel regionChannel,
-        colorChannel,
-        scaleChannel = new FloatChannel(),
-        rotationChannel;
-  }
+  public FloatChannel regionChannel, colorChannel, scaleChannel, rotationChannel;
 }
