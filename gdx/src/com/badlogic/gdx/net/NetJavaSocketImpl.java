@@ -112,7 +112,6 @@ public class NetJavaSocketImpl implements Socket {
     if (socket != null) {
       try {
         socket.close();
-        socket = null;
       } catch (Exception e) {
         throw new GdxRuntimeException("Error closing socket.", e);
       }
