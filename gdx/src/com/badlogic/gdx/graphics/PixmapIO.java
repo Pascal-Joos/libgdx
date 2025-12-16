@@ -270,7 +270,7 @@ public class PixmapIO {
 
       int lineLen = pixmap.getWidth() * 4;
       byte[] lineOut, curLine, prevLine;
-      if (lineOutBytes == null || curLineBytes == null || prevLineBytes == null) {
+      if (lineOutBytes == null) {
         lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
         curLine = (curLineBytes = new ByteArray(lineLen)).items;
         prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
