@@ -97,6 +97,9 @@ public class IntSet {
    *     next power of two.
    */
   public IntSet(int initialCapacity, float loadFactor) {
+    keyTable = new int[0];
+    iterator1 = new IntSetIterator();
+    iterator2 = new IntSetIterator();
     if (loadFactor <= 0f || loadFactor >= 1f)
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
     this.loadFactor = loadFactor;
