@@ -94,16 +94,9 @@ public class SplitPane extends WidgetGroup {
    * @param firstWidget May be null.
    * @param secondWidget May be null.
    */
-  /**
-   * @param firstWidget May be null.
-   * @param secondWidget May be null.
-   */
   public SplitPane(
       @Null Actor firstWidget, @Null Actor secondWidget, boolean vertical, SplitPaneStyle style) {
     this.vertical = vertical;
-    if (style == null) {
-      throw new IllegalArgumentException("style must not be null");
-    }
     setStyle(style);
     setFirstWidget(firstWidget);
     setSecondWidget(secondWidget);
