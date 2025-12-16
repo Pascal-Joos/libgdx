@@ -76,10 +76,8 @@ public class ETC1TextureData implements TextureData {
     if (!isPrepared)
       throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
-    final ETC1.ETC1Data localData = data;
-
     if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
-      Pixmap pixmap = ETC1.decodeImage(localData, Format.RGB565);
+      Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
       Gdx.gl.glTexImage2D(
           target,
           0,
@@ -102,11 +100,12 @@ public class ETC1TextureData implements TextureData {
           width,
           height,
           0,
-          localData.compressedData.capacity() - localData.dataOffset,
-          localData.compressedData);
+          data.compressedData.capacity() - data.dataOffset,
+          data.compressedData);
       if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
     }
-    localData.dispose();
+    data.dispose();
+    data = null;
     isPrepared = false;
   }
 
