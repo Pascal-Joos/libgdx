@@ -245,7 +245,7 @@ public class Container<T extends Actor> extends WidgetGroup {
 
   public Actor removeActorAt(int index, boolean unfocus) {
     Actor actor = super.removeActorAt(index, unfocus);
-    if (actor == this.actor) this.actor = null;
+    if (actor == this.actor) setActor(null);
     return actor;
   }
 
