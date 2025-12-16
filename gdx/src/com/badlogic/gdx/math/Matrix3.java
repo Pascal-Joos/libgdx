@@ -401,9 +401,6 @@ public class Matrix3 implements Serializable {
    * @return This matrix for the purpose of chaining operations.
    */
   public Matrix3 set(@Nullable Matrix4 mat) {
-    if (mat == null) {
-      throw new NullPointerException("mat must not be null");
-    }
     float[] val = this.val;
     val[M00] = mat.val[Matrix4.M00];
     val[M10] = mat.val[Matrix4.M10];
