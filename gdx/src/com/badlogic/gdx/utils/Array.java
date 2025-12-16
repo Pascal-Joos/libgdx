@@ -589,7 +589,8 @@ public class Array<T> implements Iterable<T> {
   }
 
   /** Returns a random item from the array, or null if the array is empty. */
-  public @Null T random() {
+  /** Returns a random item from the array, or null if the array is empty. */
+  public @org.jetbrains.annotations.Nullable T random() {
     if (size == 0) return null;
     return items[MathUtils.random(0, size - 1)];
   }
