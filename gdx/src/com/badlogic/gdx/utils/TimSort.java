@@ -165,8 +165,8 @@ class TimSort<T> {
     mergeForceCollapse();
     if (DEBUG) assert stackSize == 1;
 
-    this.a = null;
-    this.c = null;
+    this.a = a;
+    this.c = c;
     T[] tmp = this.tmp;
     for (int i = 0, n = tmpCount; i < n; i++) tmp[i] = null;
   }
