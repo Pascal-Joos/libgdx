@@ -94,7 +94,6 @@ public class TextureAtlas implements Disposable {
   }
 
   /** Adds the textures and regions from the specified texture atlas data. */
-  /** Adds the textures and regions from the specified texture atlas data. */
   public void load(TextureAtlasData data) {
     textures.ensureCapacity(data.pages.size);
     for (Page page : data.pages) {
@@ -107,11 +106,9 @@ public class TextureAtlas implements Disposable {
 
     regions.ensureCapacity(data.regions.size);
     for (Region region : data.regions) {
-      Texture texture = region.page == null ? null : region.page.texture;
-      if (texture == null) continue;
       AtlasRegion atlasRegion =
           new AtlasRegion(
-              texture,
+              region.page.texture,
               region.left,
               region.top, //
               region.rotate ? region.height : region.width, //
