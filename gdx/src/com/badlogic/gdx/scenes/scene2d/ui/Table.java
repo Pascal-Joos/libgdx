@@ -869,14 +869,22 @@ public class Table extends WidgetGroup {
     }
 
     int columns = this.columns, rows = this.rows;
-    float[] columnMinWidth = this.columnMinWidth = ensureSize(this.columnMinWidth, columns);
-    float[] rowMinHeight = this.rowMinHeight = ensureSize(this.rowMinHeight, rows);
-    float[] columnPrefWidth = this.columnPrefWidth = ensureSize(this.columnPrefWidth, columns);
-    float[] rowPrefHeight = this.rowPrefHeight = ensureSize(this.rowPrefHeight, rows);
-    float[] columnWidth = this.columnWidth = ensureSize(this.columnWidth, columns);
-    float[] rowHeight = this.rowHeight = ensureSize(this.rowHeight, rows);
-    float[] expandWidth = this.expandWidth = ensureSize(this.expandWidth, columns);
-    float[] expandHeight = this.expandHeight = ensureSize(this.expandHeight, rows);
+    float[] columnMinWidthLocal = ensureSize(this.columnMinWidth, columns);
+    this.columnMinWidth = columnMinWidthLocal;
+    float[] rowMinHeightLocal = ensureSize(this.rowMinHeight, rows);
+    this.rowMinHeight = rowMinHeightLocal;
+    float[] columnPrefWidthLocal = ensureSize(this.columnPrefWidth, columns);
+    this.columnPrefWidth = columnPrefWidthLocal;
+    float[] rowPrefHeightLocal = ensureSize(this.rowPrefHeight, rows);
+    this.rowPrefHeight = rowPrefHeightLocal;
+    float[] columnWidthLocal = ensureSize(this.columnWidth, columns);
+    this.columnWidth = columnWidthLocal;
+    float[] rowHeightLocal = ensureSize(this.rowHeight, rows);
+    this.rowHeight = rowHeightLocal;
+    float[] expandWidthLocal = ensureSize(this.expandWidth, columns);
+    this.expandWidth = expandWidthLocal;
+    float[] expandHeightLocal = ensureSize(this.expandHeight, rows);
+    this.expandHeight = expandHeightLocal;
 
     float spaceRightLast = 0;
     for (int i = 0; i < cellCount; i++) {
@@ -885,9 +893,9 @@ public class Table extends WidgetGroup {
       Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
-      if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
-      if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
-        expandWidth[column] = c.expandX;
+      if (c.expandY != 0 && expandHeightLocal[row] == 0) expandHeightLocal[row] = c.expandY;
+      if (colspan == 1 && c.expandX != 0 && expandWidthLocal[column] == 0)
+        expandWidthLocal[column] = c.expandX;
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
@@ -920,12 +928,12 @@ public class Table extends WidgetGroup {
 
       if (colspan == 1) { // Spanned column min and pref width is added later.
         float hpadding = c.computedPadLeft + c.computedPadRight;
-        columnPrefWidth[column] = Math.max(columnPrefWidth[column], prefWidth + hpadding);
-        columnMinWidth[column] = Math.max(columnMinWidth[column], minWidth + hpadding);
+        columnPrefWidthLocal[column] = Math.max(columnPrefWidthLocal[column], prefWidth + hpadding);
+        columnMinWidthLocal[column] = Math.max(columnMinWidthLocal[column], minWidth + hpadding);
       }
       float vpadding = c.computedPadTop + c.computedPadBottom;
-      rowPrefHeight[row] = Math.max(rowPrefHeight[row], prefHeight + vpadding);
-      rowMinHeight[row] = Math.max(rowMinHeight[row], minHeight + vpadding);
+      rowPrefHeightLocal[row] = Math.max(rowPrefHeightLocal[row], prefHeight + vpadding);
+      rowMinHeightLocal[row] = Math.max(rowMinHeightLocal[row], minHeight + vpadding);
     }
 
     float uniformMinWidth = 0, uniformMinHeight = 0;
@@ -940,20 +948,20 @@ public class Table extends WidgetGroup {
       outer:
       if (expandX != 0) {
         int nn = column + c.colspan;
-        for (int ii = column; ii < nn; ii++) if (expandWidth[ii] != 0) break outer;
-        for (int ii = column; ii < nn; ii++) expandWidth[ii] = expandX;
+        for (int ii = column; ii < nn; ii++) if (expandWidthLocal[ii] != 0) break outer;
+        for (int ii = column; ii < nn; ii++) expandWidthLocal[ii] = expandX;
       }
 
       // Collect uniform sizes.
       if (c.uniformX == Boolean.TRUE && c.colspan == 1) {
         float hpadding = c.computedPadLeft + c.computedPadRight;
-        uniformMinWidth = Math.max(uniformMinWidth, columnMinWidth[column] - hpadding);
-        uniformPrefWidth = Math.max(uniformPrefWidth, columnPrefWidth[column] - hpadding);
+        uniformMinWidth = Math.max(uniformMinWidth, columnMinWidthLocal[column] - hpadding);
+        uniformPrefWidth = Math.max(uniformPrefWidth, columnPrefWidthLocal[column] - hpadding);
       }
       if (c.uniformY == Boolean.TRUE) {
         float vpadding = c.computedPadTop + c.computedPadBottom;
-        uniformMinHeight = Math.max(uniformMinHeight, rowMinHeight[c.row] - vpadding);
-        uniformPrefHeight = Math.max(uniformPrefHeight, rowPrefHeight[c.row] - vpadding);
+        uniformMinHeight = Math.max(uniformMinHeight, rowMinHeightLocal[c.row] - vpadding);
+        uniformPrefHeight = Math.max(uniformPrefHeight, rowPrefHeightLocal[c.row] - vpadding);
       }
     }
 
@@ -963,13 +971,13 @@ public class Table extends WidgetGroup {
         Cell c = (Cell) cells[i];
         if (uniformPrefWidth > 0 && c.uniformX == Boolean.TRUE && c.colspan == 1) {
           float hpadding = c.computedPadLeft + c.computedPadRight;
-          columnMinWidth[c.column] = uniformMinWidth + hpadding;
-          columnPrefWidth[c.column] = uniformPrefWidth + hpadding;
+          columnMinWidthLocal[c.column] = uniformMinWidth + hpadding;
+          columnPrefWidthLocal[c.column] = uniformPrefWidth + hpadding;
         }
         if (uniformPrefHeight > 0 && c.uniformY == Boolean.TRUE) {
           float vpadding = c.computedPadTop + c.computedPadBottom;
-          rowMinHeight[c.row] = uniformMinHeight + vpadding;
-          rowPrefHeight[c.row] = uniformPrefHeight + vpadding;
+          rowMinHeightLocal[c.row] = uniformMinHeight + vpadding;
+          rowPrefHeightLocal[c.row] = uniformPrefHeight + vpadding;
         }
       }
     }
@@ -997,18 +1005,20 @@ public class Table extends WidgetGroup {
           spannedPrefWidth = spannedMinWidth;
       float totalExpandWidth = 0;
       for (int ii = column, nn = ii + colspan; ii < nn; ii++) {
-        spannedMinWidth += columnMinWidth[ii];
-        spannedPrefWidth += columnPrefWidth[ii];
+        spannedMinWidth += columnMinWidthLocal[ii];
+        spannedPrefWidth += columnPrefWidthLocal[ii];
         totalExpandWidth +=
-            expandWidth[ii]; // Distribute extra space using expand, if any columns have expand.
+            expandWidthLocal[
+                ii]; // Distribute extra space using expand, if any columns have expand.
       }
 
       float extraMinWidth = Math.max(0, minWidth - spannedMinWidth);
       float extraPrefWidth = Math.max(0, prefWidth - spannedPrefWidth);
       for (int ii = column, nn = ii + colspan; ii < nn; ii++) {
-        float ratio = totalExpandWidth == 0 ? 1f / colspan : expandWidth[ii] / totalExpandWidth;
-        columnMinWidth[ii] += extraMinWidth * ratio;
-        columnPrefWidth[ii] += extraPrefWidth * ratio;
+        float ratio =
+            totalExpandWidth == 0 ? 1f / colspan : expandWidthLocal[ii] / totalExpandWidth;
+        columnMinWidthLocal[ii] += extraMinWidth * ratio;
+        columnPrefWidthLocal[ii] += extraPrefWidth * ratio;
       }
     }
 
@@ -1018,14 +1028,14 @@ public class Table extends WidgetGroup {
     tableMinWidth = hpadding;
     tablePrefWidth = hpadding;
     for (int i = 0; i < columns; i++) {
-      tableMinWidth += columnMinWidth[i];
-      tablePrefWidth += columnPrefWidth[i];
+      tableMinWidth += columnMinWidthLocal[i];
+      tablePrefWidth += columnPrefWidthLocal[i];
     }
     tableMinHeight = vpadding;
     tablePrefHeight = vpadding;
     for (int i = 0; i < rows; i++) {
-      tableMinHeight += rowMinHeight[i];
-      tablePrefHeight += Math.max(rowMinHeight[i], rowPrefHeight[i]);
+      tableMinHeight += rowMinHeightLocal[i];
+      tablePrefHeight += Math.max(rowMinHeightLocal[i], rowPrefHeightLocal[i]);
     }
     tablePrefWidth = Math.max(tableMinWidth, tablePrefWidth);
     tablePrefHeight = Math.max(tableMinHeight, tablePrefHeight);
