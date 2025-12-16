@@ -25,6 +25,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
  * @author Inferno
  */
 public abstract class ParticleControllerRenderData {
-  public ParticleController controller;
+  public ParticleController controller = new ParticleController();
   public FloatChannel positionChannel;
 }
