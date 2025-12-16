@@ -280,7 +280,7 @@ public class ParallelArray {
     for (Channel array : arrays) {
       if (array.id == descriptor.id) return (T) array;
     }
-    return null;
+    throw new IllegalStateException("Channel not found for descriptor id: " + descriptor.id);
   }
 
   /** Removes all the channels and sets size to 0 */
