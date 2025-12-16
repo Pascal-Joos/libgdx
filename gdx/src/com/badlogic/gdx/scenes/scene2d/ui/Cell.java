@@ -979,7 +979,6 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   /** Sets all constraint fields to null. */
-  /** Sets all constraint fields to null. */
   void clear() {
     minWidth = null;
     minHeight = null;
@@ -991,7 +990,7 @@ public class Cell<T extends Actor> implements Poolable {
     spaceLeft = null;
     spaceBottom = null;
     spaceRight = null;
-    padTop = 0f;
+    padTop = null;
     padLeft = null;
     padBottom = null;
     padRight = null;
