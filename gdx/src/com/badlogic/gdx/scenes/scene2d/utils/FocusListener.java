@@ -31,9 +31,7 @@ public abstract class FocusListener implements EventListener {
   public boolean handle(Event event) {
     if (!(event instanceof FocusEvent)) return false;
     FocusEvent focusEvent = (FocusEvent) event;
-    FocusEvent.Type type = focusEvent.getType();
-    if (type == null) return false;
-    switch (type) {
+    switch (focusEvent.getType()) {
       case keyboard:
         keyboardFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
         break;
