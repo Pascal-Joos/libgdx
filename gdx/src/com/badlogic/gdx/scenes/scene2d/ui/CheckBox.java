@@ -46,7 +46,6 @@ public class CheckBox extends TextButton {
 
   public CheckBox(@Null String text, CheckBoxStyle style) {
     super(text, style);
-    this.style = style;
 
     Label label = getLabel();
     label.setAlignment(Align.left);
