@@ -130,9 +130,6 @@ public class CameraInputController extends GestureDetector {
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-      if (controller == null) {
-        return false;
-      }
       float newZoom = distance - initialDistance;
       float amount = newZoom - previousZoom;
       previousZoom = newZoom;
