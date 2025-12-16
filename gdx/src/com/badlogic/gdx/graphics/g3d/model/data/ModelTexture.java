@@ -33,7 +33,7 @@ public class ModelTexture {
   public static final int USAGE_REFLECTION = 10;
 
   @Nullable public String id;
-  public String fileName = "";
+  public String fileName;
   @Nullable public Vector2 uvTranslation;
   @Nullable public Vector2 uvScaling;
   public int usage;
