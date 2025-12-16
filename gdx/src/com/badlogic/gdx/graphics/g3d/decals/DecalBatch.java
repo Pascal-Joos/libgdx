@@ -129,32 +129,6 @@ public class DecalBatch implements Disposable {
       indices[i + 5] = (short) (v + 3);
     }
     mesh.setIndices(indices);
-    if (groupStrategy == null) {
-      groupStrategy =
-          new GroupStrategy() {
-            @Override
-            public int compare(Decal decal1, Decal decal2) {
-              return 0;
-            }
-
-            @Override
-            public void beforeGroups() {}
-
-            @Override
-            public void afterGroups() {}
-
-            @Override
-            public void beforeGroup(int group, Array<Decal> contents) {}
-
-            @Override
-            public void afterGroup(int group) {}
-
-            @Override
-            public int decideGroup(Decal decal) {
-              return 0;
-            }
-          };
-    }
   }
 
   /**
