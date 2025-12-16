@@ -70,7 +70,6 @@ public class TextArea extends TextField {
 
   public TextArea(String text, TextFieldStyle style) {
     super(text, style);
-    initialize();
   }
 
   protected void initialize() {
