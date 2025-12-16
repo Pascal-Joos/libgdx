@@ -204,7 +204,7 @@ public class AssetManager implements Disposable {
    * @return the asset
    * @throws GdxRuntimeException if the asset is not loaded
    */
-  public synchronized @Null <T> T get(@Nullable AssetDescriptor<T> assetDescriptor) {
+  public synchronized <T> T get(@Nullable AssetDescriptor<T> assetDescriptor) {
     return get(assetDescriptor.fileName, assetDescriptor.type, true);
   }
 
