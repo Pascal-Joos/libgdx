@@ -89,7 +89,7 @@ public class ModelInstanceRenderer
           scale,
           scale,
           scale);
-      if (hasColor && renderData.colorChannel != null) {
+      if (hasColor) {
         int colorOffset = i * renderData.colorChannel.strideSize;
         ColorAttribute colorAttribute =
             (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
