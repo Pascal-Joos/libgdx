@@ -1018,10 +1018,6 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Initializer
   void set(@Nullable Cell cell) {
-    actor = cell.actor;
-    table = cell.table;
-    endRow = cell.endRow;
-    cellAboveIndex = cell.cellAboveIndex;
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;
