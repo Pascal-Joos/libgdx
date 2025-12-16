@@ -139,9 +139,6 @@ public class Slider extends ProgressBar {
     if (disabled && style.disabledBackground != null) return style.disabledBackground;
     if (isDragging() && style.backgroundDown != null) return style.backgroundDown;
     if (mouseOver && style.backgroundOver != null) return style.backgroundOver;
-    if (style.background == null) {
-      return null;
-    }
     return style.background;
   }
 
