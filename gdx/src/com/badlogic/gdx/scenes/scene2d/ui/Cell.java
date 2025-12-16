@@ -829,7 +829,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getSpaceLeft() {
-    return spaceLeft.get(actor);
+    return actor == null ? 0f : spaceLeft.get(actor);
   }
 
   /**
