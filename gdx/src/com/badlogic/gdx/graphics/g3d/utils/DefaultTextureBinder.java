@@ -162,7 +162,7 @@ public final class DefaultTextureBinder implements TextureBinder {
   private final int bindTextureLRU(final GLTexture texture) {
     int i;
     for (i = 0; i < count; i++) {
-      final int idx = unitsLRU[i].intValue();
+      final int idx = unitsLRU[i];
       if (textures[idx] == texture) {
         reused = true;
         break;
@@ -172,12 +172,12 @@ public final class DefaultTextureBinder implements TextureBinder {
       }
     }
     if (i >= count) i = count - 1;
-    final int idx = unitsLRU[i].intValue();
+    final int idx = unitsLRU[i];
     while (i > 0) {
       unitsLRU[i] = unitsLRU[i - 1];
       i--;
     }
-    unitsLRU[0] = Integer.valueOf(idx);
+    unitsLRU[0] = idx;
     if (!reused) {
       textures[idx] = texture;
       texture.bind(offset + idx);
