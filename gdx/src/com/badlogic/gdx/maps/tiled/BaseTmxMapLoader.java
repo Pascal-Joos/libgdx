@@ -76,8 +76,6 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
 
   public BaseTmxMapLoader(FileHandleResolver resolver) {
     super(resolver);
-    this.root = new Element("dummy", null);
-    this.map = new TiledMap();
   }
 
   @Override
