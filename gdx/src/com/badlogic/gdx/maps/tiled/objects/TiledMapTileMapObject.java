@@ -44,8 +44,7 @@ public class TiledMapTileMapObject extends TextureMapObject {
     this.flipVertically = flipVertically;
     this.tile = tile;
 
-    TextureRegion textureRegion =
-        new TextureRegion(tile.getTextureRegion() == null ? null : tile.getTextureRegion());
+    TextureRegion textureRegion = new TextureRegion(tile.getTextureRegion());
     textureRegion.flip(flipHorizontally, flipVertically);
     setTextureRegion(textureRegion);
   }
