@@ -675,6 +675,9 @@ public class TextureAtlas implements Disposable {
       originalHeight = height;
       packedWidth = width;
       packedHeight = height;
+      name = "";
+      names = null;
+      values = null;
     }
 
     public AtlasRegion(AtlasRegion region) {
