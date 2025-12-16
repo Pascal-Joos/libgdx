@@ -451,7 +451,6 @@ public class PixmapPacker implements Disposable {
       boolean useIndexes) {
     updatePageTextures(minFilter, magFilter, useMipMaps);
     for (Page page : pages) {
-      if (page.texture == null) continue;
       if (page.addedRects.size > 0) {
         for (String name : page.addedRects) {
           PixmapPackerRectangle rect = page.rects.get(name);
