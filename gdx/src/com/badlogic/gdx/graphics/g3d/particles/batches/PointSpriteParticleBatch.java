@@ -149,6 +149,7 @@ public class PointSpriteParticleBatch
 
   @Override
   protected void flush(int[] offsets) {
+    if (vertices == null) return;
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
       FloatChannel scaleChannel = data.scaleChannel;
