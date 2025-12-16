@@ -304,9 +304,7 @@ public class MeshBuilder implements MeshPartBuilder {
     for (MeshPart p : parts) p.mesh = mesh;
     parts.clear();
 
-    if (attributes != null) {
-      attributes = null;
-    }
+    attributes = null;
     vertices.clear();
     indices.clear();
 
