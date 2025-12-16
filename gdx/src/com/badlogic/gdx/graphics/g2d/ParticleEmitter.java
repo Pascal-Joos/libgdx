@@ -749,9 +749,6 @@ public class ParticleEmitter {
   }
 
   public String getName() {
-    if (name == null) {
-      return "";
-    }
     return name;
   }
 
