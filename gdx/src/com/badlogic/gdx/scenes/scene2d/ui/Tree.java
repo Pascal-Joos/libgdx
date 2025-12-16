@@ -669,9 +669,7 @@ public class Tree<N extends Node, V> extends WidgetGroup {
      * Creates a node without an actor. An actor must be set using {@link #setActor(Actor)} before
      * this node can be used.
      */
-    public Node() {
-      this.actor = null;
-    }
+    public Node() {}
 
     public void setExpanded(boolean expanded) {
       if (expanded == this.expanded) return;
