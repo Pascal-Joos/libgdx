@@ -282,8 +282,9 @@ public class ModelInstance implements RenderableProvider {
   }
 
   /** Constructs a new ModelInstance with the specified transform. */
+  /** Constructs a new ModelInstance with the specified transform. */
   public ModelInstance(final Model model, Matrix4 transform) {
-    this(model, transform, (String[]) null);
+    this(model, transform, new String[0]);
   }
 
   /** Constructs a new ModelInstance which is an copy of the specified ModelInstance. */
