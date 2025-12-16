@@ -89,8 +89,12 @@ public class Button extends Table implements Disableable {
    * Creates a button without setting the style or size. At least a style must be set before using
    * this button.
    */
+  /**
+   * Creates a button without setting the style or size. At least a style must be set before using
+   * this button.
+   */
   public Button() {
-    initialize();
+    this(new ButtonStyle());
   }
 
   private void initialize() {
