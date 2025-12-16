@@ -110,9 +110,7 @@ public class ButtonGroup<T extends Button> {
         for (int tries = 0; ; ) { // Try multiple times to allow the button states to settle.
           int old = minCheckCount;
           minCheckCount = 0;
-          if (lastChecked != null) {
-            lastChecked.setChecked(false); // May have listeners that change button states.
-          }
+          lastChecked.setChecked(false); // May have listeners that change button states.
           minCheckCount = old;
           if (button.isChecked == newState) return false;
           if (checkedButtons.size < maxCheckCount) break;
