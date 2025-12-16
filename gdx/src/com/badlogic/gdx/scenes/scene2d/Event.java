@@ -94,11 +94,7 @@ public class Event implements Poolable {
   }
 
   /** Returns the actor that the event originated from. */
-  /** Returns the actor that the event originated from. */
   public Actor getTarget() {
-    if (targetActor == null) {
-      throw new IllegalStateException("targetActor is null");
-    }
     return targetActor;
   }
 
