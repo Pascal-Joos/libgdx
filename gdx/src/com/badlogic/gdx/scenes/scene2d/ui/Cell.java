@@ -873,11 +873,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPadLeft() {
-    Value localPadLeft = padLeft;
-    if (localPadLeft == null) {
-      return 0f;
-    }
-    return localPadLeft.get(actor);
+    return padLeft.get(actor);
   }
 
   /**
