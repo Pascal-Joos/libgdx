@@ -36,7 +36,9 @@ public class Container<T extends Actor> extends WidgetGroup {
   private boolean round = true;
 
   /** Creates a container with no actor. */
+  /** Creates a container with no actor. */
   public Container() {
+    this.actor = null;
     setTouchable(Touchable.childrenOnly);
     setTransform(false);
   }
