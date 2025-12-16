@@ -457,9 +457,7 @@ public class XmlReader {
   }
 
   protected void attribute(@Nullable String name, @Nullable String value) {
-    if (current != null) {
-      current.setAttribute(name, value);
-    }
+    current.setAttribute(name, value);
   }
 
   @Nullable
