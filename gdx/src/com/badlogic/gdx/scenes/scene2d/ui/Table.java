@@ -1194,18 +1194,16 @@ public class Table extends WidgetGroup {
 
       float fillX = c.fillX, fillY = c.fillY;
       if (fillX > 0) {
-        Actor a = c.actor == null ? this : c.actor;
-        c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(a));
-        float maxWidth = c.maxWidth.get(a);
+        c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(c.actor));
+        float maxWidth = c.maxWidth.get(c.actor);
         if (maxWidth > 0) c.actorWidth = Math.min(c.actorWidth, maxWidth);
       }
       if (fillY > 0) {
-        Actor a = c.actor == null ? this : c.actor;
         c.actorHeight =
             Math.max(
                 rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
-                c.minHeight.get(a));
-        float maxHeight = c.maxHeight.get(a);
+                c.minHeight.get(c.actor));
+        float maxHeight = c.maxHeight.get(c.actor);
         if (maxHeight > 0) c.actorHeight = Math.min(c.actorHeight, maxHeight);
       }
 
