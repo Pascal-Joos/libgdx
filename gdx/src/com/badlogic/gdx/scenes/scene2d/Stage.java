@@ -1019,7 +1019,7 @@ public class Stage extends InputAdapter implements Disposable {
 
     public void reset() {
       listenerActor = null;
-      listener = InputListener.NULL_LISTENER;
+      listener = null;
       target = null;
     }
   }
