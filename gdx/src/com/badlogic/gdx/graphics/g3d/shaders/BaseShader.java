@@ -289,7 +289,9 @@ public abstract class BaseShader implements Shader {
 
   @Override
   public void dispose() {
-    program = null;
+    if (program != null) {
+      program.dispose();
+    }
     uniforms.clear();
     validators.clear();
     setters.clear();
