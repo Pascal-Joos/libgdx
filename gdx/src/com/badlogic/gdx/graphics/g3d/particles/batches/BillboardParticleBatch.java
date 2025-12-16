@@ -159,14 +159,14 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
     super(BillboardControllerRenderData.class);
     renderables = new Array<Renderable>();
     renderablePool = new RenderablePool();
-    this.blendingAttribute =
-        blendingAttribute != null
-            ? blendingAttribute
-            : new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f);
-    this.depthTestAttribute =
-        depthTestAttribute != null
-            ? depthTestAttribute
-            : new DepthTestAttribute(GL20.GL_LEQUAL, false);
+    this.blendingAttribute = blendingAttribute;
+    this.depthTestAttribute = depthTestAttribute;
+
+    if (this.blendingAttribute == null)
+      this.blendingAttribute = new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f);
+    if (this.depthTestAttribute == null)
+      this.depthTestAttribute = new DepthTestAttribute(GL20.GL_LEQUAL, false);
+
     allocIndices();
     initRenderData();
     ensureCapacity(capacity);
