@@ -1013,18 +1013,7 @@ public class Stage extends InputAdapter implements Disposable {
    * @author Nathan Sweet
    */
   public static final class TouchFocus implements Poolable {
-    public static final class TouchFocus implements Poolable {
-      @Nullable EventListener listener;
-      Actor listenerActor, target;
-      int pointer, button;
-
-      public void reset() {
-        listenerActor = null;
-        listener = null;
-        target = null;
-      }
-    }
-
+    EventListener listener;
     @Nullable Actor listenerActor, target;
     int pointer, button;
 
