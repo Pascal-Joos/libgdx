@@ -44,13 +44,17 @@ public class TiledMapTileSets implements Iterable<TiledMapTileSet> {
    * @param name Name of the {@link TiledMapTileSet} to retrieve.
    * @return tileset with matching name, null if it doesn't exist
    */
+  /**
+   * @param name Name of the {@link TiledMapTileSet} to retrieve.
+   * @return tileset with matching name, null if it doesn't exist
+   */
   public TiledMapTileSet getTileSet(String name) {
     for (TiledMapTileSet tileset : tilesets) {
       if (name.equals(tileset.getName())) {
         return tileset;
       }
     }
-    return null;
+    throw new IllegalArgumentException("No tileset found with name: " + name);
   }
 
   /**
