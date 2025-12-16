@@ -51,8 +51,7 @@ public class TextTooltip extends Tooltip<Label> {
       @Null String text, @Nullable final TooltipManager manager, TextTooltipStyle style) {
     super(null, manager);
 
-    LabelStyle labelStyle = style == null ? null : style.label;
-    container.setActor(newLabel(text, labelStyle));
+    container.setActor(newLabel(text, style.label));
 
     setStyle(style);
   }
