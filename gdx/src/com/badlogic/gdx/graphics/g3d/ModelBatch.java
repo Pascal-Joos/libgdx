@@ -269,14 +269,7 @@ public class ModelBatch implements Disposable {
    * Flushes the batch, causing all {@link Renderable}s in the batch to be rendered. Can only be
    * called after the call to {@link #begin(Camera)} and before the call to {@link #end()}.
    */
-  /**
-   * Flushes the batch, causing all {@link Renderable}s in the batch to be rendered. Can only be
-   * called after the call to {@link #begin(Camera)} and before the call to {@link #end()}.
-   */
   public void flush() {
-    if (camera == null) {
-      return;
-    }
     sorter.sort(camera, renderables);
     Shader currentShader = null;
     for (int i = 0; i < renderables.size; i++) {
