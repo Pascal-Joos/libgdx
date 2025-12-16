@@ -28,7 +28,14 @@ public class Decoder {
   int Range;
   int Code;
 
-  java.io.InputStream Stream;
+  public final void Init() throws IOException {
+    if (Stream == null) {
+      throw new IllegalStateException("Stream is not set");
+    }
+    Code = 0;
+    Range = -1;
+    for (int i = 0; i < 5; i++) Code = (Code << 8) | Stream.read();
+  }
 
   public final void SetStream(java.io.InputStream stream) {
     Stream = stream;
