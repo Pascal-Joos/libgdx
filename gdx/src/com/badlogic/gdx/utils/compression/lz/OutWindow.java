@@ -6,21 +6,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 public class OutWindow {
-  public class OutWindow {
-    @Nullable byte[] _buffer;
-    int _pos;
-    int _windowSize = 0;
-    int _streamPos;
-    java.io.OutputStream _stream;
-
-    public void Create(int windowSize) {
-      if (_buffer == null || _windowSize != windowSize) _buffer = new byte[windowSize];
-      _windowSize = windowSize;
-      _pos = 0;
-      _streamPos = 0;
-    }
-  }
-
+  byte[] _buffer;
   int _pos;
   int _windowSize = 0;
   int _streamPos;
