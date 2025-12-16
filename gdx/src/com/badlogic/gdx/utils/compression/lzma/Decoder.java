@@ -92,7 +92,7 @@ public class Decoder {
       }
     }
 
-    Decoder2[] m_Coders = new Decoder2[0];
+    Decoder2[] m_Coders;
     int m_NumPrevBits;
     int m_NumPosBits;
     int m_PosMask;
