@@ -108,6 +108,7 @@ public class PointSpriteParticleBatch
     if (this.depthTestAttribute == null)
       this.depthTestAttribute = new DepthTestAttribute(GL20.GL_LEQUAL, false);
 
+    renderable = new Renderable();
     allocRenderable();
     ensureCapacity(capacity);
     renderable.shader = new ParticleShader(renderable, shaderConfig);
