@@ -552,9 +552,6 @@ public class XmlReader {
     }
 
     public String getText() {
-      if (text == null) {
-        return "";
-      }
       return text;
     }
 
