@@ -63,7 +63,11 @@ public class Button extends Table implements Disableable {
   public Button(Skin skin, String styleName) {
     super(skin);
     initialize();
-    setStyle(skin.get(styleName, ButtonStyle.class));
+    ButtonStyle resolvedStyle = skin.get(styleName, ButtonStyle.class);
+    if (resolvedStyle == null) {
+      throw new IllegalStateException("ButtonStyle must not be null for style name: " + styleName);
+    }
+    setStyle(resolvedStyle);
     setSize(getPrefWidth(), getPrefHeight());
   }
 
