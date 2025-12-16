@@ -39,9 +39,7 @@ public class RunnableAction extends Action {
   }
 
   /** Called to run the runnable. */
-  /** Called to run the runnable. */
   public void run() {
-    if (runnable == null) return;
     Pool pool = getPool();
     setPool(null); // Ensure this action can't be returned to the pool inside the runnable.
     try {
