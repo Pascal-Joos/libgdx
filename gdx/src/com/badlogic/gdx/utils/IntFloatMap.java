@@ -103,8 +103,9 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
    *     next power of two.
    */
   public IntFloatMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f)
+    if (loadFactor <= 0f || loadFactor >= 1f) {
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    }
     this.loadFactor = loadFactor;
 
     int tableSize = tableSize(initialCapacity, loadFactor);
