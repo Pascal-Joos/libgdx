@@ -139,10 +139,6 @@ public class ParticleEffectLoader
       }
     }
 
-    if (effectData == null) {
-      return null;
-    }
-
     effectData.resource.load(manager, effectData);
     if (parameter != null) {
       if (parameter.batches != null) {
