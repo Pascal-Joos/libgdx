@@ -883,9 +883,6 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
       Actor a = c.actor;
-      if (a == null) {
-        continue;
-      }
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -986,9 +983,6 @@ public class Table extends WidgetGroup {
       int column = c.column;
 
       Actor a = c.actor;
-      if (a == null) {
-        continue;
-      }
       float minWidth = c.minWidth.get(a),
           prefWidth = c.prefWidth.get(a),
           maxWidth = c.maxWidth.get(a);
