@@ -160,11 +160,7 @@ public class Event implements Poolable {
   }
 
   /** The stage for the actor the event was fired on. */
-  /** The stage for the actor the event was fired on. */
   public Stage getStage() {
-    if (stage == null) {
-      throw new IllegalStateException("Stage is not set");
-    }
     return stage;
   }
 }
