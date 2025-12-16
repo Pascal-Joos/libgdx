@@ -1089,23 +1089,17 @@ public class Table extends WidgetGroup {
         spannedWeightedWidth += columnWeightedWidth[ii];
       float weightedHeight = rowWeightedHeight[row];
 
-      if (a != null) {
-        float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-        float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
-        float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
-        if (prefWidth < minWidth) prefWidth = minWidth;
-        if (prefHeight < minHeight) prefHeight = minHeight;
-        if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
-        if (maxHeight > 0 && prefHeight > maxHeight) prefHeight = maxHeight;
+      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
+      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
+      if (prefWidth < minWidth) prefWidth = minWidth;
+      if (prefHeight < minHeight) prefHeight = minHeight;
+      if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
+      if (maxHeight > 0 && prefHeight > maxHeight) prefHeight = maxHeight;
 
-        c.actorWidth =
-            Math.min(spannedWeightedWidth - c.computedPadLeft - c.computedPadRight, prefWidth);
-        c.actorHeight =
-            Math.min(weightedHeight - c.computedPadTop - c.computedPadBottom, prefHeight);
-      } else {
-        c.actorWidth = Math.min(spannedWeightedWidth - c.computedPadLeft - c.computedPadRight, 0);
-        c.actorHeight = Math.min(weightedHeight - c.computedPadTop - c.computedPadBottom, 0);
-      }
+      c.actorWidth =
+          Math.min(spannedWeightedWidth - c.computedPadLeft - c.computedPadRight, prefWidth);
+      c.actorHeight = Math.min(weightedHeight - c.computedPadTop - c.computedPadBottom, prefHeight);
 
       if (colspan == 1) columnWidth[column] = Math.max(columnWidth[column], spannedWeightedWidth);
       rowHeight[row] = Math.max(rowHeight[row], weightedHeight);
@@ -1199,12 +1193,12 @@ public class Table extends WidgetGroup {
       currentX += c.computedPadLeft;
 
       float fillX = c.fillX, fillY = c.fillY;
-      if (fillX > 0 && c.actor != null) {
+      if (fillX > 0) {
         c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(c.actor));
         float maxWidth = c.maxWidth.get(c.actor);
         if (maxWidth > 0) c.actorWidth = Math.min(c.actorWidth, maxWidth);
       }
-      if (fillY > 0 && c.actor != null) {
+      if (fillY > 0) {
         c.actorHeight =
             Math.max(
                 rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
