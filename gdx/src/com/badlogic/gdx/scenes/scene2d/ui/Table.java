@@ -468,7 +468,6 @@ public class Table extends WidgetGroup {
   }
 
   /** Returns the cell for the specified actor in this table, or null. */
-  /** Returns the cell for the specified actor in this table, or null. */
   public @Null <T extends Actor> Cell<T> getCell(T actor) {
     if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
     Object[] cells = this.cells.items;
@@ -476,7 +475,7 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
       if (c.actor == actor) return c;
     }
-    throw new IllegalStateException("Cell for the specified actor was not found.");
+    return null;
   }
 
   /** Returns the cells for this table. */
