@@ -81,9 +81,6 @@ public class Button extends Table implements Disableable {
 
   public Button(ButtonStyle style) {
     initialize();
-    if (style == null) {
-      throw new IllegalArgumentException("style cannot be null");
-    }
     setStyle(style);
     setSize(getPrefWidth(), getPrefHeight());
   }
