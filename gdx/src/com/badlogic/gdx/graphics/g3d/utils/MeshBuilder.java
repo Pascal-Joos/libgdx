@@ -638,6 +638,7 @@ public class MeshBuilder implements MeshPartBuilder {
       @Nullable Vector3 pos, @Nullable Vector3 nor, @Nullable Color col, @Nullable Vector2 uv) {
     if (vindex > MAX_INDEX) throw new GdxRuntimeException("Too many vertices used");
 
+    if (pos == null) throw new GdxRuntimeException("Position must not be null");
     vertex[posOffset] = pos.x;
     if (posSize > 1) vertex[posOffset + 1] = pos.y;
     if (posSize > 2) vertex[posOffset + 2] = pos.z;
