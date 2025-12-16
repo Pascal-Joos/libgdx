@@ -38,7 +38,7 @@ public class Gdx {
   public static Files files;
   @Nullable public static Net net;
 
-  public static GL20 gl;
+  @Nullable public static GL20 gl;
   public static GL20 gl20;
   public static GL30 gl30;
 }
