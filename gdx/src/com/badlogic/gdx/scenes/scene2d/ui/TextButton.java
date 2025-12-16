@@ -46,7 +46,6 @@ public class TextButton extends Button {
 
   public TextButton(@Null String text, TextButtonStyle style) {
     super();
-    if (style == null) throw new NullPointerException("style cannot be null");
     setStyle(style);
     label = newLabel(text, new LabelStyle(style.font, style.fontColor));
     label.setAlignment(Align.center);
