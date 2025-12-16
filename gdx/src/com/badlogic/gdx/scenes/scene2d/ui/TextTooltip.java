@@ -93,6 +93,9 @@ public class TextTooltip extends Tooltip<Label> {
     }
 
     public TextTooltipStyle(TextTooltipStyle style) {
+      if (style == null || style.label == null) {
+        throw new IllegalArgumentException("style and style.label must not be null");
+      }
       label = new LabelStyle(style.label);
       background = style.background;
       wrapWidth = style.wrapWidth;
