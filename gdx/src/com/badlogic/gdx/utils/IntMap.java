@@ -104,10 +104,6 @@ public class IntMap<V> implements Iterable<IntMap.Entry<V>> {
    *     next power of two.
    */
   public IntMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f)
-      throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
-    this.loadFactor = loadFactor;
-
     int tableSize = tableSize(initialCapacity, loadFactor);
     threshold = (int) (tableSize * loadFactor);
     mask = tableSize - 1;
@@ -115,6 +111,10 @@ public class IntMap<V> implements Iterable<IntMap.Entry<V>> {
 
     keyTable = new int[tableSize];
     valueTable = (V[]) new Object[tableSize];
+
+    if (loadFactor <= 0f || loadFactor >= 1f)
+      throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    this.loadFactor = loadFactor;
   }
 
   /** Creates a new map identical to the specified map. */
