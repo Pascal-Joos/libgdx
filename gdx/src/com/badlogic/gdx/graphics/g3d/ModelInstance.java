@@ -205,11 +205,7 @@ public class ModelInstance implements RenderableProvider {
       boolean shareKeyframes) {
     this.model = model;
     this.transform = transform == null ? new Matrix4() : transform;
-    Node copy;
-    Node node = model.getNode(nodeId, recursive);
-    if (node == null) {
-      throw new IllegalArgumentException("Node with id '" + nodeId + "' not found in model.");
-    }
+    Node copy, node = model.getNode(nodeId, recursive);
     this.nodes.add(copy = node.copy());
     if (mergeTransform) {
       this.transform.mul(parentTransform ? node.globalTransform : node.localTransform);
