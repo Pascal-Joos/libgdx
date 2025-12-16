@@ -33,9 +33,7 @@ public abstract class ParticleControllerRenderer<
   @Nullable protected T batch;
   protected D renderData;
 
-  protected ParticleControllerRenderer() {
-    throw new IllegalStateException("renderData must be initialized");
-  }
+  protected ParticleControllerRenderer() {}
 
   protected ParticleControllerRenderer(D renderData) {
     this.renderData = renderData;
