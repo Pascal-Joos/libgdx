@@ -157,9 +157,6 @@ public class TextureAttribute extends Attribute {
 
   public TextureAttribute(final long type, @Nullable final Texture texture) {
     this(type);
-    if (texture == null) {
-      throw new NullPointerException("texture must not be null");
-    }
     textureDescription.texture = texture;
   }
 
