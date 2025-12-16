@@ -1082,6 +1082,7 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row;
       Actor a = c.actor;
+      if (a == null) continue;
 
       float spannedWeightedWidth = 0;
       int colspan = c.colspan;
@@ -1193,12 +1194,12 @@ public class Table extends WidgetGroup {
       currentX += c.computedPadLeft;
 
       float fillX = c.fillX, fillY = c.fillY;
-      if (fillX > 0) {
+      if (fillX > 0 && c.actor != null) {
         c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(c.actor));
         float maxWidth = c.maxWidth.get(c.actor);
         if (maxWidth > 0) c.actorWidth = Math.min(c.actorWidth, maxWidth);
       }
-      if (fillY > 0) {
+      if (fillY > 0 && c.actor != null) {
         c.actorHeight =
             Math.max(
                 rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
