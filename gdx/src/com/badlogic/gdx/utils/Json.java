@@ -340,11 +340,11 @@ public class Json {
       @Nullable @Null Class elementType,
       Writer writer) {
     setWriter(writer);
+    JsonWriter previousWriter = this.writer;
     try {
       writeValue(object, knownType, elementType);
     } finally {
-      StreamUtils.closeQuietly(this.writer);
-      this.writer = null;
+      StreamUtils.closeQuietly(previousWriter);
     }
   }
 
