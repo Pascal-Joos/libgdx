@@ -1179,11 +1179,16 @@ public class Json {
    * @param elementType May be null if the type is unknown.
    * @return May be null.
    */
+  /**
+   * @param type May be null if the type is unknown.
+   * @param elementType May be null if the type is unknown.
+   * @return May be null.
+   */
   public @Null <T> T readValue(
       @Nullable @Null Class<T> type,
       @Nullable @Null Class elementType,
       @Nullable JsonValue jsonData) {
-    if (jsonData == null) return null;
+    if (jsonData == null) throw new SerializationException("jsonData cannot be null");
 
     if (jsonData.isObject()) {
       String className = typeName == null ? null : jsonData.getString(typeName, null);
