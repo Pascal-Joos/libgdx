@@ -179,11 +179,7 @@ public class HttpRequestBuilder {
   public HttpRequest build() {
     validate();
     HttpRequest request = httpRequest;
-    if (request == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
-    httpRequest = new HttpRequest();
+    httpRequest = null;
     return request;
   }
 
