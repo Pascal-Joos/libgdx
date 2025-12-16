@@ -75,9 +75,6 @@ public class Tree<N extends Node, V> extends WidgetGroup {
   }
 
   public Tree(TreeStyle style) {
-    if (style == null) {
-      throw new IllegalArgumentException("style cannot be null");
-    }
     selection =
         new Selection<N>() {
           protected void changed() {
