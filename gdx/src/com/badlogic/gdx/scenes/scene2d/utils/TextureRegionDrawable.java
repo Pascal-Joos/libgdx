@@ -45,9 +45,6 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
 
   public TextureRegionDrawable(TextureRegionDrawable drawable) {
     super(drawable);
-    if (drawable == null || drawable.region == null) {
-      throw new IllegalArgumentException("drawable and its region must not be null");
-    }
     setRegion(drawable.region);
   }
 
