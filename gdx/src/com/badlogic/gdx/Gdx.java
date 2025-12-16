@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
  * @author mzechner
  */
 public class Gdx {
-  public static @Nullable Application app;
+  public static Application app;
   public static Graphics graphics;
   public static Audio audio;
   public static Input input;
