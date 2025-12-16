@@ -526,15 +526,7 @@ public class ObjectMap<K, V> implements Iterable<ObjectMap.Entry<K, V>> {
   }
 
   public static class Entry<K, V> {
-    public static class Entry<K, V> {
-      public @Null K key;
-      public @Null V value;
-
-      public String toString() {
-        return key + "=" + value;
-      }
-    }
-
+    public K key;
     public @Null V value;
 
     public String toString() {
