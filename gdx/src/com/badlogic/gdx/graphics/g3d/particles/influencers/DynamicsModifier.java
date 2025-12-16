@@ -158,6 +158,7 @@ public abstract class DynamicsModifier extends Influencer {
       super(value);
       thetaValue = new ScaledNumericValue();
       phiValue = new ScaledNumericValue();
+      angularChannel = value.angularChannel;
       thetaValue.load(value.thetaValue);
       phiValue.load(value.phiValue);
     }
