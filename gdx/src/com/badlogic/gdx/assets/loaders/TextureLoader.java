@@ -75,7 +75,7 @@ public class TextureLoader
       info.data = parameter.textureData;
       info.texture = parameter.texture;
     }
-    if (!info.data.isPrepared()) info.data.prepare();
+    if (info.data != null && !info.data.isPrepared()) info.data.prepare();
   }
 
   @Nullable
