@@ -78,8 +78,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   /** Returns the actor for this cell, or null. */
-  /** Returns the actor for this cell, or null. */
-  public @Nullable T getActor() {
+  public @Null T getActor() {
     return (T) actor;
   }
 
