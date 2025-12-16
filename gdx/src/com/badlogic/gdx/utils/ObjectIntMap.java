@@ -101,16 +101,8 @@ public class ObjectIntMap<K> implements Iterable<ObjectIntMap.Entry<K>> {
    *     next power of two.
    */
   public ObjectIntMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f) {
-      this.loadFactor = 0.8f;
-      int tableSize = tableSize(initialCapacity, this.loadFactor);
-      threshold = (int) (tableSize * this.loadFactor);
-      mask = tableSize - 1;
-      shift = Long.numberOfLeadingZeros(mask);
-      keyTable = (K[]) new Object[tableSize];
-      valueTable = new int[tableSize];
+    if (loadFactor <= 0f || loadFactor >= 1f)
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
-    }
     this.loadFactor = loadFactor;
 
     int tableSize = tableSize(initialCapacity, loadFactor);
