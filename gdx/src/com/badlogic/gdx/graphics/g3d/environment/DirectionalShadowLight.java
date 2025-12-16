@@ -115,7 +115,9 @@ public class DirectionalShadowLight extends DirectionalLight implements ShadowMa
 
   @Override
   public void dispose() {
-    if (fbo != null) fbo.dispose();
-    fbo = null;
+    if (fbo != null) {
+      fbo.dispose();
+      textureDesc.texture = null;
+    }
   }
 }
