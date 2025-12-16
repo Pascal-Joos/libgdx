@@ -240,7 +240,7 @@ public class Mesh implements Disposable {
   }
 
   public Mesh disableInstancedRendering() {
-    if (isInstanced) {
+    if (isInstanced && instances != null) {
       isInstanced = false;
       instances.dispose();
       instances = null;
