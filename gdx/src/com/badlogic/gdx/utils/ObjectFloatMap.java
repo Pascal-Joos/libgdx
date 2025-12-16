@@ -100,9 +100,24 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    * @param initialCapacity The backing array size is initialCapacity / loadFactor, increased to the
    *     next power of two.
    */
+  /**
+   * Creates a new map with the specified initial capacity and load factor. This map will hold
+   * initialCapacity items before growing the backing table.
+   *
+   * @param initialCapacity The backing array size is initialCapacity / loadFactor, increased to the
+   *     next power of two.
+   */
   public ObjectFloatMap(int initialCapacity, float loadFactor) {
-    if (loadFactor <= 0f || loadFactor >= 1f)
+    if (loadFactor <= 0f || loadFactor >= 1f) {
+      this.loadFactor = 0.8f;
+      int tableSize = tableSize(initialCapacity, this.loadFactor);
+      threshold = (int) (tableSize * this.loadFactor);
+      mask = tableSize - 1;
+      shift = Long.numberOfLeadingZeros(mask);
+      keyTable = (K[]) new Object[tableSize];
+      valueTable = new float[tableSize];
       throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    }
     this.loadFactor = loadFactor;
 
     int tableSize = tableSize(initialCapacity, loadFactor);
