@@ -44,7 +44,6 @@ public class ParticleControllerFinalizerInfluencer extends Influencer {
     if (controllerChannel == null)
       throw new GdxRuntimeException(
           "ParticleController channel not found, specify an influencer which will allocate it please.");
-    positionChannel = controller.particles.getChannel(ParticleChannels.Position);
     scaleChannel = controller.particles.getChannel(ParticleChannels.Scale);
     rotationChannel = controller.particles.getChannel(ParticleChannels.Rotation3D);
     hasScale = scaleChannel != null;
