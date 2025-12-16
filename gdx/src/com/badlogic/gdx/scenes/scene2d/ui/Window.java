@@ -71,6 +71,7 @@ public class Window extends Table {
 
   public Window(String title, WindowStyle style) {
     if (title == null) throw new IllegalArgumentException("title cannot be null.");
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
     setTouchable(Touchable.enabled);
     setClip(true);
 
@@ -200,7 +201,7 @@ public class Window extends Table {
             return isModal;
           }
 
-          public boolean keyDown(@Nullable InputEvent event, int keycode) {
+          public boolean keyDown(InputEvent event, int keycode) {
             return isModal;
           }
 
