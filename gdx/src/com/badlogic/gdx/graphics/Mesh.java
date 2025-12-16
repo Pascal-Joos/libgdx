@@ -803,7 +803,7 @@ public class Mesh implements Disposable {
     int len = attributes.size();
     for (int i = 0; i < len; i++) if (attributes.get(i).usage == usage) return attributes.get(i);
 
-    throw new IllegalStateException("No VertexAttribute found for usage: " + usage);
+    return null;
   }
 
   /**
