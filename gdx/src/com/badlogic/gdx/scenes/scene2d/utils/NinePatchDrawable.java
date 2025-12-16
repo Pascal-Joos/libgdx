@@ -43,6 +43,9 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
   public NinePatchDrawable() {}
 
   public NinePatchDrawable(NinePatch patch) {
+    if (patch == null) {
+      throw new IllegalArgumentException("patch cannot be null");
+    }
     setPatch(patch);
   }
 
