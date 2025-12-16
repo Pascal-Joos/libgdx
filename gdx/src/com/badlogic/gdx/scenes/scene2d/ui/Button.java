@@ -73,9 +73,6 @@ public class Button extends Table implements Disableable {
   }
 
   public Button(Actor child, ButtonStyle style) {
-    if (style == null) {
-      throw new IllegalArgumentException("style cannot be null");
-    }
     initialize();
     add(child);
     setStyle(style);
