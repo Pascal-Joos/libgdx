@@ -64,7 +64,7 @@ public class Polygon implements Shape2D {
    * @return vertices scaled, rotated, and offset by the polygon position.
    */
   public float[] getTransformedVertices() {
-    if (!dirty) return worldVertices == null ? new float[0] : worldVertices;
+    if (!dirty) return worldVertices;
     dirty = false;
 
     final float[] localVertices = this.localVertices;
