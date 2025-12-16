@@ -22,7 +22,7 @@ import com.uber.nullaway.annotations.Initializer;
 import javax.annotation.Nullable;
 
 public class TextureDescriptor<T extends GLTexture> implements Comparable<TextureDescriptor<T>> {
-  @Nullable public T texture = null;
+  public T texture = null;
   @Nullable public Texture.TextureFilter minFilter;
   @Nullable public Texture.TextureFilter magFilter;
   @Nullable public Texture.TextureWrap uWrap;
