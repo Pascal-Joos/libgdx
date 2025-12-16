@@ -72,13 +72,8 @@ public class Touchpad extends Widget {
    * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
    *     knob to be moved.
    */
-  /**
-   * @param deadzoneRadius The distance in pixels from the center of the touchpad required for the
-   *     knob to be moved.
-   */
   public Touchpad(float deadzoneRadius, TouchpadStyle style) {
     if (deadzoneRadius < 0) throw new IllegalArgumentException("deadzoneRadius must be > 0");
-    if (style == null) throw new IllegalArgumentException("style must not be null");
     this.deadzoneRadius = deadzoneRadius;
 
     knobPosition.set(getWidth() / 2f, getHeight() / 2f);
