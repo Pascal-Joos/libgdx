@@ -20,6 +20,6 @@ import javax.annotation.Nullable;
 
 public class ModelMeshPart {
   @Nullable public String id;
-  public short[] indices = new short[0];
+  public short[] indices;
   public int primitiveType;
 }
