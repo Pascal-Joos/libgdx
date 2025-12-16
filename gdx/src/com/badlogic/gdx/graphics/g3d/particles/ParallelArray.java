@@ -199,17 +199,8 @@ public class ParallelArray {
    * Adds and returns a channel described by the channel descriptor parameter. If a channel with the
    * same id already exists, no allocation is performed and that channel is returned.
    */
-  /**
-   * Adds and returns a channel described by the channel descriptor parameter. If a channel with the
-   * same id already exists, no allocation is performed and that channel is returned.
-   */
   public <T extends Channel> T addChannel(@Nullable ChannelDescriptor channelDescriptor) {
-    return addChannel(
-        channelDescriptor,
-        new ChannelInitializer<T>() {
-          @Override
-          public void init(T channel) {}
-        });
+    return addChannel(channelDescriptor, null);
   }
 
   /**
