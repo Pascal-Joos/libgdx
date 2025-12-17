@@ -110,7 +110,6 @@ public abstract class Action implements Poolable {
    */
   public void reset() {
     actor = null;
-    target = null;
     pool = null;
     restart();
   }
