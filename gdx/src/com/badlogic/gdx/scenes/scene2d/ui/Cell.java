@@ -997,7 +997,7 @@ public class Cell<T extends Actor> implements Poolable {
     // spaceLeft not cleared to avoid assigning null to @NonNull field
     spaceBottom = Value.zero;
     spaceRight = Value.zero;
-    padTop = null;
+    padTop = Value.zero;
     padLeft = null;
     padBottom = null;
     padRight = null;
