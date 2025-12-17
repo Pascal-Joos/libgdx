@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Button(Skin skin) {
+    super(skin);
+    setStyle(skin.get(ButtonStyle.class));
+    initialize();
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

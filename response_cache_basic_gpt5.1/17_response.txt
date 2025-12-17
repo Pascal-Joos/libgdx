@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public TextureAtlas load(
+      AssetManager assetManager,
+      String fileName,
+      FileHandle file,
+       TextureAtlasParameter parameter) {
+    if (data == null) {
+      return null;
+    }
+    for (Page page : data.getPages()) {
+      Texture texture =
+          assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
+      page.texture = texture;
+    }
+
+    TextureAtlas atlas = new TextureAtlas(data);
+    data = null;
+    return atlas;
+  }
+  ```
+    ]]>
+  </code>
+</response>

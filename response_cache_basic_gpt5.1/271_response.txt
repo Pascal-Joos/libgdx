@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Creates a container with no actor. */
+  public Container() {
+    this.actor = null;
+    setTouchable(Touchable.childrenOnly);
+    setTransform(false);
+  }
+  ```
+    ]]>
+  </code>
+</response>

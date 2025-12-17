@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public NinePatchDrawable(NinePatch patch) {
+    if (patch == null) {
+      throw new IllegalArgumentException("patch cannot be null");
+    }
+    setPatch(patch);
+  }
+  ```
+    ]]>
+  </code>
+</response>

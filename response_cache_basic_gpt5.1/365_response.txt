@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  ComparableTimSort(Object[] a) {
+    this.a = a;
+    tmp = new Object[INITIAL_TMP_STORAGE_LENGTH];
+    runBase = new int[40];
+    runLen = new int[40];
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Returns the actor for this cell, or null. */
+  public @Nullable T getActor() {
+    return (T) actor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

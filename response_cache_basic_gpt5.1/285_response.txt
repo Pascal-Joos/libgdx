@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public SelectBoxStyle() {
+      this.font = new BitmapFont();
+      this.scrollStyle = new ScrollPaneStyle();
+      this.listStyle = new ListStyle();
+    }
+  ```
+    ]]>
+  </code>
+</response>

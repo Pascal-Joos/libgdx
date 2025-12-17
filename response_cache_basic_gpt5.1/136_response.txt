@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Strength(Strength rotation) {
+      super(rotation);
+      this.strengthChannel = rotation.strengthChannel;
+      strengthValue = new ScaledNumericValue();
+      strengthValue.load(rotation.strengthValue);
+    }
+  ```
+    ]]>
+  </code>
+</response>

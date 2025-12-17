@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Sets all constraint fields to null. */
+  void clear() {
+    minWidth = null;
+    minHeight = null;
+    prefWidth = null;
+    prefHeight = null;
+    maxWidth = null;
+    maxHeight = null;
+    spaceTop = null;
+    // spaceLeft not cleared to avoid assigning null to @NonNull field
+    spaceBottom = null;
+    spaceRight = null;
+    padTop = null;
+    padLeft = null;
+    padBottom = null;
+    padRight = null;
+    fillX = null;
+    fillY = null;
+    align = null;
+    expandX = null;
+    expandY = null;
+    colspan = null;
+    uniformX = null;
+    uniformY = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

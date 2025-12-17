@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ReflectionPool(Class<T> type, int initialCapacity, int max) {
+    super(initialCapacity, max);
+    Constructor ctor = findConstructor(type);
+    if (ctor == null)
+      throw new RuntimeException(
+          "Class cannot be created (missing no-arg constructor): " + type.getName());
+    this.constructor = ctor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

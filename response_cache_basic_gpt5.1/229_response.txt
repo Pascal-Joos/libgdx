@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Button(ButtonStyle style) {
+    initialize();
+    if (style == null) {
+      throw new IllegalArgumentException("style cannot be null");
+    }
+    setStyle(style);
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

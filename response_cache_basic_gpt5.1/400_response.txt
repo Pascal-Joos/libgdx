@@ -1,0 +1,45 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Removes the current list item based on the iterator position. */
+  public void remove() {
+    if (curr == null) return;
+
+    size--;
+
+    Item<T> c = curr;
+    Item<T> n = curr.next;
+    Item<T> p = curr.prev;
+    pool.free(curr);
+    curr = null;
+
+    if (size == 0) {
+      head = null;
+      tail = null;
+      return;
+    }
+
+    if (c == head) {
+      head = n;
+      if (n != null) {
+        n.prev = null;
+      }
+      return;
+    }
+
+    if (c == tail) {
+      p.next = null;
+      tail = p;
+      return;
+    }
+
+    p.next = n;
+    if (n != null) {
+      n.prev = p;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

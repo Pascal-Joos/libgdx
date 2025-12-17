@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public SaveData() {
+      data = new ObjectMap<String, Object>();
+      assets = new IntArray();
+      loadIndex = 0;
+      this.resources = new ResourceData();
+    }
+  ```
+    ]]>
+  </code>
+</response>

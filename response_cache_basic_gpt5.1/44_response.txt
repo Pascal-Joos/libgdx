@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Particle(Sprite sprite) {
+      super(sprite);
+      this.tint = new float[3];
+    }
+  ```
+    ]]>
+  </code>
+</response>

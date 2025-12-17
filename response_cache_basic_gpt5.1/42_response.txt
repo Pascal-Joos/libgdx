@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public String getName() {
+    if (name == null) {
+      return "";
+    }
+    return name;
+  }
+  ```
+    ]]>
+  </code>
+</response>

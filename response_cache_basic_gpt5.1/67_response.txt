@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setRegion( TextureRegion region) {
+    if (region == null) return;
+    texture = region.texture;
+    setRegion(region.u, region.v, region.u2, region.v2);
+  }
+  ```
+    ]]>
+  </code>
+</response>

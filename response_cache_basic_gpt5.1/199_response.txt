@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected class OctreeNode {
+
+    int level;
+    final BoundingBox bounds = new BoundingBox();
+    boolean leaf;
+    private Octree.OctreeNode[] children = new Octree.OctreeNode[0]; // May be null when leaf is true.
+    private final Array<T> geometries = new Array<T>(Math.min(16, maxItemsPerNode));
+
+    private void split() {
+      float midx = (bounds.max.x + bounds.min.x) * 0.5f;
+      float midy = (bounds.max.y + bounds.min.y) * 0.5f;
+      float midz = (bounds.max.z + bounds.min.z) * 0.5f;
+
+      int deeperLevel = level - 1;
+
+      leaf = false;
+      if (children == null || children.length == 0) children = new Octree.OctreeNode[8];
+      children[0] =
+          createNode(
+              new Vector3(bounds.min.x, midy, midz),
+              new Vector3(midx, bounds.max.y, bounds.max.z),
+              deeperLevel);
+      children[1] =
+          createNode(
+              new Vector3(midx, midy, midz),
+  ```
+    ]]>
+  </code>
+</response>

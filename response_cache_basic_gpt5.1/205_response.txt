@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private HttpRequest httpRequest = new HttpRequest();
+  ```
+    ]]>
+  </code>
+</response>

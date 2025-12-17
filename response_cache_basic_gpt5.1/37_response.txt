@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public ReadonlyIterable(T[] array) {
+      this.array = array;
+      this.iterator1 = new ReadonlyIterator(array);
+      this.iterator2 = new ReadonlyIterator(array);
+    }
+  ```
+    ]]>
+  </code>
+</response>

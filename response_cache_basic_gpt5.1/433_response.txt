@@ -1,0 +1,10 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  com.badlogic.gdx.utils.compression.lz.BinTree _matchFinder =
+      new com.badlogic.gdx.utils.compression.lz.BinTree();
+  ```
+    ]]>
+  </code>
+</response>

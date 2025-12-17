@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Constructs a new ModelInstance with the specified transform. */
+  public ModelInstance(final Model model, Matrix4 transform) {
+    this(model, transform, new String[0]);
+  }
+  ```
+    ]]>
+  </code>
+</response>

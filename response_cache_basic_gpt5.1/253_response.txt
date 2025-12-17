@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMinHeight() {
+    Actor nonNullActor = actor;
+    if (nonNullActor == null) {
+      throw new IllegalStateException("actor is null");
+    }
+    return minHeight.get(nonNullActor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

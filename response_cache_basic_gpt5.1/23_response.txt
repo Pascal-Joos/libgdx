@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Mesh disableInstancedRendering() {
+    if (isInstanced && instances != null) {
+      isInstanced = false;
+      instances.dispose();
+      instances = null;
+    }
+    return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

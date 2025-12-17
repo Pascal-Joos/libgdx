@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    @Initializer
+    @Override
+    public Node<E> next() {
+      if (position == null) {
+        throw new java.util.NoSuchElementException();
+      }
+      previousPosition = position;
+      position = position.n;
+      return previousPosition;
+    }
+  ```
+    ]]>
+  </code>
+</response>

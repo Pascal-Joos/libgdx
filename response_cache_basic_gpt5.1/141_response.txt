@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ParticleControllerInfluencer(ParticleController... templates) {
+    this.templates = new Array<ParticleController>(templates);
+    this.particleControllerChannel = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

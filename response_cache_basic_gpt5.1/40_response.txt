@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public BitmapFontCache(BitmapFont font, boolean integer) {
+    this.font = font;
+    this.integer = integer;
+
+    int pageCount = font.regions.size;
+    if (pageCount == 0)
+      throw new IllegalArgumentException(
+          "The specified font must contain at least one texture page.");
+
+    pageVertices = new float[pageCount][];
+    idx = new int[pageCount];
+    pageGlyphIndices = new IntArray[pageCount];
+    if (pageCount > 1) {
+      // Contains the indices of the glyph in the cache as they are added.
+      for (int i = 0, n = pageGlyphIndices.length; i < n; i++) pageGlyphIndices[i] = new IntArray();
+    }
+    tempGlyphCount = new int[pageCount];
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private Type type = Type.touchDown;
+  ```
+    ]]>
+  </code>
+</response>

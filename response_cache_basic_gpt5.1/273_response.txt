@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Actor removeActorAt(int index, boolean unfocus) {
+    Actor actor = super.removeActorAt(index, unfocus);
+    if (actor == this.actor) setActor(null);
+    return actor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

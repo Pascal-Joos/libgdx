@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Returns the actor that the event originated from. */
+  public Actor getTarget() {
+    if (targetActor == null) {
+      throw new IllegalStateException("targetActor is null");
+    }
+    return targetActor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

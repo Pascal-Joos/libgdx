@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public AssetData( String filename, Class<T> type) {
+      if (filename == null) {
+        throw new NullPointerException("filename must not be null");
+      }
+      if (type == null) {
+        throw new NullPointerException("type must not be null");
+      }
+      this.filename = filename;
+      this.type = type;
+    }
+  ```
+    ]]>
+  </code>
+</response>

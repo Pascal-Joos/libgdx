@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+            public boolean keyDown(InputEvent event, int keycode) {
+              if (event == null) return false;
+              switch (keycode) {
+                case Keys.NUMPAD_ENTER:
+                case Keys.ENTER:
+                  selectBox.selection.choose(list.getSelected());
+                  // Fall thru.
+                case Keys.ESCAPE:
+                  hide();
+                  event.stop();
+                  return true;
+              }
+              return false;
+            }
+  ```
+    ]]>
+  </code>
+</response>

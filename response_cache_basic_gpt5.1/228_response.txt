@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Button(Actor child, ButtonStyle style) {
+    if (style == null) {
+      throw new IllegalArgumentException("style cannot be null");
+    }
+    initialize();
+    add(child);
+    setStyle(style);
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

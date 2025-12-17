@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean SetMatchFinder(int matchFinderIndex) {
+    if (matchFinderIndex < 0 || matchFinderIndex > 2) return false;
+    int matchFinderIndexPrev = _matchFinderType;
+    _matchFinderType = matchFinderIndex;
+    if (_matchFinder != null && matchFinderIndexPrev != _matchFinderType) {
+      _dictionarySizePrev = -1;
+      if (_matchFinderType == matchFinderIndexPrev) {
+        _matchFinder = _matchFinder; 
+      }
+    }
+    return true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

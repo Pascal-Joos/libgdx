@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static final class TouchFocus implements Poolable {
+    @Nullable EventListener listener;
+     Actor listenerActor, target;
+    int pointer, button;
+
+    public void reset() {
+      listenerActor = null;
+      listener = null;
+      target = null;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

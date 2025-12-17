@@ -1,0 +1,30 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Tree(TreeStyle style) {
+    if (style == null) {
+      throw new IllegalArgumentException("style cannot be null");
+    }
+    selection =
+        new Selection<N>() {
+          protected void changed() {
+            switch (size()) {
+              case 0:
+                rangeStart = null;
+                break;
+              case 1:
+                rangeStart = first();
+                break;
+            }
+          }
+        };
+    selection.setActor(this);
+    selection.setMultiple(true);
+    setStyle(style);
+    initialize();
+  }
+  ```
+    ]]>
+  </code>
+</response>

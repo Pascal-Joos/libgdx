@@ -1,0 +1,10 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** the Node affected by this animation * */
+  @Nullable public Node node;
+  ```
+    ]]>
+  </code>
+</response>

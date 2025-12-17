@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ETC1TextureData(FileHandle file, boolean useMipMaps) {
+    this.file = file;
+    this.useMipMaps = useMipMaps;
+    this.data = new ETC1Data(file);
+  }
+  ```
+    ]]>
+  </code>
+</response>

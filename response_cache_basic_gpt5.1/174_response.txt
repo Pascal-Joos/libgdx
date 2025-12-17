@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable public T texture = null;
+  ```
+    ]]>
+  </code>
+</response>

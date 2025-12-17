@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public AtlasRegion(TextureRegion region) {
+      setRegion(region);
+      packedWidth = region.getRegionWidth();
+      packedHeight = region.getRegionHeight();
+      originalWidth = packedWidth;
+      originalHeight = packedHeight;
+      name = "";
+      names = new Array<String>(1);
+      values = new FloatArray(1);
+    }
+  ```
+    ]]>
+  </code>
+</response>

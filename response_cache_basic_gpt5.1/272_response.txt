@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean removeActor(Actor actor, boolean unfocus) {
+    if (actor == null) throw new IllegalArgumentException("actor cannot be null.");
+    if (actor != this.actor) return false;
+    setActor(null);
+    return super.removeActor(actor, unfocus);
+  }
+  ```
+    ]]>
+  </code>
+</response>

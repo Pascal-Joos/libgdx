@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
+  public float getPadX() {
+    float left = padLeft != null ? padLeft.get(actor) : 0f;
+    float right = padRight != null ? padRight.get(actor) : 0f;
+    return left + right;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setActor( Actor actor) {
+    this.actor = actor;
+    if (actor != null && target == null) setTarget(actor);
+    if (actor == null) {
+      if (pool != null) {
+        pool.free(this);
+        pool = null;
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

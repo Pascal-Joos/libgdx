@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public BillboardParticleBatch(
+      AlignMode mode,
+      boolean useGPU,
+      int capacity,
+      BlendingAttribute blendingAttribute,
+      DepthTestAttribute depthTestAttribute) {
+    super(BillboardControllerRenderData.class);
+    renderables = new Array<Renderable>();
+    renderablePool = new RenderablePool();
+    this.blendingAttribute = blendingAttribute != null
+        ? blendingAttribute
+        : new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f);
+    this.depthTestAttribute = depthTestAttribute != null
+        ? depthTestAttribute
+        : new DepthTestAttribute(GL20.GL_LEQUAL, false);
+    allocIndices();
+    initRenderData();
+    ensureCapacity(capacity);
+    setUseGpu(useGPU);
+    setAlignMode(mode);
+  }
+  ```
+    ]]>
+  </code>
+</response>

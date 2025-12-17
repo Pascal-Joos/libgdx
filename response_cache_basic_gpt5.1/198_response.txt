@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Matrix4 set( Matrix4 matrix) {
+    if (matrix == null) {
+      return this;
+    }
+    return set(matrix.val);
+  }
+  ```
+    ]]>
+  </code>
+</response>

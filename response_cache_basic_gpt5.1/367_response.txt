@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  private void setLocale(Locale locale) {
+    Locale effectiveLocale = locale != null ? locale : Locale.getDefault();
+    this.locale = effectiveLocale;
+    this.formatter = new TextFormatter(effectiveLocale, !simpleFormatter);
+  }
+  ```
+    ]]>
+  </code>
+</response>

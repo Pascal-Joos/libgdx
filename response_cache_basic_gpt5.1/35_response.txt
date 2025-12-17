@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static int getNumManagedTextureArrays() {
+    Array<TextureArray> arrays = managedTextureArrays.get(Gdx.app);
+    return arrays == null ? 0 : arrays.size;
+  }
+  ```
+    ]]>
+  </code>
+</response>

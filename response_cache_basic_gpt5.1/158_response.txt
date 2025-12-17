@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  @Override
+  public void begin(Camera camera, RenderContext context) {
+    this.camera = camera;
+    this.context = context;
+    program.bind();
+    currentMesh = null;
+    for (int u, i = 0; i < globalUniforms.size; ++i) {
+      final BaseShader.Setter setter = setters.get(u = globalUniforms.get(i));
+      if (setter != null) setter.set(this, u, null, null);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

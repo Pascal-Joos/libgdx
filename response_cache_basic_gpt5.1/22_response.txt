@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static int getNumManagedCubemaps() {
+    Application app = Gdx.app;
+    return app == null || !managedCubemaps.containsKey(app) ? 0 : managedCubemaps.get(app).size;
+  }
+  ```
+    ]]>
+  </code>
+</response>

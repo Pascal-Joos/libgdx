@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable public ObjectChannel<ModelInstance> modelInstanceChannel;
+  ```
+    ]]>
+  </code>
+</response>

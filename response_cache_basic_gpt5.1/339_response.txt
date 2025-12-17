@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Node() {
+      this.actor = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

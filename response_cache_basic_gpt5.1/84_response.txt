@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextureAttribute(final long type, final Texture texture) {
+    this(type);
+    if (texture == null) {
+      throw new NullPointerException("texture must not be null");
+    }
+    textureDescription.texture = texture;
+  }
+  ```
+    ]]>
+  </code>
+</response>

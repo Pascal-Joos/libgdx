@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public BaseTmxMapLoader(FileHandleResolver resolver) {
+    super(resolver);
+    this.root = new Element("dummy", null);
+    this.map = new TiledMap();
+  }
+  ```
+    ]]>
+  </code>
+</response>

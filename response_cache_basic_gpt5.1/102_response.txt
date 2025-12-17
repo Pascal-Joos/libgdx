@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /**
+   * Adds and returns a channel described by the channel descriptor parameter. If a channel with the
+   * same id already exists, no allocation is performed and that channel is returned.
+   */
+  public <T extends Channel> T addChannel(ChannelDescriptor channelDescriptor) {
+    return addChannel(channelDescriptor, new ChannelInitializer<T>() {
+      @Override
+      public void init(T channel) {
+      }
+    });
+  }
+  ```
+    ]]>
+  </code>
+</response>

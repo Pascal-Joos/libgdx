@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public IntFloatMap(int initialCapacity, float loadFactor) {
+    if (loadFactor <= 0f || loadFactor >= 1f) {
+      throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    }
+    this.loadFactor = loadFactor;
+
+    int tableSize = tableSize(initialCapacity, loadFactor);
+    threshold = (int) (tableSize * loadFactor);
+    mask = tableSize - 1;
+    shift = Long.numberOfLeadingZeros(mask);
+
+    keyTable = new int[tableSize];
+    valueTable = new float[tableSize];
+  }
+  ```
+    ]]>
+  </code>
+</response>

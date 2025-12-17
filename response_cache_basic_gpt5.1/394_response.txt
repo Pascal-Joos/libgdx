@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static class Entry<K, V> {
+    public @Null K key;
+    public @Null V value;
+
+    public String toString() {
+      return key + "=" + value;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

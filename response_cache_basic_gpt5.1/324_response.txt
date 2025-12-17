@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextArea(String text, TextFieldStyle style) {
+    super(text, style);
+    initialize();
+  }
+  ```
+    ]]>
+  </code>
+</response>

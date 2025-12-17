@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Adds the specified object to the end of the list regardless of iteration status */
+  @Initializer
+  public void add(T object) {
+    Item<T> item = pool.obtain();
+    item.payload = object;
+    item.next = null;
+    item.prev = null;
+
+    if (head == null) {
+      head = item;
+      tail = item;
+      size++;
+      return;
+    }
+
+    Item<T> currentTail = tail;
+    if (currentTail == null) {
+      return;
+    }
+
+    item.prev = currentTail;
+    currentTail.next = item;
+    tail = item;
+    size++;
+  }
+  ```
+    ]]>
+  </code>
+</response>

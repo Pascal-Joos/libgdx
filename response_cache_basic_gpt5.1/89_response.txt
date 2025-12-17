@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void beforeGroup(int group, Array<Decal> contents) {
+    GroupPlug plug = plugs.get(group);
+    if (plug != null) {
+      plug.beforeGroup(contents);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

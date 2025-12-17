@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Nullable Drawable getBackgroundDrawable() {
+    if (disabled && style.disabledBackground != null) return style.disabledBackground;
+    if (style.focusedBackground != null && hasKeyboardFocus()) return style.focusedBackground;
+    return style.background;
+  }
+  ```
+    ]]>
+  </code>
+</response>

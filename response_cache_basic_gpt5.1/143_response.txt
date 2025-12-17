@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public RegionInfluencer(int regionsCount) {
+    this.regions = new Array<AspectTextureRegion>(false, regionsCount, AspectTextureRegion.class);
+    this.regionChannel = new FloatChannel();
+  }
+  ```
+    ]]>
+  </code>
+</response>

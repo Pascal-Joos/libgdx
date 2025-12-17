@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public SplitPaneStyle() {
+      this.handle = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

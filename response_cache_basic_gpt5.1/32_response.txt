@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Texture(TextureData data) {
+    if (data == null) throw new IllegalArgumentException("data cannot be null");
+    this(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture(), data);
+  }
+  ```
+    ]]>
+  </code>
+</response>

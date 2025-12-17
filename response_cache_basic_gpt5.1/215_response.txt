@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** The stage for the actor the event was fired on. */
+  public Stage getStage() {
+    if (stage == null) {
+      throw new IllegalStateException("Stage is not set");
+    }
+    return stage;
+  }
+  ```
+    ]]>
+  </code>
+</response>

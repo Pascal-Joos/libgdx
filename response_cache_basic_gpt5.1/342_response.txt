@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public VerticalGroup() {
+    columnSizes = new FloatArray();
+    setTouchable(Touchable.childrenOnly);
+  }
+  ```
+    ]]>
+  </code>
+</response>

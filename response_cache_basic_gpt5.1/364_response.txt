@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ArrayMap(boolean ordered, int capacity, Class keyArrayType, Class valueArrayType) {
+    this.ordered = ordered;
+    K[] newKeys = (K[]) ArrayReflection.newInstance(keyArrayType, capacity);
+    V[] newValues = (V[]) ArrayReflection.newInstance(valueArrayType, capacity);
+    keys = newKeys;
+    values = newValues;
+  }
+  ```
+    ]]>
+  </code>
+</response>

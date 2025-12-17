@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void attribute( String name,  String value) {
+    if (current != null) {
+      current.setAttribute(name, value);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

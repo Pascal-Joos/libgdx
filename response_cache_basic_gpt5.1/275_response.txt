@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HorizontalGroup() {
+    rowSizes = new FloatArray();
+    setTouchable(Touchable.childrenOnly);
+  }
+  ```
+    ]]>
+  </code>
+</response>

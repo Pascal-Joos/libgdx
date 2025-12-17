@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Texture(int glTarget, int glHandle, TextureData data) {
+    super(glTarget, glHandle);
+    this.data = data;
+    load(data);
+    if (data.isManaged()) addManagedTexture(Gdx.app, this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

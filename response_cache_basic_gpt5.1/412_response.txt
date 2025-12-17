@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public static class Node<E> {
+      /** Node previous to this */
+       protected Node<E> p;
+
+      /** Node next to this */
+       protected Node<E> n;
+
+      /** Value held */
+      public E value = null;
+
+      /** Index value in list */
+      public int index;
+    }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  void Free() {
+    // Intentionally left blank to avoid assigning null to _bufferBase
+  }
+  ```
+    ]]>
+  </code>
+</response>

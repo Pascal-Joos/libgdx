@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Vector3 set(final Vector3 vector) {
+    if (vector == null) {
+      return this;
+    }
+    return this.set(vector.x, vector.y, vector.z);
+  }
+  ```
+    ]]>
+  </code>
+</response>

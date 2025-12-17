@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextureRegionDrawable(Texture texture) {
+    this.region = new TextureRegion(texture);
+    setRegion(this.region);
+  }
+  ```
+    ]]>
+  </code>
+</response>

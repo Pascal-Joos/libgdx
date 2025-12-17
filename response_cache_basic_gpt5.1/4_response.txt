@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable public static GL20 gl;
+  ```
+    ]]>
+  </code>
+</response>

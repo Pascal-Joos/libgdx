@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    @Override
+    public void ensureCapacity(int capacity) {
+      if (currentSize < capacity) {
+        distances = new float[capacity];
+        particleIndices = new int[capacity];
+        particleOffsets = new int[capacity];
+        currentSize = capacity;
+      } else if (particleIndices == null || particleOffsets == null) {
+        particleIndices = new int[currentSize];
+        particleOffsets = new int[currentSize];
+      }
+    }
+  ```
+    ]]>
+  </code>
+</response>

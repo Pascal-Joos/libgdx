@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected int letterUnderCursor(float x) {
+    x -=
+        textOffset
+            + fontOffset
+            - style.font.getData().cursorX
+            - glyphPositions.get(visibleTextStart);
+    Drawable background = getBackgroundDrawable();
+    if (background != null) x -= background.getLeftWidth();
+    int n = this.glyphPositions.size;
+    float[] glyphPositions = this.glyphPositions.items;
+    for (int i = 1; i < n; i++) {
+      if (glyphPositions[i] > x) {
+        if (glyphPositions[i] - x <= x - glyphPositions[i - 1]) return i;
+        return i - 1;
+      }
+    }
+    return n - 1;
+  }
+  ```
+    ]]>
+  </code>
+</response>

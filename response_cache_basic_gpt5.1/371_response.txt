@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public IntSet(int initialCapacity, float loadFactor) {
+    keyTable = new int[0];
+    iterator1 = new IntSetIterator();
+    iterator2 = new IntSetIterator();
+    if (loadFactor <= 0f || loadFactor >= 1f)
+      throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
+    this.loadFactor = loadFactor;
+
+    int tableSize = tableSize(initialCapacity, loadFactor);
+    threshold = (int) (tableSize * loadFactor);
+    mask = tableSize - 1;
+    shift = Long.numberOfLeadingZeros(mask);
+
+    keyTable = new int[tableSize];
+  }
+  ```
+    ]]>
+  </code>
+</response>

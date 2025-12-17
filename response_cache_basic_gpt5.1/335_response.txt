@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Tooltip(@Null T contents, @Null TooltipManager manager) {
+    if (manager == null) {
+      manager = TooltipManager.getInstance();
+    }
+    this.manager = manager;
+
+    container =
+        new Container(contents) {
+          public void act(float delta) {
+            super.act(delta);
+            if (targetActor != null && targetActor.getStage() == null) remove();
+          }
+        };
+    container.setTouchable(Touchable.disabled);
+  }
+  ```
+    ]]>
+  </code>
+</response>

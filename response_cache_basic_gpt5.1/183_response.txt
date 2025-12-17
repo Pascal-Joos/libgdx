@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public GLFrameBufferBuilder(int width, int height) {
+      this.width = width;
+      this.height = height;
+      this.stencilRenderBufferSpec = null;
+      this.depthRenderBufferSpec = null;
+      this.packedStencilDepthRenderBufferSpec = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

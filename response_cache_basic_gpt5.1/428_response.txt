@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public byte[] _bufferBase = new byte[0]; // pointer to buffer with data
+  ```
+    ]]>
+  </code>
+</response>

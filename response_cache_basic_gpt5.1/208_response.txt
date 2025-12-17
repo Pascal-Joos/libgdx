@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void dispose() {
+    if (socket != null) {
+      try {
+        socket.close();
+      } catch (Exception e) {
+        throw new GdxRuntimeException("Error closing socket.", e);
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

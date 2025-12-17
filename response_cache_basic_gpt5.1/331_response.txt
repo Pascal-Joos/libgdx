@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public TextFieldStyle() {
+      this.font = new BitmapFont();
+      this.fontColor = new Color(1, 1, 1, 1);
+    }
+  ```
+    ]]>
+  </code>
+</response>

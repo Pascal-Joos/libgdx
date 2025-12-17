@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setActor(@Null T actor) {
+    if (actor == this) throw new IllegalArgumentException("actor cannot be the Container.");
+    if (actor == this.actor) return;
+    if (this.actor != null) super.removeActor(this.actor);
+    if (actor != null) {
+      this.actor = actor;
+      super.addActor(actor);
+    } else {
+      this.actor = null;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

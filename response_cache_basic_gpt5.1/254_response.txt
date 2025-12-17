@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMinWidth() {
+    return actor == null ? 0f : minWidth.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

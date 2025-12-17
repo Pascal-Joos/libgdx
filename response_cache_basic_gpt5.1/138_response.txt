@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ModelInfluencer(Model... models) {
+    this.models = new Array<Model>(models);
+    this.modelChannel = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

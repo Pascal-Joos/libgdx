@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public AtlasRegion(Texture texture, int x, int y, int width, int height) {
+      if (texture == null) throw new NullPointerException("texture");
+      super(texture, x, y, width, height);
+      originalWidth = width;
+      originalHeight = height;
+      packedWidth = width;
+      packedHeight = height;
+    }
+  ```
+    ]]>
+  </code>
+</response>

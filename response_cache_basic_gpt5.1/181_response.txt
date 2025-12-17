@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void bindSide(final Cubemap.CubemapSide side) {
+    if (side == null) {
+      throw new GdxRuntimeException("No remaining sides.");
+    }
+    Gdx.gl20.glFramebufferTexture2D(
+        GL20.GL_FRAMEBUFFER,
+        GL20.GL_COLOR_ATTACHMENT0,
+        side.glEnum,
+        getColorBufferTexture().getTextureObjectHandle(),
+        0);
+  }
+  ```
+    ]]>
+  </code>
+</response>

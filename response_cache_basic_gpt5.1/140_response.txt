@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ParticleControllerInfluencer() {
+    this.templates = new Array<ParticleController>(true, 1, ParticleController.class);
+    this.particleControllerChannel = controller.particles.addChannel(ParticleChannels.ParticleController);
+  }
+  ```
+    ]]>
+  </code>
+</response>

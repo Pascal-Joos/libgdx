@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public TextTooltipStyle(TextTooltipStyle style) {
+      if (style == null || style.label == null) {
+        throw new IllegalArgumentException("style and style.label must not be null");
+      }
+      label = new LabelStyle(style.label);
+      background = style.background;
+      wrapWidth = style.wrapWidth;
+    }
+  ```
+    ]]>
+  </code>
+</response>

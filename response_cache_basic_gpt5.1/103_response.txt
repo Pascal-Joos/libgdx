@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unchecked")
+  public <T extends Channel> T getChannel(ChannelDescriptor descriptor) {
+    for (Channel array : arrays) {
+      if (array.id == descriptor.id) return (T) array;
+    }
+    throw new IllegalStateException("Channel not found for descriptor id: " + descriptor.id);
+  }
+  ```
+    ]]>
+  </code>
+</response>

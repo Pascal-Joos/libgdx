@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Returns the value for the specified key, or null if the key is not in the map. */
+  public <T extends K> V get(T key) {
+    int i = locateKey(key);
+    if (i < 0) {
+      throw new IllegalStateException("Null value cannot be returned from a @NonNull method");
+    }
+    return valueTable[i];
+  }
+  ```
+    ]]>
+  </code>
+</response>

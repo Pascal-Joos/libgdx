@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public static int valueOf(String keyname) {
+      if (keyNames == null) initializeKeyNames();
+      ObjectIntMap<String> localKeyNames = keyNames;
+      if (localKeyNames == null) return -1;
+      return localKeyNames.get(keyname, -1);
+    }
+  ```
+    ]]>
+  </code>
+</response>

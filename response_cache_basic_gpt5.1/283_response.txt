@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SelectBox(SelectBoxStyle style) {
+    if (style == null) {
+      throw new IllegalArgumentException("style cannot be null");
+    }
+    setStyle(style);
+    setSize(getPrefWidth(), getPrefHeight());
+
+    selection.setActor(this);
+    selection.setRequired(true);
+
+    scrollPane = newScrollPane();
+
+    addListener(
+        clickListener =
+            new ClickListener() {
+              public boolean touchDown(
+                  InputEvent event, float x, float y, int pointer, int button) {
+                if (pointer == 0 && button != 0) return false;
+                if (isDisabled()) return false;
+                if (scrollPane.hasParent()) hideScrollPane();
+                else showScrollPane();
+                return true;
+              }
+            });
+  }
+  ```
+    ]]>
+  </code>
+</response>

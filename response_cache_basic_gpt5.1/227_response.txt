@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /**
+   * Creates a button without setting the style or size. At least a style must be set before using
+   * this button.
+   */
+  public Button() {
+    this(new ButtonStyle());
+  }
+  ```
+    ]]>
+  </code>
+</response>

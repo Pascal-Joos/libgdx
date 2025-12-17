@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextureRegionDrawable(TextureRegion region) {
+    if (region == null) {
+      throw new IllegalArgumentException("region cannot be null");
+    }
+    setRegion(region);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public CheckBox(@Null String text, CheckBoxStyle style) {
+    super(text, style);
+    this.style = style;
+
+    Label label = getLabel();
+    label.setAlignment(Align.left);
+
+    image = newImage();
+    image.setDrawable(style.checkboxOff);
+
+    clearChildren();
+    imageCell = add(image);
+    add(label);
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

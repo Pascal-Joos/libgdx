@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public abstract class ParticleControllerRenderData {
+    public ParticleController controller;
+    public FloatChannel positionChannel = new FloatChannel();
+  }
+  ```
+    ]]>
+  </code>
+</response>

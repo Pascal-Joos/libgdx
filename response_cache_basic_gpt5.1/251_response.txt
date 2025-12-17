@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMaxHeight() {
+    if (actor == null) {
+      return 0f;
+    }
+    return maxHeight.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

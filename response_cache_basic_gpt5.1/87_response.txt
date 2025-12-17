@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected TextureRegion textureRegion = new TextureRegion();
+  ```
+    ]]>
+  </code>
+</response>

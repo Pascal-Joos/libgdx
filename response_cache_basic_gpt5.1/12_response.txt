@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public synchronized @Null <T> T get( AssetDescriptor<T> assetDescriptor) {
+    return get(assetDescriptor.fileName, assetDescriptor.type, true);
+  }
+  ```
+    ]]>
+  </code>
+</response>

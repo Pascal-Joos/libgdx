@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ImageButton(ImageButtonStyle style) {
+    super(style);
+    this.style = style;
+    image = newImage();
+    add(image);
+    setStyle(style);
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

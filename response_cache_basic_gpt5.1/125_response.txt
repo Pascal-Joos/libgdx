@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void allocateChannels() {
+    colorChannel = controller.particles.addChannel(ParticleChannels.Color);
+  }
+  ```
+    ]]>
+  </code>
+</response>

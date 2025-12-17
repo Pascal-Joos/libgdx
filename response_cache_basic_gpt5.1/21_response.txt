@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Color set(Color color) {
+    if (color == null) {
+      return this;
+    }
+    this.r = color.r;
+    this.g = color.g;
+    this.b = color.b;
+    this.a = color.a;
+    return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

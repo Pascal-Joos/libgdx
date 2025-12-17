@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Removes the tail of the list regardless of iteration status */
+  
+  public @Null T removeLast() {
+    if (tail == null) {
+      return null;
+    }
+
+    T payload = tail.payload;
+
+    size--;
+
+    Item<T> p = tail.prev;
+    pool.free(tail);
+
+    if (size == 0) {
+      head = null;
+      tail = null;
+    } else {
+      tail = p;
+      if (tail != null) {
+        tail.next = null;
+      }
+    }
+
+    return payload;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected BufferedParticleBatch(Class<T> type, Camera camera) {
+    this.sorter = new ParticleSorter.Distance();
+    this.camera = camera;
+    renderData = new com.badlogic.gdx.utils.Array<T>(false, 10, type);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,67 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  public void initialize(int size) {
+    vertices = new float[size * Decal.SIZE];
+
+    Mesh.VertexDataType vertexDataType = Mesh.VertexDataType.VertexArray;
+    if (Gdx.gl30 != null) {
+      vertexDataType = Mesh.VertexDataType.VertexBufferObjectWithVAO;
+    }
+    mesh =
+        new Mesh(
+            vertexDataType,
+            false,
+            size * 4,
+            size * 6,
+            new VertexAttribute(
+                VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
+            new VertexAttribute(
+                VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+            new VertexAttribute(
+                VertexAttributes.Usage.TextureCoordinates,
+                2,
+                ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+
+    short[] indices = new short[size * 6];
+    int v = 0;
+    for (int i = 0; i < indices.length; i += 6, v += 4) {
+      indices[i] = (short) (v);
+      indices[i + 1] = (short) (v + 2);
+      indices[i + 2] = (short) (v + 1);
+      indices[i + 3] = (short) (v + 1);
+      indices[i + 4] = (short) (v + 2);
+      indices[i + 5] = (short) (v + 3);
+    }
+    mesh.setIndices(indices);
+    if (groupStrategy == null) {
+      groupStrategy = new GroupStrategy() {
+        @Override
+        public int compare(Decal decal1, Decal decal2) {
+          return 0;
+        }
+        @Override
+        public void beforeGroups() {
+        }
+        @Override
+        public void afterGroups() {
+        }
+        @Override
+        public void beforeGroup(int group, Array<Decal> contents) {
+        }
+        @Override
+        public void afterGroup(int group) {
+        }
+        @Override
+        public int decideGroup(Decal decal) {
+          return 0;
+        }
+      };
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

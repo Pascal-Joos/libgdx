@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /**
+   * @param stringValue May be null if the string representation is the string value of the double
+   *     (eg, no leading zeros).
+   */
+  @Initializer
+  public void set(double value, @Null String stringValue) {
+    doubleValue = value;
+    longValue = (long) value;
+    this.name = "";
+    this.stringValue = stringValue == null ? "" : stringValue;
+    type = ValueType.doubleValue;
+  }
+  ```
+    ]]>
+  </code>
+</response>

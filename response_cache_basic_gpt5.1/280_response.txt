@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ProgressBar(
+      float min, float max, float stepSize, boolean vertical, ProgressBarStyle style) {
+    this.style = style;
+    if (min > max)
+      throw new IllegalArgumentException("max must be > min. min,max: " + min + ", " + max);
+    if (stepSize <= 0) throw new IllegalArgumentException("stepSize must be > 0: " + stepSize);
+    setStyle(style);
+    this.min = min;
+    this.max = max;
+    this.stepSize = stepSize;
+    this.vertical = vertical;
+    this.value = min;
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

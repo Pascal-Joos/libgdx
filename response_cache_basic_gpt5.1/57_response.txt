@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public AtlasRegion( Texture texture, int x, int y, int width, int height) {
+      super(texture, x, y, width, height);
+      originalWidth = width;
+      originalHeight = height;
+      packedWidth = width;
+      packedHeight = height;
+      name = "";
+      names = null;
+      values = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Angular() {
+      angularChannel = null;
+      thetaValue = new ScaledNumericValue();
+      phiValue = new ScaledNumericValue();
+    }
+  ```
+    ]]>
+  </code>
+</response>

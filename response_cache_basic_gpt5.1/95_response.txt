@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static Node getNode(
+      final Array<Node> nodes,  final String id, boolean recursive, boolean ignoreCase) {
+    final int n = nodes.size;
+    Node node;
+    if (ignoreCase) {
+      for (int i = 0; i < n; i++) {
+        node = nodes.get(i);
+        if (node.id != null && node.id.equalsIgnoreCase(id)) return node;
+      }
+    } else {
+      for (int i = 0; i < n; i++) {
+        node = nodes.get(i);
+        if (node.id != null && node.id.equals(id)) return node;
+      }
+    }
+    if (recursive) {
+      for (int i = 0; i < n; i++)
+        if ((node = getNode(nodes.get(i).children, id, true, ignoreCase)) != null) return node;
+    }
+    return null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void render(ShaderProgram shader, int primitiveType, int offset, int count) {
+    if (shader == null) {
+      throw new IllegalArgumentException("shader must not be null");
+    }
+    render(shader, primitiveType, offset, count, autoBind);
+  }
+  ```
+    ]]>
+  </code>
+</response>

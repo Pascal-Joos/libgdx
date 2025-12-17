@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Vector2 set(Vector2 v) {
+    if (v == null) {
+      throw new IllegalArgumentException("v cannot be null");
+    }
+    x = v.x;
+    y = v.y;
+    return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

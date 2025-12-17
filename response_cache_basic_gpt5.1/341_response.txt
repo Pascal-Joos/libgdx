@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Calls {@link #get(Actor)} with null. */
+  public float get() {
+    return get((Actor)null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

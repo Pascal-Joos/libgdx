@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public FloatChannel regionChannel, colorChannel, scaleChannel, rotationChannel = new FloatChannel();
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public void reset() {
+      listenerActor = null;
+      listener = InputListener.NULL_LISTENER;
+      target = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

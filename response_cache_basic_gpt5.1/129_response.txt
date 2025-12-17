@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public DynamicsModifier(DynamicsModifier modifier) {
+    this.isGlobal = modifier.isGlobal;
+    this.lifeChannel = modifier.lifeChannel;
+  }
+  ```
+    ]]>
+  </code>
+</response>

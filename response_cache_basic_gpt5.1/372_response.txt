@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Json() {
+    this(new JsonWriter());
+    outputType = OutputType.minimal;
+  }
+  ```
+    ]]>
+  </code>
+</response>

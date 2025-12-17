@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public NinePatchDrawable() {
+    this.patch = new NinePatch();
+  }
+  ```
+    ]]>
+  </code>
+</response>

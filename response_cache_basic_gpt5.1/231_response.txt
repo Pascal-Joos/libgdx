@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Button(Skin skin, String styleName) {
+    super(skin);
+    initialize();
+    ButtonStyle resolvedStyle = skin.get(styleName, ButtonStyle.class);
+    if (resolvedStyle == null) {
+      throw new IllegalStateException("ButtonStyle must not be null for style name: " + styleName);
+    }
+    setStyle(resolvedStyle);
+    setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

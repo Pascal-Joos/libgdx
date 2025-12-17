@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Strength() {
+      super();
+      strengthValue = new ScaledNumericValue();
+      strengthChannel = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

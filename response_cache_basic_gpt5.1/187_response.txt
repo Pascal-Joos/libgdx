@@ -1,0 +1,79 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  protected void addStaticTiles(
+      FileHandle tmxFile,
+      ImageResolver imageResolver,
+      TiledMapTileSet tileSet,
+      Element element,
+      Array<Element> tileElements,
+      String name,
+      int firstgid,
+      int tilewidth,
+      int tileheight,
+      int spacing,
+      int margin,
+      String source,
+      int offsetX,
+      int offsetY,
+      String imageSource,
+      int imageWidth,
+      int imageHeight,
+      FileHandle image) {
+
+    if (atlasResolver == null)
+      throw new GdxRuntimeException("atlasResolver is null");
+    TextureAtlas atlas = atlasResolver.getAtlas();
+    if (atlas == null)
+      throw new GdxRuntimeException("TextureAtlas is null");
+    String regionsName = name;
+
+    for (Texture texture : atlas.getTextures()) {
+      trackedTextures.add(texture);
+    }
+
+    MapProperties props = tileSet.getProperties();
+    props.put("imagesource", imageSource);
+    props.put("imagewidth", imageWidth);
+    props.put("imageheight", imageHeight);
+    props.put("tilewidth", tilewidth);
+    props.put("tileheight", tileheight);
+    props.put("margin", margin);
+    props.put("spacing", spacing);
+
+    if (imageSource != null && imageSource.length() > 0) {
+      int lastgid = firstgid + ((imageWidth / tilewidth) * (imageHeight / tileheight)) - 1;
+      for (AtlasRegion region : atlas.findRegions(regionsName)) {
+        // Handle unused tileIds
+        if (region != null) {
+          int tileId = firstgid + region.index;
+          if (tileId >= firstgid && tileId <= lastgid) {
+            addStaticTiledMapTile(tileSet, region, tileId, offsetX, offsetY);
+          }
+        }
+      }
+    }
+
+    // Add tiles with individual image sources
+    for (Element tileElement : tileElements) {
+      int tileId = firstgid + tileElement.getIntAttribute("id", 0);
+      TiledMapTile tile = tileSet.getTile(tileId);
+      if (tile == null) {
+        Element imageElement = tileElement.getChildByName("image");
+        if (imageElement != null) {
+          String regionName = imageElement.getAttribute("source");
+          regionName = regionName.substring(0, regionName.lastIndexOf('.'));
+          AtlasRegion region = atlas.findRegion(regionName);
+          if (region == null)
+            throw new GdxRuntimeException("Tileset atlasRegion not found: " + regionName);
+          addStaticTiledMapTile(tileSet, region, tileId, offsetX, offsetY);
+        }
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

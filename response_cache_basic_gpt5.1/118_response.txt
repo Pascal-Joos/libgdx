@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public PointSpriteParticleBatch(
+      int capacity,
+      ParticleShader.Config shaderConfig,
+       BlendingAttribute blendingAttribute,
+       DepthTestAttribute depthTestAttribute) {
+    super(PointSpriteControllerRenderData.class);
+
+    if (!pointSpritesEnabled) enablePointSprites();
+
+    this.blendingAttribute = blendingAttribute;
+    this.depthTestAttribute = depthTestAttribute;
+
+    if (this.blendingAttribute == null)
+      this.blendingAttribute = new BlendingAttribute(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA, 1f);
+    if (this.depthTestAttribute == null)
+      this.depthTestAttribute = new DepthTestAttribute(GL20.GL_LEQUAL, false);
+
+    renderable = new Renderable();
+    allocRenderable();
+    ensureCapacity(capacity);
+    renderable.shader = new ParticleShader(renderable, shaderConfig);
+    renderable.shader.init();
+  }
+  ```
+    ]]>
+  </code>
+</response>

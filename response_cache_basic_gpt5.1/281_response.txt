@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getBackgroundDrawable() {
+    if (disabled && style.disabledBackground != null) return style.disabledBackground;
+    if (style.background == null) return getKnobDrawable();
+    return style.background;
+  }
+  ```
+    ]]>
+  </code>
+</response>

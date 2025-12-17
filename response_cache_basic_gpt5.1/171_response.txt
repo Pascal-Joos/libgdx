@@ -1,0 +1,44 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public short vertex(
+       Vector3 pos,  Vector3 nor,  Color col,  Vector2 uv) {
+    if (vindex > MAX_INDEX) throw new GdxRuntimeException("Too many vertices used");
+
+    if (pos == null) throw new GdxRuntimeException("Position must not be null");
+    vertex[posOffset] = pos.x;
+    if (posSize > 1) vertex[posOffset + 1] = pos.y;
+    if (posSize > 2) vertex[posOffset + 2] = pos.z;
+
+    if (norOffset >= 0) {
+      if (nor == null) nor = tmpNormal.set(pos).nor();
+      vertex[norOffset] = nor.x;
+      vertex[norOffset + 1] = nor.y;
+      vertex[norOffset + 2] = nor.z;
+    }
+
+    if (colOffset >= 0) {
+      if (col == null) col = Color.WHITE;
+      vertex[colOffset] = col.r;
+      vertex[colOffset + 1] = col.g;
+      vertex[colOffset + 2] = col.b;
+      if (colSize > 3) vertex[colOffset + 3] = col.a;
+    } else if (cpOffset > 0) {
+      if (col == null) col = Color.WHITE;
+      vertex[cpOffset] = col.toFloatBits(); // FIXME cache packed color?
+    }
+
+    if (uv != null && uvOffset >= 0) {
+      vertex[uvOffset] = uv.x;
+      vertex[uvOffset + 1] = uv.y;
+    }
+
+    addVertex(vertex, 0);
+    return (short) lastIndex;
+  }
+  ```
+    ]]>
+  </code>
+</response>

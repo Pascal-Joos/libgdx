@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    protected AnimationDesc() {
+      this.animation = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

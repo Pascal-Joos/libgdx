@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
+  public float getPadY() {
+    Actor localActor = this.actor;
+    if (localActor == null) {
+      return 0f;
+    }
+    return padTop.get(localActor) + padBottom.get(localActor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

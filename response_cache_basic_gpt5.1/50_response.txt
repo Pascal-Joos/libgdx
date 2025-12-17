@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private TextureRegion region = TextureRegion.split(new Texture(""), 1, 1)[0][0];
+  ```
+    ]]>
+  </code>
+</response>

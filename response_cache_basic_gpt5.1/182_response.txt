@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  GLFrameBuffer() {
+    this.bufferBuilder = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

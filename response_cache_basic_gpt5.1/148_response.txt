@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public class BillboardControllerRenderData extends ParticleControllerRenderData {
+    public FloatChannel regionChannel, colorChannel, scaleChannel = new FloatChannel(), rotationChannel;
+  }
+  ```
+    ]]>
+  </code>
+</response>

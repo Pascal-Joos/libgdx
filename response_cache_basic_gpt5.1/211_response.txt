@@ -1,0 +1,10 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /** The actor this action targets, or null if a target has not been set. */
+  @Nullable protected Actor target;
+  ```
+    ]]>
+  </code>
+</response>

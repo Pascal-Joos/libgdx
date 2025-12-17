@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public short[] indices = new short[0];
+  ```
+    ]]>
+  </code>
+</response>

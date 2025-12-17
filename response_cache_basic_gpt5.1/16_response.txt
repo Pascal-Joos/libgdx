@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static class CubemapLoaderInfo {
+     String filename;
+    CubemapData data = null;
+     Cubemap cubemap;
+  }
+  ```
+    ]]>
+  </code>
+</response>

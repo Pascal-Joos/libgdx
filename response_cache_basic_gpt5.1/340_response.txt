@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public TreeStyle() {
+      this.plus = null;
+      this.minus = null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

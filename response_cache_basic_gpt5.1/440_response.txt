@@ -1,0 +1,48 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  /**
+   * Manages a {@link Camera} and determines how world coordinates are mapped to and from the screen.
+   *
+   * @author Daniel Holderbaum
+   * @author Nathan Sweet
+   */
+  public abstract class Viewport {
+    private Camera camera = new Camera() {
+      @Override
+      public void update() {
+      }
+
+      @Override
+      public void update(boolean updateFrustum) {
+      }
+
+      @Override
+      public Ray getPickRay(float screenX, float screenY) {
+        return null;
+      }
+    };
+    private float worldWidth, worldHeight;
+    private int screenX, screenY, screenWidth, screenHeight;
+
+    private final Vector3 tmp = new Vector3();
+
+    /** Calls {@link #apply(boolean)} with false. */
+    public void apply() {
+      apply(false);
+    }
+
+    /**
+     * Applies the viewport to the camera and sets the glViewport.
+     *
+     * @param centerCamera If true, the camera position is set to the center of the world.
+     */
+    public void apply(boolean centerCamera) {
+      HdpiUtils.glViewport(screenX, screenY, screenWidth, screenHeight);
+      camera.viewportWidth = worldWidth;
+      camera.viewportHeight = worldHeight;
+  ```
+    ]]>
+  </code>
+</response>

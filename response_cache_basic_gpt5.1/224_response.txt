@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void reset() {
+    super.reset();
+    color.set(0, 0, 0, 0);
+  }
+  ```
+    ]]>
+  </code>
+</response>

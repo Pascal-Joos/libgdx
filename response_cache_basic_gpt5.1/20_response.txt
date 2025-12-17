@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected FileHandle() {
+    this.file = new File("");
+    this.type = FileType.Absolute;
+  }
+  ```
+    ]]>
+  </code>
+</response>

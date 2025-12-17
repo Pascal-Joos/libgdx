@@ -1,0 +1,9 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  int[] _son = new int[0];
+  ```
+    ]]>
+  </code>
+</response>

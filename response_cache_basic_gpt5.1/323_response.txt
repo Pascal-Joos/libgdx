@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextArea(String text, Skin skin, String styleName) {
+    super(text, skin, styleName);
+    initialize();
+  }
+  ```
+    ]]>
+  </code>
+</response>

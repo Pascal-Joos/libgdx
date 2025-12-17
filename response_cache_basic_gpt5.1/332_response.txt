@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextTooltip(
+      @Null String text,  final TooltipManager manager, TextTooltipStyle style) {
+    super(null, manager);
+
+    LabelStyle labelStyle = style == null ? null : style.label;
+    container.setActor(newLabel(text, labelStyle));
+
+    setStyle(style);
+  }
+  ```
+    ]]>
+  </code>
+</response>

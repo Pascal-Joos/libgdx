@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void init() {
+    final ShaderProgram program = this.program;
+    if (program == null) {
+      throw new IllegalStateException("ShaderProgram must not be null during init");
+    }
+    init(program, renderable);
+    this.program = null;
+    renderable = null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+          public void readFields(Object object, JsonValue jsonMap) {
+            if (jsonMap.has(parentFieldName)) {
+              String parentName = readValue(parentFieldName, String.class, jsonMap);
+              Class parentType = object.getClass();
+              while (true) {
+                try {
+                  copyFields(get(parentName, parentType), object);
+                  break;
+                } catch (GdxRuntimeException ex) { // Parent resource doesn't exist.
+                  parentType = parentType.getSuperclass(); // Try resource for super class.
+                  if (parentType == Object.class) {
+                    SerializationException se =
+                        new SerializationException(
+                            "Unable to find parent resource with name: " + parentName);
+                    JsonValue child = jsonMap.child;
+                    if (child != null) {
+                      se.addTrace(child.trace());
+                    }
+                    throw se;
+                  }
+                }
+              }
+            }
+            super.readFields(object, jsonMap);
+          }
+  ```
+    ]]>
+  </code>
+</response>
