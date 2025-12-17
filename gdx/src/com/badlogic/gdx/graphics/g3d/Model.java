@@ -259,6 +259,9 @@ public class Model implements Disposable {
   }
 
   protected void convertMesh(ModelMesh modelMesh) {
+    if (modelMesh.vertices == null) {
+      return;
+    }
     int numIndices = 0;
     for (ModelMeshPart part : modelMesh.parts) {
       numIndices += part.indices.length;
