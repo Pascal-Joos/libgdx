@@ -133,7 +133,7 @@ public class Encoder {
       }
     }
 
-    Encoder2[] m_Coders;
+    Encoder2[] m_Coders = new Encoder2[0];
     int m_NumPrevBits;
     int m_NumPosBits;
     int m_PosMask;
