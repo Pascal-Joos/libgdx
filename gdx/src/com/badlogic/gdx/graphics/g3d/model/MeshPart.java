@@ -152,6 +152,9 @@ public class MeshPart {
       final int offset,
       final int size,
       final int type) {
+    if (mesh == null) {
+      throw new IllegalArgumentException("mesh must not be null");
+    }
     this.id = id;
     this.mesh = mesh;
     this.offset = offset;
