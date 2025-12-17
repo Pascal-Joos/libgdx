@@ -69,6 +69,9 @@ public class DynamicsInfluencer extends Influencer {
     if (hasAcceleration) {
       positionChannel = controller.particles.addChannel(ParticleChannels.Position);
       previousPositionChannel = controller.particles.addChannel(ParticleChannels.PreviousPosition);
+    } else {
+      positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+      previousPositionChannel = controller.particles.addChannel(ParticleChannels.PreviousPosition);
     }
 
     // Angular velocity check
@@ -82,6 +85,7 @@ public class DynamicsInfluencer extends Influencer {
       has3dAngularVelocity = angularVelocityChannel != null;
       if (has3dAngularVelocity)
         rotationChannel = controller.particles.addChannel(ParticleChannels.Rotation3D);
+      else rotationChannel = controller.particles.addChannel(ParticleChannels.Rotation2D);
     }
   }
 
