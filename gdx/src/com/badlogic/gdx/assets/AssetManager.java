@@ -157,8 +157,18 @@ public class AssetManager implements Disposable {
    * @return the asset
    * @throws GdxRuntimeException if the asset is not loaded
    */
+  /**
+   * @param fileName the asset file name
+   * @param type the asset type
+   * @return the asset
+   * @throws GdxRuntimeException if the asset is not loaded
+   */
   public synchronized <T> T get(String fileName, Class<T> type) {
-    return get(fileName, type, true);
+    T asset = get(fileName, type, true);
+    if (asset == null) {
+      throw new GdxRuntimeException("Asset not loaded: " + fileName);
+    }
+    return asset;
   }
 
   /**
