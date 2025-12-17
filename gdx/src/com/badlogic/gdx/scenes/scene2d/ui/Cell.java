@@ -927,7 +927,11 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
+  /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
   public float getPadY() {
+    if (actor == null) {
+      return 0f;
+    }
     return padTop.get(actor) + padBottom.get(actor);
   }
 
