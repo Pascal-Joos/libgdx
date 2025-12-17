@@ -41,6 +41,7 @@ public class ETC1TextureData implements TextureData {
   public ETC1TextureData(FileHandle file, boolean useMipMaps) {
     this.file = file;
     this.useMipMaps = useMipMaps;
+    this.data = new ETC1Data(file);
   }
 
   public ETC1TextureData(ETC1Data encodedImage, boolean useMipMaps) {
