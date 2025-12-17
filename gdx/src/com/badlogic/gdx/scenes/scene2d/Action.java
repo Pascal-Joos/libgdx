@@ -66,7 +66,7 @@ public abstract class Action implements Poolable {
    */
   public void setActor(@Nullable Actor actor) {
     this.actor = actor;
-    if (target == null) setTarget(actor);
+    if (actor != null && target == null) setTarget(actor);
     if (actor == null) {
       if (pool != null) {
         pool.free(this);
