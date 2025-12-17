@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Animation {
   /** the unique id of the animation * */
-  public String id;
+  public String id = "";
 
   /** the duration in seconds * */
   public float duration;
