@@ -154,9 +154,18 @@ public class ModelBuilder {
    * disposed when the model is disposed. The resources the Material might contain are not managed,
    * use {@link #manage(Disposable)} to add those to the model.
    */
+  /**
+   * Adds the specified MeshPart to the current Node. The Mesh will be managed by the model and
+   * disposed when the model is disposed. The resources the Material might contain are not managed,
+   * use {@link #manage(Disposable)} to add those to the model.
+   */
   public void part(final MeshPart meshpart, final Material material) {
     if (node == null) node();
-    node.parts.add(new NodePart(meshpart, material));
+    final Node currentNode = node;
+    if (currentNode == null) {
+      throw new GdxRuntimeException("Call begin() first");
+    }
+    currentNode.parts.add(new NodePart(meshpart, material));
   }
 
   /**
