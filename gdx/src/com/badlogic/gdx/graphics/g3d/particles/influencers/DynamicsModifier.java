@@ -550,6 +550,9 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      if (accelerationChannel == null) {
+        return;
+      }
       int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
       for (int i = 0, c = controller.particles.size;
           i < c;
