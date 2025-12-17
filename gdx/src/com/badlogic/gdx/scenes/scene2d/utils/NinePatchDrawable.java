@@ -45,7 +45,15 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
   }
 
   public NinePatchDrawable(NinePatch patch) {
-    setPatch(patch);
+    this.patch = patch;
+    if (patch != null) {
+      setMinWidth(patch.getTotalWidth());
+      setMinHeight(patch.getTotalHeight());
+      setTopHeight(patch.getTopHeight());
+      setRightWidth(patch.getRightWidth());
+      setBottomHeight(patch.getBottomHeight());
+      setLeftWidth(patch.getLeftWidth());
+    }
   }
 
   public NinePatchDrawable(NinePatchDrawable drawable) {
