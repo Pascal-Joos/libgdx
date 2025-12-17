@@ -41,7 +41,9 @@ public abstract class ParticleControllerRenderer<
 
   @Override
   public void update() {
-    batch.draw(renderData);
+    if (batch != null) {
+      batch.draw(renderData);
+    }
   }
 
   @SuppressWarnings("unchecked")
