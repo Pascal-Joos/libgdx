@@ -1267,6 +1267,7 @@ public class ParticleEmitter {
 
     public Particle(@Nullable Sprite sprite) {
       super(sprite);
+      tint = new float[] {1f, 1f, 1f};
     }
   }
 
