@@ -298,6 +298,9 @@ public class Window extends Table {
 
   protected void drawStageBackground(
       Batch batch, float parentAlpha, float x, float y, float width, float height) {
+    if (style.stageBackground == null) {
+      return;
+    }
     Color color = getColor();
     batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     style.stageBackground.draw(batch, x, y, width, height);
