@@ -869,6 +869,9 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPadTop() {
+    if (actor == null) {
+      return 0f;
+    }
     return padTop.get(actor);
   }
 
