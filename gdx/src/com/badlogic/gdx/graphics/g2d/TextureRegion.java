@@ -80,6 +80,7 @@ public class TextureRegion {
    * @param height The height of the texture region. May be negative to flip the sprite when drawn.
    */
   public TextureRegion(TextureRegion region, int x, int y, int width, int height) {
+    this.texture = region.texture;
     setRegion(region, x, y, width, height);
   }
 
