@@ -1080,9 +1080,12 @@ public class Cell<T extends Actor> implements Poolable {
    * Reset state so the cell can be reused, setting all constraints to their {@link #defaults()
    * default} values.
    */
+  /**
+   * Reset state so the cell can be reused, setting all constraints to their {@link #defaults()
+   * default} values.
+   */
   public void reset() {
     actor = null;
-    table = null;
     endRow = false;
     cellAboveIndex = -1;
     set(defaults());
