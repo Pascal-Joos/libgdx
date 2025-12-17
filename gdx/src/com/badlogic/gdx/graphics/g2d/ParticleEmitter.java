@@ -405,6 +405,8 @@ public class ParticleEmitter {
         break;
     }
 
+    if (sprite == null) return;
+
     Particle particle = particles[index];
     if (particle == null) {
       particles[index] = particle = newParticle(sprite);
