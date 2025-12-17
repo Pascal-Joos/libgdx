@@ -125,6 +125,12 @@ public class ResourceData<T> implements Json.Serializable {
     public AssetData() {}
 
     public AssetData(@Nullable String filename, Class<T> type) {
+      if (filename == null) {
+        throw new NullPointerException("filename must not be null");
+      }
+      if (type == null) {
+        throw new NullPointerException("type must not be null");
+      }
       this.filename = filename;
       this.type = type;
     }
