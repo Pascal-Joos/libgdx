@@ -90,6 +90,12 @@ public class Timer {
    *
    * @param repeatCount If negative, the task will repeat forever.
    */
+  /**
+   * Schedules a task to occur once after the specified delay and then a number of additional times
+   * at the specified interval.
+   *
+   * @param repeatCount If negative, the task will repeat forever.
+   */
   public Task scheduleTask(Task task, float delaySeconds, float intervalSeconds, int repeatCount) {
     synchronized (threadLock) {
       synchronized (this) {
@@ -99,7 +105,9 @@ public class Timer {
           task.timer = this;
           long timeMillis = System.nanoTime() / 1000000;
           long executeTimeMillis = timeMillis + (long) (delaySeconds * 1000);
-          if (thread.pauseTimeMillis > 0) executeTimeMillis -= timeMillis - thread.pauseTimeMillis;
+          TimerThread localThread = thread;
+          if (localThread != null && localThread.pauseTimeMillis > 0)
+            executeTimeMillis -= timeMillis - localThread.pauseTimeMillis;
           task.executeTimeMillis = executeTimeMillis;
           task.intervalMillis = (long) (intervalSeconds * 1000);
           task.repeatCount = repeatCount;
