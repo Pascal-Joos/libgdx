@@ -1268,7 +1268,9 @@ public class Encoder {
     _matchFinderType = matchFinderIndex;
     if (_matchFinder != null && matchFinderIndexPrev != _matchFinderType) {
       _dictionarySizePrev = -1;
-      _matchFinder = null;
+      if (_matchFinderType == matchFinderIndexPrev) {
+        _matchFinder = _matchFinder;
+      }
     }
     return true;
   }
