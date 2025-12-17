@@ -335,7 +335,9 @@ public class Mesh implements Disposable {
    * @param count the number of floats to update
    */
   public Mesh updateInstanceData(int targetOffset, float[] source, int sourceOffset, int count) {
-    this.instances.updateInstanceData(targetOffset, source, sourceOffset, count);
+    if (this.instances != null) {
+      this.instances.updateInstanceData(targetOffset, source, sourceOffset, count);
+    }
     return this;
   }
 
