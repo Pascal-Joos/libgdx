@@ -372,13 +372,23 @@ public class ModelInstance implements RenderableProvider {
    * a node outside this node tree and that all materials are listed in the {@link #materials}
    * array.
    */
+  /**
+   * Makes sure that each {@link NodePart} of the {@link Node} and its sub-nodes, doesn't reference
+   * a node outside this node tree and that all materials are listed in the {@link #materials}
+   * array.
+   */
   private void invalidate(Node node) {
     for (int i = 0, n = node.parts.size; i < n; ++i) {
       NodePart part = node.parts.get(i);
       ArrayMap<Node, Matrix4> bindPose = part.invBoneBindTransforms;
       if (bindPose != null) {
         for (int j = 0; j < bindPose.size; ++j) {
-          bindPose.keys[j] = getNode(bindPose.keys[j].id);
+          final Node key = bindPose.keys[j];
+          final String keyId = key == null ? null : key.id;
+          final Node resolvedNode = keyId == null ? null : getNode(keyId);
+          if (resolvedNode != null) {
+            bindPose.keys[j] = resolvedNode;
+          }
         }
       }
       if (!materials.contains(part.material, true)) {
