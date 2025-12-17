@@ -1093,6 +1093,10 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Initializer
   void set(@Nullable Cell cell) {
+    if (cell == null) {
+      clear();
+      return;
+    }
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;
