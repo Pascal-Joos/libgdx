@@ -47,11 +47,16 @@ public class Attributes
    *
    * @return The attribute (which can safely be cast) if any, otherwise null
    */
+  /**
+   * Example usage: ((BlendingAttribute)material.get(BlendingAttribute.ID)).sourceFunction;
+   *
+   * @return The attribute (which can safely be cast) if any, otherwise null
+   */
   public final Attribute get(final long type) {
-    if (has(type))
-      for (int i = 0; i < attributes.size; i++)
-        if (attributes.get(i).type == type) return attributes.get(i);
-    return null;
+    if (!has(type)) throw new IllegalStateException("Attribute with specified type not found");
+    for (int i = 0; i < attributes.size; i++)
+      if (attributes.get(i).type == type) return attributes.get(i);
+    throw new IllegalStateException("Attribute with specified type not found");
   }
 
   /**
