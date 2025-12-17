@@ -40,7 +40,9 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
    * Creates an uninitialized NinePatchDrawable. The ninepatch must be {@link #setPatch(NinePatch)
    * set} before use.
    */
-  public NinePatchDrawable() {}
+  public NinePatchDrawable() {
+    this.patch = new NinePatch();
+  }
 
   public NinePatchDrawable(NinePatch patch) {
     setPatch(patch);
