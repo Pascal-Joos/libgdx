@@ -35,7 +35,12 @@ public class Decoder {
   }
 
   public final void ReleaseStream() {
-    Stream = null;
+    if (Stream != null) {
+      try {
+        Stream.close();
+      } catch (IOException e) {
+      }
+    }
   }
 
   public final void Init() throws IOException {
