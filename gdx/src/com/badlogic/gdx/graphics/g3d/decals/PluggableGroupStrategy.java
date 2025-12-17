@@ -29,7 +29,10 @@ public abstract class PluggableGroupStrategy implements GroupStrategy {
 
   @Override
   public void beforeGroup(int group, Array<Decal> contents) {
-    plugs.get(group).beforeGroup(contents);
+    GroupPlug plug = plugs.get(group);
+    if (plug != null) {
+      plug.beforeGroup(contents);
+    }
   }
 
   @Override
