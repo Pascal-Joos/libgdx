@@ -158,7 +158,11 @@ public class PointSpriteParticleBatch
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
 
-      if (colorChannel == null) {
+      if (colorChannel == null
+          || regionChannel == null
+          || positionChannel == null
+          || rotationChannel == null
+          || scaleChannel == null) {
         continue;
       }
 
