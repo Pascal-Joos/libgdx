@@ -259,7 +259,7 @@ public class Model implements Disposable {
   }
 
   protected void convertMesh(ModelMesh modelMesh) {
-    if (modelMesh.vertices == null) {
+    if (modelMesh.vertices == null || modelMesh.attributes == null) {
       return;
     }
     int numIndices = 0;
