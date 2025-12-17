@@ -853,6 +853,9 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getSpaceBottom() {
+    if (spaceBottom == null || actor == null) {
+      throw new IllegalStateException("spaceBottom and actor must be non-null");
+    }
     return spaceBottom.get(actor);
   }
 
