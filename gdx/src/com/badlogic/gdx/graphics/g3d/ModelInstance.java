@@ -200,6 +200,18 @@ public class ModelInstance implements RenderableProvider {
    * @param mergeTransform True to apply the source node transform to the instance transform,
    *     resetting the node transform.
    */
+  /**
+   * @param model The source {@link Model}
+   * @param transform The {@link Matrix4} instance for this ModelInstance to reference or null to
+   *     create a new matrix.
+   * @param nodeId The ID of the {@link Node} within the {@link Model} for the instance to contain
+   * @param recursive True to recursively search the Model's node tree, false to only search for a
+   *     root node
+   * @param parentTransform True to apply the parent's node transform to the instance (only
+   *     applicable if recursive is true).
+   * @param mergeTransform True to apply the source node transform to the instance transform,
+   *     resetting the node transform.
+   */
   public ModelInstance(
       final Model model,
       @Nullable final Matrix4 transform,
@@ -211,6 +223,9 @@ public class ModelInstance implements RenderableProvider {
     this.model = model;
     this.transform = transform == null ? new Matrix4() : transform;
     Node copy, node = model.getNode(nodeId, recursive);
+    if (node == null) {
+      throw new IllegalArgumentException("Node with id '" + nodeId + "' not found in model.");
+    }
     this.nodes.add(copy = node.copy());
     if (mergeTransform) {
       this.transform.mul(parentTransform ? node.globalTransform : node.localTransform);
