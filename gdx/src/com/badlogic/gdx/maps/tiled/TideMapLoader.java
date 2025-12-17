@@ -249,11 +249,15 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
           } else if (name.equals("Null")) {
             x += currentChild.getIntAttribute("Count");
           } else if (name.equals("Static")) {
-            Cell cell = new Cell();
-            cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
-            layer.setCell(x++, y, cell);
+            if (currentTileSet != null) {
+              Cell cell = new Cell();
+              cell.setTile(
+                  currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+              layer.setCell(x++, y, cell);
+            } else {
+              x++;
+            }
           } else if (name.equals("Animated")) {
-            // Create an AnimatedTile
             int interval = currentChild.getInt("Interval");
             Element frames = currentChild.getChildByName("Frames");
             Array<StaticTiledMapTile> frameTiles = new Array<StaticTiledMapTile>();
@@ -266,14 +270,20 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
                 currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
                 firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
               } else if (frameName.equals("Static")) {
-                frameTiles.add(
-                    (StaticTiledMapTile)
-                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                if (currentTileSet != null) {
+                  frameTiles.add(
+                      (StaticTiledMapTile)
+                          currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                }
               }
             }
-            Cell cell = new Cell();
-            cell.setTile(new AnimatedTiledMapTile(interval / 1000f, frameTiles));
-            layer.setCell(x++, y, cell); // TODO: Reuse existing animated tiles
+            if (frameTiles.size > 0) {
+              Cell cell = new Cell();
+              cell.setTile(new AnimatedTiledMapTile(interval / 1000f, frameTiles));
+              layer.setCell(x++, y, cell); // TODO: Reuse existing animated tiles
+            } else {
+              x++;
+            }
           }
         }
       }
