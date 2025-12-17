@@ -627,13 +627,17 @@ public class XmlReader {
      * @param name the name of the child {@link Element}
      * @return the first child having the given name or null, does not recurse
      */
-    public @Null Element getChildByName(String name) {
-      if (children == null) return null;
+    /**
+     * @param name the name of the child {@link Element}
+     * @return the first child having the given name or null, does not recurse
+     */
+    public Element getChildByName(String name) {
+      if (children == null) throw new IllegalStateException("No children available");
       for (int i = 0; i < children.size; i++) {
         Element element = children.get(i);
         if (element.name.equals(name)) return element;
       }
-      return null;
+      throw new IllegalStateException("No child with name: " + name);
     }
 
     public boolean hasChild(String name) {
