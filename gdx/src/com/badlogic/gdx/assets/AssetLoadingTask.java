@@ -151,7 +151,7 @@ class AssetLoadingTask implements AsyncTask<Void> {
       asset =
           asyncLoader.loadSync(
               manager, assetDesc.fileName, resolve(loader, assetDesc), assetDesc.params);
-    else if (loadFuture.isDone()) {
+    else if (loadFuture != null && loadFuture.isDone()) {
       try {
         loadFuture.get();
       } catch (Exception e) {
