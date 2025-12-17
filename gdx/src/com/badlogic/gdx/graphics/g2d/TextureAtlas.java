@@ -106,9 +106,11 @@ public class TextureAtlas implements Disposable {
 
     regions.ensureCapacity(data.regions.size);
     for (Region region : data.regions) {
+      Texture texture = region.page != null ? region.page.texture : null;
+      if (texture == null) continue;
       AtlasRegion atlasRegion =
           new AtlasRegion(
-              region.page.texture,
+              texture,
               region.left,
               region.top, //
               region.rotate ? region.height : region.width, //
