@@ -28,12 +28,13 @@ public class RepeatAction extends DelegateAction {
   private boolean finished;
 
   protected boolean delegate(float delta) {
+    if (action == null) return true;
     if (executedCount == repeatCount) return true;
     if (action.act(delta)) {
       if (finished) return true;
       if (repeatCount > 0) executedCount++;
       if (executedCount == repeatCount) return true;
-      if (action != null) action.restart();
+      action.restart();
     }
     return false;
   }
