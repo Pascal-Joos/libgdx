@@ -72,6 +72,7 @@ public class Json {
   }
 
   public Json(OutputType outputType) {
+    this();
     this.outputType = outputType;
   }
 
