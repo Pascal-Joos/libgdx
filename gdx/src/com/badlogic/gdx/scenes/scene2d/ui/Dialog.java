@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -93,7 +94,8 @@ public class Dialog extends Window {
         new ChangeListener() {
           public void changed(ChangeEvent event, Actor actor) {
             if (!values.containsKey(actor)) return;
-            while (actor.getParent() != buttonTable) actor = actor.getParent();
+            while (Nullability.castToNonnull(actor).getParent() != buttonTable)
+              actor = Nullability.castToNonnull(actor).getParent();
             result(values.get(actor));
             if (!cancelHide) hide();
             cancelHide = false;

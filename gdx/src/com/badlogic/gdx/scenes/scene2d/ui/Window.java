@@ -317,7 +317,7 @@ public class Window extends Table {
   }
 
   @Nullable
-  public @Null Actor hit(float x, float y, boolean touchable) {
+  public @NotNull Actor hit(float x, float y, boolean touchable) {
     if (!isVisible()) return null;
     Actor hit = super.hit(x, y, touchable);
     if (hit == null && isModal && (!touchable || getTouchable() == Touchable.enabled)) return this;
@@ -326,7 +326,8 @@ public class Window extends Table {
     if (y <= height && y >= height - getPadTop() && x >= 0 && x <= getWidth()) {
       // Hit the title bar, don't use the hit child if it is in the Window's table.
       Actor current = hit;
-      while (current.getParent() != this) current = current.getParent();
+      while (current != null && current.getParent() != this) current = current.getParent();
+      if (current == null) return null;
       if (getCell(current) != null) return this;
     }
     return hit;
