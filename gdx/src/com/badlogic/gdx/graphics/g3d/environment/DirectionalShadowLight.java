@@ -27,14 +27,12 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * @author Xoppa
  */
 public class DirectionalShadowLight extends DirectionalLight implements ShadowMap, Disposable {
-  @Nullable protected FrameBuffer fbo;
+  protected FrameBuffer fbo;
   protected Camera cam;
   protected float halfDepth;
   protected float halfHeight;
@@ -81,7 +79,6 @@ public class DirectionalShadowLight extends DirectionalLight implements ShadowMa
   }
 
   public void begin() {
-    if (fbo == null) return;
     final int w = fbo.getWidth();
     final int h = fbo.getHeight();
     fbo.begin();
@@ -94,10 +91,9 @@ public class DirectionalShadowLight extends DirectionalLight implements ShadowMa
 
   public void end() {
     Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
-    if (fbo != null) fbo.end();
+    fbo.end();
   }
 
-  @Nullable
   public FrameBuffer getFrameBuffer() {
     return fbo;
   }
@@ -113,7 +109,7 @@ public class DirectionalShadowLight extends DirectionalLight implements ShadowMa
 
   @Override
   public TextureDescriptor getDepthMap() {
-    if (fbo != null) textureDesc.texture = Nullability.castToNonnull(fbo).getColorBufferTexture();
+    textureDesc.texture = fbo.getColorBufferTexture();
     return textureDesc;
   }
 
