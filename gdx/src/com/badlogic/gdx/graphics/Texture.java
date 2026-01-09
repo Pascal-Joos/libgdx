@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -159,7 +158,7 @@ public class Texture extends GLTexture {
   }
 
   public Texture(@Nullable TextureData data) {
-    this(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture(), Nullability.castToNonnull(data));
+    this(GL20.GL_TEXTURE_2D, Gdx.gl.glGenTexture(), data);
   }
 
   protected Texture(int glTarget, int glHandle, TextureData data) {
