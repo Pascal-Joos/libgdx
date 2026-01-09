@@ -18,7 +18,6 @@ package com.badlogic.gdx.math;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.NumberUtils;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.Serializable;
 import javax.annotation.Nullable;
 
@@ -88,7 +87,7 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 
   @Override
   public Vector2 set(@Nullable Vector2 v) {
-    x = Nullability.castToNonnull(v).x;
+    x = v.x;
     y = v.y;
     return this;
   }
