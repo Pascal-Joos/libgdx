@@ -94,6 +94,7 @@ public class Event implements Poolable {
   }
 
   /** Returns the actor that the event originated from. */
+  @Nullable
   public Actor getTarget() {
     return targetActor;
   }
