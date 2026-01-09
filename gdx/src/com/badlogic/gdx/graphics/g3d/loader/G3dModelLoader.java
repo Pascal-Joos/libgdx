@@ -41,6 +41,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.BaseJsonReader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 public class G3dModelLoader extends ModelLoader<ModelLoader.ModelParameters> {
@@ -104,7 +105,7 @@ public class G3dModelLoader extends ModelLoader<ModelLoader.ModelParameters> {
             throw new GdxRuntimeException("Not id given for mesh part");
           }
           for (ModelMeshPart other : parts) {
-            if (other.id.equals(partId)) {
+            if (Nullability.castToNonnull(other.id).equals(partId)) {
               throw new GdxRuntimeException(
                   "Mesh part with id '" + partId + "' already in defined");
             }
