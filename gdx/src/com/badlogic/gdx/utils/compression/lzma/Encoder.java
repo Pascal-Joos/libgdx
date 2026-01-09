@@ -18,6 +18,7 @@ package com.badlogic.gdx.utils.compression.lzma;
 
 import com.badlogic.gdx.utils.compression.ICodeProgress;
 import com.badlogic.gdx.utils.compression.rangecoder.BitTreeEncoder;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import javax.annotation.Nullable;
 
@@ -296,7 +297,7 @@ public class Encoder {
   ;
 
   Optimal[] _optimum = new Optimal[kNumOpts];
-  com.badlogic.gdx.utils.compression.lz.BinTree _matchFinder = null;
+  @Nullable com.badlogic.gdx.utils.compression.lz.BinTree _matchFinder = null;
   com.badlogic.gdx.utils.compression.rangecoder.Encoder _rangeEncoder =
       new com.badlogic.gdx.utils.compression.rangecoder.Encoder();
 
@@ -410,23 +411,27 @@ public class Encoder {
 
   int ReadMatchDistances() throws java.io.IOException {
     int lenRes = 0;
-    _numDistancePairs = _matchFinder.GetMatches(_matchDistances);
+    if (_matchFinder == null) {
+      return lenRes;
+    }
+    _numDistancePairs = Nullability.castToNonnull(_matchFinder).GetMatches(_matchDistances);
     if (_numDistancePairs > 0) {
       lenRes = _matchDistances[_numDistancePairs - 2];
       if (lenRes == _numFastBytes)
         lenRes +=
-            _matchFinder.GetMatchLen(
-                (int) lenRes - 1,
-                _matchDistances[_numDistancePairs - 1],
-                Base.kMatchMaxLen - lenRes);
+            Nullability.castToNonnull(_matchFinder)
+                .GetMatchLen(
+                    (int) lenRes - 1,
+                    _matchDistances[_numDistancePairs - 1],
+                    Base.kMatchMaxLen - lenRes);
     }
     _additionalOffset++;
     return lenRes;
   }
 
   void MovePos(int num) throws java.io.IOException {
-    if (num > 0) {
-      _matchFinder.Skip(num);
+    if (num > 0 && _matchFinder != null) {
+      Nullability.castToNonnull(_matchFinder).Skip(num);
       _additionalOffset += num;
     }
   }
@@ -525,6 +530,11 @@ public class Encoder {
       _longestMatchWasFound = false;
     }
     numDistancePairs = _numDistancePairs;
+
+    if (_matchFinder == null) {
+      backRes = -1;
+      return 1;
+    }
 
     int numAvailableBytes = _matchFinder.GetNumAvailableBytes() + 1;
     if (numAvailableBytes < 2) {
@@ -988,9 +998,9 @@ public class Encoder {
     outSize[0] = 0;
     finished[0] = true;
 
-    if (_inStream != null) {
-      _matchFinder.SetStream(_inStream);
-      _matchFinder.Init();
+    if (_inStream != null && _matchFinder != null) {
+      Nullability.castToNonnull(_matchFinder).SetStream(_inStream);
+      Nullability.castToNonnull(_matchFinder).Init();
       _needReleaseMFStream = true;
       _inStream = null;
     }
@@ -998,9 +1008,15 @@ public class Encoder {
     if (_finished) return;
     _finished = true;
 
+    if (_matchFinder == null) {
+      Flush((int) nowPos64);
+      return;
+    }
+
     long progressPosValuePrev = nowPos64;
     if (nowPos64 == 0) {
-      if (_matchFinder.GetNumAvailableBytes() == 0) {
+      if (_matchFinder == null
+          || Nullability.castToNonnull(_matchFinder).GetNumAvailableBytes() == 0) {
         Flush((int) nowPos64);
         return;
       }
@@ -1009,13 +1025,14 @@ public class Encoder {
       int posState = (int) (nowPos64) & _posStateMask;
       _rangeEncoder.Encode(_isMatch, (_state << Base.kNumPosStatesBitsMax) + posState, 0);
       _state = Base.StateUpdateChar(_state);
-      byte curByte = _matchFinder.GetIndexByte(0 - _additionalOffset);
+      byte curByte = Nullability.castToNonnull(_matchFinder).GetIndexByte(0 - _additionalOffset);
       _literalEncoder.GetSubCoder((int) (nowPos64), _previousByte).Encode(_rangeEncoder, curByte);
       _previousByte = curByte;
       _additionalOffset--;
       nowPos64++;
     }
-    if (_matchFinder.GetNumAvailableBytes() == 0) {
+    if (_matchFinder == null
+        || Nullability.castToNonnull(_matchFinder).GetNumAvailableBytes() == 0) {
       Flush((int) nowPos64);
       return;
     }
@@ -1027,12 +1044,14 @@ public class Encoder {
       int complexState = (_state << Base.kNumPosStatesBitsMax) + posState;
       if (len == 1 && pos == -1) {
         _rangeEncoder.Encode(_isMatch, complexState, 0);
-        byte curByte = _matchFinder.GetIndexByte((int) (0 - _additionalOffset));
+        byte curByte =
+            Nullability.castToNonnull(_matchFinder).GetIndexByte((int) (0 - _additionalOffset));
         LiteralEncoder.Encoder2 subCoder =
             _literalEncoder.GetSubCoder((int) nowPos64, _previousByte);
         if (!Base.StateIsCharState(_state)) {
           byte matchByte =
-              _matchFinder.GetIndexByte((int) (0 - _repDistances[0] - 1 - _additionalOffset));
+              Nullability.castToNonnull(_matchFinder)
+                  .GetIndexByte((int) (0 - _repDistances[0] - 1 - _additionalOffset));
           subCoder.EncodeMatched(_rangeEncoder, matchByte, curByte);
         } else subCoder.Encode(_rangeEncoder, curByte);
         _previousByte = curByte;
@@ -1093,7 +1112,8 @@ public class Encoder {
           _repDistances[0] = distance;
           _matchPriceCount++;
         }
-        _previousByte = _matchFinder.GetIndexByte(len - 1 - _additionalOffset);
+        _previousByte =
+            Nullability.castToNonnull(_matchFinder).GetIndexByte(len - 1 - _additionalOffset);
       }
       _additionalOffset -= len;
       nowPos64 += len;
@@ -1103,7 +1123,8 @@ public class Encoder {
         if (_alignPriceCount >= Base.kAlignTableSize) FillAlignPrices();
         inSize[0] = nowPos64;
         outSize[0] = _rangeEncoder.GetProcessedSizeAdd();
-        if (_matchFinder.GetNumAvailableBytes() == 0) {
+        if (_matchFinder == null
+            || Nullability.castToNonnull(_matchFinder).GetNumAvailableBytes() == 0) {
           Flush((int) nowPos64);
           return;
         }
