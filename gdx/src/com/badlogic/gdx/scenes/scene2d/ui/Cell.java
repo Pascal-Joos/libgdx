@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -43,7 +42,7 @@ public class Cell<T extends Actor> implements Poolable {
   float actorX, actorY;
   float actorWidth, actorHeight;
 
-  @Nullable private Table table;
+  private Table table;
   boolean endRow;
   int column, row;
   int cellAboveIndex;
@@ -67,7 +66,7 @@ public class Cell<T extends Actor> implements Poolable {
     if (actor != newActor) {
       if (actor != null && actor.getParent() == table) actor.remove();
       actor = newActor;
-      if (newActor != null && table != null) table.addActor(newActor);
+      if (newActor != null) table.addActor(newActor);
     }
     return (Cell<A>) this;
   }
@@ -972,10 +971,9 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public void row() {
-    if (table != null) Nullability.castToNonnull(table).row();
+    table.row();
   }
 
-  @Nullable
   public Table getTable() {
     return table;
   }
