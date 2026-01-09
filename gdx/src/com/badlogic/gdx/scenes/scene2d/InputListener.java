@@ -18,7 +18,6 @@ package com.badlogic.gdx.scenes.scene2d;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -64,7 +63,7 @@ public class InputListener implements EventListener {
         return keyTyped(event, event.getCharacter());
     }
 
-    event.toCoordinates(Nullability.castToNonnull(event.getListenerActor()), tmpCoords);
+    event.toCoordinates(event.getListenerActor(), tmpCoords);
 
     switch (event.getType()) {
       case touchDown:
@@ -75,7 +74,7 @@ public class InputListener implements EventListener {
               .getStage()
               .addTouchFocus(
                   this,
-                  Nullability.castToNonnull(event.getListenerActor()),
+                  event.getListenerActor(),
                   event.getTarget(),
                   event.getPointer(),
                   event.getButton());

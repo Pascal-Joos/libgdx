@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -114,8 +113,7 @@ public class Tooltip<T extends Actor> extends InputListener {
 
   private void setContainerPosition(Actor actor, float x, float y) {
     this.targetActor = actor;
-    Actor nonnullActor = Nullability.castToNonnull(actor);
-    Stage stage = nonnullActor.getStage();
+    Stage stage = actor.getStage();
     if (stage == null) return;
 
     container.setSize(manager.maxWidth, Integer.MAX_VALUE);
@@ -125,10 +123,8 @@ public class Tooltip<T extends Actor> extends InputListener {
 
     float offsetX = manager.offsetX, offsetY = manager.offsetY, dist = manager.edgeDistance;
     Vector2 point =
-        nonnullActor.localToStageCoordinates(
-            tmp.set(x + offsetX, y - offsetY - container.getHeight()));
-    if (point.y < dist)
-      point = nonnullActor.localToStageCoordinates(tmp.set(x + offsetX, y + offsetY));
+        actor.localToStageCoordinates(tmp.set(x + offsetX, y - offsetY - container.getHeight()));
+    if (point.y < dist) point = actor.localToStageCoordinates(tmp.set(x + offsetX, y + offsetY));
     if (point.x < dist) point.x = dist;
     if (point.x + container.getWidth() > stage.getWidth() - dist)
       point.x = stage.getWidth() - dist - container.getWidth();
@@ -136,9 +132,7 @@ public class Tooltip<T extends Actor> extends InputListener {
       point.y = stage.getHeight() - dist - container.getHeight();
     container.setPosition(point.x, point.y);
 
-    point =
-        nonnullActor.localToStageCoordinates(
-            tmp.set(nonnullActor.getWidth() / 2, nonnullActor.getHeight() / 2));
+    point = actor.localToStageCoordinates(tmp.set(actor.getWidth() / 2, actor.getHeight() / 2));
     point.sub(container.getX(), container.getY());
     container.setOrigin(point.x, point.y);
   }
@@ -149,7 +143,7 @@ public class Tooltip<T extends Actor> extends InputListener {
     if (touchIndependent && Gdx.input.isTouched()) return;
     Actor actor = event.getListenerActor();
     if (fromActor != null && fromActor.isDescendantOf(actor)) return;
-    setContainerPosition(Nullability.castToNonnull(actor), x, y);
+    setContainerPosition(actor, x, y);
     manager.enter(this);
   }
 
