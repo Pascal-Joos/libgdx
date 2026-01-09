@@ -193,7 +193,6 @@ public class Button extends Table implements Disableable {
    * Returns the button's style. Modifying the returned style may not have an effect until {@link
    * #setStyle(ButtonStyle)} is called.
    */
-  @Nullable
   public ButtonStyle getStyle() {
     return style;
   }

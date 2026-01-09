@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -35,7 +34,7 @@ import javax.annotation.Nullable;
 public class CheckBox extends TextButton {
   private Image image;
   private Cell imageCell;
-  @Nullable private CheckBoxStyle style;
+  private CheckBoxStyle style;
 
   public CheckBox(@Null String text, Skin skin) {
     this(text, skin.get(CheckBoxStyle.class));
@@ -75,7 +74,6 @@ public class CheckBox extends TextButton {
    * Returns the checkbox's style. Modifying the returned style may not have an effect until {@link
    * #setStyle(ButtonStyle)} is called.
    */
-  @Nullable
   public CheckBoxStyle getStyle() {
     return style;
   }
@@ -86,21 +84,16 @@ public class CheckBox extends TextButton {
   }
 
   @Nullable
-  protected Drawable getImageDrawable() {
+  protected @Null Drawable getImageDrawable() {
     if (isDisabled()) {
-      if (isChecked && Nullability.castToNonnull(style).checkboxOnDisabled != null)
-        return Nullability.castToNonnull(style).checkboxOnDisabled;
-      return style == null ? null : Nullability.castToNonnull(style).checkboxOffDisabled;
+      if (isChecked && style.checkboxOnDisabled != null) return style.checkboxOnDisabled;
+      return style.checkboxOffDisabled;
     }
     boolean over = isOver() && !isDisabled();
-    if (style == null) return null;
-    if (isChecked && Nullability.castToNonnull(style).checkboxOn != null)
-      return over && Nullability.castToNonnull(style).checkboxOnOver != null
-          ? Nullability.castToNonnull(style).checkboxOnOver
-          : Nullability.castToNonnull(style).checkboxOn;
-    if (over && Nullability.castToNonnull(style).checkboxOver != null)
-      return Nullability.castToNonnull(style).checkboxOver;
-    return Nullability.castToNonnull(style).checkboxOff;
+    if (isChecked && style.checkboxOn != null)
+      return over && style.checkboxOnOver != null ? style.checkboxOnOver : style.checkboxOn;
+    if (over && style.checkboxOver != null) return style.checkboxOver;
+    return style.checkboxOff;
   }
 
   public Image getImage() {

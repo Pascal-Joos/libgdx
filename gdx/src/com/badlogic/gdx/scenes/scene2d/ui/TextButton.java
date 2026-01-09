@@ -73,7 +73,6 @@ public class TextButton extends Button {
     }
   }
 
-  @Nullable
   public TextButtonStyle getStyle() {
     return style;
   }
