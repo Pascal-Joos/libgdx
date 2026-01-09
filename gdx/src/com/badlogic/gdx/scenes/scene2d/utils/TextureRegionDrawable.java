@@ -23,8 +23,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * Drawable for a {@link TextureRegion}.
@@ -32,7 +30,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class TextureRegionDrawable extends BaseDrawable implements TransformDrawable {
-  @Nullable private TextureRegion region;
+  private TextureRegion region;
 
   /** Creates an uninitialized TextureRegionDrawable. The texture region must be set before use. */
   public TextureRegionDrawable() {}
@@ -47,11 +45,11 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
 
   public TextureRegionDrawable(TextureRegionDrawable drawable) {
     super(drawable);
-    setRegion(Nullability.castToNonnull(drawable.region));
+    setRegion(drawable.region);
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
-    batch.draw(Nullability.castToNonnull(region), x, y, width, height);
+    batch.draw(region, x, y, width, height);
   }
 
   public void draw(
@@ -65,17 +63,7 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
       float scaleX,
       float scaleY,
       float rotation) {
-    batch.draw(
-        Nullability.castToNonnull(region),
-        x,
-        y,
-        originX,
-        originY,
-        width,
-        height,
-        scaleX,
-        scaleY,
-        rotation);
+    batch.draw(region, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
   }
 
   public void setRegion(TextureRegion region) {
@@ -86,7 +74,6 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
     }
   }
 
-  @Nullable
   public TextureRegion getRegion() {
     return region;
   }
@@ -95,7 +82,7 @@ public class TextureRegionDrawable extends BaseDrawable implements TransformDraw
   public Drawable tint(Color tint) {
     Sprite sprite;
     if (region instanceof AtlasRegion) sprite = new AtlasSprite((AtlasRegion) region);
-    else sprite = new Sprite(Nullability.castToNonnull(region));
+    else sprite = new Sprite(region);
     sprite.setColor(tint);
     sprite.setSize(getMinWidth(), getMinHeight());
     SpriteDrawable drawable = new SpriteDrawable(sprite);
