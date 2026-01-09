@@ -213,7 +213,7 @@ public class JsonWriter extends Writer {
       return '"' + buffer.replace('"', "\\\"").toString() + '"';
     }
 
-    public String quoteName(String value) {
+    public String quoteName(@Nullable String value) {
       StringBuilder buffer = new StringBuilder(value);
       buffer.replace('\\', "\\\\").replace('\r', "\\r").replace('\n', "\\n").replace('\t', "\\t");
       switch (this) {

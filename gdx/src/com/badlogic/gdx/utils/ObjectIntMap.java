@@ -159,7 +159,7 @@ public class ObjectIntMap<K> implements Iterable<ObjectIntMap.Entry<K>> {
     }
   }
 
-  public void put(K key, int value) {
+  public void put(@Nullable K key, int value) {
     int i = locateKey(key);
     if (i >= 0) { // Existing key was found.
       valueTable[i] = value;
