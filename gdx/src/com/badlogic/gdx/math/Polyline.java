@@ -50,6 +50,7 @@ public class Polyline implements Shape2D {
   }
 
   /** Returns vertices scaled, rotated, and offset by the polygon position. */
+  @Nullable
   public float[] getTransformedVertices() {
     if (!dirty) return worldVertices;
     dirty = false;
@@ -222,6 +223,7 @@ public class Polyline implements Shape2D {
    */
   public Rectangle getBoundingRectangle() {
     float[] vertices = getTransformedVertices();
+    if (vertices == null) return bounds == null ? new Rectangle() : bounds;
 
     float minX = vertices[0];
     float minY = vertices[1];
