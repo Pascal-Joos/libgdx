@@ -457,7 +457,8 @@ public class XmlReader {
   }
 
   protected void attribute(@Nullable String name, @Nullable String value) {
-    current.setAttribute(name, value);
+    Element parent = current;
+    if (parent != null) parent.setAttribute(name, value);
   }
 
   @Nullable
@@ -473,8 +474,11 @@ public class XmlReader {
   }
 
   protected void text(@Nullable String text) {
-    String existing = current.getText();
-    current.setText(existing != null ? existing + text : text);
+    Element parent = current;
+    if (parent != null) {
+      String existing = parent.getText();
+      parent.setText(existing != null ? existing + text : text);
+    }
   }
 
   protected void close() {
