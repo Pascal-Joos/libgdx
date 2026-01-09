@@ -22,7 +22,6 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -403,16 +402,11 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
           tiledMapTileMapObject.getProperties().put("gid", id);
           tiledMapTileMapObject.setX(x);
           tiledMapTileMapObject.setY(flipY ? y : y - height);
-          float objectWidth =
-              element.getFloatAttribute(
-                  "width", Nullability.castToNonnull(textureRegion).getRegionWidth());
-          float objectHeight =
-              element.getFloatAttribute(
-                  "height", Nullability.castToNonnull(textureRegion).getRegionHeight());
-          tiledMapTileMapObject.setScaleX(
-              scaleX * (objectWidth / Nullability.castToNonnull(textureRegion).getRegionWidth()));
+          float objectWidth = element.getFloatAttribute("width", textureRegion.getRegionWidth());
+          float objectHeight = element.getFloatAttribute("height", textureRegion.getRegionHeight());
+          tiledMapTileMapObject.setScaleX(scaleX * (objectWidth / textureRegion.getRegionWidth()));
           tiledMapTileMapObject.setScaleY(
-              scaleY * (objectHeight / Nullability.castToNonnull(textureRegion).getRegionHeight()));
+              scaleY * (objectHeight / textureRegion.getRegionHeight()));
           tiledMapTileMapObject.setRotation(element.getFloatAttribute("rotation", 0));
           object = tiledMapTileMapObject;
         } else {
