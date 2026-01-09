@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -31,7 +30,7 @@ public class Cell<T extends Actor> implements Poolable {
   Value minWidth, minHeight;
   Value prefWidth, prefHeight;
   Value maxWidth, maxHeight;
-  @Nullable Value spaceTop, spaceLeft, spaceBottom, spaceRight;
+  Value spaceTop, spaceLeft, spaceBottom, spaceRight;
   Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
@@ -814,56 +813,45 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getSpaceTopValue() {
     return spaceTop;
   }
 
   public float getSpaceTop() {
-    if (actor == null) throw new IllegalStateException("actor cannot be null.");
-    if (spaceTop == null) throw new IllegalStateException("spaceTop cannot be null.");
-    return Nullability.castToNonnull(spaceTop).get(actor);
+    return spaceTop.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getSpaceLeftValue() {
     return spaceLeft;
   }
 
   public float getSpaceLeft() {
-    Value value = spaceLeft;
-    if (value == null) value = Value.zero;
-    Actor a = actor;
-    if (a == null) a = Nullability.castToNonnull(this.actor);
-    return value.get(a);
+    return spaceLeft.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getSpaceBottomValue() {
     return spaceBottom;
   }
 
   public float getSpaceBottom() {
-    return Nullability.castToNonnull(spaceBottom).get(Nullability.castToNonnull(actor));
+    return spaceBottom.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getSpaceRightValue() {
     return spaceRight;
   }
 
   public float getSpaceRight() {
-    return Nullability.castToNonnull(Nullability.castToNonnull(spaceRight))
-        .get(Nullability.castToNonnull(actor));
+    return spaceRight.get(actor);
   }
 
   /**
@@ -1029,8 +1017,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   @Initializer
-  void set(@Nullable @Null Cell cell) {
-    if (cell == null) return;
+  void set(@Nullable Cell cell) {
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;

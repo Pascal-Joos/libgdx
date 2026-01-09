@@ -33,7 +33,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -883,7 +882,7 @@ public class Table extends WidgetGroup {
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
-      Actor a = Nullability.castToNonnull(c.actor);
+      Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -892,40 +891,22 @@ public class Table extends WidgetGroup {
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
-      float spaceLeftValue = Nullability.castToNonnull(c.spaceLeft).get(a);
       c.computedPadLeft =
-          Nullability.castToNonnull(c.padLeft).get(a)
-              + (column == 0 ? 0 : Math.max(0, spaceLeftValue - spaceRightLast));
-      c.computedPadTop = Nullability.castToNonnull(c.padTop).get(a);
+          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+      c.computedPadTop = c.padTop.get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
-        Actor aboveActor = Nullability.castToNonnull(above.actor);
-        c.computedPadTop +=
-            Math.max(
-                0,
-                Nullability.castToNonnull(c.spaceTop).get(a)
-                    - Nullability.castToNonnull(Nullability.castToNonnull(above.spaceBottom))
-                        .get(aboveActor));
+        c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
       }
-      float spaceRight = Nullability.castToNonnull(c.spaceRight).get(a);
-      c.computedPadRight =
-          Nullability.castToNonnull(c.padRight).get(a)
-              + ((column + colspan) == columns ? 0 : spaceRight);
-      c.computedPadBottom =
-          Nullability.castToNonnull(c.padBottom).get(a)
-              + (row == rows - 1
-                  ? 0
-                  : Nullability.castToNonnull(c.spaceBottom)
-                      .get(Nullability.castToNonnull(c.actor)));
+      float spaceRight = c.spaceRight.get(a);
+      c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
+      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
-      float prefWidth = Nullability.castToNonnull(c.prefWidth).get(a),
-          prefHeight = Nullability.castToNonnull(c.prefHeight).get(a);
-      float minWidth = Nullability.castToNonnull(c.minWidth).get(a),
-          minHeight = Nullability.castToNonnull(c.minHeight).get(a);
-      float maxWidth = Nullability.castToNonnull(c.maxWidth).get(a),
-          maxHeight = Nullability.castToNonnull(c.maxHeight).get(a);
+      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
+      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
@@ -1001,10 +982,10 @@ public class Table extends WidgetGroup {
       if (colspan == 1) continue;
       int column = c.column;
 
-      Actor a = Nullability.castToNonnull(c.actor);
-      float minWidth = Nullability.castToNonnull(c.minWidth).get(a),
-          prefWidth = Nullability.castToNonnull(c.prefWidth).get(a),
-          maxWidth = Nullability.castToNonnull(c.maxWidth).get(a);
+      Actor a = c.actor;
+      float minWidth = c.minWidth.get(a),
+          prefWidth = c.prefWidth.get(a),
+          maxWidth = c.maxWidth.get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
       if (round) {
