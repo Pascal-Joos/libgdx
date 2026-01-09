@@ -43,6 +43,7 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -422,6 +423,14 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
+      if (scaleChannel == null
+          || regionChannel == null
+          || positionChannel == null
+          || colorChannel == null
+          || rotationChannel == null) {
+        continue;
+      }
+      positionChannel = Nullability.castToNonnull(positionChannel);
       for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
         int baseOffset = particlesOffset[tp] * currentVertexSize * 4;
         float scale = scaleChannel.data[p * scaleChannel.strideSize];
@@ -565,6 +574,9 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   private void fillVerticesToViewPointCPU(int[] particlesOffset) {
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
+      if (data.positionChannel == null) {
+        continue;
+      }
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
@@ -575,12 +587,19 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
         int baseOffset = particlesOffset[tp] * currentVertexSize * 4;
         float scale = scaleChannel.data[p * scaleChannel.strideSize];
         int regionOffset = p * regionChannel.strideSize;
-        int positionOffset = p * positionChannel.strideSize;
+        int positionOffset = p * Nullability.castToNonnull(positionChannel).strideSize;
         int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
-        float px = positionChannel.data[positionOffset + ParticleChannels.XOffset],
-            py = positionChannel.data[positionOffset + ParticleChannels.YOffset],
-            pz = positionChannel.data[positionOffset + ParticleChannels.ZOffset];
+        float
+            px =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.XOffset],
+            py =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.YOffset],
+            pz =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.ZOffset];
         float u = regionChannel.data[regionOffset + ParticleChannels.UOffset];
         float v = regionChannel.data[regionOffset + ParticleChannels.VOffset];
         float u2 = regionChannel.data[regionOffset + ParticleChannels.U2Offset];
@@ -722,16 +741,31 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
 
+      if (scaleChannel == null
+          || regionChannel == null
+          || positionChannel == null
+          || colorChannel == null
+          || rotationChannel == null) {
+        continue;
+      }
+
       for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
         int baseOffset = particlesOffset[tp] * currentVertexSize * 4;
         float scale = scaleChannel.data[p * scaleChannel.strideSize];
         int regionOffset = p * regionChannel.strideSize;
-        int positionOffset = p * positionChannel.strideSize;
+        int positionOffset = p * Nullability.castToNonnull(positionChannel).strideSize;
         int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
-        float px = positionChannel.data[positionOffset + ParticleChannels.XOffset],
-            py = positionChannel.data[positionOffset + ParticleChannels.YOffset],
-            pz = positionChannel.data[positionOffset + ParticleChannels.ZOffset];
+        float
+            px =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.XOffset],
+            py =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.YOffset],
+            pz =
+                Nullability.castToNonnull(positionChannel)
+                    .data[positionOffset + ParticleChannels.ZOffset];
         float u = regionChannel.data[regionOffset + ParticleChannels.UOffset];
         float v = regionChannel.data[regionOffset + ParticleChannels.VOffset];
         float u2 = regionChannel.data[regionOffset + ParticleChannels.U2Offset];

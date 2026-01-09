@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleChannels;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleControllerComponent;
 import com.badlogic.gdx.graphics.g3d.particles.batches.ModelInstanceParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.batches.ParticleBatch;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -64,9 +65,10 @@ public class ModelInstanceRenderer
 
   @Override
   public void update() {
+    if (renderData.positionChannel == null) return;
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
-        ++i, positionOffset += renderData.positionChannel.strideSize) {
+        ++i, positionOffset += Nullability.castToNonnull(renderData.positionChannel).strideSize) {
       ModelInstance instance = renderData.modelInstanceChannel.data[i];
       float scale = hasScale ? renderData.scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
@@ -79,9 +81,12 @@ public class ModelInstanceRenderer
       }
 
       instance.transform.set(
-          renderData.positionChannel.data[positionOffset + ParticleChannels.XOffset],
-          renderData.positionChannel.data[positionOffset + ParticleChannels.YOffset],
-          renderData.positionChannel.data[positionOffset + ParticleChannels.ZOffset],
+          Nullability.castToNonnull(renderData.positionChannel)
+              .data[positionOffset + ParticleChannels.XOffset],
+          Nullability.castToNonnull(renderData.positionChannel)
+              .data[positionOffset + ParticleChannels.YOffset],
+          Nullability.castToNonnull(renderData.positionChannel)
+              .data[positionOffset + ParticleChannels.ZOffset],
           qx,
           qy,
           qz,
