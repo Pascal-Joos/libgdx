@@ -209,7 +209,9 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
         buffer.put(GL30.GL_COLOR_ATTACHMENT0 + i);
       }
       ((Buffer) buffer).position(0);
-      Gdx.gl30.glDrawBuffers(colorTextureCounter, buffer);
+      if (Gdx.gl30 != null) {
+        Gdx.gl30.glDrawBuffers(colorTextureCounter, buffer);
+      }
     } else {
       attachFrameBufferColorTexture(textureAttachments.first());
     }

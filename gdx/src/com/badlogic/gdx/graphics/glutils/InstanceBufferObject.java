@@ -196,6 +196,7 @@ public class InstanceBufferObject implements InstanceData {
     }
 
     final int numAttributes = attributes.size();
+    final GL30 gl30 = Gdx.gl30;
     if (locations == null) {
       for (int i = 0; i < numAttributes; i++) {
         final VertexAttribute attribute = attributes.get(i);
@@ -211,7 +212,7 @@ public class InstanceBufferObject implements InstanceData {
             attribute.normalized,
             attributes.vertexSize,
             attribute.offset);
-        Gdx.gl30.glVertexAttribDivisor(location + unitOffset, 1);
+        if (gl30 != null) gl30.glVertexAttribDivisor(location + unitOffset, 1);
       }
 
     } else {
@@ -229,7 +230,7 @@ public class InstanceBufferObject implements InstanceData {
             attribute.normalized,
             attributes.vertexSize,
             attribute.offset);
-        Gdx.gl30.glVertexAttribDivisor(location + unitOffset, 1);
+        if (gl30 != null) gl30.glVertexAttribDivisor(location + unitOffset, 1);
       }
     }
     isBound = true;

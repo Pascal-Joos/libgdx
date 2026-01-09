@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.IntArray;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -153,13 +154,14 @@ public class VertexBufferObjectWithVAO implements VertexData {
   @Override
   public void bind(ShaderProgram shader, @Nullable int[] locations) {
     GL30 gl = Gdx.gl30;
+    if (gl == null) return;
 
-    gl.glBindVertexArray(vaoHandle);
+    Nullability.castToNonnull(gl).glBindVertexArray(vaoHandle);
 
     bindAttributes(shader, locations);
 
     // if our data has changed upload it:
-    bindData(gl);
+    bindData(Nullability.castToNonnull(gl));
 
     isBound = true;
   }
@@ -249,7 +251,9 @@ public class VertexBufferObjectWithVAO implements VertexData {
   @Override
   public void unbind(final ShaderProgram shader, @Nullable final int[] locations) {
     GL30 gl = Gdx.gl30;
-    gl.glBindVertexArray(0);
+    if (gl != null) {
+      Nullability.castToNonnull(gl).glBindVertexArray(0);
+    }
     isBound = false;
   }
 
@@ -259,7 +263,10 @@ public class VertexBufferObjectWithVAO implements VertexData {
    */
   @Override
   public void invalidate() {
-    bufferHandle = Gdx.gl30.glGenBuffer();
+    if (Gdx.gl30 == null)
+      throw new GdxRuntimeException(
+          "VertexBufferObjectWithVAO requires a device running with GLES 3.0 compatibilty");
+    bufferHandle = Nullability.castToNonnull(Gdx.gl30).glGenBuffer();
     createVAO();
     isDirty = true;
   }
@@ -267,10 +274,11 @@ public class VertexBufferObjectWithVAO implements VertexData {
   /** Disposes of all resources this VertexBufferObject uses. */
   @Override
   public void dispose() {
+    if (Gdx.gl30 == null) return;
     GL30 gl = Gdx.gl30;
 
-    gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
-    gl.glDeleteBuffer(bufferHandle);
+    Nullability.castToNonnull(gl).glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
+    Nullability.castToNonnull(gl).glDeleteBuffer(bufferHandle);
     bufferHandle = 0;
     if (ownsBuffer) {
       BufferUtils.disposeUnsafeByteBuffer(byteBuffer);
@@ -279,17 +287,20 @@ public class VertexBufferObjectWithVAO implements VertexData {
   }
 
   private void createVAO() {
+    if (Gdx.gl30 == null)
+      throw new GdxRuntimeException(
+          "createVAO requires a device running with GLES 3.0 compatibilty");
     ((Buffer) tmpHandle).clear();
-    Gdx.gl30.glGenVertexArrays(1, tmpHandle);
+    Nullability.castToNonnull(Gdx.gl30).glGenVertexArrays(1, tmpHandle);
     vaoHandle = tmpHandle.get();
   }
 
   private void deleteVAO() {
-    if (vaoHandle != -1) {
+    if (vaoHandle != -1 && Gdx.gl30 != null) {
       ((Buffer) tmpHandle).clear();
       tmpHandle.put(vaoHandle);
       ((Buffer) tmpHandle).flip();
-      Gdx.gl30.glDeleteVertexArrays(1, tmpHandle);
+      Nullability.castToNonnull(Gdx.gl30).glDeleteVertexArrays(1, tmpHandle);
       vaoHandle = -1;
     }
   }

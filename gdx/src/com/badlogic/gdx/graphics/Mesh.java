@@ -39,6 +39,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -767,14 +768,24 @@ public class Mesh implements Disposable {
         }
 
         if (isInstanced && numInstances > 0) {
-          Gdx.gl30.glDrawElementsInstanced(
-              primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2, numInstances);
+          if (Gdx.gl30 != null) {
+            Nullability.castToNonnull(Gdx.gl30)
+                .glDrawElementsInstanced(
+                    primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2, numInstances);
+          } else {
+            Gdx.gl20.glDrawElements(primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2);
+          }
         } else {
           Gdx.gl20.glDrawElements(primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2);
         }
       } else {
         if (isInstanced && numInstances > 0) {
-          Gdx.gl30.glDrawArraysInstanced(primitiveType, offset, count, numInstances);
+          if (Gdx.gl30 != null) {
+            Nullability.castToNonnull(Gdx.gl30)
+                .glDrawArraysInstanced(primitiveType, offset, count, numInstances);
+          } else {
+            Gdx.gl20.glDrawArrays(primitiveType, offset, count);
+          }
         } else {
           Gdx.gl20.glDrawArrays(primitiveType, offset, count);
         }
