@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -176,15 +177,17 @@ public class Window extends Table {
             if ((edge & Align.right) != 0) {
               float amountX = x - lastX - width;
               if (width + amountX < minWidth) amountX = minWidth - width;
-              if (clampPosition && windowX + width + amountX > stage.getWidth())
-                amountX = stage.getWidth() - windowX - width;
+              if (clampPosition
+                  && windowX + width + amountX > Nullability.castToNonnull(stage).getWidth())
+                amountX = Nullability.castToNonnull(stage).getWidth() - windowX - width;
               width += amountX;
             }
             if ((edge & Align.top) != 0) {
               float amountY = y - lastY - height;
               if (height + amountY < minHeight) amountY = minHeight - height;
-              if (clampPosition && windowY + height + amountY > stage.getHeight())
-                amountY = stage.getHeight() - windowY - height;
+              if (clampPosition
+                  && windowY + height + amountY > Nullability.castToNonnull(stage).getHeight())
+                amountY = Nullability.castToNonnull(stage).getHeight() - windowY - height;
               height += amountY;
             }
             setBounds(
