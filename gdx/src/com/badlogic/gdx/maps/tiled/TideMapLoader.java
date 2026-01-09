@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import javax.annotation.Nullable;
@@ -250,7 +251,9 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
             x += currentChild.getIntAttribute("Count");
           } else if (name.equals("Static")) {
             Cell cell = new Cell();
-            cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+            cell.setTile(
+                Nullability.castToNonnull(currentTileSet)
+                    .getTile(firstgid + currentChild.getIntAttribute("Index")));
             layer.setCell(x++, y, cell);
           } else if (name.equals("Animated")) {
             // Create an AnimatedTile
@@ -268,7 +271,8 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
               } else if (frameName.equals("Static")) {
                 frameTiles.add(
                     (StaticTiledMapTile)
-                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+                        Nullability.castToNonnull(currentTileSet)
+                            .getTile(firstgid + frame.getIntAttribute("Index")));
               }
             }
             Cell cell = new Cell();
