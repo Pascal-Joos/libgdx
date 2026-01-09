@@ -18,8 +18,10 @@ package com.badlogic.gdx.utils;
 
 import static com.badlogic.gdx.utils.ObjectSet.tableSize;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import javax.annotation.Nullable;
 
 /**
  * An unordered set where the items are unboxed ints. No allocation is done except when growing the
@@ -72,7 +74,7 @@ public class IntSet {
    */
   protected int mask;
 
-  private transient IntSetIterator iterator1, iterator2;
+  @Nullable private transient IntSetIterator iterator1, iterator2;
 
   /** Creates a new set with an initial capacity of 51 and a load factor of 0.8. */
   public IntSet() {
@@ -372,6 +374,7 @@ public class IntSet {
    * each time this method is called. Use the {@link IntSetIterator} constructor for nested or
    * multithreaded iteration.
    */
+  @SuppressWarnings("NullAway")
   public IntSetIterator iterator() {
     if (Collections.allocateIterators) return new IntSetIterator(this);
     if (iterator1 == null) {
@@ -381,11 +384,11 @@ public class IntSet {
     if (!iterator1.valid) {
       iterator1.reset();
       iterator1.valid = true;
-      iterator2.valid = false;
+      Nullability.castToNonnull(iterator2).valid = false;
       return iterator1;
     }
-    iterator2.reset();
-    iterator2.valid = true;
+    Nullability.castToNonnull(iterator2).reset();
+    Nullability.castToNonnull(iterator2).valid = true;
     iterator1.valid = false;
     return iterator2;
   }
