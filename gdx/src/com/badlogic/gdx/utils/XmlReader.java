@@ -551,6 +551,7 @@ public class XmlReader {
       children.add(element);
     }
 
+    @Nullable
     public String getText() {
       return text;
     }
