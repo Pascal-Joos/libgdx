@@ -24,8 +24,6 @@ import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FlushablePool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * RenderableShapeBuilder builds various properties of a renderable.
@@ -57,7 +55,7 @@ public class RenderableShapeBuilder extends BaseShapeBuilder {
   }
 
   private static short[] indices;
-  @Nullable private static float[] vertices;
+  private static float[] vertices;
   private static final RenderablePool renderablesPool = new RenderablePool();
   private static final Array<Renderable> renderables = new Array<Renderable>();
   private static final int FLOAT_BYTES = 4;
@@ -169,43 +167,39 @@ public class RenderableShapeBuilder extends BaseShapeBuilder {
 
     ensureVerticesCapacity(verticesQuantity * attributesSize);
     mesh.getVertices(
-        verticesOffset * attributesSize,
-        verticesQuantity * attributesSize,
-        Nullability.castToNonnull(vertices),
-        0);
+        verticesOffset * attributesSize, verticesQuantity * attributesSize, vertices, 0);
 
-    float[] nonnullVertices = Nullability.castToNonnull(vertices);
     for (int i = verticesOffset; i < verticesQuantity; i++) {
       int id = i * attributesSize;
 
       // Vertex position
       tmpV0.set(
-          Nullability.castToNonnull(vertices)[id + positionOffset],
-          Nullability.castToNonnull(vertices)[id + positionOffset + 1],
-          Nullability.castToNonnull(vertices)[id + positionOffset + 2]);
+          vertices[id + positionOffset],
+          vertices[id + positionOffset + 1],
+          vertices[id + positionOffset + 2]);
 
       // Vertex normal, tangent, binormal
       if (normalOffset != -1) {
         tmpV1.set(
-            nonnullVertices[id + normalOffset],
-            nonnullVertices[id + normalOffset + 1],
-            nonnullVertices[id + normalOffset + 2]);
+            vertices[id + normalOffset],
+            vertices[id + normalOffset + 1],
+            vertices[id + normalOffset + 2]);
         tmpV2.set(tmpV0).add(tmpV1.scl(vectorSize));
       }
 
       if (tangentOffset != -1) {
         tmpV3.set(
-            nonnullVertices[id + tangentOffset],
-            nonnullVertices[id + tangentOffset + 1],
-            nonnullVertices[id + tangentOffset + 2]);
+            vertices[id + tangentOffset],
+            vertices[id + tangentOffset + 1],
+            vertices[id + tangentOffset + 2]);
         tmpV4.set(tmpV0).add(tmpV3.scl(vectorSize));
       }
 
       if (binormalOffset != -1) {
         tmpV5.set(
-            nonnullVertices[id + binormalOffset],
-            nonnullVertices[id + binormalOffset + 1],
-            nonnullVertices[id + binormalOffset + 2]);
+            vertices[id + binormalOffset],
+            vertices[id + binormalOffset + 1],
+            vertices[id + binormalOffset + 2]);
         tmpV6.set(tmpV0).add(tmpV5.scl(vectorSize));
       }
 
