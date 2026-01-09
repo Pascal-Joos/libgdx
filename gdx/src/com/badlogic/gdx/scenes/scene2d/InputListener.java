@@ -18,7 +18,6 @@ package com.badlogic.gdx.scenes.scene2d;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -71,7 +70,8 @@ public class InputListener implements EventListener {
         boolean handled =
             touchDown(event, tmpCoords.x, tmpCoords.y, event.getPointer(), event.getButton());
         if (handled && event.getTouchFocus()) {
-          Nullability.castToNonnull(event.getStage())
+          event
+              .getStage()
               .addTouchFocus(
                   this,
                   event.getListenerActor(),

@@ -26,7 +26,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -96,11 +95,8 @@ public class DragAndDrop {
 
             float stageX = event.getStageX() + touchOffsetX,
                 stageY = event.getStageY() + touchOffsetY;
-            Actor hit =
-                Nullability.castToNonnull(event.getStage())
-                    .hit(stageX, stageY, true); // Prefer touchable actors.
-            if (hit == null)
-              hit = Nullability.castToNonnull(event.getStage()).hit(stageX, stageY, false);
+            Actor hit = event.getStage().hit(stageX, stageY, true); // Prefer touchable actors.
+            if (hit == null) hit = event.getStage().hit(stageX, stageY, false);
 
             if (oldDragActor != null) oldDragActor.setPosition(oldDragActorX, oldDragActorY);
 
@@ -138,7 +134,7 @@ public class DragAndDrop {
               dragActor = actor;
               removeDragActor =
                   actor.getStage() == null; // Only remove later if not already in the stage now.
-              if (removeDragActor) Nullability.castToNonnull(stage).addActor(actor);
+              if (removeDragActor) stage.addActor(actor);
             }
             if (actor == null) return;
 
@@ -148,10 +144,10 @@ public class DragAndDrop {
             if (keepWithinStage) {
               if (actorX < 0) actorX = 0;
               if (actorY < 0) actorY = 0;
-              if (actorX + actor.getWidth() > Nullability.castToNonnull(stage).getWidth())
-                actorX = Nullability.castToNonnull(stage).getWidth() - actor.getWidth();
-              if (actorY + actor.getHeight() > Nullability.castToNonnull(stage).getHeight())
-                actorY = Nullability.castToNonnull(stage).getHeight() - actor.getHeight();
+              if (actorX + actor.getWidth() > stage.getWidth())
+                actorX = stage.getWidth() - actor.getWidth();
+              if (actorY + actor.getHeight() > stage.getHeight())
+                actorY = stage.getHeight() - actor.getHeight();
             }
             actor.setPosition(actorX, actorY);
           }

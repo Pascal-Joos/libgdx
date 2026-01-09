@@ -160,7 +160,6 @@ public class Event implements Poolable {
   }
 
   /** The stage for the actor the event was fired on. */
-  @Nullable
   public Stage getStage() {
     return stage;
   }
