@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -83,8 +82,8 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
 
   public void setSprite(@Nullable Sprite sprite) {
     this.sprite = sprite;
-    setMinWidth(Nullability.castToNonnull(sprite).getWidth());
-    setMinHeight(Nullability.castToNonnull(sprite).getHeight());
+    setMinWidth(sprite.getWidth());
+    setMinHeight(sprite.getHeight());
   }
 
   @Nullable
