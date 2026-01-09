@@ -17,7 +17,6 @@
 package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.graphics.Texture;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -125,7 +124,7 @@ public class TextureRegion {
 
   /** Sets the texture and coordinates to the specified region. */
   public void setRegion(@Nullable TextureRegion region) {
-    texture = Nullability.castToNonnull(region).texture;
+    texture = region.texture;
     setRegion(region.u, region.v, region.u2, region.v2);
   }
 
