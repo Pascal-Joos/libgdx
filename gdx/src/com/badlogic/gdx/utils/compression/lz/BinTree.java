@@ -2,16 +2,14 @@
 
 package com.badlogic.gdx.utils.compression.lz;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
-import javax.annotation.Nullable;
 
 public class BinTree extends InWindow {
   int _cyclicBufferPos;
   int _cyclicBufferSize = 0;
   int _matchMaxLen;
 
-  @Nullable int[] _son;
+  int[] _son;
   int[] _hash;
 
   int _cutValue = 0xFF;
@@ -95,8 +93,6 @@ public class BinTree extends InWindow {
   }
 
   public int GetMatches(int[] distances) throws IOException {
-    if (_son == null) return 0;
-    int[] son = Nullability.castToNonnull(_son);
     int lenLimit;
     if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
     else {
@@ -167,8 +163,7 @@ public class BinTree extends InWindow {
 
     while (true) {
       if (curMatch <= matchMinPos || count-- == 0) {
-        Nullability.castToNonnull(_son)[ptr0] =
-            Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+        _son[ptr0] = _son[ptr1] = kEmptyHashValue;
         break;
       }
       int delta = _pos - curMatch;
@@ -186,21 +181,21 @@ public class BinTree extends InWindow {
           distances[offset++] = maxLen = len;
           distances[offset++] = delta - 1;
           if (len == lenLimit) {
-            son[ptr1] = son[cyclicPos];
-            son[ptr0] = son[cyclicPos + 1];
+            _son[ptr1] = _son[cyclicPos];
+            _son[ptr0] = _son[cyclicPos + 1];
             break;
           }
         }
       }
       if ((_bufferBase[pby1 + len] & 0xFF) < (_bufferBase[cur + len] & 0xFF)) {
-        son[ptr1] = curMatch;
+        _son[ptr1] = curMatch;
         ptr1 = cyclicPos + 1;
-        curMatch = son[ptr1];
+        curMatch = _son[ptr1];
         len1 = len;
       } else {
-        son[ptr0] = curMatch;
+        _son[ptr0] = curMatch;
         ptr0 = cyclicPos;
-        curMatch = son[ptr0];
+        curMatch = _son[ptr0];
         len0 = len;
       }
     }
@@ -209,10 +204,6 @@ public class BinTree extends InWindow {
   }
 
   public void Skip(int num) throws IOException {
-    if (_son == null) {
-      return;
-    }
-    int[] son = Nullability.castToNonnull(_son);
     do {
       int lenLimit;
       if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
@@ -251,8 +242,7 @@ public class BinTree extends InWindow {
       int count = _cutValue;
       while (true) {
         if (curMatch <= matchMinPos || count-- == 0) {
-          Nullability.castToNonnull(_son)[ptr0] =
-              Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+          _son[ptr0] = _son[ptr1] = kEmptyHashValue;
           break;
         }
 
@@ -268,20 +258,20 @@ public class BinTree extends InWindow {
         if (_bufferBase[pby1 + len] == _bufferBase[cur + len]) {
           while (++len != lenLimit) if (_bufferBase[pby1 + len] != _bufferBase[cur + len]) break;
           if (len == lenLimit) {
-            son[ptr1] = son[cyclicPos];
-            son[ptr0] = son[cyclicPos + 1];
+            _son[ptr1] = _son[cyclicPos];
+            _son[ptr0] = _son[cyclicPos + 1];
             break;
           }
         }
         if ((_bufferBase[pby1 + len] & 0xFF) < (_bufferBase[cur + len] & 0xFF)) {
-          son[ptr1] = curMatch;
+          _son[ptr1] = curMatch;
           ptr1 = cyclicPos + 1;
-          curMatch = son[ptr1];
+          curMatch = _son[ptr1];
           len1 = len;
         } else {
-          son[ptr0] = curMatch;
+          _son[ptr0] = curMatch;
           ptr0 = cyclicPos;
-          curMatch = son[ptr0];
+          curMatch = _son[ptr0];
           len0 = len;
         }
       }
@@ -299,9 +289,8 @@ public class BinTree extends InWindow {
   }
 
   void Normalize() {
-    if (_son == null) return;
     int subValue = _pos - _cyclicBufferSize;
-    NormalizeLinks(Nullability.castToNonnull(_son), _cyclicBufferSize * 2, subValue);
+    NormalizeLinks(_son, _cyclicBufferSize * 2, subValue);
     NormalizeLinks(_hash, _hashSizeSum, subValue);
     ReduceOffsets(subValue);
   }
