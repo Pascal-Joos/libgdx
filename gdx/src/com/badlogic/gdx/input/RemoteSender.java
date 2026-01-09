@@ -21,7 +21,6 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputProcessor;
 import java.io.DataOutputStream;
 import java.net.Socket;
-import javax.annotation.Nullable;
 
 /**
  * Sends all inputs from touch, key, accelerometer and compass to a {@link RemoteInput} at the given
@@ -30,7 +29,7 @@ import javax.annotation.Nullable;
  * @author mzechner
  */
 public class RemoteSender implements InputProcessor {
-  @Nullable private DataOutputStream out;
+  private DataOutputStream out;
   private boolean connected = false;
 
   public static final int KEY_DOWN = 0;
@@ -62,7 +61,7 @@ public class RemoteSender implements InputProcessor {
 
   public void sendUpdate() {
     synchronized (this) {
-      if (!connected || out == null) return;
+      if (!connected) return;
     }
     try {
       out.writeInt(ACCEL);
@@ -89,7 +88,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean keyDown(int keycode) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
@@ -106,7 +105,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean keyUp(int keycode) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
@@ -123,7 +122,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean keyTyped(char character) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
@@ -140,7 +139,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
@@ -159,7 +158,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
@@ -183,7 +182,7 @@ public class RemoteSender implements InputProcessor {
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
     synchronized (this) {
-      if (!connected || out == null) return false;
+      if (!connected) return false;
     }
 
     try {
