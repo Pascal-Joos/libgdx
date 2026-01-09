@@ -95,6 +95,7 @@ public abstract class RegionInfluencer extends Influencer {
           i < c;
           i += regionChannel.strideSize) {
         AspectTextureRegion region = regions.random();
+        if (region == null) continue;
         regionChannel.data[i + ParticleChannels.UOffset] = region.u;
         regionChannel.data[i + ParticleChannels.VOffset] = region.v;
         regionChannel.data[i + ParticleChannels.U2Offset] = region.u2;
