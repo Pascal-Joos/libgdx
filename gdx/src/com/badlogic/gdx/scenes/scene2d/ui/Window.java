@@ -31,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -75,10 +74,7 @@ public class Window extends Table {
     setTouchable(Touchable.enabled);
     setClip(true);
 
-    titleLabel =
-        newLabel(
-            title,
-            new LabelStyle(Nullability.castToNonnull(style.titleFont), style.titleFontColor));
+    titleLabel = newLabel(title, new LabelStyle(style.titleFont, style.titleFontColor));
     titleLabel.setEllipsis(true);
 
     titleTable =
@@ -204,7 +200,7 @@ public class Window extends Table {
             return isModal;
           }
 
-          public boolean keyDown(InputEvent event, int keycode) {
+          public boolean keyDown(@Nullable InputEvent event, int keycode) {
             return isModal;
           }
 
@@ -227,8 +223,7 @@ public class Window extends Table {
     this.style = style;
 
     setBackground(style.background);
-    titleLabel.setStyle(
-        new LabelStyle(Nullability.castToNonnull(style.titleFont), style.titleFontColor));
+    titleLabel.setStyle(new LabelStyle(style.titleFont, style.titleFontColor));
     invalidateHierarchy();
   }
 
@@ -392,7 +387,7 @@ public class Window extends Table {
    */
   public static class WindowStyle {
     @Nullable public @Null Drawable background;
-    @Nullable public BitmapFont titleFont;
+    public BitmapFont titleFont;
     public @Null Color titleFontColor = new Color(1, 1, 1, 1);
     @Nullable public @Null Drawable stageBackground;
 
