@@ -43,6 +43,7 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -130,13 +131,13 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 
   private RenderablePool renderablePool;
   private Array<Renderable> renderables;
-  private float[] vertices;
+  @Nullable private float[] vertices;
   private short[] indices;
   private int currentVertexSize = 0;
-  private VertexAttributes currentAttributes;
+  @Nullable private VertexAttributes currentAttributes;
   protected boolean useGPU = false;
   @Nullable protected AlignMode mode = AlignMode.Screen;
-  protected Texture texture;
+  @Nullable protected Texture texture;
   @Nullable protected BlendingAttribute blendingAttribute;
   @Nullable protected DepthTestAttribute depthTestAttribute;
   @Nullable Shader shader;
@@ -202,7 +203,11 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
             this.depthTestAttribute,
             TextureAttribute.createDiffuse(texture));
     renderable.meshPart.mesh =
-        new Mesh(false, MAX_VERTICES_PER_MESH, MAX_PARTICLES_PER_MESH * 6, currentAttributes);
+        new Mesh(
+            false,
+            MAX_VERTICES_PER_MESH,
+            MAX_PARTICLES_PER_MESH * 6,
+            Nullability.castToNonnull(currentAttributes));
     renderable.meshPart.mesh.setIndices(indices);
     renderable.shader = shader;
     return renderable;
@@ -322,6 +327,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
     this.texture = texture;
   }
 
+  @Nullable
   public Texture getTexture() {
     return texture;
   }
@@ -447,7 +453,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 
         // bottom left, bottom right, top right, top left
         putVertex(
-            vertices,
+            Nullability.castToNonnull(vertices),
             baseOffset,
             px,
             py,
@@ -464,7 +470,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
             a);
         baseOffset += currentVertexSize;
         putVertex(
-            vertices,
+            Nullability.castToNonnull(vertices),
             baseOffset,
             px,
             py,
@@ -481,10 +487,38 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
             a);
         baseOffset += currentVertexSize;
         putVertex(
-            vertices, baseOffset, px, py, pz, u2, v, sx, sy, cosRotation, sinRotation, r, g, b, a);
+            Nullability.castToNonnull(vertices),
+            baseOffset,
+            px,
+            py,
+            pz,
+            u2,
+            v,
+            sx,
+            sy,
+            cosRotation,
+            sinRotation,
+            r,
+            g,
+            b,
+            a);
         baseOffset += currentVertexSize;
         putVertex(
-            vertices, baseOffset, px, py, pz, u, v, -sx, sy, cosRotation, sinRotation, r, g, b, a);
+            Nullability.castToNonnull(vertices),
+            baseOffset,
+            px,
+            py,
+            pz,
+            u,
+            v,
+            -sx,
+            sy,
+            cosRotation,
+            sinRotation,
+            r,
+            g,
+            b,
+            a);
         baseOffset += currentVertexSize;
       }
     }
@@ -602,7 +636,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
         if (cosRotation != 1) {
           TMP_M3.setToRotation(look, cosRotation, sinRotation);
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(-TMP_V1.x - TMP_V2.x, -TMP_V1.y - TMP_V2.y, -TMP_V1.z - TMP_V2.z)
@@ -616,7 +650,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(TMP_V1.x - TMP_V2.x, TMP_V1.y - TMP_V2.y, TMP_V1.z - TMP_V2.z)
@@ -630,7 +664,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(TMP_V1.x + TMP_V2.x, TMP_V1.y + TMP_V2.y, TMP_V1.z + TMP_V2.z)
@@ -644,7 +678,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(-TMP_V1.x + TMP_V2.x, -TMP_V1.y + TMP_V2.y, -TMP_V1.z + TMP_V2.z)
@@ -658,7 +692,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
         } else {
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   -TMP_V1.x - TMP_V2.x + px, -TMP_V1.y - TMP_V2.y + py, -TMP_V1.z - TMP_V2.z + pz),
@@ -670,7 +704,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   TMP_V1.x - TMP_V2.x + px, TMP_V1.y - TMP_V2.y + py, TMP_V1.z - TMP_V2.z + pz),
@@ -682,7 +716,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   TMP_V1.x + TMP_V2.x + px, TMP_V1.y + TMP_V2.y + py, TMP_V1.z + TMP_V2.z + pz),
@@ -694,7 +728,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   -TMP_V1.x + TMP_V2.x + px, -TMP_V1.y + TMP_V2.y + py, -TMP_V1.z + TMP_V2.z + pz),
@@ -750,7 +784,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
         if (cosRotation != 1) {
           TMP_M3.setToRotation(look, cosRotation, sinRotation);
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(-TMP_V1.x - TMP_V2.x, -TMP_V1.y - TMP_V2.y, -TMP_V1.z - TMP_V2.z)
@@ -764,7 +798,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(TMP_V1.x - TMP_V2.x, TMP_V1.y - TMP_V2.y, TMP_V1.z - TMP_V2.z)
@@ -778,7 +812,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(TMP_V1.x + TMP_V2.x, TMP_V1.y + TMP_V2.y, TMP_V1.z + TMP_V2.z)
@@ -792,7 +826,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6
                   .set(-TMP_V1.x + TMP_V2.x, -TMP_V1.y + TMP_V2.y, -TMP_V1.z + TMP_V2.z)
@@ -806,7 +840,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
         } else {
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   -TMP_V1.x - TMP_V2.x + px, -TMP_V1.y - TMP_V2.y + py, -TMP_V1.z - TMP_V2.z + pz),
@@ -818,7 +852,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   TMP_V1.x - TMP_V2.x + px, TMP_V1.y - TMP_V2.y + py, TMP_V1.z - TMP_V2.z + pz),
@@ -830,7 +864,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   TMP_V1.x + TMP_V2.x + px, TMP_V1.y + TMP_V2.y + py, TMP_V1.z + TMP_V2.z + pz),
@@ -842,7 +876,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
               a);
           baseOffset += currentVertexSize;
           putVertex(
-              vertices,
+              Nullability.castToNonnull(vertices),
               baseOffset,
               TMP_V6.set(
                   -TMP_V1.x + TMP_V2.x + px, -TMP_V1.y + TMP_V2.y + py, -TMP_V1.z + TMP_V2.z + pz),
@@ -896,7 +930,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   public void save(AssetManager manager, ResourceData resources) {
     SaveData data = resources.createSaveData("billboardBatch");
     data.save("cfg", new Config(useGPU, mode));
-    data.saveAsset(manager.getAssetFileName(texture), Texture.class);
+    data.saveAsset(manager.getAssetFileName(Nullability.castToNonnull(texture)), Texture.class);
   }
 
   @Override
