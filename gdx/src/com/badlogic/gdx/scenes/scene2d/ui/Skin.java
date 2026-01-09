@@ -127,7 +127,6 @@ public class Skin implements Disposable {
     for (int i = 0, n = regions.size; i < n; i++) {
       AtlasRegion region = regions.get(i);
       String name = region.name;
-      if (name == null) continue;
       if (region.index != -1) {
         name += "_" + region.index;
       }
@@ -139,7 +138,7 @@ public class Skin implements Disposable {
     add(name, resource, resource.getClass());
   }
 
-  public void add(@Nullable String name, Object resource, Class type) {
+  public void add(String name, Object resource, Class type) {
     if (name == null) throw new IllegalArgumentException("name cannot be null.");
     if (resource == null) throw new IllegalArgumentException("resource cannot be null.");
     ObjectMap<String, Object> typeResources = resources.get(type);
