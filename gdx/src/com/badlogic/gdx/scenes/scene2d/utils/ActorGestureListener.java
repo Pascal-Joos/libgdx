@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -38,7 +39,7 @@ public class ActorGestureListener implements EventListener {
 
   private final GestureDetector detector;
   @Nullable InputEvent event;
-  Actor actor, touchDownTarget;
+  @Nullable Actor actor, touchDownTarget;
 
   /**
    * @see GestureDetector#GestureDetector(com.badlogic.gdx.input.GestureDetector.GestureListener)
@@ -68,14 +69,18 @@ public class ActorGestureListener implements EventListener {
               private final Vector2 pointer1 = new Vector2(), pointer2 = new Vector2();
 
               public boolean tap(float stageX, float stageY, int count, int button) {
+                if (actor == null) return false;
                 actor.stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
                 ActorGestureListener.this.tap(event, tmpCoords.x, tmpCoords.y, count, button);
                 return true;
               }
 
               public boolean longPress(float stageX, float stageY) {
-                actor.stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
-                return ActorGestureListener.this.longPress(actor, tmpCoords.x, tmpCoords.y);
+                if (actor == null) return false;
+                Nullability.castToNonnull(actor)
+                    .stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                return ActorGestureListener.this.longPress(
+                    Nullability.castToNonnull(actor), tmpCoords.x, tmpCoords.y);
               }
 
               public boolean fling(float velocityX, float velocityY, int button) {
@@ -85,16 +90,20 @@ public class ActorGestureListener implements EventListener {
               }
 
               public boolean pan(float stageX, float stageY, float deltaX, float deltaY) {
+                if (actor == null) return false;
                 stageToLocalAmount(tmpCoords.set(deltaX, deltaY));
                 deltaX = tmpCoords.x;
                 deltaY = tmpCoords.y;
-                actor.stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                Nullability.castToNonnull(actor)
+                    .stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
                 ActorGestureListener.this.pan(event, tmpCoords.x, tmpCoords.y, deltaX, deltaY);
                 return true;
               }
 
               public boolean panStop(float stageX, float stageY, int pointer, int button) {
-                actor.stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                if (actor == null) return false;
+                Nullability.castToNonnull(actor)
+                    .stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
                 ActorGestureListener.this.panStop(event, tmpCoords.x, tmpCoords.y, pointer, button);
                 return true;
               }
@@ -109,6 +118,7 @@ public class ActorGestureListener implements EventListener {
                   Vector2 stageInitialPointer2,
                   Vector2 stagePointer1,
                   Vector2 stagePointer2) {
+                if (actor == null) return false;
                 actor.stageToLocalCoordinates(initialPointer1.set(stageInitialPointer1));
                 actor.stageToLocalCoordinates(initialPointer2.set(stageInitialPointer2));
                 actor.stageToLocalCoordinates(pointer1.set(stagePointer1));
@@ -119,8 +129,10 @@ public class ActorGestureListener implements EventListener {
               }
 
               private void stageToLocalAmount(Vector2 amount) {
-                actor.stageToLocalCoordinates(amount);
-                amount.sub(actor.stageToLocalCoordinates(tmpCoords2.set(0, 0)));
+                if (actor == null) return;
+                Nullability.castToNonnull(actor).stageToLocalCoordinates(amount);
+                amount.sub(
+                    Nullability.castToNonnull(actor).stageToLocalCoordinates(tmpCoords2.set(0, 0)));
               }
             });
   }
@@ -202,6 +214,7 @@ public class ActorGestureListener implements EventListener {
     return detector;
   }
 
+  @Nullable
   public @Null Actor getTouchDownTarget() {
     return touchDownTarget;
   }
