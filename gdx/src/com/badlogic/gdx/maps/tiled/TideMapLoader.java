@@ -294,11 +294,11 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
         String type = property.getAttribute("Type", null);
         String value = property.getText();
 
-        if (type.equals("Int32")) {
+        if ("Int32".equals(type)) {
           properties.put(key, Integer.parseInt(value));
-        } else if (type.equals("String")) {
+        } else if ("String".equals(type)) {
           properties.put(key, value);
-        } else if (type.equals("Boolean")) {
+        } else if ("Boolean".equals(type)) {
           properties.put(key, value.equalsIgnoreCase("true"));
         } else {
           properties.put(key, value);
