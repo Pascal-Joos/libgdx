@@ -28,7 +28,6 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -427,7 +426,7 @@ public class ModelInstance implements RenderableProvider {
     animation.id = sourceAnim.id;
     animation.duration = sourceAnim.duration;
     for (final NodeAnimation nanim : sourceAnim.nodeAnimations) {
-      final Node node = getNode(Nullability.castToNonnull(nanim.node.id));
+      final Node node = getNode(nanim.node.id);
       if (node == null) continue;
       NodeAnimation nodeAnim = new NodeAnimation();
       nodeAnim.node = node;
