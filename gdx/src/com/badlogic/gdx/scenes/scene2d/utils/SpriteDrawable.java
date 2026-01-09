@@ -43,7 +43,6 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
-    if (sprite == null) return;
     Color spriteColor = sprite.getColor();
     float oldColor = spriteColor.toFloatBits();
     sprite.setColor(spriteColor.mul(batch.getColor()));
@@ -68,8 +67,6 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
       float scaleY,
       float rotation) {
 
-    if (sprite == null) return;
-
     Color spriteColor = sprite.getColor();
     float oldColor = spriteColor.toFloatBits();
     sprite.setColor(spriteColor.mul(batch.getColor()));
@@ -85,10 +82,8 @@ public class SpriteDrawable extends BaseDrawable implements TransformDrawable {
 
   public void setSprite(@Nullable Sprite sprite) {
     this.sprite = sprite;
-    if (sprite != null) {
-      setMinWidth(sprite.getWidth());
-      setMinHeight(sprite.getHeight());
-    }
+    setMinWidth(sprite.getWidth());
+    setMinHeight(sprite.getHeight());
   }
 
   @Nullable
