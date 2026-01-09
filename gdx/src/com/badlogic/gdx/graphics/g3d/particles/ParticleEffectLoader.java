@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import javax.annotation.Nullable;
 
@@ -139,16 +140,18 @@ public class ParticleEffectLoader
       }
     }
 
-    effectData.resource.load(manager, effectData);
+    Nullability.castToNonnull(effectData)
+        .resource
+        .load(manager, Nullability.castToNonnull(effectData));
     if (parameter != null) {
       if (parameter.batches != null) {
         for (ParticleBatch<?> batch : parameter.batches) {
-          batch.load(manager, effectData);
+          batch.load(manager, Nullability.castToNonnull(effectData));
         }
       }
-      effectData.resource.setBatch(parameter.batches);
+      Nullability.castToNonnull(effectData).resource.setBatch(parameter.batches);
     }
-    return effectData.resource;
+    return Nullability.castToNonnull(effectData).resource;
   }
 
   @Nullable
