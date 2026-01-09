@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -1438,8 +1439,8 @@ public class PolygonSpriteBatch implements PolygonBatch {
   private void switchTexture(@Nullable Texture texture) {
     flush();
     lastTexture = texture;
-    invTexWidth = 1.0f / texture.getWidth();
-    invTexHeight = 1.0f / texture.getHeight();
+    invTexWidth = 1.0f / Nullability.castToNonnull(texture).getWidth();
+    invTexHeight = 1.0f / Nullability.castToNonnull(texture).getHeight();
   }
 
   @Override
