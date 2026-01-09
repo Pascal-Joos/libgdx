@@ -234,7 +234,7 @@ public class AtlasTmxMapLoader
   }
 
   protected FileHandle getAtlasFileHandle(FileHandle tmxFile) {
-    Element properties = root.getChildByName("properties");
+    Element properties = this.root.getChildByName("properties");
 
     String atlasFilePath = null;
     if (properties != null) {
