@@ -94,7 +94,6 @@ public abstract class ParticleControllerInfluencer extends Influencer {
 
       @Override
       public ParticleController newObject() {
-        if (templates.size == 0) return null;
         ParticleController controller = templates.random().copy();
         controller.init();
         return controller;
