@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -703,7 +704,8 @@ public class AnimationController extends BaseAnimationController {
 
   /** Apply an action animation on top of the current animation. */
   protected AnimationDesc action(@Nullable final AnimationDesc anim, float transitionTime) {
-    if (anim.loopCount < 0) throw new GdxRuntimeException("An action cannot be continuous");
+    if (Nullability.castToNonnull(anim).loopCount < 0)
+      throw new GdxRuntimeException("An action cannot be continuous");
     if (current == null || current.loopCount == 0) animate(anim, transitionTime);
     else {
       AnimationDesc toQueue = inAction ? null : obtain(current);
