@@ -80,10 +80,6 @@ public class NetJavaServerSocketImpl implements ServerSocket {
 
   @Override
   public Socket accept(SocketHints hints) {
-    if (server == null) {
-      throw new GdxRuntimeException(
-          "Error accepting socket.", new NullPointerException("server is null"));
-    }
     try {
       return new NetJavaSocketImpl(server.accept(), hints);
     } catch (Exception e) {
