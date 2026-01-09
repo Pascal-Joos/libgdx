@@ -47,7 +47,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 public class DefaultShader extends BaseShader {
@@ -771,8 +770,7 @@ public class DefaultShader extends BaseShader {
     this.environmentCubemap =
         attributes.has(CubemapAttribute.EnvironmentMap)
             || (lighting && attributes.has(CubemapAttribute.EnvironmentMap));
-    this.shadowMap =
-        lighting && Nullability.castToNonnull(renderable.environment).shadowMap != null;
+    this.shadowMap = lighting && renderable.environment.shadowMap != null;
     this.renderable = renderable;
     attributesMask = attributes.getMask() | optionalAttributes;
     vertexMask = renderable.meshPart.mesh.getVertexAttributes().getMaskWithSizePacked();
