@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -241,10 +240,7 @@ public abstract class BaseShader implements Shader {
     program.bind();
     currentMesh = null;
     for (int u, i = 0; i < globalUniforms.size; ++i)
-      if (setters.get(u = globalUniforms.get(i)) != null)
-        setters
-            .get(u)
-            .set(this, u, Nullability.castToNonnull(null), Nullability.castToNonnull(null));
+      if (setters.get(u = globalUniforms.get(i)) != null) setters.get(u).set(this, u, null, null);
   }
 
   private final IntArray tempArray = new IntArray();
