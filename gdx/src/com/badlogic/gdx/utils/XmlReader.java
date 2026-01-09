@@ -70,7 +70,6 @@ public class XmlReader {
     }
   }
 
-  @Nullable
   public Element parse(InputStream input) {
     try {
       return parse(new InputStreamReader(input, "UTF-8"));
@@ -81,7 +80,6 @@ public class XmlReader {
     }
   }
 
-  @Nullable
   public Element parse(FileHandle file) {
     try {
       return parse(file.reader("UTF-8"));
@@ -90,7 +88,6 @@ public class XmlReader {
     }
   }
 
-  @Nullable
   public Element parse(char[] data, int offset, int length) {
     int cs, p = offset, pe = length;
 

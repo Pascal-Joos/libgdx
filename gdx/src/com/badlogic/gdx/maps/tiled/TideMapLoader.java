@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import javax.annotation.Nullable;
@@ -138,7 +137,7 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
    */
   private Array<FileHandle> loadTileSheets(Element root, FileHandle tideFile) throws IOException {
     Array<FileHandle> images = new Array<FileHandle>();
-    Element tilesheets = Nullability.castToNonnull(root).getChildByName("TileSheets");
+    Element tilesheets = root.getChildByName("TileSheets");
     for (Element tileset : tilesheets.getChildrenByName("TileSheet")) {
       Element imageSource = tileset.getChildByName("ImageSource");
       FileHandle image = getRelativeFileHandle(tideFile, imageSource.getText());
