@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -47,7 +48,7 @@ public class TextButton extends Button {
   public TextButton(@Null String text, TextButtonStyle style) {
     super();
     setStyle(style);
-    label = newLabel(text, new LabelStyle(style.font, style.fontColor));
+    label = newLabel(text, new LabelStyle(Nullability.castToNonnull(style.font), style.fontColor));
     label.setAlignment(Align.center);
     add(label).expand().fill();
     setSize(getPrefWidth(), getPrefHeight());
@@ -144,7 +145,7 @@ public class TextButton extends Button {
    * @author Nathan Sweet
    */
   public static class TextButtonStyle extends ButtonStyle {
-    public BitmapFont font;
+    @Nullable public BitmapFont font;
     @Nullable
     public @Null Color fontColor, downFontColor, overFontColor, focusedFontColor, disabledFontColor;
     @Nullable

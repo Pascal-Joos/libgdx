@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -183,6 +184,7 @@ public class Label extends Widget {
   }
 
   public void layout() {
+    if (style == null) throw new IllegalStateException("Label style must not be null.");
     BitmapFont font = cache.getFont();
     float oldScaleX = font.getScaleX();
     float oldScaleY = font.getScaleY();
@@ -227,10 +229,10 @@ public class Label extends Widget {
 
     if ((labelAlign & Align.top) != 0) {
       y += cache.getFont().isFlipped() ? 0 : height - textHeight;
-      y += style.font.getDescent();
+      y += Nullability.castToNonnull(style.font).getDescent();
     } else if ((labelAlign & Align.bottom) != 0) {
       y += cache.getFont().isFlipped() ? height - textHeight : 0;
-      y -= style.font.getDescent();
+      y -= font.getDescent();
     } else {
       y += (height - textHeight) / 2;
     }
@@ -270,10 +272,15 @@ public class Label extends Widget {
   }
 
   public float getPrefHeight() {
+    if (style == null) throw new IllegalArgumentException("Missing LabelStyle font.");
+    if (style.font == null) throw new IllegalArgumentException("Missing LabelStyle font.");
     if (prefSizeInvalid) scaleAndComputePrefSize();
     float descentScaleCorrection = 1;
-    if (fontScaleChanged) descentScaleCorrection = fontScaleY / style.font.getScaleY();
-    float height = prefHeight - style.font.getDescent() * descentScaleCorrection * 2;
+    if (fontScaleChanged)
+      descentScaleCorrection = fontScaleY / Nullability.castToNonnull(style.font).getScaleY();
+    float height =
+        prefHeight
+            - Nullability.castToNonnull(style.font).getDescent() * descentScaleCorrection * 2;
     Drawable background = style.background;
     if (background != null)
       height =
@@ -402,7 +409,7 @@ public class Label extends Widget {
    * @author Nathan Sweet
    */
   public static class LabelStyle {
-    public BitmapFont font;
+    @Nullable public BitmapFont font;
     @Nullable public @Null Color fontColor;
     @Nullable public @Null Drawable background;
 
