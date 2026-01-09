@@ -18,6 +18,7 @@ package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class I18NBundle {
   private Locale locale;
 
   /** The properties for this bundle. */
-  private ObjectMap<String, String> properties;
+  @Nullable private ObjectMap<String, String> properties;
 
   /** The formatter used for argument replacement. */
   private TextFormatter formatter;
@@ -502,7 +503,13 @@ public class I18NBundle {
    *     and {@link #getExceptionOnMissingKey()} returns {@code false}
    */
   public String get(String key) {
-    String result = properties.get(key);
+    if (properties == null) {
+      if (exceptionOnMissingKey)
+        throw new MissingResourceException(
+            "Can't find bundle key " + key, this.getClass().getName(), key);
+      else return "???" + key + "???";
+    }
+    String result = Nullability.castToNonnull(properties).get(key);
     if (result == null) {
       if (parent != null) result = parent.get(key);
       if (result == null) {
@@ -537,6 +544,7 @@ public class I18NBundle {
    * @param placeholder
    */
   public void debug(String placeholder) {
+    if (properties == null) return;
     ObjectMap.Keys<String> keys = properties.keys();
     if (keys == null) return;
 
