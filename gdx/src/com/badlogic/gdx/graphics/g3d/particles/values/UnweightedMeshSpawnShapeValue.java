@@ -42,6 +42,8 @@ public final class UnweightedMeshSpawnShapeValue extends MeshSpawnShapeValue {
 
   @Override
   public void setMesh(Mesh mesh, @Nullable Model model) {
+    if (mesh.getVertexAttribute(Usage.Position) == null)
+      throw new GdxRuntimeException("Mesh vertices must have Usage.Position");
     super.setMesh(mesh, model);
     vertexSize = mesh.getVertexSize() / 4;
     positionOffset = mesh.getVertexAttribute(Usage.Position).offset / 4;
