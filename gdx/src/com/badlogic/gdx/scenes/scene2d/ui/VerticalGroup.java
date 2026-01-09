@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
+import edu.ucr.cs.riple.annotator.util.Nullability;
+import javax.annotation.Nullable;
 
 /**
  * A group that lays out its children top to bottom vertically, with optional wrapping. {@link
@@ -44,7 +46,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 public class VerticalGroup extends WidgetGroup {
   private float prefWidth, prefHeight, lastPrefWidth;
   private boolean sizeInvalid = true;
-  private FloatArray columnSizes; // column height, column width, ...
+  @Nullable private FloatArray columnSizes; // column height, column width, ...
 
   private int align = Align.top, columnAlign;
   private boolean reverse, round = true, wrap, expand;
@@ -228,7 +230,8 @@ public class VerticalGroup extends WidgetGroup {
     groupHeight -= padTop;
     align = columnAlign;
 
-    FloatArray columnSizes = this.columnSizes;
+    if (columnSizes == null) columnSizes = new FloatArray();
+    FloatArray columnSizes = Nullability.castToNonnull(this.columnSizes);
     SnapshotArray<Actor> children = getChildren();
     int i = 0, n = children.size, incr = 1;
     if (reverse) {
@@ -255,17 +258,19 @@ public class VerticalGroup extends WidgetGroup {
         r =
             Math.min(
                 r,
-                columnSizes.size
-                    - 2); // In case an actor changed size without invalidating this layout.
+                Nullability.castToNonnull(columnSizes).size
+                    - 2); // In case an actor changed size without
+        // invalidating this layout.
         y = yStart;
-        if ((align & Align.bottom) != 0) y -= maxHeight - columnSizes.get(r);
+        if ((align & Align.bottom) != 0)
+          y -= maxHeight - Nullability.castToNonnull(columnSizes).get(r);
         else if ((align & Align.top) == 0) // center
-        y -= (maxHeight - columnSizes.get(r)) / 2;
+        y -= (maxHeight - Nullability.castToNonnull(columnSizes).get(r)) / 2;
         if (r > 0) {
           columnX += wrapSpace;
           columnX += columnWidth;
         }
-        columnWidth = columnSizes.get(r + 1);
+        columnWidth = Nullability.castToNonnull(columnSizes).get(r + 1);
         r += 2;
       }
 
@@ -304,7 +309,9 @@ public class VerticalGroup extends WidgetGroup {
 
   /** When wrapping is enabled, the number of columns may be > 1. */
   public int getColumns() {
-    return wrap ? columnSizes.size >> 1 : 1;
+    if (!wrap) return 1;
+    if (columnSizes == null) computeSize();
+    return columnSizes.size >> 1;
   }
 
   /** If true (the default), positions and sizes are rounded to integers. */
