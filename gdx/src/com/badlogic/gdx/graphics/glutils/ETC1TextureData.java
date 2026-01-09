@@ -24,12 +24,11 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.ETC1.ETC1Data;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 public class ETC1TextureData implements TextureData {
   @Nullable FileHandle file;
-  @Nullable ETC1Data data;
+  ETC1Data data;
   boolean useMipMaps;
   int width = 0;
   int height = 0;
@@ -67,9 +66,8 @@ public class ETC1TextureData implements TextureData {
     if (file != null) {
       data = new ETC1Data(file);
     }
-    ETC1Data nonnullData = Nullability.castToNonnull(data);
-    width = nonnullData.width;
-    height = nonnullData.height;
+    width = data.width;
+    height = data.height;
     isPrepared = true;
   }
 
@@ -77,8 +75,6 @@ public class ETC1TextureData implements TextureData {
   public void consumeCustomData(int target) {
     if (!isPrepared)
       throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
-
-    if (data == null) throw new GdxRuntimeException("ETC1Data must not be null");
 
     if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
       Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
@@ -96,7 +92,7 @@ public class ETC1TextureData implements TextureData {
         MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
       pixmap.dispose();
       useMipMaps = false;
-    } else if (data != null) {
+    } else {
       Gdx.gl.glCompressedTexImage2D(
           target,
           0,
@@ -108,7 +104,7 @@ public class ETC1TextureData implements TextureData {
           data.compressedData);
       if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
     }
-    if (data != null) Nullability.castToNonnull(data).dispose();
+    data.dispose();
     data = null;
     isPrepared = false;
   }
