@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
@@ -706,7 +707,9 @@ public class ParticleEmitter {
           break;
       }
       particle.setRegion(sprite);
-      particle.setOrigin(sprite.getOriginX(), sprite.getOriginY());
+      particle.setOrigin(
+          Nullability.castToNonnull(sprite).getOriginX(),
+          Nullability.castToNonnull(sprite).getOriginY());
     }
   }
 
