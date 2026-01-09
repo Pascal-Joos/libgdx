@@ -33,7 +33,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -883,7 +882,7 @@ public class Table extends WidgetGroup {
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
-      Actor a = Nullability.castToNonnull(c.actor);
+      Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -983,7 +982,7 @@ public class Table extends WidgetGroup {
       if (colspan == 1) continue;
       int column = c.column;
 
-      Actor a = Nullability.castToNonnull(c.actor);
+      Actor a = c.actor;
       float minWidth = c.minWidth.get(a),
           prefWidth = c.prefWidth.get(a),
           maxWidth = c.maxWidth.get(a);
