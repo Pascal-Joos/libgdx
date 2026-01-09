@@ -44,6 +44,9 @@ public class ParticleControllerControllerRenderer extends ParticleControllerRend
 
   @Override
   public void update() {
+    if (controllerChannel == null)
+      throw new GdxRuntimeException(
+          "ParticleController channel not found, specify an influencer which will allocate it please.");
     for (int i = 0, c = controller.particles.size; i < c; ++i) {
       controllerChannel.data[i].draw();
     }
