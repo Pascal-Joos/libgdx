@@ -33,7 +33,7 @@ public class AssetDescriptor<T> {
   /** The resolved file. May be null if the fileName has not been resolved yet. */
   @Nullable public FileHandle file;
 
-  public AssetDescriptor(@Nullable String fileName, Class<T> assetType) {
+  public AssetDescriptor(String fileName, Class<T> assetType) {
     this(fileName, assetType, null);
   }
 
@@ -43,7 +43,7 @@ public class AssetDescriptor<T> {
   }
 
   public AssetDescriptor(
-      @Nullable String fileName, Class<T> assetType, @Nullable AssetLoaderParameters<T> params) {
+      String fileName, Class<T> assetType, @Nullable AssetLoaderParameters<T> params) {
     this.fileName = fileName;
     this.type = assetType;
     this.params = params;

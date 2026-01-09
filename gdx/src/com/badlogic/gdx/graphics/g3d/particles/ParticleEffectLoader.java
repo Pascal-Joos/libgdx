@@ -80,18 +80,14 @@ public class ParticleEffectLoader
     for (AssetData<?> assetData : assets) {
 
       // If the asset doesn't exist try to load it from loading effect directory
-      String filename = assetData.filename;
-      if (filename != null && !resolve(filename).exists()) {
-        filename = file.parent().child(Gdx.files.internal(filename).name()).path();
-        assetData.filename = filename;
+      if (!resolve(assetData.filename).exists()) {
+        assetData.filename =
+            file.parent().child(Gdx.files.internal(assetData.filename).name()).path();
       }
 
-      if (filename == null) continue;
-
-      Class type = assetData.type;
-      if (type == ParticleEffect.class) {
-        descriptors.add(new AssetDescriptor(filename, type, parameter));
-      } else descriptors.add(new AssetDescriptor(filename, type));
+      if (assetData.type == ParticleEffect.class) {
+        descriptors.add(new AssetDescriptor(assetData.filename, assetData.type, parameter));
+      } else descriptors.add(new AssetDescriptor(assetData.filename, assetData.type));
     }
 
     return descriptors;

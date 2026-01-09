@@ -508,7 +508,7 @@ public class Json {
    * @param value May be null.
    * @see #writeValue(String, Object, Class, Class)
    */
-  public void writeValue(String name, @Nullable @Null Object value) {
+  public void writeValue(String name, @Null Object value) {
     try {
       writer.name(name);
     } catch (IOException ex) {
