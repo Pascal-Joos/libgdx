@@ -891,23 +891,16 @@ public class Table extends WidgetGroup {
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
-      float padLeftValue = c.padLeft == null ? 0 : c.padLeft.get(a);
-      float spaceLeftValue = c.spaceLeft == null ? 0 : c.spaceLeft.get(a);
       c.computedPadLeft =
-          padLeftValue + (column == 0 ? 0 : Math.max(0, spaceLeftValue - spaceRightLast));
-      c.computedPadTop = c.padTop == null ? 0 : c.padTop.get(a);
+          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+      c.computedPadTop = c.padTop.get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
-        float spaceTopValue = c.spaceTop == null ? 0 : c.spaceTop.get(a);
-        float aboveSpaceBottomValue = above.spaceBottom == null ? 0 : above.spaceBottom.get(a);
-        c.computedPadTop += Math.max(0, spaceTopValue - aboveSpaceBottomValue);
+        c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
       }
-      float spaceRight = c.spaceRight == null ? 0 : c.spaceRight.get(a);
-      float padRightValue = c.padRight == null ? 0 : c.padRight.get(a);
-      c.computedPadRight = padRightValue + ((column + colspan) == columns ? 0 : spaceRight);
-      float padBottomValue = c.padBottom == null ? 0 : c.padBottom.get(a);
-      float spaceBottomValue = c.spaceBottom == null ? 0 : c.spaceBottom.get(a);
-      c.computedPadBottom = padBottomValue + (row == rows - 1 ? 0 : spaceBottomValue);
+      float spaceRight = c.spaceRight.get(a);
+      c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
+      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.

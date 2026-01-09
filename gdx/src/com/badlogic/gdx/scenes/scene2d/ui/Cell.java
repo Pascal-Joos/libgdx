@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -32,7 +31,7 @@ public class Cell<T extends Actor> implements Poolable {
   Value prefWidth, prefHeight;
   Value maxWidth, maxHeight;
   Value spaceTop, spaceLeft, spaceBottom, spaceRight;
-  @Nullable Value padTop, padLeft, padBottom, padRight;
+  Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
   Integer expandX, expandY;
@@ -858,71 +857,55 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getPadTopValue() {
     return padTop;
   }
 
   public float getPadTop() {
-    return padTop == null ? 0 : Nullability.castToNonnull(padTop).get(actor);
+    return padTop.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getPadLeftValue() {
     return padLeft;
   }
 
   public float getPadLeft() {
-    float padLeftValue = padLeft == null ? 0 : Nullability.castToNonnull(padLeft).get(actor);
-    return padLeftValue;
+    return padLeft.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getPadBottomValue() {
     return padBottom;
   }
 
   public float getPadBottom() {
-    return padBottom == null ? 0 : Nullability.castToNonnull(padBottom).get(actor);
+    return padBottom.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
-  @Nullable
   public @Null Value getPadRightValue() {
     return padRight;
   }
 
   public float getPadRight() {
-    return padRight == null ? 0 : padRight.get(this);
+    return padRight.get(actor);
   }
 
   /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
   public float getPadX() {
-    Actor a = actor;
-    if (a == null) return 0;
-    Value padLeft = this.padLeft;
-    Value padRight = this.padRight;
-    if (padLeft == null) padLeft = Value.zero;
-    if (padRight == null) padRight = Value.zero;
-    return padLeft.get(a) + Nullability.castToNonnull(padRight).get(a);
+    return padLeft.get(actor) + padRight.get(actor);
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
   public float getPadY() {
-    if (actor == null) return 0;
-    if (padTop == null) padTop = Value.zero;
-    if (padBottom == null) padBottom = Value.zero;
-    float padTopValue = Nullability.castToNonnull(padTop).get(actor);
-    float padBottomValue = Nullability.castToNonnull(padBottom).get(actor);
-    return padTopValue + padBottomValue;
+    return padTop.get(actor) + padBottom.get(actor);
   }
 
   @Nullable
@@ -1035,7 +1018,6 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Initializer
   void set(@Nullable Cell cell) {
-    if (cell == null) return;
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;
