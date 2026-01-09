@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,6 +166,6 @@ public class TextureArray extends GLTexture {
    * @return the number of managed TextureArrays currently loaded
    */
   public static int getNumManagedTextureArrays() {
-    return managedTextureArrays.get(Gdx.app).size;
+    return Nullability.castToNonnull(managedTextureArrays.get(Gdx.app)).size;
   }
 }
