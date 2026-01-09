@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -209,33 +210,34 @@ public class NinePatch {
   }
 
   public NinePatch(NinePatch ninePatch, Color color) {
-    texture = ninePatch.texture;
+    NinePatch nonNullNinePatch = Nullability.castToNonnull(ninePatch);
+    texture = nonNullNinePatch.texture;
 
-    bottomLeft = ninePatch.bottomLeft;
-    bottomCenter = ninePatch.bottomCenter;
-    bottomRight = ninePatch.bottomRight;
-    middleLeft = ninePatch.middleLeft;
-    middleCenter = ninePatch.middleCenter;
-    middleRight = ninePatch.middleRight;
-    topLeft = ninePatch.topLeft;
-    topCenter = ninePatch.topCenter;
-    topRight = ninePatch.topRight;
+    bottomLeft = nonNullNinePatch.bottomLeft;
+    bottomCenter = nonNullNinePatch.bottomCenter;
+    bottomRight = nonNullNinePatch.bottomRight;
+    middleLeft = nonNullNinePatch.middleLeft;
+    middleCenter = nonNullNinePatch.middleCenter;
+    middleRight = nonNullNinePatch.middleRight;
+    topLeft = nonNullNinePatch.topLeft;
+    topCenter = nonNullNinePatch.topCenter;
+    topRight = nonNullNinePatch.topRight;
 
-    leftWidth = ninePatch.leftWidth;
-    rightWidth = ninePatch.rightWidth;
-    middleWidth = ninePatch.middleWidth;
-    middleHeight = ninePatch.middleHeight;
-    topHeight = ninePatch.topHeight;
-    bottomHeight = ninePatch.bottomHeight;
+    leftWidth = nonNullNinePatch.leftWidth;
+    rightWidth = nonNullNinePatch.rightWidth;
+    middleWidth = nonNullNinePatch.middleWidth;
+    middleHeight = nonNullNinePatch.middleHeight;
+    topHeight = nonNullNinePatch.topHeight;
+    bottomHeight = nonNullNinePatch.bottomHeight;
 
-    padLeft = ninePatch.padLeft;
-    padTop = ninePatch.padTop;
-    padBottom = ninePatch.padBottom;
-    padRight = ninePatch.padRight;
+    padLeft = nonNullNinePatch.padLeft;
+    padTop = nonNullNinePatch.padTop;
+    padBottom = nonNullNinePatch.padBottom;
+    padRight = nonNullNinePatch.padRight;
 
-    vertices = new float[ninePatch.vertices.length];
-    System.arraycopy(ninePatch.vertices, 0, vertices, 0, ninePatch.vertices.length);
-    idx = ninePatch.idx;
+    vertices = new float[nonNullNinePatch.vertices.length];
+    System.arraycopy(nonNullNinePatch.vertices, 0, vertices, 0, nonNullNinePatch.vertices.length);
+    idx = nonNullNinePatch.idx;
     this.color.set(color);
   }
 
