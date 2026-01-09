@@ -33,7 +33,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -1204,7 +1203,7 @@ public class Table extends WidgetGroup {
             Math.max(
                 rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
                 c.minHeight.get(c.actor));
-        float maxHeight = c.maxHeight.get(Nullability.castToNonnull(c.actor));
+        float maxHeight = c.maxHeight.get(c.actor);
         if (maxHeight > 0) c.actorHeight = Math.min(c.actorHeight, maxHeight);
       }
 
