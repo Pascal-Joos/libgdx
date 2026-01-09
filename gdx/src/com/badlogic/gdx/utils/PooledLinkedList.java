@@ -65,11 +65,7 @@ public class PooledLinkedList<T> {
     }
 
     item.prev = tail;
-    if (tail != null) {
-      tail.next = item;
-    } else {
-      head = item;
-    }
+    tail.next = item;
     tail = item;
     size++;
   }
@@ -156,31 +152,19 @@ public class PooledLinkedList<T> {
     }
 
     if (c == head) {
-      if (n != null) {
-        n.prev = null;
-      }
+      n.prev = null;
       head = n;
       return;
     }
 
     if (c == tail) {
-      if (p != null) {
-        p.next = null;
-      }
+      p.next = null;
       tail = p;
       return;
     }
 
-    if (p != null) {
-      p.next = n;
-    } else {
-      head = n;
-    }
-    if (n != null) {
-      n.prev = p;
-    } else {
-      tail = p;
-    }
+    p.next = n;
+    n.prev = p;
   }
 
   /** Removes the tail of the list regardless of iteration status */
@@ -202,9 +186,7 @@ public class PooledLinkedList<T> {
       tail = null;
     } else {
       tail = p;
-      if (tail != null) {
-        tail.next = null;
-      }
+      tail.next = null;
     }
 
     return payload;
