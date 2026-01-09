@@ -43,7 +43,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -543,7 +542,7 @@ public class SelectBox<T> extends Widget implements Disableable {
                   // Fall thru.
                 case Keys.ESCAPE:
                   hide();
-                  Nullability.castToNonnull(event).stop();
+                  event.stop();
                   return true;
               }
               return false;
