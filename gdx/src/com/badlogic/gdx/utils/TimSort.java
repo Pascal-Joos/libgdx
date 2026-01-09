@@ -13,8 +13,10 @@
 
 package com.badlogic.gdx.utils;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Comparator;
+import javax.annotation.Nullable;
 
 /**
  * A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when
@@ -60,7 +62,7 @@ class TimSort<T> {
   private static final int MIN_MERGE = 32;
 
   /** The array being sorted. */
-  private T[] a;
+  @Nullable private T[] a;
 
   /** The comparator for this sort. */
   private Comparator<? super T> c;
@@ -461,6 +463,10 @@ class TimSort<T> {
     if (DEBUG) assert i >= 0;
     if (DEBUG) assert i == stackSize - 2 || i == stackSize - 3;
 
+    if (a == null || c == null) {
+      return;
+    }
+
     int base1 = runBase[i];
     int len1 = runLen[i];
     int base2 = runBase[i + 1];
@@ -483,6 +489,7 @@ class TimSort<T> {
      * Find where the first element of run2 goes in run1. Prior elements in run1 can be ignored (because they're already in
      * place).
      */
+    a = Nullability.castToNonnull(a);
     int k = gallopRight(a[base2], a, base1, len1, 0, c);
     if (DEBUG) assert k >= 0;
     base1 += k;
@@ -653,23 +660,27 @@ class TimSort<T> {
     if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
     // Copy first run into temp array
-    T[] a = this.a; // For performance
+    T[] a = this.a;
+    if (a == null) {
+      throw new IllegalStateException("Array to sort must not be null");
+    }
     T[] tmp = ensureCapacity(len1);
-    System.arraycopy(a, base1, tmp, 0, len1);
+    System.arraycopy(Nullability.castToNonnull(a), base1, tmp, 0, len1);
 
     int cursor1 = 0; // Indexes into tmp array
     int cursor2 = base2; // Indexes int a
     int dest = base1; // Indexes int a
 
     // Move first element of second run and deal with degenerate cases
-    a[dest++] = a[cursor2++];
+    Nullability.castToNonnull(a)[dest++] = Nullability.castToNonnull(a)[cursor2++];
     if (--len2 == 0) {
-      System.arraycopy(tmp, cursor1, a, dest, len1);
+      System.arraycopy(tmp, cursor1, Nullability.castToNonnull(a), dest, len1);
       return;
     }
     if (len1 == 1) {
-      System.arraycopy(a, cursor2, a, dest, len2);
-      a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+      System.arraycopy(
+          Nullability.castToNonnull(a), cursor2, Nullability.castToNonnull(a), dest, len2);
+      Nullability.castToNonnull(a)[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
       return;
     }
 
@@ -685,13 +696,13 @@ class TimSort<T> {
        */
       do {
         if (DEBUG) assert len1 > 1 && len2 > 0;
-        if (c.compare(a[cursor2], tmp[cursor1]) < 0) {
-          a[dest++] = a[cursor2++];
+        if (c.compare(Nullability.castToNonnull(a)[cursor2], tmp[cursor1]) < 0) {
+          Nullability.castToNonnull(a)[dest++] = Nullability.castToNonnull(a)[cursor2++];
           count2++;
           count1 = 0;
           if (--len2 == 0) break outer;
         } else {
-          a[dest++] = tmp[cursor1++];
+          Nullability.castToNonnull(a)[dest++] = tmp[cursor1++];
           count1++;
           count2 = 0;
           if (--len1 == 1) break outer;
@@ -704,27 +715,28 @@ class TimSort<T> {
        */
       do {
         if (DEBUG) assert len1 > 1 && len2 > 0;
-        count1 = gallopRight(a[cursor2], tmp, cursor1, len1, 0, c);
+        count1 = gallopRight(Nullability.castToNonnull(a)[cursor2], tmp, cursor1, len1, 0, c);
         if (count1 != 0) {
-          System.arraycopy(tmp, cursor1, a, dest, count1);
+          System.arraycopy(tmp, cursor1, Nullability.castToNonnull(a), dest, count1);
           dest += count1;
           cursor1 += count1;
           len1 -= count1;
           if (len1 <= 1) // len1 == 1 || len1 == 0
           break outer;
         }
-        a[dest++] = a[cursor2++];
+        Nullability.castToNonnull(a)[dest++] = Nullability.castToNonnull(a)[cursor2++];
         if (--len2 == 0) break outer;
 
-        count2 = gallopLeft(tmp[cursor1], a, cursor2, len2, 0, c);
+        count2 = gallopLeft(tmp[cursor1], Nullability.castToNonnull(a), cursor2, len2, 0, c);
         if (count2 != 0) {
-          System.arraycopy(a, cursor2, a, dest, count2);
+          System.arraycopy(
+              Nullability.castToNonnull(a), cursor2, Nullability.castToNonnull(a), dest, count2);
           dest += count2;
           cursor2 += count2;
           len2 -= count2;
           if (len2 == 0) break outer;
         }
-        a[dest++] = tmp[cursor1++];
+        Nullability.castToNonnull(a)[dest++] = tmp[cursor1++];
         if (--len1 == 1) break outer;
         minGallop--;
       } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
@@ -735,14 +747,15 @@ class TimSort<T> {
 
     if (len1 == 1) {
       if (DEBUG) assert len2 > 0;
-      System.arraycopy(a, cursor2, a, dest, len2);
-      a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+      System.arraycopy(
+          Nullability.castToNonnull(a), cursor2, Nullability.castToNonnull(a), dest, len2);
+      Nullability.castToNonnull(a)[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
     } else if (len1 == 0) {
       throw new IllegalArgumentException("Comparison method violates its general contract!");
     } else {
       if (DEBUG) assert len2 == 0;
       if (DEBUG) assert len1 > 1;
-      System.arraycopy(tmp, cursor1, a, dest, len1);
+      System.arraycopy(tmp, cursor1, Nullability.castToNonnull(a), dest, len1);
     }
   }
 
@@ -759,7 +772,10 @@ class TimSort<T> {
     if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
     // Copy second run into temp array
-    T[] a = this.a; // For performance
+    T[] a = this.a;
+    if (a == null) {
+      throw new NullPointerException();
+    }
     T[] tmp = ensureCapacity(len2);
     System.arraycopy(a, base2, tmp, 0, len2);
 
@@ -867,7 +883,6 @@ class TimSort<T> {
   private T[] ensureCapacity(int minCapacity) {
     tmpCount = Math.max(tmpCount, minCapacity);
     if (tmp.length < minCapacity) {
-      // Compute smallest power of 2 > minCapacity
       int newSize = minCapacity;
       newSize |= newSize >> 1;
       newSize |= newSize >> 2;
@@ -876,9 +891,8 @@ class TimSort<T> {
       newSize |= newSize >> 16;
       newSize++;
 
-      if (newSize < 0) // Not bloody likely!
-      newSize = minCapacity;
-      else newSize = Math.min(newSize, a.length >>> 1);
+      if (newSize < 0) newSize = minCapacity;
+      else newSize = Math.min(newSize, (a != null ? a.length : minCapacity) >>> 1);
 
       T[] newArray = (T[]) new Object[newSize];
       tmp = newArray;
