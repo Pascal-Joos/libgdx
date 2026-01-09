@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
+import edu.ucr.cs.riple.annotator.util.Nullability;
+import javax.annotation.Nullable;
 
 /**
  * A group that lays out its children side by side horizontally, with optional wrapping. This can be
@@ -44,7 +46,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 public class HorizontalGroup extends WidgetGroup {
   private float prefWidth, prefHeight, lastPrefHeight;
   private boolean sizeInvalid = true;
-  private FloatArray rowSizes; // row width, row height, ...
+  @Nullable private FloatArray rowSizes; // row width, row height, ...
 
   private int align = Align.left, rowAlign;
   private boolean reverse, round = true, wrap, wrapReverse, expand;
@@ -216,11 +218,14 @@ public class HorizontalGroup extends WidgetGroup {
         rowHeight = 0,
         rowDir = -1;
 
+    if (rowSizes == null) rowSizes = new FloatArray();
+    FloatArray rowSizes = this.rowSizes;
+
     if ((align & Align.top) != 0) rowY += getHeight() - prefHeight;
     else if ((align & Align.bottom) == 0) // center
     rowY += (getHeight() - prefHeight) / 2;
     if (wrapReverse) {
-      rowY -= prefHeight + rowSizes.get(1);
+      rowY -= prefHeight + Nullability.castToNonnull(rowSizes).get(1);
       rowDir = 1;
     }
 
@@ -231,7 +236,6 @@ public class HorizontalGroup extends WidgetGroup {
     groupWidth -= padRight;
     align = this.rowAlign;
 
-    FloatArray rowSizes = this.rowSizes;
     SnapshotArray<Actor> children = getChildren();
     int i = 0, n = children.size, incr = 1;
     if (reverse) {
@@ -258,13 +262,14 @@ public class HorizontalGroup extends WidgetGroup {
         r =
             Math.min(
                 r,
-                rowSizes.size
-                    - 2); // In case an actor changed size without invalidating this layout.
+                Nullability.castToNonnull(rowSizes).size
+                    - 2); // In case an actor changed size without invalidating
+        // this layout.
         x = xStart;
-        if ((align & Align.right) != 0) x += maxWidth - rowSizes.get(r);
+        if ((align & Align.right) != 0) x += maxWidth - Nullability.castToNonnull(rowSizes).get(r);
         else if ((align & Align.left) == 0) // center
-        x += (maxWidth - rowSizes.get(r)) / 2;
-        rowHeight = rowSizes.get(r + 1);
+        x += (maxWidth - Nullability.castToNonnull(rowSizes).get(r)) / 2;
+        rowHeight = Nullability.castToNonnull(rowSizes).get(r + 1);
         if (r > 0) rowY += wrapSpace * rowDir;
         rowY += rowHeight * rowDir;
         r += 2;
@@ -305,7 +310,9 @@ public class HorizontalGroup extends WidgetGroup {
 
   /** When wrapping is enabled, the number of rows may be > 1. */
   public int getRows() {
-    return wrap ? rowSizes.size >> 1 : 1;
+    if (!wrap) return 1;
+    if (rowSizes == null) computeSize();
+    return rowSizes.size >> 1;
   }
 
   /** If true (the default), positions and sizes are rounded to integers. */
