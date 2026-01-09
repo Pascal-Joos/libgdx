@@ -29,7 +29,6 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
@@ -111,11 +110,7 @@ public abstract class ModelLoader<P extends ModelLoader.ModelParameters>
     for (final ModelMaterial modelMaterial : data.materials) {
       if (modelMaterial.textures != null) {
         for (final ModelTexture modelTexture : modelMaterial.textures)
-          deps.add(
-              new AssetDescriptor(
-                  Nullability.castToNonnull(modelTexture.fileName),
-                  Texture.class,
-                  textureParameter));
+          deps.add(new AssetDescriptor(modelTexture.fileName, Texture.class, textureParameter));
       }
     }
     return deps;

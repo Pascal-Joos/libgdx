@@ -54,7 +54,6 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import javax.annotation.Nullable;
 
@@ -319,12 +318,11 @@ public class Model implements Disposable {
     if (mtl.textures != null) {
       for (ModelTexture tex : mtl.textures) {
         Texture texture;
-        String texFileName = Nullability.castToNonnull(tex.fileName);
-        if (textures.containsKey(texFileName)) {
-          texture = textures.get(Nullability.castToNonnull(tex.fileName));
+        if (textures.containsKey(tex.fileName)) {
+          texture = textures.get(tex.fileName);
         } else {
-          texture = textureProvider.load(texFileName);
-          textures.put(texFileName, texture);
+          texture = textureProvider.load(tex.fileName);
+          textures.put(tex.fileName, texture);
           disposables.add(texture);
         }
 
