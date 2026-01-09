@@ -41,6 +41,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -151,13 +152,14 @@ public class PointSpriteParticleBatch
   protected void flush(int[] offsets) {
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
+      if (data.controller == null) continue;
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
 
-      for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
+      for (int p = 0; p < Nullability.castToNonnull(data.controller).particles.size; ++p, ++tp) {
         int offset = offsets[tp] * CPU_VERTEX_SIZE;
         int regionOffset = p * regionChannel.strideSize;
         int positionOffset = p * positionChannel.strideSize;

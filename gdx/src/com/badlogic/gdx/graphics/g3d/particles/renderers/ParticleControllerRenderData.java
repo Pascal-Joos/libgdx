@@ -18,6 +18,7 @@ package com.badlogic.gdx.graphics.g3d.particles.renderers;
 
 import com.badlogic.gdx.graphics.g3d.particles.ParallelArray.FloatChannel;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
+import javax.annotation.Nullable;
 
 /**
  * Render data used by particle controller renderer
@@ -25,6 +26,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
  * @author Inferno
  */
 public abstract class ParticleControllerRenderData {
-  public ParticleController controller;
+  @Nullable public ParticleController controller;
   public FloatChannel positionChannel;
 }
