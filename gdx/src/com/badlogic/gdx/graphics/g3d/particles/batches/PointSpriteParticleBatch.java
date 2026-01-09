@@ -136,7 +136,6 @@ public class PointSpriteParticleBatch
     attribute.textureDescription.texture = texture;
   }
 
-  @Nullable
   public Texture getTexture() {
     TextureAttribute attribute =
         (TextureAttribute) renderable.material.get(TextureAttribute.Diffuse);

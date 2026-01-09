@@ -27,7 +27,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ResourceData.SaveData;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -204,7 +203,7 @@ public abstract class RegionInfluencer extends Influencer {
       if (imageName == null) {
         return;
       }
-      TextureAtlas.AtlasRegion region = Nullability.castToNonnull(atlas).findRegion(imageName);
+      TextureAtlas.AtlasRegion region = atlas.findRegion(imageName);
       this.u = region.getU();
       this.v = region.getV();
       this.u2 = region.getU2();
