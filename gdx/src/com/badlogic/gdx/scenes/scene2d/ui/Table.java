@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -1195,7 +1196,7 @@ public class Table extends WidgetGroup {
       float fillX = c.fillX, fillY = c.fillY;
       if (fillX > 0) {
         c.actorWidth = Math.max(spannedCellWidth * fillX, c.minWidth.get(c.actor));
-        float maxWidth = c.maxWidth.get(c.actor);
+        float maxWidth = c.maxWidth.get(Nullability.castToNonnull(c.actor));
         if (maxWidth > 0) c.actorWidth = Math.min(c.actorWidth, maxWidth);
       }
       if (fillY > 0) {
