@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -51,7 +52,7 @@ import javax.annotation.Nullable;
 public class Tree<N extends Node, V> extends WidgetGroup {
   private static final Vector2 tmp = new Vector2();
 
-  TreeStyle style;
+  @Nullable TreeStyle style;
   final Array<N> rootNodes = new Array();
   final Selection<N> selection;
   float ySpacing = 4,
@@ -213,7 +214,11 @@ public class Tree<N extends Node, V> extends WidgetGroup {
   }
 
   private float plusMinusWidth() {
-    float width = Math.max(style.plus.getMinWidth(), style.minus.getMinWidth());
+    if (style == null || style.plus == null || style.minus == null) return 0f;
+    float width =
+        Math.max(
+            Nullability.castToNonnull(style).plus.getMinWidth(),
+            Nullability.castToNonnull(style).minus.getMinWidth());
     if (style.plusOver != null) width = Math.max(width, style.plusOver.getMinWidth());
     if (style.minusOver != null) width = Math.max(width, style.minusOver.getMinWidth());
     return width;
@@ -286,7 +291,8 @@ public class Tree<N extends Node, V> extends WidgetGroup {
 
   /** Called to draw the background. Default implementation draws the style background drawable. */
   protected void drawBackground(Batch batch, float parentAlpha) {
-    if (style.background != null) {
+    TreeStyle style = this.style;
+    if (style != null && Nullability.castToNonnull(style).background != null) {
       Color color = getColor();
       batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
       style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
@@ -317,6 +323,8 @@ public class Tree<N extends Node, V> extends WidgetGroup {
       cullTop = cullBottom + cullingArea.height;
     }
     TreeStyle style = this.style;
+    if (style == null) return 0;
+    style = Nullability.castToNonnull(style);
     float x = getX(),
         y = getY(),
         expandX = x + indent,
@@ -337,9 +345,15 @@ public class Tree<N extends Node, V> extends WidgetGroup {
               y + actorY - ySpacing / 2,
               getWidth(),
               height + ySpacing);
-        } else if (node == overNode && style.over != null) {
+        } else if (node == overNode && Nullability.castToNonnull(style).over != null) {
           drawOver(
-              node, style.over, batch, x, y + actorY - ySpacing / 2, getWidth(), height + ySpacing);
+              node,
+              Nullability.castToNonnull(style).over,
+              batch,
+              x,
+              y + actorY - ySpacing / 2,
+              getWidth(),
+              height + ySpacing);
         }
 
         if (node.icon != null) {
@@ -390,17 +404,26 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    * @param iconX The X coordinate of the over node's icon.
    */
   protected Drawable getExpandIcon(N node, float iconX) {
+    TreeStyle style = this.style;
+    if (style == null) return null;
     if (node == overNode //
         && Gdx.app.getType() == ApplicationType.Desktop //
         && (!selection.getMultiple() || (!UIUtils.ctrl() && !UIUtils.shift())) //
     ) {
       float mouseX = screenToLocalCoordinates(tmp.set(Gdx.input.getX(), 0)).x + getX();
       if (mouseX >= 0 && mouseX < iconX) {
-        Drawable icon = node.expanded ? style.minusOver : style.plusOver;
+        Drawable icon =
+            node.expanded
+                ? Nullability.castToNonnull(style).minusOver
+                : Nullability.castToNonnull(style).plusOver;
         if (icon != null) return icon;
       }
     }
-    return node.expanded ? style.minus : style.plus;
+    return style == null
+        ? null
+        : (node.expanded
+            ? Nullability.castToNonnull(style).minus
+            : Nullability.castToNonnull(style).plus);
   }
 
   /**
@@ -462,6 +485,7 @@ public class Tree<N extends Node, V> extends WidgetGroup {
     return node == null ? null : (V) node.getValue();
   }
 
+  @Nullable
   public TreeStyle getStyle() {
     return style;
   }
