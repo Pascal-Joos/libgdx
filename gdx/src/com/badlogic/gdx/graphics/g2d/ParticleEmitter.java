@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
@@ -439,8 +440,8 @@ public class ParticleEmitter {
       particle.angleSin = MathUtils.sinDeg(angle);
     }
 
-    float spriteWidth = sprite.getWidth();
-    float spriteHeight = sprite.getHeight();
+    float spriteWidth = Nullability.castToNonnull(sprite).getWidth();
+    float spriteHeight = Nullability.castToNonnull(sprite).getHeight();
 
     particle.xScale = xScaleValue.newLowValue() / spriteWidth;
     particle.xScaleDiff = xScaleValue.newHighValue() / spriteWidth;
