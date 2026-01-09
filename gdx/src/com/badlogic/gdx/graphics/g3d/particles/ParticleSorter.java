@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g3d.particles.renderers.ParticleControllerRende
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -55,7 +56,7 @@ public abstract class ParticleSorter {
   /** This class will sort all the particles using the distance from camera. */
   public static class Distance extends ParticleSorter {
     private float[] distances;
-    private int[] particleIndices, particleOffsets;
+    @Nullable private int[] particleIndices, particleOffsets;
     private int currentSize = 0;
 
     @Override
@@ -68,8 +69,23 @@ public abstract class ParticleSorter {
       }
     }
 
+    @SuppressWarnings("NullAway")
     @Override
     public <T extends ParticleControllerRenderData> int[] sort(Array<T> renderData) {
+      int capacity = 0;
+      for (int i = 0, n = renderData.size; i < n; ++i) {
+        capacity += renderData.get(i).controller.particles.size;
+      }
+      ensureCapacity(capacity);
+
+      if (camera == null || camera.view == null) {
+        return null;
+      }
+
+      if (particleIndices == null) {
+        return null;
+      }
+
       float[] val = camera.view.val;
       float cx = val[Matrix4.M20], cy = val[Matrix4.M21], cz = val[Matrix4.M22];
       int count = 0, i = 0;
@@ -81,20 +97,27 @@ public abstract class ParticleSorter {
               cx * data.positionChannel.data[k + ParticleChannels.XOffset]
                   + cy * data.positionChannel.data[k + ParticleChannels.YOffset]
                   + cz * data.positionChannel.data[k + ParticleChannels.ZOffset];
-          particleIndices[i] = i;
+          Nullability.castToNonnull(particleIndices)[i] = i;
         }
         count += data.controller.particles.size;
       }
 
       qsort(0, count - 1);
 
+      if (particleOffsets == null) {
+        return null;
+      }
       for (i = 0; i < count; ++i) {
-        particleOffsets[particleIndices[i]] = i;
+        Nullability.castToNonnull(particleOffsets)[Nullability.castToNonnull(particleIndices)[i]] =
+            i;
       }
       return particleOffsets;
     }
 
     public void qsort(int si, int ei) {
+      if (particleIndices == null || distances == null) {
+        return;
+      }
       // base case
       if (si < ei) {
         float tmp;
