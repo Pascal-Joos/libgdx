@@ -36,7 +36,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -281,10 +280,7 @@ public class ParticleShader extends BaseShader {
     this.config = config;
     this.program = shaderProgram;
     this.renderable = renderable;
-    materialMask =
-        (renderable != null && renderable.material != null)
-            ? Nullability.castToNonnull(renderable.material).getMask() | optionalAttributes
-            : optionalAttributes;
+    materialMask = renderable.material.getMask() | optionalAttributes;
     vertexMask = renderable.meshPart.mesh.getVertexAttributes().getMask();
 
     if (!config.ignoreUnimplemented && (implementedFlags & materialMask) != materialMask)
@@ -328,9 +324,7 @@ public class ParticleShader extends BaseShader {
 
   @Override
   public boolean canRender(final Renderable renderable) {
-    final long matFlags =
-        (renderable != null && renderable.material != null) ? renderable.material.getMask() : 0;
-    return (materialMask == (matFlags | optionalAttributes))
+    return (materialMask == (renderable.material.getMask() | optionalAttributes))
         && (vertexMask == renderable.meshPart.mesh.getVertexAttributes().getMask());
   }
 
@@ -357,7 +351,7 @@ public class ParticleShader extends BaseShader {
 
   @Override
   public void render(final Renderable renderable) {
-    if (renderable.material == null || !renderable.material.has(BlendingAttribute.Type))
+    if (!renderable.material.has(BlendingAttribute.Type))
       context.setBlending(false, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     bindMaterial(renderable);
     super.render(renderable);
@@ -372,7 +366,6 @@ public class ParticleShader extends BaseShader {
   @Nullable Material currentMaterial;
 
   protected void bindMaterial(final Renderable renderable) {
-    if (renderable.material == null) return;
     if (currentMaterial == renderable.material) return;
 
     int cullFace = config.defaultCullFace == -1 ? GL20.GL_BACK : config.defaultCullFace;
@@ -382,7 +375,7 @@ public class ParticleShader extends BaseShader {
     boolean depthMask = true;
 
     currentMaterial = renderable.material;
-    for (final Attribute attr : Nullability.castToNonnull(currentMaterial)) {
+    for (final Attribute attr : currentMaterial) {
       final long t = attr.type;
       if (BlendingAttribute.is(t)) {
         context.setBlending(
