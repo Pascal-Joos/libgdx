@@ -19,6 +19,7 @@ package com.badlogic.gdx.graphics.g3d.particles;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -200,7 +201,7 @@ public class ParallelArray {
    * same id already exists, no allocation is performed and that channel is returned.
    */
   public <T extends Channel> T addChannel(@Nullable ChannelDescriptor channelDescriptor) {
-    return addChannel(channelDescriptor, null);
+    return addChannel(Nullability.castToNonnull(channelDescriptor), null);
   }
 
   /**
