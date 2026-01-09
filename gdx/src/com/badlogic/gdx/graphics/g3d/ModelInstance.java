@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -283,7 +284,7 @@ public class ModelInstance implements RenderableProvider {
 
   /** Constructs a new ModelInstance with the specified transform. */
   public ModelInstance(final Model model, Matrix4 transform) {
-    this(model, transform, (String[]) null);
+    this(model, transform, Nullability.castToNonnull((String[]) null));
   }
 
   /** Constructs a new ModelInstance which is an copy of the specified ModelInstance. */
