@@ -74,6 +74,7 @@ public interface TextureData {
    *
    * @return the pixmap.
    */
+  @Nullable
   public Pixmap consumePixmap();
 
   /**
