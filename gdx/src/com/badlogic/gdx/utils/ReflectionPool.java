@@ -19,6 +19,7 @@ package com.badlogic.gdx.utils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -53,7 +54,8 @@ public class ReflectionPool<T> extends Pool<T> {
       return ClassReflection.getConstructor(type, (Class[]) null);
     } catch (Exception ex1) {
       try {
-        Constructor constructor = ClassReflection.getDeclaredConstructor(type, (Class[]) null);
+        Constructor constructor =
+            ClassReflection.getDeclaredConstructor(type, Nullability.castToNonnull((Class[]) null));
         constructor.setAccessible(true);
         return constructor;
       } catch (ReflectionException ex2) {
