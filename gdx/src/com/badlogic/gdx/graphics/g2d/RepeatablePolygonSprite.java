@@ -20,8 +20,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ShortArray;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * Renders polygon filled with a repeating TextureRegion with specified density Without causing an
@@ -31,7 +29,7 @@ import javax.annotation.Nullable;
  */
 public class RepeatablePolygonSprite {
 
-  @Nullable private TextureRegion region;
+  private TextureRegion region;
   private float density;
 
   private boolean dirty = true;
@@ -168,7 +166,6 @@ public class RepeatablePolygonSprite {
 
   /** Builds final vertices with vertex attributes like coordinates, color and region u/v */
   private void buildVertices() {
-    if (region == null) return;
     vertices.clear();
     for (int i = 0; i < parts.size; i++) {
       float verts[] = parts.get(i);
@@ -192,16 +189,8 @@ public class RepeatablePolygonSprite {
         if (verts[j] == (col + 1) * gridWidth) u = 1f;
         if (verts[j + 1] == row * gridHeight) v = 0f;
         if (verts[j + 1] == (row + 1) * gridHeight) v = 1f;
-        u =
-            Nullability.castToNonnull(region).getU()
-                + (Nullability.castToNonnull(region).getU2()
-                        - Nullability.castToNonnull(region).getU())
-                    * u;
-        v =
-            Nullability.castToNonnull(region).getV()
-                + (Nullability.castToNonnull(region).getV2()
-                        - Nullability.castToNonnull(region).getV())
-                    * v;
+        u = region.getU() + (region.getU2() - region.getU()) * u;
+        v = region.getV() + (region.getV2() - region.getV()) * v;
         fullVerts[idx++] = u;
         fullVerts[idx++] = v;
       }
@@ -213,9 +202,6 @@ public class RepeatablePolygonSprite {
   public void draw(PolygonSpriteBatch batch) {
     if (dirty) {
       buildVertices();
-    }
-    if (region == null) {
-      return;
     }
     for (int i = 0; i < vertices.size; i++) {
       batch.draw(
