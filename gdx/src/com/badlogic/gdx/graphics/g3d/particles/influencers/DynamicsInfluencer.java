@@ -24,7 +24,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 /**
  * It's an {@link Influencer} which controls the particles dynamics (movement, rotations).
@@ -33,6 +35,7 @@ import java.util.Arrays;
  */
 public class DynamicsInfluencer extends Influencer {
   public Array<DynamicsModifier> velocities;
+  @Nullable
   private FloatChannel accellerationChannel,
       positionChannel,
       previousPositionChannel,
@@ -101,20 +104,20 @@ public class DynamicsInfluencer extends Influencer {
   }
 
   public void activateParticles(int startIndex, int count) {
-    if (hasAcceleration) {
+    if (hasAcceleration && previousPositionChannel != null && positionChannel != null) {
       // Previous position is the current position
       // Attention, this requires that some other influencer setting the position channel must
       // execute before this influencer.
-      for (int i = startIndex * positionChannel.strideSize,
-              c = i + count * positionChannel.strideSize;
+      for (int i = startIndex * Nullability.castToNonnull(positionChannel).strideSize,
+              c = i + count * Nullability.castToNonnull(positionChannel).strideSize;
           i < c;
-          i += positionChannel.strideSize) {
+          i += Nullability.castToNonnull(positionChannel).strideSize) {
         previousPositionChannel.data[i + ParticleChannels.XOffset] =
-            positionChannel.data[i + ParticleChannels.XOffset];
+            Nullability.castToNonnull(positionChannel).data[i + ParticleChannels.XOffset];
         previousPositionChannel.data[i + ParticleChannels.YOffset] =
-            positionChannel.data[i + ParticleChannels.YOffset];
+            Nullability.castToNonnull(positionChannel).data[i + ParticleChannels.YOffset];
         previousPositionChannel.data[i + ParticleChannels.ZOffset] =
-            positionChannel.data[i + ParticleChannels.ZOffset];
+            Nullability.castToNonnull(positionChannel).data[i + ParticleChannels.ZOffset];
         /*
          * //Euler intialization previousPositionChannel.data[i+ParticleChannels.XOffset] =
          * previousPositionChannel.data[i+ParticleChannels.YOffset] = previousPositionChannel.data[i+ParticleChannels.ZOffset]
@@ -123,25 +126,25 @@ public class DynamicsInfluencer extends Influencer {
       }
     }
 
-    if (has2dAngularVelocity) {
+    if (rotationChannel != null && has2dAngularVelocity) {
       // Rotation back to 0
-      for (int i = startIndex * rotationChannel.strideSize,
-              c = i + count * rotationChannel.strideSize;
+      for (int i = startIndex * Nullability.castToNonnull(rotationChannel).strideSize,
+              c = i + count * Nullability.castToNonnull(rotationChannel).strideSize;
           i < c;
-          i += rotationChannel.strideSize) {
-        rotationChannel.data[i + ParticleChannels.CosineOffset] = 1;
-        rotationChannel.data[i + ParticleChannels.SineOffset] = 0;
+          i += Nullability.castToNonnull(rotationChannel).strideSize) {
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.CosineOffset] = 1;
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.SineOffset] = 0;
       }
-    } else if (has3dAngularVelocity) {
+    } else if (rotationChannel != null && has3dAngularVelocity) {
       // Rotation back to 0
-      for (int i = startIndex * rotationChannel.strideSize,
-              c = i + count * rotationChannel.strideSize;
+      for (int i = startIndex * Nullability.castToNonnull(rotationChannel).strideSize,
+              c = i + count * Nullability.castToNonnull(rotationChannel).strideSize;
           i < c;
-          i += rotationChannel.strideSize) {
-        rotationChannel.data[i + ParticleChannels.XOffset] = 0;
-        rotationChannel.data[i + ParticleChannels.YOffset] = 0;
-        rotationChannel.data[i + ParticleChannels.ZOffset] = 0;
-        rotationChannel.data[i + ParticleChannels.WOffset] = 1;
+          i += Nullability.castToNonnull(rotationChannel).strideSize) {
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.XOffset] = 0;
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.YOffset] = 0;
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.ZOffset] = 0;
+        Nullability.castToNonnull(rotationChannel).data[i + ParticleChannels.WOffset] = 1;
       }
     }
 
@@ -151,27 +154,31 @@ public class DynamicsInfluencer extends Influencer {
   }
 
   public void update() {
-    // Clean previouse frame velocities
-    if (hasAcceleration)
+    if ((!hasAcceleration || accellerationChannel == null)
+        && !has2dAngularVelocity
+        && !has3dAngularVelocity) return;
+
+    if (hasAcceleration && accellerationChannel != null)
       Arrays.fill(
-          accellerationChannel.data,
+          Nullability.castToNonnull(accellerationChannel).data,
           0,
-          controller.particles.size * accellerationChannel.strideSize,
+          controller.particles.size * Nullability.castToNonnull(accellerationChannel).strideSize,
           0);
-    if (has2dAngularVelocity || has3dAngularVelocity)
+    if ((has2dAngularVelocity || has3dAngularVelocity) && angularVelocityChannel != null)
       Arrays.fill(
-          angularVelocityChannel.data,
+          Nullability.castToNonnull(angularVelocityChannel).data,
           0,
-          controller.particles.size * angularVelocityChannel.strideSize,
+          controller.particles.size * Nullability.castToNonnull(angularVelocityChannel).strideSize,
           0);
 
-    // Sum all the forces/accelerations
     for (int k = 0; k < velocities.size; ++k) {
       velocities.items[k].update();
     }
 
-    // Apply the forces
-    if (hasAcceleration) {
+    if (hasAcceleration
+        && accellerationChannel != null
+        && positionChannel != null
+        && previousPositionChannel != null) {
       /*
        * //Euler Integration for(int i=0, offset = 0; i < controller.particles.size; ++i, offset +=positionChannel.strideSize){
        * previousPositionChannel.data[offset + ParticleChannels.XOffset] += accellerationChannel.data[offset +
@@ -184,72 +191,98 @@ public class DynamicsInfluencer extends Influencer {
        * previousPositionChannel.data[offset + ParticleChannels.YOffset]*controller.deltaTime; positionChannel.data[offset +
        * ParticleChannels.ZOffset] += previousPositionChannel.data[offset + ParticleChannels.ZOffset]*controller.deltaTime; }
        */
-      // Verlet integration
       for (int i = 0, offset = 0;
           i < controller.particles.size;
-          ++i, offset += positionChannel.strideSize) {
-        float x = positionChannel.data[offset + ParticleChannels.XOffset],
-            y = positionChannel.data[offset + ParticleChannels.YOffset],
-            z = positionChannel.data[offset + ParticleChannels.ZOffset];
-        positionChannel.data[offset + ParticleChannels.XOffset] =
+          ++i, offset += Nullability.castToNonnull(positionChannel).strideSize) {
+        float
+            x = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.XOffset],
+            y = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.YOffset],
+            z = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.ZOffset];
+        Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.XOffset] =
             2 * x
-                - previousPositionChannel.data[offset + ParticleChannels.XOffset]
-                + accellerationChannel.data[offset + ParticleChannels.XOffset]
+                - Nullability.castToNonnull(previousPositionChannel)
+                    .data[offset + ParticleChannels.XOffset]
+                + Nullability.castToNonnull(accellerationChannel)
+                        .data[offset + ParticleChannels.XOffset]
                     * controller.deltaTimeSqr;
-        positionChannel.data[offset + ParticleChannels.YOffset] =
+        Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.YOffset] =
             2 * y
-                - previousPositionChannel.data[offset + ParticleChannels.YOffset]
-                + accellerationChannel.data[offset + ParticleChannels.YOffset]
+                - Nullability.castToNonnull(previousPositionChannel)
+                    .data[offset + ParticleChannels.YOffset]
+                + Nullability.castToNonnull(accellerationChannel)
+                        .data[offset + ParticleChannels.YOffset]
                     * controller.deltaTimeSqr;
-        positionChannel.data[offset + ParticleChannels.ZOffset] =
+        Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.ZOffset] =
             2 * z
-                - previousPositionChannel.data[offset + ParticleChannels.ZOffset]
-                + accellerationChannel.data[offset + ParticleChannels.ZOffset]
+                - Nullability.castToNonnull(previousPositionChannel)
+                    .data[offset + ParticleChannels.ZOffset]
+                + Nullability.castToNonnull(accellerationChannel)
+                        .data[offset + ParticleChannels.ZOffset]
                     * controller.deltaTimeSqr;
-        previousPositionChannel.data[offset + ParticleChannels.XOffset] = x;
-        previousPositionChannel.data[offset + ParticleChannels.YOffset] = y;
-        previousPositionChannel.data[offset + ParticleChannels.ZOffset] = z;
+        Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.XOffset] =
+            x;
+        Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.YOffset] =
+            y;
+        Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.ZOffset] =
+            z;
       }
     }
 
-    if (has2dAngularVelocity) {
+    if (has2dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
       for (int i = 0, offset = 0;
           i < controller.particles.size;
-          ++i, offset += rotationChannel.strideSize) {
-        float rotation = angularVelocityChannel.data[i] * controller.deltaTime;
+          ++i, offset += Nullability.castToNonnull(rotationChannel).strideSize) {
+        float rotation =
+            Nullability.castToNonnull(angularVelocityChannel).data[i] * controller.deltaTime;
         if (rotation != 0) {
           float cosBeta = MathUtils.cosDeg(rotation), sinBeta = MathUtils.sinDeg(rotation);
-          float currentCosine = rotationChannel.data[offset + ParticleChannels.CosineOffset];
-          float currentSine = rotationChannel.data[offset + ParticleChannels.SineOffset];
+          float currentCosine =
+              Nullability.castToNonnull(rotationChannel)
+                  .data[offset + ParticleChannels.CosineOffset];
+          float currentSine =
+              Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.SineOffset];
           float newCosine = currentCosine * cosBeta - currentSine * sinBeta,
               newSine = currentSine * cosBeta + currentCosine * sinBeta;
-          rotationChannel.data[offset + ParticleChannels.CosineOffset] = newCosine;
-          rotationChannel.data[offset + ParticleChannels.SineOffset] = newSine;
+          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.CosineOffset] =
+              newCosine;
+          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.SineOffset] =
+              newSine;
         }
       }
-    } else if (has3dAngularVelocity) {
+    } else if (has3dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
       for (int i = 0, offset = 0, angularOffset = 0;
           i < controller.particles.size;
-          ++i, offset += rotationChannel.strideSize,
-              angularOffset += angularVelocityChannel.strideSize) {
+          ++i, offset += Nullability.castToNonnull(rotationChannel).strideSize,
+              angularOffset += Nullability.castToNonnull(angularVelocityChannel).strideSize) {
 
-        float wx = angularVelocityChannel.data[angularOffset + ParticleChannels.XOffset],
-            wy = angularVelocityChannel.data[angularOffset + ParticleChannels.YOffset],
-            wz = angularVelocityChannel.data[angularOffset + ParticleChannels.ZOffset],
-            qx = rotationChannel.data[offset + ParticleChannels.XOffset],
-            qy = rotationChannel.data[offset + ParticleChannels.YOffset],
-            qz = rotationChannel.data[offset + ParticleChannels.ZOffset],
-            qw = rotationChannel.data[offset + ParticleChannels.WOffset];
+        float
+            wx =
+                Nullability.castToNonnull(angularVelocityChannel)
+                    .data[angularOffset + ParticleChannels.XOffset],
+            wy =
+                Nullability.castToNonnull(angularVelocityChannel)
+                    .data[angularOffset + ParticleChannels.YOffset],
+            wz =
+                Nullability.castToNonnull(angularVelocityChannel)
+                    .data[angularOffset + ParticleChannels.ZOffset],
+            qx = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.XOffset],
+            qy = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.YOffset],
+            qz = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.ZOffset],
+            qw = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.WOffset];
         TMP_Q
             .set(wx, wy, wz, 0)
             .mul(qx, qy, qz, qw)
             .mul(0.5f * controller.deltaTime)
             .add(qx, qy, qz, qw)
             .nor();
-        rotationChannel.data[offset + ParticleChannels.XOffset] = TMP_Q.x;
-        rotationChannel.data[offset + ParticleChannels.YOffset] = TMP_Q.y;
-        rotationChannel.data[offset + ParticleChannels.ZOffset] = TMP_Q.z;
-        rotationChannel.data[offset + ParticleChannels.WOffset] = TMP_Q.w;
+        Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.XOffset] =
+            TMP_Q.x;
+        Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.YOffset] =
+            TMP_Q.y;
+        Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.ZOffset] =
+            TMP_Q.z;
+        Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.WOffset] =
+            TMP_Q.w;
       }
     }
   }
