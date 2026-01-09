@@ -27,7 +27,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -142,7 +141,7 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   public abstract static class Angular extends Strength {
-    @Nullable protected FloatChannel angularChannel;
+    protected FloatChannel angularChannel;
 
     /** Polar angle, XZ plane */
     public ScaledNumericValue thetaValue;
@@ -173,7 +172,6 @@ public abstract class DynamicsModifier extends Influencer {
     @Override
     public void activateParticles(int startIndex, int count) {
       super.activateParticles(startIndex, count);
-      if (angularChannel == null) return;
       float start, diff;
       for (int i = startIndex * angularChannel.strideSize,
               c = i + count * angularChannel.strideSize;
@@ -294,8 +292,6 @@ public abstract class DynamicsModifier extends Influencer {
       // Algorithm 3
       // Consider a channel which represent a simple angular momentum L
       // Proceed as Algorithm 2
-
-      if (angularChannel == null) return;
 
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
@@ -418,7 +414,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
-      if (angularChannel == null) return;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
@@ -484,7 +479,6 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
-      if (angularChannel == null) return;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
@@ -502,22 +496,18 @@ public abstract class DynamicsModifier extends Influencer {
                     + strengthChannel.data[s + ParticleChannels.VelocityStrengthDiffOffset]
                         * strengthValue.getScale(lifePercent),
             phi =
-                Nullability.castToNonnull(angularChannel)
-                        .data[a + ParticleChannels.VelocityPhiStartOffset]
-                    + Nullability.castToNonnull(angularChannel)
-                            .data[a + ParticleChannels.VelocityPhiDiffOffset]
+                angularChannel.data[a + ParticleChannels.VelocityPhiStartOffset]
+                    + angularChannel.data[a + ParticleChannels.VelocityPhiDiffOffset]
                         * phiValue.getScale(lifePercent),
             theta =
-                Nullability.castToNonnull(angularChannel)
-                        .data[a + ParticleChannels.VelocityThetaStartOffset]
-                    + Nullability.castToNonnull(angularChannel)
-                            .data[a + ParticleChannels.VelocityThetaDiffOffset]
+                angularChannel.data[a + ParticleChannels.VelocityThetaStartOffset]
+                    + angularChannel.data[a + ParticleChannels.VelocityThetaDiffOffset]
                         * thetaValue.getScale(lifePercent);
 
         float cosTheta = MathUtils.cosDeg(theta),
             sinTheta = MathUtils.sinDeg(theta),
             cosPhi = MathUtils.cosDeg(phi),
-            sinPhi = MathUtils.cosDeg(phi);
+            sinPhi = MathUtils.sinDeg(phi);
         TMP_V3.set(cosTheta * sinPhi, cosPhi, sinTheta * sinPhi);
         TMP_V1.set(
             positionChannel.data[positionOffset + ParticleChannels.XOffset],
