@@ -27,7 +27,6 @@
  */
 package com.badlogic.gdx.utils;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.UnsupportedEncodingException;
 
 public class Base64Coder {
@@ -272,7 +271,7 @@ public class Base64Coder {
    * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
    */
   public static byte[] decode(String s) {
-    return decode(Nullability.castToNonnull(s).toCharArray());
+    return decode(s.toCharArray());
   }
 
   /**

@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import javax.annotation.Nullable;
@@ -176,7 +175,7 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
       int spacingX = Integer.parseInt(spacingParts[0]);
       int spacingY = Integer.parseInt(spacingParts[1]);
 
-      FileHandle image = getRelativeFileHandle(tideFile, Nullability.castToNonnull(imageSource));
+      FileHandle image = getRelativeFileHandle(tideFile, imageSource);
       TextureRegion texture = imageResolver.getImage(image.path());
 
       TiledMapTileSets tilesets = map.getTileSets();
@@ -300,7 +299,7 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
         } else if (type.equals("String")) {
           properties.put(key, value);
         } else if (type.equals("Boolean")) {
-          properties.put(key, value != null && value.equalsIgnoreCase("true"));
+          properties.put(key, value.equalsIgnoreCase("true"));
         } else {
           properties.put(key, value);
         }

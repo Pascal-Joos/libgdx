@@ -22,7 +22,6 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -455,13 +454,12 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
         if (value == null) {
           value = property.getText();
         }
-        Object castValue = castProperty(name, Nullability.castToNonnull(value), type);
+        Object castValue = castProperty(name, value, type);
         properties.put(name, castValue);
       }
     }
   }
 
-  @Nullable
   protected Object castProperty(@Nullable String name, String value, @Nullable String type) {
     if (type == null) {
       return value;
@@ -473,8 +471,8 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
       return Boolean.valueOf(value);
     } else if (type.equals("color")) {
       // Tiled uses the format #AARRGGBB
-      String opaqueColor = Nullability.castToNonnull(value).substring(3);
-      String alpha = Nullability.castToNonnull(value).substring(1, 3);
+      String opaqueColor = value.substring(3);
+      String alpha = value.substring(1, 3);
       return Color.valueOf(opaqueColor + alpha);
     } else {
       throw new GdxRuntimeException(
@@ -516,9 +514,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
     }
     int[] ids = new int[width * height];
     if (encoding.equals("csv")) {
-      String text = data.getText();
-      if (text == null) throw new GdxRuntimeException("Missing TMX Layer Data for CSV encoding");
-      String[] array = text.split(",");
+      String[] array = data.getText().split(",");
       for (int i = 0; i < array.length; i++) ids[i] = (int) Long.parseLong(array[i].trim());
     } else {
       if (true)
@@ -526,10 +522,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
           InputStream is = null;
           try {
             String compression = data.getAttribute("compression", null);
-            String text = data.getText();
-            if (text == null)
-              throw new GdxRuntimeException("Missing TMX Layer Data for base64 encoding");
-            byte[] bytes = Base64Coder.decode(text);
+            byte[] bytes = Base64Coder.decode(data.getText());
             if (compression == null) is = new ByteArrayInputStream(bytes);
             else if (compression.equals("gzip"))
               is =
