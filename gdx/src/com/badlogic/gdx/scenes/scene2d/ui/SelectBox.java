@@ -43,6 +43,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -61,7 +62,7 @@ import javax.annotation.Nullable;
 public class SelectBox<T> extends Widget implements Disableable {
   static final Vector2 temp = new Vector2();
 
-  SelectBoxStyle style;
+  @Nullable SelectBoxStyle style;
   final Array<T> items = new Array();
   SelectBoxScrollPane<T> scrollPane;
   private float prefWidth, prefHeight;
@@ -149,6 +150,7 @@ public class SelectBox<T> extends Widget implements Disableable {
    * Returns the select box's style. Modifying the returned style may not have an effect until
    * {@link #setStyle(SelectBoxStyle)} is called.
    */
+  @Nullable
   public SelectBoxStyle getStyle() {
     return style;
   }
@@ -200,6 +202,7 @@ public class SelectBox<T> extends Widget implements Disableable {
   }
 
   public void layout() {
+    if (style == null) throw new IllegalStateException("style cannot be null.");
     Drawable bg = style.background;
     BitmapFont font = style.font;
 
@@ -260,18 +263,28 @@ public class SelectBox<T> extends Widget implements Disableable {
    */
   @Nullable
   protected @Null Drawable getBackgroundDrawable() {
-    if (isDisabled() && style.backgroundDisabled != null) return style.backgroundDisabled;
-    if (scrollPane.hasParent() && style.backgroundOpen != null) return style.backgroundOpen;
-    if (isOver() && style.backgroundOver != null) return style.backgroundOver;
-    return style.background;
+    SelectBoxStyle style = this.style;
+    if (style == null) return null;
+    if (isDisabled() && Nullability.castToNonnull(style).backgroundDisabled != null)
+      return Nullability.castToNonnull(style).backgroundDisabled;
+    if (scrollPane != null
+        && scrollPane.hasParent()
+        && Nullability.castToNonnull(style).backgroundOpen != null)
+      return Nullability.castToNonnull(style).backgroundOpen;
+    if (isOver() && Nullability.castToNonnull(style).backgroundOver != null)
+      return Nullability.castToNonnull(style).backgroundOver;
+    return Nullability.castToNonnull(style).background;
   }
 
   /** Returns the appropriate label font color from the style based on the current button state. */
   protected Color getFontColor() {
-    if (isDisabled() && style.disabledFontColor != null) return style.disabledFontColor;
-    if (style.overFontColor != null && (isOver() || scrollPane.hasParent()))
-      return style.overFontColor;
-    return style.fontColor;
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+    if (isDisabled() && Nullability.castToNonnull(style).disabledFontColor != null)
+      return Nullability.castToNonnull(style).disabledFontColor;
+    if (Nullability.castToNonnull(style).overFontColor != null
+        && (isOver() || (scrollPane != null && scrollPane.hasParent())))
+      return Nullability.castToNonnull(style).overFontColor;
+    return Nullability.castToNonnull(style).fontColor;
   }
 
   public void draw(Batch batch, float parentAlpha) {
@@ -279,7 +292,8 @@ public class SelectBox<T> extends Widget implements Disableable {
 
     Drawable background = getBackgroundDrawable();
     Color fontColor = getFontColor();
-    BitmapFont font = style.font;
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+    BitmapFont font = Nullability.castToNonnull(style).font;
 
     Color color = getColor();
     float x = getX(), y = getY();
@@ -375,14 +389,15 @@ public class SelectBox<T> extends Widget implements Disableable {
    * #setSelectedPrefWidth(boolean)} is true.
    */
   public float getMaxSelectedPrefWidth() {
+    if (style == null) throw new IllegalStateException("style cannot be null.");
     Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
     GlyphLayout layout = layoutPool.obtain();
     float width = 0;
     for (int i = 0; i < items.size; i++) {
-      layout.setText(style.font, toString(items.get(i)));
+      layout.setText(Nullability.castToNonnull(style).font, toString(items.get(i)));
       width = Math.max(layout.width, width);
     }
-    Drawable bg = style.background;
+    Drawable bg = Nullability.castToNonnull(this.style).background;
     if (bg != null)
       width = Math.max(width + bg.getLeftWidth() + bg.getRightWidth(), bg.getMinWidth());
     return width;
@@ -555,7 +570,8 @@ public class SelectBox<T> extends Widget implements Disableable {
      * that delegates {@link List#toString(Object)} to {@link SelectBox#toString(Object)}.
      */
     protected List<T> newList() {
-      return new List<T>(selectBox.style.listStyle) {
+      if (selectBox.style == null) throw new IllegalStateException("style cannot be null.");
+      return new List<T>(Nullability.castToNonnull(selectBox.style).listStyle) {
         public String toString(T obj) {
           return selectBox.toString(obj);
         }
