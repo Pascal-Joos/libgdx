@@ -28,7 +28,6 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -74,7 +73,7 @@ public class ModelInstance implements RenderableProvider {
    * @param model The {@link Model} to create an instance of.
    */
   public ModelInstance(final Model model) {
-    this(model, Nullability.castToNonnull((String[]) null));
+    this(model, (String[]) null);
   }
 
   /**
