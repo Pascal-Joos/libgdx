@@ -1471,7 +1471,9 @@ public class Json {
   }
 
   public String prettyPrint(String json, int singleLineColumns) {
-    return new JsonReader().parse(json).prettyPrint(outputType, singleLineColumns);
+    JsonValue value = new JsonReader().parse(json);
+    if (value == null) return null;
+    return value.prettyPrint(outputType, singleLineColumns);
   }
 
   public String prettyPrint(@Null Object object, PrettyPrintSettings settings) {
@@ -1479,7 +1481,9 @@ public class Json {
   }
 
   public String prettyPrint(String json, PrettyPrintSettings settings) {
-    return new JsonReader().parse(json).prettyPrint(settings);
+    JsonValue value = new JsonReader().parse(json);
+    if (value == null) return null;
+    return value.prettyPrint(settings);
   }
 
   private static class FieldMetadata {
