@@ -352,8 +352,10 @@ public class Tree<N extends Node, V> extends WidgetGroup {
 
         if (node.children.size > 0) {
           Drawable expandIcon = getExpandIcon(node, iconX);
-          float iconY = y + actorY + Math.round((height - expandIcon.getMinHeight()) / 2);
-          drawExpandIcon(node, expandIcon, batch, expandX, iconY);
+          if (expandIcon != null) {
+            float iconY = y + actorY + Math.round((height - expandIcon.getMinHeight()) / 2);
+            drawExpandIcon(node, expandIcon, batch, expandX, iconY);
+          }
         }
       } else if (actorY < cullBottom) //
       break;
@@ -389,6 +391,7 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    *
    * @param iconX The X coordinate of the over node's icon.
    */
+  @Nullable
   protected Drawable getExpandIcon(N node, float iconX) {
     if (node == overNode //
         && Gdx.app.getType() == ApplicationType.Desktop //
@@ -971,7 +974,7 @@ public class Tree<N extends Node, V> extends WidgetGroup {
    * @author Nathan Sweet
    */
   public static class TreeStyle {
-    public Drawable plus, minus;
+    @Nullable public Drawable plus, minus;
     @Nullable public @Null Drawable plusOver, minusOver;
     @Nullable public @Null Drawable over, selection, background;
 
