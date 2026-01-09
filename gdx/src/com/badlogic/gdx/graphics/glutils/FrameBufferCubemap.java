@@ -115,8 +115,8 @@ public class FrameBufferCubemap extends GLFrameBuffer<Cubemap> {
   protected Cubemap createTexture(FrameBufferTextureAttachmentSpec attachmentSpec) {
     GLOnlyTextureData data =
         new GLOnlyTextureData(
-            bufferBuilder.width,
-            bufferBuilder.height,
+            this.bufferBuilder.width,
+            this.bufferBuilder.height,
             0,
             attachmentSpec.internalFormat,
             attachmentSpec.format,

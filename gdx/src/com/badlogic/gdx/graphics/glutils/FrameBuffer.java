@@ -81,10 +81,11 @@ public class FrameBuffer extends GLFrameBuffer<Texture> {
 
   @Override
   protected Texture createTexture(FrameBufferTextureAttachmentSpec attachmentSpec) {
+    GLFrameBufferBuilder<? extends GLFrameBuffer<T>> localBufferBuilder = this.bufferBuilder;
     GLOnlyTextureData data =
         new GLOnlyTextureData(
-            bufferBuilder.width,
-            bufferBuilder.height,
+            localBufferBuilder.width,
+            localBufferBuilder.height,
             0,
             attachmentSpec.internalFormat,
             attachmentSpec.format,
