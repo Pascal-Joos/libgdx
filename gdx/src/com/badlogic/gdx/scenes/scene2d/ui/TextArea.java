@@ -30,7 +30,6 @@ import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /** A text input field with multiple lines. */
@@ -108,10 +107,7 @@ public class TextArea extends TextField {
     this.style = style;
 
     // no extra descent to fake line height
-    if (style.font != null)
-      textHeight =
-          Nullability.castToNonnull(style.font).getCapHeight()
-              - Nullability.castToNonnull(style.font).getDescent();
+    textHeight = style.font.getCapHeight() - style.font.getDescent();
     if (text != null) updateDisplayText();
     invalidateHierarchy();
   }
@@ -131,9 +127,7 @@ public class TextArea extends TextField {
       // without ceil we might end up with one less row then expected
       // due to how linesShowing is calculated in #sizeChanged and #getHeight() returning rounded
       // value
-      float prefHeight =
-          MathUtils.ceil(
-              (style.font != null ? style.font : style.messageFont).getLineHeight() * prefRows);
+      float prefHeight = MathUtils.ceil(style.font.getLineHeight() * prefRows);
       if (style.background != null) {
         prefHeight =
             Math.max(
@@ -244,9 +238,7 @@ public class TextArea extends TextField {
     float availableHeight =
         getHeight()
             - (background == null ? 0 : background.getBottomHeight() + background.getTopHeight());
-    if (font != null)
-      linesShowing =
-          (int) Math.floor(availableHeight / Nullability.castToNonnull(font).getLineHeight());
+    linesShowing = (int) Math.floor(availableHeight / font.getLineHeight());
   }
 
   protected float getTextY(BitmapFont font, @Null Drawable background) {
@@ -264,8 +256,7 @@ public class TextArea extends TextField {
     int minIndex = Math.min(cursor, selectionStart);
     int maxIndex = Math.max(cursor, selectionStart);
     BitmapFont.BitmapFontData fontData = font.getData();
-    BitmapFont usedFont = style.font != null ? style.font : font;
-    float lineHeight = Nullability.castToNonnull(style.font).getLineHeight();
+    float lineHeight = style.font.getLineHeight();
     while (i + 1 < linesBreak.size && i < (firstLineShowing + linesShowing) * 2) {
 
       int lineStart = linesBreak.get(i);
@@ -307,17 +298,16 @@ public class TextArea extends TextField {
             x + selectionX + fontLineOffsetX,
             y - lineHeight - offsetY,
             selectionWidth + fontLineOffsetWidth,
-            usedFont.getLineHeight());
+            font.getLineHeight());
       }
 
-      offsetY += usedFont.getLineHeight();
+      offsetY += font.getLineHeight();
       i += 2;
     }
   }
 
   protected void drawText(Batch batch, BitmapFont font, float x, float y) {
-    if (style.font == null) return;
-    float offsetY = -(Nullability.castToNonnull(style.font).getLineHeight() - textHeight) / 2;
+    float offsetY = -(style.font.getLineHeight() - textHeight) / 2;
     for (int i = firstLineShowing * 2;
         i < (firstLineShowing + linesShowing) * 2 && i < linesBreak.size;
         i += 2) {
@@ -345,7 +335,6 @@ public class TextArea extends TextField {
     if (!this.text.equals(lastText)) {
       this.lastText = text;
       BitmapFont font = style.font;
-      if (font == null) return;
       float maxWidthLine =
           this.getWidth()
               - (style.background != null
@@ -365,7 +354,7 @@ public class TextArea extends TextField {
           lineStart = i + 1;
         } else {
           lastSpace = (continueCursor(i, 0) ? lastSpace : i);
-          layout.setText(Nullability.castToNonnull(font), text.subSequence(lineStart, i + 1));
+          layout.setText(font, text.subSequence(lineStart, i + 1));
           if (layout.width > maxWidthLine) {
             if (lineStart >= lastSpace) {
               lastSpace = i - 1;
@@ -437,8 +426,7 @@ public class TextArea extends TextField {
 
   public float getCursorX() {
     float textOffset = 0;
-    if (style.font == null) return textOffset;
-    BitmapFont.BitmapFontData fontData = Nullability.castToNonnull(style.font).getData();
+    BitmapFont.BitmapFontData fontData = style.font.getData();
     if (!(cursor >= glyphPositions.size || cursorLine * 2 >= linesBreak.size)) {
       int lineStart = linesBreak.items[cursorLine * 2];
       float glyphOffset = 0;
@@ -455,8 +443,7 @@ public class TextArea extends TextField {
 
   public float getCursorY() {
     BitmapFont font = style.font;
-    if (font == null) return 0;
-    return -(cursorLine - firstLineShowing + 1) * Nullability.castToNonnull(font).getLineHeight();
+    return -(cursorLine - firstLineShowing + 1) * font.getLineHeight();
   }
 
   /** Input listener for the text area * */
@@ -478,10 +465,8 @@ public class TextArea extends TextField {
         y -= background.getTopHeight();
       }
 
-      if (font != null) {
-        cursorLine = (int) Math.floor((height - y) / font.getLineHeight()) + firstLineShowing;
-        cursorLine = Math.max(0, Math.min(cursorLine, getLines() - 1));
-      }
+      cursorLine = (int) Math.floor((height - y) / font.getLineHeight()) + firstLineShowing;
+      cursorLine = Math.max(0, Math.min(cursorLine, getLines() - 1));
 
       super.setCursorPosition(x, y);
       updateCurrentLine();
