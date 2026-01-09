@@ -18,11 +18,9 @@ package com.badlogic.gdx.net;
 
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import javax.annotation.Nullable;
 
 /**
  * Socket implementation using java.net.Socket.
@@ -32,7 +30,7 @@ import javax.annotation.Nullable;
 public class NetJavaSocketImpl implements Socket {
 
   /** Our socket or null for disposed, aka closed. */
-  @Nullable private java.net.Socket socket;
+  private java.net.Socket socket;
 
   public NetJavaSocketImpl(Protocol protocol, String host, int port, SocketHints hints) {
     try {
@@ -58,7 +56,7 @@ public class NetJavaSocketImpl implements Socket {
   }
 
   private void applyHints(SocketHints hints) {
-    if (socket != null && hints != null) {
+    if (hints != null) {
       try {
         socket.setPerformancePreferences(
             hints.performancePrefConnectionTime,
@@ -88,11 +86,8 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public InputStream getInputStream() {
-    if (socket == null) {
-      throw new GdxRuntimeException("Socket is not connected.");
-    }
     try {
-      return Nullability.castToNonnull(socket).getInputStream();
+      return socket.getInputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting input stream from socket.", e);
     }
@@ -100,11 +95,8 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public OutputStream getOutputStream() {
-    if (socket == null) {
-      throw new GdxRuntimeException("Socket is not connected.");
-    }
     try {
-      return Nullability.castToNonnull(socket).getOutputStream();
+      return socket.getOutputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting output stream from socket.", e);
     }
@@ -112,11 +104,7 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public String getRemoteAddress() {
-    if (socket != null) {
-      return Nullability.castToNonnull(socket).getRemoteSocketAddress().toString();
-    } else {
-      return null;
-    }
+    return socket.getRemoteSocketAddress().toString();
   }
 
   @Override
