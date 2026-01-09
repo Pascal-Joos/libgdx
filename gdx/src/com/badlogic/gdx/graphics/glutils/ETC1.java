@@ -31,6 +31,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import javax.annotation.Nullable;
 
 /**
  * Class for encoding and decoding ETC1 compressed images. Also provides methods to add a PKM
@@ -212,7 +213,7 @@ public class ETC1 {
    * @param format either {@link Format#RGB565} or {@link Format#RGB888}
    * @return the Pixmap
    */
-  public static Pixmap decodeImage(ETC1Data etc1Data, Format format) {
+  public static Pixmap decodeImage(@Nullable ETC1Data etc1Data, Format format) {
     int dataOffset = 0;
     int width = 0;
     int height = 0;
