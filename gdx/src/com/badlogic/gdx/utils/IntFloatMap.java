@@ -18,11 +18,9 @@ package com.badlogic.gdx.utils;
 
 import static com.badlogic.gdx.utils.ObjectSet.tableSize;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import javax.annotation.Nullable;
 
 /**
  * An unordered map where the keys are unboxed ints and values are unboxed floats. No allocation is
@@ -78,9 +76,9 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
    */
   protected int mask;
 
-  @Nullable private transient Entries entries1, entries2;
-  @Nullable private transient Values values1, values2;
-  @Nullable private transient Keys keys1, keys2;
+  private transient Entries entries1, entries2;
+  private transient Values values1, values2;
+  private transient Keys keys1, keys2;
 
   /** Creates a new map with an initial capacity of 51 and a load factor of 0.8. */
   public IntFloatMap() {
@@ -523,13 +521,13 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
     if (!entries1.valid) {
       entries1.reset();
       entries1.valid = true;
-      Nullability.castToNonnull(entries2).valid = false;
+      entries2.valid = false;
       return entries1;
     }
-    Nullability.castToNonnull(entries2).reset();
-    Nullability.castToNonnull(entries2).valid = true;
+    entries2.reset();
+    entries2.valid = true;
     entries1.valid = false;
-    return Nullability.castToNonnull(entries2);
+    return entries2;
   }
 
   /**
@@ -548,13 +546,13 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
     if (!values1.valid) {
       values1.reset();
       values1.valid = true;
-      Nullability.castToNonnull(values2).valid = false;
+      values2.valid = false;
       return values1;
     }
-    Nullability.castToNonnull(values2).reset();
-    Nullability.castToNonnull(values2).valid = true;
+    values2.reset();
+    values2.valid = true;
     values1.valid = false;
-    return Nullability.castToNonnull(values2);
+    return values2;
   }
 
   /**
@@ -564,7 +562,6 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
    * each time this method is called. Use the {@link Entries} constructor for nested or
    * multithreaded iteration.
    */
-  @SuppressWarnings("NullAway")
   public Keys keys() {
     if (Collections.allocateIterators) return new Keys(this);
     if (keys1 == null) {
@@ -574,11 +571,11 @@ public class IntFloatMap implements Iterable<IntFloatMap.Entry> {
     if (!keys1.valid) {
       keys1.reset();
       keys1.valid = true;
-      Nullability.castToNonnull(keys2).valid = false;
+      keys2.valid = false;
       return keys1;
     }
-    Nullability.castToNonnull(keys2).reset();
-    Nullability.castToNonnull(keys2).valid = true;
+    keys2.reset();
+    keys2.valid = true;
     keys1.valid = false;
     return keys2;
   }
