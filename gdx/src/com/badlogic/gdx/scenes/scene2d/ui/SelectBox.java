@@ -43,7 +43,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -237,11 +236,8 @@ public class SelectBox<T> extends Widget implements Disableable {
 
       ListStyle listStyle = style.listStyle;
       ScrollPaneStyle scrollStyle = style.scrollStyle;
-      float scrollWidth = maxItemWidth;
-      if (listStyle.selection != null)
-        scrollWidth +=
-            Nullability.castToNonnull(listStyle.selection).getLeftWidth()
-                + Nullability.castToNonnull(listStyle.selection).getRightWidth();
+      float scrollWidth =
+          maxItemWidth + listStyle.selection.getLeftWidth() + listStyle.selection.getRightWidth();
       bg = scrollStyle.background;
       if (bg != null)
         scrollWidth =

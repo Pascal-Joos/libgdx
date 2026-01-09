@@ -36,7 +36,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -185,20 +184,16 @@ public class List<T> extends Widget implements Cullable {
 
   public void layout() {
     BitmapFont font = style.font;
-    if (font == null) return;
     Drawable selectedDrawable = style.selection;
-    if (selectedDrawable == null) return;
 
-    itemHeight =
-        Nullability.castToNonnull(font).getCapHeight()
-            - Nullability.castToNonnull(font).getDescent() * 2;
+    itemHeight = font.getCapHeight() - font.getDescent() * 2;
     itemHeight += selectedDrawable.getTopHeight() + selectedDrawable.getBottomHeight();
 
     prefWidth = 0;
     Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
     GlyphLayout layout = layoutPool.obtain();
     for (int i = 0; i < items.size; i++) {
-      layout.setText(Nullability.castToNonnull(font), toString(items.get(i)));
+      layout.setText(font, toString(items.get(i)));
       prefWidth = Math.max(layout.width, prefWidth);
     }
     layoutPool.free(layout);
@@ -223,7 +218,6 @@ public class List<T> extends Widget implements Cullable {
 
     drawBackground(batch, parentAlpha);
 
-    if (style.font == null || style.selection == null) return;
     BitmapFont font = style.font;
     Drawable selectedDrawable = style.selection;
     Color fontColorSelected = style.fontColorSelected;
@@ -243,11 +237,9 @@ public class List<T> extends Widget implements Cullable {
       width -= leftWidth + background.getRightWidth();
     }
 
-    float textOffsetX = Nullability.castToNonnull(selectedDrawable).getLeftWidth(),
-        textWidth =
-            width - textOffsetX - Nullability.castToNonnull(selectedDrawable).getRightWidth();
-    float textOffsetY =
-        Nullability.castToNonnull(selectedDrawable).getTopHeight() - font.getDescent();
+    float textOffsetX = selectedDrawable.getLeftWidth(),
+        textWidth = width - textOffsetX - selectedDrawable.getRightWidth();
+    float textOffsetY = selectedDrawable.getTopHeight() - font.getDescent();
 
     font.setColor(
         fontColorUnselected.r,
@@ -507,10 +499,10 @@ public class List<T> extends Widget implements Cullable {
    * @author Nathan Sweet
    */
   public static class ListStyle {
-    @Nullable public BitmapFont font;
+    public BitmapFont font;
     public Color fontColorSelected = new Color(1, 1, 1, 1);
     public Color fontColorUnselected = new Color(1, 1, 1, 1);
-    @Nullable public Drawable selection;
+    public Drawable selection;
     @Nullable public @Null Drawable down, over, background;
 
     public ListStyle() {}
