@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.KTXTextureData;
 import com.badlogic.gdx.utils.Array;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -44,7 +43,7 @@ public class CubemapLoader
     extends AsynchronousAssetLoader<Cubemap, CubemapLoader.CubemapParameter> {
   public static class CubemapLoaderInfo {
     @Nullable String filename;
-    @Nullable CubemapData data;
+    CubemapData data;
     @Nullable Cubemap cubemap;
   }
   ;
@@ -66,7 +65,6 @@ public class CubemapLoader
       Format format = null;
       boolean genMipMaps = false;
       info.cubemap = null;
-      info.data = null;
 
       if (parameter != null) {
         format = parameter.format;
@@ -80,7 +78,7 @@ public class CubemapLoader
       info.data = parameter.cubemapData;
       info.cubemap = parameter.cubemap;
     }
-    if (info.data != null && !info.data.isPrepared()) info.data.prepare();
+    if (!info.data.isPrepared()) info.data.prepare();
   }
 
   @Nullable
@@ -90,13 +88,12 @@ public class CubemapLoader
       String fileName,
       FileHandle file,
       @Nullable CubemapParameter parameter) {
-    CubemapData data = info == null ? null : info.data;
-    if (data == null) return null;
+    if (info == null) return null;
     Cubemap cubemap = info.cubemap;
     if (cubemap != null) {
-      cubemap.load(Nullability.castToNonnull(data));
+      cubemap.load(info.data);
     } else {
-      cubemap = new Cubemap(Nullability.castToNonnull(data));
+      cubemap = new Cubemap(info.data);
     }
     if (parameter != null) {
       cubemap.setFilter(parameter.minFilter, parameter.magFilter);
