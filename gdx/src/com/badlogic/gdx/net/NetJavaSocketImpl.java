@@ -18,9 +18,11 @@ package com.badlogic.gdx.net;
 
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import javax.annotation.Nullable;
 
 /**
  * Socket implementation using java.net.Socket.
@@ -30,7 +32,7 @@ import java.net.InetSocketAddress;
 public class NetJavaSocketImpl implements Socket {
 
   /** Our socket or null for disposed, aka closed. */
-  private java.net.Socket socket;
+  @Nullable private java.net.Socket socket;
 
   public NetJavaSocketImpl(Protocol protocol, String host, int port, SocketHints hints) {
     try {
@@ -56,7 +58,7 @@ public class NetJavaSocketImpl implements Socket {
   }
 
   private void applyHints(SocketHints hints) {
-    if (hints != null) {
+    if (socket != null && hints != null) {
       try {
         socket.setPerformancePreferences(
             hints.performancePrefConnectionTime,
@@ -86,8 +88,11 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public InputStream getInputStream() {
+    if (socket == null) {
+      throw new GdxRuntimeException("Socket is not connected.");
+    }
     try {
-      return socket.getInputStream();
+      return Nullability.castToNonnull(socket).getInputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting input stream from socket.", e);
     }
@@ -95,8 +100,11 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public OutputStream getOutputStream() {
+    if (socket == null) {
+      throw new GdxRuntimeException("Socket is not connected.");
+    }
     try {
-      return socket.getOutputStream();
+      return Nullability.castToNonnull(socket).getOutputStream();
     } catch (Exception e) {
       throw new GdxRuntimeException("Error getting output stream from socket.", e);
     }
@@ -104,7 +112,11 @@ public class NetJavaSocketImpl implements Socket {
 
   @Override
   public String getRemoteAddress() {
-    return socket.getRemoteSocketAddress().toString();
+    if (socket != null) {
+      return Nullability.castToNonnull(socket).getRemoteSocketAddress().toString();
+    } else {
+      return null;
+    }
   }
 
   @Override
