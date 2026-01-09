@@ -29,9 +29,7 @@ public abstract class PluggableGroupStrategy implements GroupStrategy {
 
   @Override
   public void beforeGroup(int group, Array<Decal> contents) {
-    DecalRendererGroupPlug plug = plugs.get(group);
-    if (plug == null) return;
-    plug.beforeGroup(contents);
+    plugs.get(group).beforeGroup(contents);
   }
 
   @Override
