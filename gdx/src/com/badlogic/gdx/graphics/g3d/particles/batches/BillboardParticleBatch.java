@@ -43,7 +43,6 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -418,7 +417,6 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   private void fillVerticesGPU(int[] particlesOffset) {
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
-      if (data.controller == null) continue;
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
@@ -567,16 +565,13 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   private void fillVerticesToViewPointCPU(int[] particlesOffset) {
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
-      if (data.controller == null) continue;
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
 
-      for (int p = 0, c = Nullability.castToNonnull(data.controller).particles.size;
-          p < c;
-          ++p, ++tp) {
+      for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
         int baseOffset = particlesOffset[tp] * currentVertexSize * 4;
         float scale = scaleChannel.data[p * scaleChannel.strideSize];
         int regionOffset = p * regionChannel.strideSize;
@@ -721,7 +716,6 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
-      if (data.controller == null) continue;
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
