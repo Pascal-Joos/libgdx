@@ -47,27 +47,23 @@ public class ModelInstanceRenderer
 
   @Override
   public void allocateChannels() {
-    if (renderData != null)
-      renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+    renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
   }
 
   @Override
   public void init() {
-    if (renderData != null) {
-      renderData.modelInstanceChannel =
-          controller.particles.getChannel(ParticleChannels.ModelInstance);
-      renderData.colorChannel = controller.particles.getChannel(ParticleChannels.Color);
-      renderData.scaleChannel = controller.particles.getChannel(ParticleChannels.Scale);
-      renderData.rotationChannel = controller.particles.getChannel(ParticleChannels.Rotation3D);
-      hasColor = renderData.colorChannel != null;
-      hasScale = renderData.scaleChannel != null;
-      hasRotation = renderData.rotationChannel != null;
-    }
+    renderData.modelInstanceChannel =
+        controller.particles.getChannel(ParticleChannels.ModelInstance);
+    renderData.colorChannel = controller.particles.getChannel(ParticleChannels.Color);
+    renderData.scaleChannel = controller.particles.getChannel(ParticleChannels.Scale);
+    renderData.rotationChannel = controller.particles.getChannel(ParticleChannels.Rotation3D);
+    hasColor = renderData.colorChannel != null;
+    hasScale = renderData.scaleChannel != null;
+    hasRotation = renderData.rotationChannel != null;
   }
 
   @Override
   public void update() {
-    if (renderData == null) return;
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
         ++i, positionOffset += renderData.positionChannel.strideSize) {

@@ -24,7 +24,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleChannels.TextureRegionIni
 import com.badlogic.gdx.graphics.g3d.particles.ParticleControllerComponent;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.batches.ParticleBatch;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -47,19 +46,16 @@ public class BillboardRenderer
 
   @Override
   public void allocateChannels() {
-    if (renderData != null) {
-      Nullability.castToNonnull(renderData).positionChannel =
-          controller.particles.addChannel(ParticleChannels.Position);
-      Nullability.castToNonnull(renderData).regionChannel =
-          controller.particles.addChannel(
-              ParticleChannels.TextureRegion, TextureRegionInitializer.get());
-      Nullability.castToNonnull(renderData).colorChannel =
-          controller.particles.addChannel(ParticleChannels.Color, ColorInitializer.get());
-      Nullability.castToNonnull(renderData).scaleChannel =
-          controller.particles.addChannel(ParticleChannels.Scale, ScaleInitializer.get());
-      Nullability.castToNonnull(renderData).rotationChannel =
-          controller.particles.addChannel(ParticleChannels.Rotation2D, Rotation2dInitializer.get());
-    }
+    renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+    renderData.regionChannel =
+        controller.particles.addChannel(
+            ParticleChannels.TextureRegion, TextureRegionInitializer.get());
+    renderData.colorChannel =
+        controller.particles.addChannel(ParticleChannels.Color, ColorInitializer.get());
+    renderData.scaleChannel =
+        controller.particles.addChannel(ParticleChannels.Scale, ScaleInitializer.get());
+    renderData.rotationChannel =
+        controller.particles.addChannel(ParticleChannels.Rotation2D, Rotation2dInitializer.get());
   }
 
   @Override
