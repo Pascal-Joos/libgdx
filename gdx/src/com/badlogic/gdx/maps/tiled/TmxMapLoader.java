@@ -31,6 +31,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -193,7 +194,7 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
     MapProperties props = tileSet.getProperties();
     if (image != null) {
       // One image for the whole tileSet
-      TextureRegion texture = imageResolver.getImage(image.path());
+      TextureRegion texture = imageResolver.getImage(Nullability.castToNonnull(image).path());
 
       props.put("imagesource", imageSource);
       props.put("imagewidth", imageWidth);
@@ -228,7 +229,7 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
             image = getRelativeFileHandle(tmxFile, imageSource);
           }
         }
-        TextureRegion texture = imageResolver.getImage(image.path());
+        TextureRegion texture = imageResolver.getImage(Nullability.castToNonnull(image).path());
         int tileId = firstgid + tileElement.getIntAttribute("id");
         addStaticTiledMapTile(tileSet, texture, tileId, offsetX, offsetY);
       }
