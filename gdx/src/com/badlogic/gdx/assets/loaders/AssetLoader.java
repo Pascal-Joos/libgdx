@@ -50,6 +50,9 @@ public abstract class AssetLoader<T, P extends AssetLoaderParameters<T>> {
    * @return handle to the file, as resolved by the {@link FileHandleResolver} set on the loader
    */
   public FileHandle resolve(String fileName) {
+    if (resolver == null) {
+      throw new IllegalStateException("resolver cannot be null");
+    }
     return resolver.resolve(fileName);
   }
 
