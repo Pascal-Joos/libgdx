@@ -210,7 +210,7 @@ public class MeshPart {
    * @param shader the shader to be used
    * @param autoBind overrides the autoBind member of the Mesh
    */
-  public void render(ShaderProgram shader, boolean autoBind) {
+  public void render(@Nullable ShaderProgram shader, boolean autoBind) {
     mesh.render(shader, primitiveType, offset, size, autoBind);
   }
 
