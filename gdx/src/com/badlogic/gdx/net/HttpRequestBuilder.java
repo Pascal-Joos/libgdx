@@ -20,10 +20,8 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.InputStream;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * A builder for {@link HttpRequest}s.
@@ -51,7 +49,7 @@ public class HttpRequestBuilder {
   /** Will be used for the object serialization in case {@link #jsonContent(Object)} is called. */
   public static Json json = new Json();
 
-  @Nullable private HttpRequest httpRequest;
+  private HttpRequest httpRequest;
 
   /** Initializes the builder and sets it up to build a new {@link HttpRequest} . */
   public HttpRequestBuilder newRequest() {
@@ -70,12 +68,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder method(String httpMethod) {
     validate();
-    HttpRequest localHttpRequest = this.httpRequest;
-    if (localHttpRequest == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
-    Nullability.castToNonnull(httpRequest).setMethod(httpMethod);
+    httpRequest.setMethod(httpMethod);
     return this;
   }
 
@@ -86,12 +79,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder url(String url) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    if (localHttpRequest == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
-    Nullability.castToNonnull(httpRequest).setUrl(baseUrl + url);
+    httpRequest.setUrl(baseUrl + url);
     return this;
   }
 
@@ -102,8 +90,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder timeout(int timeOut) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    localHttpRequest.setTimeOut(timeOut);
+    httpRequest.setTimeOut(timeOut);
     return this;
   }
 
@@ -112,12 +99,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder followRedirects(boolean followRedirects) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    if (localHttpRequest == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
-    Nullability.castToNonnull(httpRequest).setFollowRedirects(followRedirects);
+    httpRequest.setFollowRedirects(followRedirects);
     return this;
   }
 
@@ -126,8 +108,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder includeCredentials(boolean includeCredentials) {
     validate();
-    HttpRequest localRequest = httpRequest;
-    localRequest.setIncludeCredentials(includeCredentials);
+    httpRequest.setIncludeCredentials(includeCredentials);
     return this;
   }
 
@@ -136,12 +117,7 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder header(String name, String value) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    if (localHttpRequest == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
-    Nullability.castToNonnull(httpRequest).setHeader(name, value);
+    httpRequest.setHeader(name, value);
     return this;
   }
 
@@ -159,10 +135,6 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder content(InputStream contentStream, long contentLength) {
     validate();
-    if (httpRequest == null) {
-      throw new IllegalStateException(
-          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
-    }
     httpRequest.setContent(contentStream, contentLength);
     return this;
   }
@@ -173,10 +145,9 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder formEncodedContent(Map<String, String> content) {
     validate();
-    HttpRequest localRequest = httpRequest;
-    localRequest.setHeader(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+    httpRequest.setHeader(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
     String formEncodedContent = HttpParametersUtils.convertHttpParameters(content);
-    localRequest.setContent(formEncodedContent);
+    httpRequest.setContent(formEncodedContent);
     return this;
   }
 
@@ -186,18 +157,16 @@ public class HttpRequestBuilder {
    */
   public HttpRequestBuilder jsonContent(Object content) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    localHttpRequest.setHeader(HttpRequestHeader.ContentType, "application/json");
+    httpRequest.setHeader(HttpRequestHeader.ContentType, "application/json");
     String jsonContent = json.toJson(content);
-    localHttpRequest.setContent(jsonContent);
+    httpRequest.setContent(jsonContent);
     return this;
   }
 
   /** Sets the {@code Authorization} header via the Base64 encoded username and password. */
   public HttpRequestBuilder basicAuthentication(String username, String password) {
     validate();
-    HttpRequest localHttpRequest = httpRequest;
-    localHttpRequest.setHeader(
+    httpRequest.setHeader(
         HttpRequestHeader.Authorization,
         "Basic " + Base64Coder.encodeString(username + ":" + password));
     return this;
@@ -207,7 +176,6 @@ public class HttpRequestBuilder {
    * Returns the {@link HttpRequest} that has been setup by this builder so far. After using the
    * request, it should be returned to the pool via {@code Pools.free(request)}.
    */
-  @Nullable
   public HttpRequest build() {
     validate();
     HttpRequest request = httpRequest;
