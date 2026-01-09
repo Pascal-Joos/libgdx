@@ -16,9 +16,7 @@
 
 package com.badlogic.gdx.utils.compression.rangecoder;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
-import javax.annotation.Nullable;
 
 public class Decoder {
   static final int kTopMask = ~((1 << 24) - 1);
@@ -30,7 +28,7 @@ public class Decoder {
   int Range;
   int Code;
 
-  @Nullable java.io.InputStream Stream;
+  java.io.InputStream Stream;
 
   public final void SetStream(java.io.InputStream stream) {
     Stream = stream;
@@ -41,18 +39,12 @@ public class Decoder {
   }
 
   public final void Init() throws IOException {
-    if (Stream == null) {
-      return;
-    }
     Code = 0;
     Range = -1;
-    for (int i = 0; i < 5; i++) Code = (Code << 8) | Nullability.castToNonnull(Stream).read();
+    for (int i = 0; i < 5; i++) Code = (Code << 8) | Stream.read();
   }
 
   public final int DecodeDirectBits(int numTotalBits) throws IOException {
-    if (Stream == null) {
-      throw new IOException("Stream is not set");
-    }
     int result = 0;
     for (int i = numTotalBits; i != 0; i--) {
       Range >>>= 1;
@@ -61,7 +53,7 @@ public class Decoder {
       result = (result << 1) | (1 - t);
 
       if ((Range & kTopMask) == 0) {
-        Code = (Code << 8) | Nullability.castToNonnull(Stream).read();
+        Code = (Code << 8) | Stream.read();
         Range <<= 8;
       }
     }
@@ -69,20 +61,13 @@ public class Decoder {
   }
 
   public int DecodeBit(short[] probs, int index) throws IOException {
-    if (Stream == null) {
-      throw new IOException("Stream is not set");
-    }
     int prob = probs[index];
     int newBound = (Range >>> kNumBitModelTotalBits) * prob;
     if ((Code ^ 0x80000000) < (newBound ^ 0x80000000)) {
       Range = newBound;
       probs[index] = (short) (prob + ((kBitModelTotal - prob) >>> kNumMoveBits));
       if ((Range & kTopMask) == 0) {
-        int readByte = Nullability.castToNonnull(Stream).read();
-        if (readByte == -1) {
-          throw new IOException("Unexpected end of stream");
-        }
-        Code = (Code << 8) | readByte;
+        Code = (Code << 8) | Stream.read();
         Range <<= 8;
       }
       return 0;
@@ -91,11 +76,7 @@ public class Decoder {
       Code -= newBound;
       probs[index] = (short) (prob - ((prob) >>> kNumMoveBits));
       if ((Range & kTopMask) == 0) {
-        int readByte = Nullability.castToNonnull(Stream).read();
-        if (readByte == -1) {
-          throw new IOException("Unexpected end of stream");
-        }
-        Code = (Code << 8) | readByte;
+        Code = (Code << 8) | Stream.read();
         Range <<= 8;
       }
       return 1;
