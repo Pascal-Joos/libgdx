@@ -21,7 +21,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,21 +79,17 @@ public class TextureArray extends GLTexture {
     this.data = data;
 
     bind();
-    if (Gdx.gl30 == null)
-      throw new GdxRuntimeException(
-          "TextureArray requires a device running with GLES 3.0 compatibilty");
-    Nullability.castToNonnull(Gdx.gl30)
-        .glTexImage3D(
-            GL30.GL_TEXTURE_2D_ARRAY,
-            0,
-            data.getInternalFormat(),
-            data.getWidth(),
-            data.getHeight(),
-            data.getDepth(),
-            0,
-            data.getInternalFormat(),
-            data.getGLType(),
-            null);
+    Gdx.gl30.glTexImage3D(
+        GL30.GL_TEXTURE_2D_ARRAY,
+        0,
+        data.getInternalFormat(),
+        data.getWidth(),
+        data.getHeight(),
+        data.getDepth(),
+        0,
+        data.getInternalFormat(),
+        data.getGLType(),
+        null);
 
     if (!data.isPrepared()) data.prepare();
 

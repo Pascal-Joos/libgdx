@@ -71,7 +71,6 @@ public class FileTextureArrayData implements TextureArrayData {
 
   @Override
   public void consumeTextureArrayData() {
-    if (Gdx.gl30 == null) return;
     boolean containsCustomData = false;
     for (int i = 0; i < textureDatas.length; i++) {
       if (textureDatas[i].getType() == TextureData.TextureDataType.Custom) {
