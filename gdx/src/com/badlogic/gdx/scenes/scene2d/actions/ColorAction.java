@@ -19,8 +19,6 @@ package com.badlogic.gdx.scenes.scene2d.actions;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * Sets the actor's color (or a specified color), from the current to the new color. Note this
@@ -30,7 +28,7 @@ import javax.annotation.Nullable;
  */
 public class ColorAction extends TemporalAction {
   private float startR, startG, startB, startA;
-  @Nullable private @Null Color color;
+  private @Null Color color;
   private final Color end = new Color();
 
   protected void begin() {
@@ -42,18 +40,14 @@ public class ColorAction extends TemporalAction {
   }
 
   protected void update(float percent) {
-    if (color == null) {
-      color = target.getColor();
-      if (color == null) return;
-    }
-    if (percent == 0) Nullability.castToNonnull(color).set(startR, startG, startB, startA);
-    else if (percent == 1) Nullability.castToNonnull(color).set(end);
+    if (percent == 0) color.set(startR, startG, startB, startA);
+    else if (percent == 1) color.set(end);
     else {
       float r = startR + (end.r - startR) * percent;
       float g = startG + (end.g - startG) * percent;
       float b = startB + (end.b - startB) * percent;
       float a = startA + (end.a - startA) * percent;
-      Nullability.castToNonnull(color).set(r, g, b, a);
+      color.set(r, g, b, a);
     }
   }
 
@@ -62,7 +56,6 @@ public class ColorAction extends TemporalAction {
     color = null;
   }
 
-  @Nullable
   public @Null Color getColor() {
     return color;
   }
