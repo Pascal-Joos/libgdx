@@ -29,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -48,7 +47,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Button extends Table implements Disableable {
-  @Nullable private ButtonStyle style;
+  private ButtonStyle style;
   boolean isChecked, isDisabled;
   @Nullable ButtonGroup buttonGroup;
   private ClickListener clickListener;
@@ -194,7 +193,6 @@ public class Button extends Table implements Disableable {
    * Returns the button's style. Modifying the returned style may not have an effect until {@link
    * #setStyle(ButtonStyle)} is called.
    */
-  @Nullable
   public ButtonStyle getStyle() {
     return style;
   }
@@ -210,61 +208,43 @@ public class Button extends Table implements Disableable {
   /** Returns appropriate background drawable from the style based on the current button state. */
   @Nullable
   protected @Null Drawable getBackgroundDrawable() {
-    ButtonStyle style = this.style;
-    if (style == null && getStyle() instanceof ButtonStyle) style = (ButtonStyle) getStyle();
-    if (style == null) return null;
-    this.style = style;
-    if (isDisabled() && Nullability.castToNonnull(style).disabled != null)
-      return Nullability.castToNonnull(style).disabled;
+    if (isDisabled() && style.disabled != null) return style.disabled;
     if (isPressed()) {
-      if (isChecked() && Nullability.castToNonnull(style).checkedDown != null)
-        return Nullability.castToNonnull(style).checkedDown;
-      if (Nullability.castToNonnull(style).down != null)
-        return Nullability.castToNonnull(style).down;
+      if (isChecked() && style.checkedDown != null) return style.checkedDown;
+      if (style.down != null) return style.down;
     }
     if (isOver()) {
       if (isChecked()) {
-        if (Nullability.castToNonnull(style).checkedOver != null)
-          return Nullability.castToNonnull(style).checkedOver;
+        if (style.checkedOver != null) return style.checkedOver;
       } else {
-        if (Nullability.castToNonnull(style).over != null)
-          return Nullability.castToNonnull(style).over;
+        if (style.over != null) return style.over;
       }
     }
     boolean focused = hasKeyboardFocus();
     if (isChecked()) {
-      if (focused && Nullability.castToNonnull(style).checkedFocused != null)
-        return Nullability.castToNonnull(style).checkedFocused;
-      if (Nullability.castToNonnull(style).checked != null)
-        return Nullability.castToNonnull(style).checked;
-      if (isOver() && Nullability.castToNonnull(style).over != null)
-        return Nullability.castToNonnull(style).over;
+      if (focused && style.checkedFocused != null) return style.checkedFocused;
+      if (style.checked != null) return style.checked;
+      if (isOver() && style.over != null) return style.over;
     }
-    if (focused && Nullability.castToNonnull(style).focused != null)
-      return Nullability.castToNonnull(style).focused;
-    if (Nullability.castToNonnull(style).up == null) return null;
-    return Nullability.castToNonnull(style).up;
+    if (focused && style.focused != null) return style.focused;
+    return style.up;
   }
 
   public void draw(Batch batch, float parentAlpha) {
     validate();
 
-    if (style == null) throw new IllegalStateException("style cannot be null.");
-    ButtonStyle style = this.style;
-    if (style == null) throw new IllegalStateException("style cannot be null.");
-
     setBackground(getBackgroundDrawable());
 
     float offsetX = 0, offsetY = 0;
     if (isPressed() && !isDisabled()) {
-      offsetX = Nullability.castToNonnull(style).pressedOffsetX;
-      offsetY = Nullability.castToNonnull(style).pressedOffsetY;
+      offsetX = style.pressedOffsetX;
+      offsetY = style.pressedOffsetY;
     } else if (isChecked() && !isDisabled()) {
-      offsetX = Nullability.castToNonnull(style).checkedOffsetX;
-      offsetY = Nullability.castToNonnull(style).checkedOffsetY;
+      offsetX = style.checkedOffsetX;
+      offsetY = style.checkedOffsetY;
     } else {
-      offsetX = Nullability.castToNonnull(style).unpressedOffsetX;
-      offsetY = Nullability.castToNonnull(style).unpressedOffsetY;
+      offsetX = style.unpressedOffsetX;
+      offsetY = style.unpressedOffsetY;
     }
     boolean offset = offsetX != 0 || offsetY != 0;
 
@@ -285,26 +265,17 @@ public class Button extends Table implements Disableable {
 
   public float getPrefWidth() {
     float width = super.getPrefWidth();
-    if (style != null) {
-      if (Nullability.castToNonnull(style).up != null)
-        width = Math.max(width, Nullability.castToNonnull(style).up.getMinWidth());
-      if (Nullability.castToNonnull(style).down != null)
-        width = Math.max(width, Nullability.castToNonnull(style).down.getMinWidth());
-      if (Nullability.castToNonnull(style).checked != null)
-        width = Math.max(width, Nullability.castToNonnull(style).checked.getMinWidth());
-    }
+    if (style.up != null) width = Math.max(width, style.up.getMinWidth());
+    if (style.down != null) width = Math.max(width, style.down.getMinWidth());
+    if (style.checked != null) width = Math.max(width, style.checked.getMinWidth());
     return width;
   }
 
   public float getPrefHeight() {
-    if (style == null) throw new IllegalStateException("style cannot be null.");
     float height = super.getPrefHeight();
-    if (Nullability.castToNonnull(style).up != null)
-      height = Math.max(height, Nullability.castToNonnull(style).up.getMinHeight());
-    if (Nullability.castToNonnull(style).down != null)
-      height = Math.max(height, Nullability.castToNonnull(style).down.getMinHeight());
-    if (Nullability.castToNonnull(style).checked != null)
-      height = Math.max(height, Nullability.castToNonnull(style).checked.getMinHeight());
+    if (style.up != null) height = Math.max(height, style.up.getMinHeight());
+    if (style.down != null) height = Math.max(height, style.down.getMinHeight());
+    if (style.checked != null) height = Math.max(height, style.checked.getMinHeight());
     return height;
   }
 
