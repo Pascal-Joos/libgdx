@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncResult;
 import com.badlogic.gdx.utils.async.AsyncTask;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -152,9 +151,9 @@ class AssetLoadingTask implements AsyncTask<Void> {
       asset =
           asyncLoader.loadSync(
               manager, assetDesc.fileName, resolve(loader, assetDesc), assetDesc.params);
-    else if (Nullability.castToNonnull(loadFuture).isDone()) {
+    else if (loadFuture.isDone()) {
       try {
-        Nullability.castToNonnull(loadFuture).get();
+        loadFuture.get();
       } catch (Exception e) {
         throw new GdxRuntimeException("Couldn't load asset: " + assetDesc.fileName, e);
       }
