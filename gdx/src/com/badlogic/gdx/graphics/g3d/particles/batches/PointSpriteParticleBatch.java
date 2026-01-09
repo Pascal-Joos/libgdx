@@ -60,10 +60,11 @@ public class PointSpriteParticleBatch
           new VertexAttribute(Usage.TextureCoordinates, 4, "a_region"),
           new VertexAttribute(sizeAndRotationUsage, 3, "a_sizeAndRotation"));
   protected static final int CPU_VERTEX_SIZE = (short) (CPU_ATTRIBUTES.vertexSize / 4),
-      CPU_POSITION_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.Position, -1),
-      CPU_COLOR_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1),
-      CPU_REGION_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1),
-      CPU_SIZE_AND_ROTATION_OFFSET = (short) CPU_ATTRIBUTES.getOffset(sizeAndRotationUsage, -1);
+      CPU_POSITION_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.Position).offset / 4),
+      CPU_COLOR_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.ColorUnpacked).offset / 4),
+      CPU_REGION_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.TextureCoordinates).offset / 4),
+      CPU_SIZE_AND_ROTATION_OFFSET =
+          (short) (CPU_ATTRIBUTES.findByUsage(sizeAndRotationUsage).offset / 4);
 
   private static void enablePointSprites() {
     Gdx.gl.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);

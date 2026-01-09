@@ -58,10 +58,8 @@ public final class WeightMeshSpawnShapeValue extends MeshSpawnShapeValue {
     VertexAttributes attributes = mesh.getVertexAttributes();
     int indicesCount = mesh.getNumIndices();
     int vertexCount = mesh.getNumVertices();
-    int vertexSize = (short) (attributes.vertexSize / 4);
-    VertexAttribute positionAttribute = attributes.findByUsage(Usage.Position);
-    if (positionAttribute == null) return;
-    int positionOffset = (short) (positionAttribute.offset / 4);
+    int vertexSize = (short) (attributes.vertexSize / 4),
+        positionOffset = (short) (attributes.findByUsage(Usage.Position).offset / 4);
     float[] vertices = new float[vertexCount * vertexSize];
     mesh.getVertices(vertices);
     if (indicesCount > 0) {

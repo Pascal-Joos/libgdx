@@ -83,16 +83,26 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
 
   // Offsets
   private static final int
-      GPU_POSITION_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.Position, -1)),
-      GPU_UV_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1)),
-      GPU_SIZE_ROTATION_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(sizeAndRotationUsage, -1)),
-      GPU_COLOR_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1)),
+      GPU_POSITION_OFFSET = (short) (GPU_ATTRIBUTES.findByUsage(Usage.Position).offset / 4),
+      GPU_UV_OFFSET = (short) (GPU_ATTRIBUTES.findByUsage(Usage.TextureCoordinates).offset / 4),
+      GPU_SIZE_ROTATION_OFFSET =
+          (short) (GPU_ATTRIBUTES.findByUsage(sizeAndRotationUsage).offset / 4),
+      GPU_COLOR_OFFSET = (short) (GPU_ATTRIBUTES.findByUsage(Usage.ColorUnpacked).offset / 4),
       GPU_VERTEX_SIZE = GPU_ATTRIBUTES.vertexSize / 4,
 
+      // Ext
+      /*
+       * GPU_EXT_POSITION_OFFSET = (short)(GPU_EXT_ATTRIBUTES.findByUsage(Usage.Position).offset/4), GPU_EXT_UV_OFFSET =
+       * (short)(GPU_EXT_ATTRIBUTES.findByUsage(Usage.TextureCoordinates).offset/4), GPU_EXT_SIZE_ROTATION_OFFSET =
+       * (short)(GPU_EXT_ATTRIBUTES.findByUsage(sizeAndRotationUsage).offset/4), GPU_EXT_COLOR_OFFSET =
+       * (short)(GPU_EXT_ATTRIBUTES.findByUsage(Usage.Color).offset/4), GPU_EXT_DIRECTION_OFFSET =
+       * (short)(GPU_EXT_ATTRIBUTES.findByUsage(directionUsage).offset/4), GPU_EXT_VERTEX_SIZE = GPU_EXT_ATTRIBUTES.vertexSize/4,
+       */
+
       // Cpu
-      CPU_POSITION_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.Position, -1)),
-      CPU_UV_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1)),
-      CPU_COLOR_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1)),
+      CPU_POSITION_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.Position).offset / 4),
+      CPU_UV_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.TextureCoordinates).offset / 4),
+      CPU_COLOR_OFFSET = (short) (CPU_ATTRIBUTES.findByUsage(Usage.ColorUnpacked).offset / 4),
       CPU_VERTEX_SIZE = CPU_ATTRIBUTES.vertexSize / 4;
   private static final int MAX_PARTICLES_PER_MESH = Short.MAX_VALUE / 4,
       MAX_VERTICES_PER_MESH = MAX_PARTICLES_PER_MESH * 4;
