@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -129,7 +130,7 @@ public class ActorGestureListener implements EventListener {
     if (!(e instanceof InputEvent)) return false;
     InputEvent event = (InputEvent) e;
 
-    switch (event.getType()) {
+    switch (Nullability.castToNonnull(event.getType())) {
       case touchDown:
         actor = event.getListenerActor();
         touchDownTarget = event.getTarget();
