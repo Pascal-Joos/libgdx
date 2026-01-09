@@ -1060,20 +1060,18 @@ public class Json {
     Class type = object.getClass();
     OrderedMap<String, FieldMetadata> fields = getFields(type);
     for (JsonValue child = jsonMap.child; child != null; child = child.next) {
-      String childName = child.name;
-      if (childName == null) continue;
-      FieldMetadata metadata = fields.get(childName.replace(" ", "_"));
+      FieldMetadata metadata = fields.get(child.name().replace(" ", "_"));
       if (metadata == null) {
-        if (childName.equals(typeName)) continue;
-        if (ignoreUnknownFields || ignoreUnknownField(type, childName)) {
+        if (child.name.equals(typeName)) continue;
+        if (ignoreUnknownFields || ignoreUnknownField(type, child.name)) {
           if (debug)
             System.out.println(
-                "Ignoring unknown field: " + childName + " (" + type.getName() + ")");
+                "Ignoring unknown field: " + child.name + " (" + type.getName() + ")");
           continue;
         } else {
           SerializationException ex =
               new SerializationException(
-                  "Field not found: " + childName + " (" + type.getName() + ")");
+                  "Field not found: " + child.name + " (" + type.getName() + ")");
           ex.addTrace(child.trace());
           throw ex;
         }
@@ -1244,18 +1242,14 @@ public class Json {
         }
         if (object instanceof ObjectIntMap) {
           ObjectIntMap result = (ObjectIntMap) object;
-          for (JsonValue child = jsonData.child; child != null; child = child.next) {
-            if (child.name == null) continue;
+          for (JsonValue child = jsonData.child; child != null; child = child.next)
             result.put(child.name, readValue(Integer.class, null, child));
-          }
           return (T) result;
         }
         if (object instanceof ObjectFloatMap) {
           ObjectFloatMap result = (ObjectFloatMap) object;
-          for (JsonValue child = jsonData.child; child != null; child = child.next) {
-            if (child.name == null) continue;
+          for (JsonValue child = jsonData.child; child != null; child = child.next)
             result.put(child.name, readValue(Float.class, null, child));
-          }
           return (T) result;
         }
         if (object instanceof ObjectSet) {
@@ -1291,7 +1285,7 @@ public class Json {
         if (object instanceof Map) {
           Map result = (Map) object;
           for (JsonValue child = jsonData.child; child != null; child = child.next) {
-            if (child.name == null || child.name.equals(typeName)) continue;
+            if (child.name.equals(typeName)) continue;
             result.put(child.name, readValue(elementType, null, child));
           }
           return (T) result;

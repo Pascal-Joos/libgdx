@@ -159,7 +159,7 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
     }
   }
 
-  public void put(@Nullable K key, float value) {
+  public void put(K key, float value) {
     int i = locateKey(key);
     if (i >= 0) { // Existing key was found.
       valueTable[i] = value;

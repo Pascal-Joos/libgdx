@@ -18,7 +18,6 @@ package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -53,7 +52,7 @@ public class JsonValue implements Iterable<JsonValue> {
   private double doubleValue;
   private long longValue;
 
-  @Nullable public String name;
+  public String name;
 
   /** May be null. */
   @Nullable public JsonValue child, parent;
@@ -1060,7 +1059,6 @@ public class JsonValue implements Iterable<JsonValue> {
    *
    * @return May be null.
    */
-  @Nullable
   public @Null String name() {
     return name;
   }
@@ -1213,8 +1211,6 @@ public class JsonValue implements Iterable<JsonValue> {
           buffer.append('{');
           int i = 0;
           for (JsonValue child = object.child; child != null; child = child.next) {
-            if (child.name == null)
-              throw new IllegalStateException("An object child requires a name: " + child);
             buffer.append(outputType.quoteName(child.name));
             buffer.append(':');
             json(child, buffer, outputType);
@@ -1283,10 +1279,8 @@ public class JsonValue implements Iterable<JsonValue> {
           break;
         }
       }
-    } else if (name != null && Nullability.castToNonnull(name).indexOf('.') != -1)
-      trace = ".\"" + Nullability.castToNonnull(name).replace("\"", "\\\"") + "\"";
-    else if (name != null) trace = '.' + name;
-    else trace = "";
+    } else if (name.indexOf('.') != -1) trace = ".\"" + name.replace("\"", "\\\"") + "\"";
+    else trace = '.' + name;
     return parent.trace() + trace;
   }
 
@@ -1317,8 +1311,6 @@ public class JsonValue implements Iterable<JsonValue> {
           int i = 0;
           for (JsonValue child = object.child; child != null; child = child.next) {
             if (newLines) indent(indent, buffer);
-            if (child.name == null)
-              throw new IllegalStateException("An object child requires a name: " + child);
             buffer.append(outputType.quoteName(child.name));
             buffer.append(": ");
             prettyPrint(child, buffer, indent + 1, settings);
@@ -1400,7 +1392,7 @@ public class JsonValue implements Iterable<JsonValue> {
         int i = 0;
         for (JsonValue child = object.child; child != null; child = child.next) {
           if (newLines) indent(indent, writer);
-          if (child.name != null) writer.append(outputType.quoteName(child.name));
+          writer.append(outputType.quoteName(child.name));
           writer.append(": ");
           prettyPrint(child, writer, indent + 1, settings);
           if ((!newLines || outputType != OutputType.minimal) && child.next != null)
