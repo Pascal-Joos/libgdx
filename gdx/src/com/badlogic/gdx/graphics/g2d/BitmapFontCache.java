@@ -58,7 +58,7 @@ public class BitmapFontCache {
    * For each page, an array with a value for each glyph from that page, where the value is the
    * index of the character in the full text being cached.
    */
-  private IntArray[] pageGlyphIndices;
+  @Nullable private IntArray[] pageGlyphIndices;
 
   /** Used internally to ensure a correct capacity for multi-page font vertex data. */
   private int[] tempGlyphCount;
@@ -233,6 +233,7 @@ public class BitmapFontCache {
     int pageCount = pageVertices.length;
     for (int i = 0; i < pageCount; i++) {
       float[] vertices = pageVertices[i];
+      if (pageGlyphIndices == null) continue;
       IntArray glyphIndices = pageGlyphIndices[i];
       // Loop through the indices and determine whether the glyph is inside begin/end.
       for (int j = 0, n = glyphIndices.size; j < n; j++) {
@@ -301,6 +302,7 @@ public class BitmapFontCache {
       int offset = -1, count = 0;
 
       // For each set of glyph indices, determine where to begin within the start/end bounds.
+      if (pageGlyphIndices == null) continue;
       IntArray glyphIndices = pageGlyphIndices[i];
       for (int ii = 0, n = glyphIndices.size; ii < n; ii++) {
         int glyphIndex = glyphIndices.get(ii);
