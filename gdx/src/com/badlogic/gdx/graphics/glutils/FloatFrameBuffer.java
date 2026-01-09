@@ -23,7 +23,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 
 /** This is a {@link FrameBuffer} variant backed by a float texture. */
 public class FloatFrameBuffer extends FrameBuffer {
@@ -59,11 +58,10 @@ public class FloatFrameBuffer extends FrameBuffer {
 
   @Override
   protected Texture createTexture(FrameBufferTextureAttachmentSpec attachmentSpec) {
-    if (bufferBuilder == null) throw new IllegalStateException("bufferBuilder not set");
     FloatTextureData data =
         new FloatTextureData(
-            Nullability.castToNonnull(bufferBuilder).width,
-            Nullability.castToNonnull(bufferBuilder).height,
+            bufferBuilder.width,
+            bufferBuilder.height,
             attachmentSpec.internalFormat,
             attachmentSpec.format,
             attachmentSpec.type,
