@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import javax.annotation.Nullable;
@@ -246,17 +245,12 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
           String name = currentChild.getName();
           if (name.equals("TileSheet")) {
             currentTileSet = tilesets.getTileSet(currentChild.getAttribute("Ref"));
-            firstgid =
-                Nullability.castToNonnull(currentTileSet)
-                    .getProperties()
-                    .get("firstgid", Integer.class);
+            firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
           } else if (name.equals("Null")) {
             x += currentChild.getIntAttribute("Count");
           } else if (name.equals("Static")) {
             Cell cell = new Cell();
-            cell.setTile(
-                Nullability.castToNonnull(currentTileSet)
-                    .getTile(firstgid + currentChild.getIntAttribute("Index")));
+            cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
             layer.setCell(x++, y, cell);
           } else if (name.equals("Animated")) {
             // Create an AnimatedTile
@@ -270,15 +264,11 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
               String frameName = frame.getName();
               if (frameName.equals("TileSheet")) {
                 currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
-                firstgid =
-                    Nullability.castToNonnull(currentTileSet)
-                        .getProperties()
-                        .get("firstgid", Integer.class);
+                firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
               } else if (frameName.equals("Static")) {
                 frameTiles.add(
                     (StaticTiledMapTile)
-                        Nullability.castToNonnull(currentTileSet)
-                            .getTile(firstgid + frame.getIntAttribute("Index")));
+                        currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
               }
             }
             Cell cell = new Cell();
