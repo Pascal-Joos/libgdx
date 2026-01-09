@@ -17,7 +17,6 @@
 package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import javax.annotation.Nullable;
@@ -550,7 +549,7 @@ public class Queue<T> implements Iterable<T> {
   public static class QueueIterable<T> implements Iterable<T> {
     private final Queue<T> queue;
     private final boolean allowRemove;
-    @Nullable private QueueIterator iterator1, iterator2;
+    private QueueIterator iterator1, iterator2;
 
     // java.io.StringWriter lastAcquire = new java.io.StringWriter();
 
@@ -579,13 +578,13 @@ public class Queue<T> implements Iterable<T> {
       if (!iterator1.valid) {
         iterator1.index = 0;
         iterator1.valid = true;
-        Nullability.castToNonnull(iterator2).valid = false;
+        iterator2.valid = false;
         return iterator1;
       }
-      Nullability.castToNonnull(iterator2).index = 0;
-      Nullability.castToNonnull(iterator2).valid = true;
+      iterator2.index = 0;
+      iterator2.valid = true;
       iterator1.valid = false;
-      return Nullability.castToNonnull(iterator2);
+      return iterator2;
     }
   }
 }
