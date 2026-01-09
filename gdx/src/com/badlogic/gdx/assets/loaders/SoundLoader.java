@@ -23,6 +23,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -52,7 +53,11 @@ public class SoundLoader extends AsynchronousAssetLoader<Sound, SoundLoader.Soun
   @Override
   public void loadAsync(
       AssetManager manager, String fileName, FileHandle file, @Nullable SoundParameter parameter) {
-    sound = Gdx.audio.newSound(file);
+    if (Gdx.audio == null) {
+      sound = null;
+      return;
+    }
+    sound = Nullability.castToNonnull(Gdx.audio).newSound(file);
   }
 
   @Nullable
