@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -900,7 +901,8 @@ public class Cell<T extends Actor> implements Poolable {
 
   /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
   public float getPadX() {
-    return padLeft.get(actor) + padRight.get(actor);
+    return padLeft.get(Nullability.castToNonnull(actor))
+        + padRight.get(Nullability.castToNonnull(actor));
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
