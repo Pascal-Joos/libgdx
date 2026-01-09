@@ -27,14 +27,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should cover
@@ -142,17 +140,14 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
     int width = bufferBuilder.width;
     int height = bufferBuilder.height;
 
-    if (bufferBuilder.hasDepthRenderBuffer && bufferBuilder.depthRenderBufferSpec != null) {
+    if (bufferBuilder.hasDepthRenderBuffer) {
       depthbufferHandle = gl.glGenRenderbuffer();
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, depthbufferHandle);
       gl.glRenderbufferStorage(
-          GL20.GL_RENDERBUFFER,
-          Nullability.castToNonnull(bufferBuilder.depthRenderBufferSpec).internalFormat,
-          width,
-          height);
+          GL20.GL_RENDERBUFFER, bufferBuilder.depthRenderBufferSpec.internalFormat, width, height);
     }
 
-    if (bufferBuilder.hasStencilRenderBuffer && bufferBuilder.stencilRenderBufferSpec != null) {
+    if (bufferBuilder.hasStencilRenderBuffer) {
       stencilbufferHandle = gl.glGenRenderbuffer();
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, stencilbufferHandle);
       gl.glRenderbufferStorage(
@@ -162,14 +157,12 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
           height);
     }
 
-    if (bufferBuilder.hasPackedStencilDepthRenderBuffer
-        && bufferBuilder.packedStencilDepthRenderBufferSpec != null) {
+    if (bufferBuilder.hasPackedStencilDepthRenderBuffer) {
       depthStencilPackedBufferHandle = gl.glGenRenderbuffer();
       gl.glBindRenderbuffer(GL20.GL_RENDERBUFFER, depthStencilPackedBufferHandle);
       gl.glRenderbufferStorage(
           GL20.GL_RENDERBUFFER,
-          Nullability.castToNonnull(bufferBuilder.packedStencilDepthRenderBufferSpec)
-              .internalFormat,
+          bufferBuilder.packedStencilDepthRenderBufferSpec.internalFormat,
           width,
           height);
     }
@@ -529,9 +522,9 @@ public abstract class GLFrameBuffer<T extends GLTexture> implements Disposable {
     protected Array<FrameBufferTextureAttachmentSpec> textureAttachmentSpecs =
         new Array<FrameBufferTextureAttachmentSpec>();
 
-    @Nullable protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
-    @Nullable protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
-    @Nullable protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
+    protected FrameBufferRenderBufferAttachmentSpec stencilRenderBufferSpec;
+    protected FrameBufferRenderBufferAttachmentSpec depthRenderBufferSpec;
+    protected FrameBufferRenderBufferAttachmentSpec packedStencilDepthRenderBufferSpec;
 
     protected boolean hasStencilRenderBuffer;
     protected boolean hasDepthRenderBuffer;
