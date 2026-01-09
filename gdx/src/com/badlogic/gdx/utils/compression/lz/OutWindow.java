@@ -2,11 +2,12 @@
 
 package com.badlogic.gdx.utils.compression.lz;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import javax.annotation.Nullable;
 
 public class OutWindow {
-  byte[] _buffer;
+  @Nullable byte[] _buffer;
   int _pos;
   int _windowSize = 0;
   int _streamPos;
@@ -45,23 +46,29 @@ public class OutWindow {
   }
 
   public void CopyBlock(int distance, int len) throws IOException {
+    if (_buffer == null) return;
+    byte[] nonNullBuffer = Nullability.castToNonnull(_buffer);
     int pos = _pos - distance - 1;
     if (pos < 0) pos += _windowSize;
     for (; len != 0; len--) {
       if (pos >= _windowSize) pos = 0;
-      _buffer[_pos++] = _buffer[pos++];
+      nonNullBuffer[_pos++] = nonNullBuffer[pos++];
       if (_pos >= _windowSize) Flush();
     }
   }
 
   public void PutByte(byte b) throws IOException {
+    if (_buffer == null) return;
     _buffer[_pos++] = b;
     if (_pos >= _windowSize) Flush();
   }
 
   public byte GetByte(int distance) {
+    if (_buffer == null) {
+      throw new IllegalStateException("Buffer is not initialized");
+    }
     int pos = _pos - distance - 1;
     if (pos < 0) pos += _windowSize;
-    return _buffer[pos];
+    return Nullability.castToNonnull(_buffer)[pos];
   }
 }
