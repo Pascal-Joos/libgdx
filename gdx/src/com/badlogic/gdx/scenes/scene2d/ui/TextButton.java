@@ -109,9 +109,7 @@ public class TextButton extends Button {
 
   public void setLabel(Label label) {
     if (label == null) throw new IllegalArgumentException("label cannot be null.");
-    Cell<Label> labelCell = getLabelCell();
-    if (labelCell == null) throw new IllegalStateException("labelCell cannot be null.");
-    labelCell.setActor(label);
+    getLabelCell().setActor(label);
     this.label = label;
   }
 
@@ -119,7 +117,6 @@ public class TextButton extends Button {
     return label;
   }
 
-  @Nullable
   public Cell<Label> getLabelCell() {
     return getCell(label);
   }

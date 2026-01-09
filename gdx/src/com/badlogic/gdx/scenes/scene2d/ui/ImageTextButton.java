@@ -168,10 +168,7 @@ public class ImageTextButton extends Button {
   }
 
   public void setLabel(Label label) {
-    Cell labelCell = getLabelCell();
-    if (labelCell != null) {
-      labelCell.setActor(label);
-    }
+    getLabelCell().setActor(label);
     this.label = label;
   }
 
@@ -179,7 +176,6 @@ public class ImageTextButton extends Button {
     return label;
   }
 
-  @Nullable
   public Cell getLabelCell() {
     return getCell(label);
   }
