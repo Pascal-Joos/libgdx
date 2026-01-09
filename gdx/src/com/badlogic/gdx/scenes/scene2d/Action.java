@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -66,7 +67,7 @@ public abstract class Action implements Poolable {
    */
   public void setActor(@Nullable Actor actor) {
     this.actor = actor;
-    if (target == null) setTarget(actor);
+    if (target == null) setTarget(Nullability.castToNonnull(actor));
     if (actor == null) {
       if (pool != null) {
         pool.free(this);
