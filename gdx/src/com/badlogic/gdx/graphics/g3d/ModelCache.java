@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FlushablePool;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Comparator;
 import javax.annotation.Nullable;
 
@@ -174,13 +173,7 @@ public class ModelCache implements Disposable, RenderableProvider {
       final VertexAttributes va1 = arg1.meshPart.mesh.getVertexAttributes();
       final int vc = va0.compareTo(va1);
       if (vc == 0) {
-        if (arg0.material == arg1.material)
-          return arg0.meshPart.primitiveType - arg1.meshPart.primitiveType;
-        if (arg0.material == null) return -1;
-        if (arg1.material == null) return 1;
-        final Material m0 = arg0.material;
-        final Material m1 = arg1.material;
-        final int mc = Nullability.castToNonnull(arg0.material).compareTo(arg1.material);
+        final int mc = arg0.material.compareTo(arg1.material);
         if (mc == 0) {
           return arg0.meshPart.primitiveType - arg1.meshPart.primitiveType;
         }
@@ -269,7 +262,7 @@ public class ModelCache implements Disposable, RenderableProvider {
     meshPool.flush();
   }
 
-  private Renderable obtainRenderable(@Nullable Material material, int primitiveType) {
+  private Renderable obtainRenderable(Material material, int primitiveType) {
     Renderable result = renderablesPool.obtain();
     result.bones = null;
     result.environment = null;
@@ -311,7 +304,7 @@ public class ModelCache implements Disposable, RenderableProvider {
 
     meshBuilder.begin(vertexAttributes);
     MeshPart part = meshBuilder.part("", primitiveType, meshPartPool.obtain());
-    if (material != null) renderables.add(obtainRenderable(material, primitiveType));
+    renderables.add(obtainRenderable(material, primitiveType));
 
     for (int i = 0, n = items.size; i < n; ++i) {
       final Renderable renderable = items.get(i);
@@ -326,12 +319,7 @@ public class ModelCache implements Disposable, RenderableProvider {
       final boolean canHoldVertices =
           meshBuilder.getNumVertices() + verticesToAdd <= MeshBuilder.MAX_VERTICES;
       final boolean sameMesh = sameAttributes && canHoldVertices;
-      final boolean samePart =
-          sameMesh
-              && pt == primitiveType
-              && mat != null
-              && material != null
-              && Nullability.castToNonnull(mat).same(material, true);
+      final boolean samePart = sameMesh && pt == primitiveType && mat.same(material, true);
 
       if (!samePart) {
         if (!sameMesh) {
@@ -344,17 +332,12 @@ public class ModelCache implements Disposable, RenderableProvider {
         }
 
         final MeshPart newPart = meshBuilder.part("", pt, meshPartPool.obtain());
-        if (renderables.size > 0) {
-          final Renderable previous = renderables.get(renderables.size - 1);
-          previous.meshPart.offset = part.offset;
-          previous.meshPart.size = part.size;
-        }
+        final Renderable previous = renderables.get(renderables.size - 1);
+        previous.meshPart.offset = part.offset;
+        previous.meshPart.size = part.size;
         part = newPart;
 
-        if (mat != null) {
-          material = mat;
-          renderables.add(obtainRenderable(material, pt));
-        }
+        renderables.add(obtainRenderable(material = mat, primitiveType = pt));
       }
 
       meshBuilder.setVertexTransform(renderable.worldTransform);
@@ -368,11 +351,9 @@ public class ModelCache implements Disposable, RenderableProvider {
                 vertexAttributes, meshBuilder.getNumVertices(), meshBuilder.getNumIndices()));
     while (offset < renderables.size) renderables.get(offset++).meshPart.mesh = mesh;
 
-    if (renderables.size > 0) {
-      final Renderable previous = renderables.get(renderables.size - 1);
-      previous.meshPart.offset = part.offset;
-      previous.meshPart.size = part.size;
-    }
+    final Renderable previous = renderables.get(renderables.size - 1);
+    previous.meshPart.offset = part.offset;
+    previous.meshPart.size = part.size;
   }
 
   /**

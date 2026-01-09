@@ -19,7 +19,6 @@ package com.badlogic.gdx.graphics.g3d;
 import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 public class Attributes
     implements Iterable<Attribute>, Comparator<Attribute>, Comparable<Attributes> {
@@ -205,7 +204,7 @@ public class Attributes
    * @return True if this collection contains the same attributes (and optionally attribute values)
    *     as the other.
    */
-  public final boolean same(@Nullable final Attributes other, boolean compareValues) {
+  public final boolean same(final Attributes other, boolean compareValues) {
     if (other == this) return true;
     if ((other == null) || (mask != other.mask)) return false;
     if (!compareValues) return true;
@@ -265,7 +264,7 @@ public class Attributes
   }
 
   @Override
-  public int compareTo(@Nullable Attributes other) {
+  public int compareTo(Attributes other) {
     if (other == this) return 0;
     if (mask != other.mask) return mask < other.mask ? -1 : 1;
     sort();
