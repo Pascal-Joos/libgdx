@@ -402,7 +402,6 @@ public class Actor {
   }
 
   /** Returns the parent actor, or null if not in a group. */
-  @Nullable
   public @Null Group getParent() {
     return parent;
   }

@@ -569,10 +569,8 @@ public class TextField extends Widget implements Disableable {
     Stage stage = getStage();
     if (stage == null) return;
     TextField current = this;
-    Group parent = current.getParent();
-    if (parent == null) return;
     Vector2 currentCoords =
-        parent.localToStageCoordinates(tmp2.set(current.getX(), current.getY()));
+        current.getParent().localToStageCoordinates(tmp2.set(current.getX(), current.getY()));
     Vector2 bestCoords = tmp1;
     while (true) {
       TextField textField =
@@ -613,7 +611,6 @@ public class TextField extends Widget implements Disableable {
         TextField textField = (TextField) actor;
         if (textField.isDisabled() || !textField.focusTraversal || !textField.ascendantsVisible())
           continue;
-        if (actor.getParent() == null) return null;
         Vector2 actorCoords =
             actor.getParent().localToStageCoordinates(tmp3.set(actor.getX(), actor.getY()));
         boolean below = actorCoords.y != currentCoords.y && (actorCoords.y < currentCoords.y ^ up);
