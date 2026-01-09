@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class JsonReader implements BaseJsonReader {
-  @Nullable
   public JsonValue parse(String json) {
     char[] data = json.toCharArray();
     return parse(data, 0, data.length);
@@ -64,7 +63,6 @@ public class JsonReader implements BaseJsonReader {
     return parse(data, 0, offset);
   }
 
-  @Nullable
   public JsonValue parse(InputStream input) {
     Reader reader;
     try {
@@ -75,7 +73,6 @@ public class JsonReader implements BaseJsonReader {
     return parse(reader);
   }
 
-  @Nullable
   public JsonValue parse(FileHandle file) {
     Reader reader;
     try {
@@ -90,7 +87,6 @@ public class JsonReader implements BaseJsonReader {
     }
   }
 
-  @Nullable
   public JsonValue parse(char[] data, int offset, int length) {
     int cs, p = offset, pe = length, eof = pe, top = 0;
     int[] stack = new int[4];
