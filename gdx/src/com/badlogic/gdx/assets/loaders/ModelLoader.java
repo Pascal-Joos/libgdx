@@ -127,8 +127,10 @@ public abstract class ModelLoader<P extends ModelLoader.ModelParameters>
     ModelData data = null;
     synchronized (items) {
       for (int i = 0; i < items.size; i++) {
-        if (items.get(i).key.equals(fileName)) {
-          data = items.get(i).value;
+        ObjectMap.Entry<String, ModelData> entry = items.get(i);
+        if (entry == null || entry.key == null) return null;
+        if (fileName.equals(entry.key)) {
+          data = entry.value;
           items.removeIndex(i);
         }
       }

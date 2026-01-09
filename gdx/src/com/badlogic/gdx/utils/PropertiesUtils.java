@@ -18,6 +18,7 @@
 package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.utils.ObjectMap.Entry;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -249,7 +250,8 @@ public final class PropertiesUtils {
 
     StringBuilder sb = new StringBuilder(200);
     for (Entry<String, String> entry : properties.entries()) {
-      dumpString(sb, entry.key, true, escapeUnicode);
+      if (entry.key == null) continue;
+      dumpString(sb, Nullability.castToNonnull(entry.key), true, escapeUnicode);
       sb.append('=');
       dumpString(sb, entry.value, false, escapeUnicode);
       writer.write(LINE_SEPARATOR);

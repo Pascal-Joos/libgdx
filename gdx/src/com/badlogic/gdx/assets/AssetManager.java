@@ -63,6 +63,7 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.ThreadUtils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -399,6 +400,7 @@ public class AssetManager implements Disposable {
     AssetLoader result = null;
     int length = -1;
     for (Entry<String, AssetLoader> entry : loaders.entries()) {
+      if (entry.key == null) return null;
       if (entry.key.length() > length && fileName.endsWith(entry.key)) {
         result = entry.value;
         length = entry.key.length();
@@ -918,16 +920,19 @@ public class AssetManager implements Disposable {
     StringBuilder buffer = new StringBuilder(256);
     for (Entry<String, Class> entry : assetTypes) {
       String fileName = entry.key;
+      if (fileName == null) continue;
       Class type = entry.value;
 
       if (buffer.length() > 0) buffer.append('\n');
-      buffer.append(fileName);
+      buffer.append(Nullability.castToNonnull(fileName));
       buffer.append(", ");
       buffer.append(ClassReflection.getSimpleName(type));
       buffer.append(", refs: ");
-      buffer.append(assets.get(type).get(fileName).refCount);
+      RefCountedContainer assetContainer =
+          assets.get(type).get(Nullability.castToNonnull(fileName));
+      buffer.append(assetContainer == null ? 0 : assetContainer.refCount);
 
-      Array<String> dependencies = assetDependencies.get(fileName);
+      Array<String> dependencies = assetDependencies.get(Nullability.castToNonnull(fileName));
       if (dependencies != null) {
         buffer.append(", deps: [");
         for (String dep : dependencies) {

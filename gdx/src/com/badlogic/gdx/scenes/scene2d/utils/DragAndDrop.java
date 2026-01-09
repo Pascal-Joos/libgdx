@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -203,7 +204,8 @@ public class DragAndDrop {
   public void clear() {
     targets.clear();
     for (Entry<Source, DragListener> entry : sourceListeners.entries())
-      entry.key.actor.removeCaptureListener(entry.value);
+      if (entry.key != null && entry.key.actor != null)
+        Nullability.castToNonnull(entry.key).actor.removeCaptureListener(entry.value);
     sourceListeners.clear(8);
   }
 

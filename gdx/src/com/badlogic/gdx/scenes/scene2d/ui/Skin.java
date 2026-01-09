@@ -47,6 +47,7 @@ import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -532,8 +533,7 @@ public class Skin implements Disposable {
         new Json() {
           private static final String parentFieldName = "parent";
 
-          public <T> T readValue(
-              @Nullable Class<T> type, @Nullable Class elementType, @Nullable JsonValue jsonData) {
+          public <T> T readValue(Class<T> type, Class elementType, JsonValue jsonData) {
             // If the JSON is a string but the type is not, look up the actual value by name.
             if (jsonData != null
                 && jsonData.isString()
@@ -575,7 +575,7 @@ public class Skin implements Disposable {
     json.setSerializer(
         Skin.class,
         new ReadOnlySerializer<Skin>() {
-          public Skin read(Json json, JsonValue typeToValueMap, @Nullable Class ignored) {
+          public Skin read(Json json, JsonValue typeToValueMap, Class ignored) {
             for (JsonValue valueMap = typeToValueMap.child;
                 valueMap != null;
                 valueMap = valueMap.next) {
@@ -614,7 +614,7 @@ public class Skin implements Disposable {
     json.setSerializer(
         BitmapFont.class,
         new ReadOnlySerializer<BitmapFont>() {
-          public BitmapFont read(Json json, JsonValue jsonData, @Nullable Class type) {
+          public BitmapFont read(Json json, JsonValue jsonData, Class type) {
             String path = json.readValue("file", String.class, jsonData);
             int scaledSize = json.readValue("scaledSize", int.class, -1, jsonData);
             Boolean flip = json.readValue("flip", Boolean.class, false, jsonData);
@@ -655,7 +655,7 @@ public class Skin implements Disposable {
     json.setSerializer(
         Color.class,
         new ReadOnlySerializer<Color>() {
-          public Color read(Json json, JsonValue jsonData, @Nullable Class type) {
+          public Color read(Json json, JsonValue jsonData, Class type) {
             if (jsonData.isString()) return get(jsonData.asString(), Color.class);
             String hex = json.readValue("hex", String.class, (String) null, jsonData);
             if (hex != null) return Color.valueOf(hex);
@@ -670,7 +670,7 @@ public class Skin implements Disposable {
     json.setSerializer(
         TintedDrawable.class,
         new ReadOnlySerializer() {
-          public Object read(Json json, JsonValue jsonData, @Nullable Class type) {
+          public Object read(Json json, JsonValue jsonData, Class type) {
             String name = json.readValue("name", String.class, jsonData);
             Color color = json.readValue("color", Color.class, jsonData);
             if (color == null)
@@ -685,7 +685,7 @@ public class Skin implements Disposable {
         });
 
     for (ObjectMap.Entry<String, Class> entry : jsonClassTags)
-      json.addClassTag(entry.key, entry.value);
+      if (entry.key != null) json.addClassTag(Nullability.castToNonnull(entry.key), entry.value);
 
     return json;
   }

@@ -131,7 +131,7 @@ public class ParticleEffectLoader
     synchronized (items) {
       for (int i = 0; i < items.size; ++i) {
         ObjectMap.Entry<String, ResourceData<ParticleEffect>> entry = items.get(i);
-        if (entry.key.equals(fileName)) {
+        if (fileName.equals(entry.key)) {
           effectData = entry.value;
           items.removeIndex(i);
           break;

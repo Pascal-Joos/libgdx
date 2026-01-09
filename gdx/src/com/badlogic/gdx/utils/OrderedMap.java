@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.utils;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.NoSuchElementException;
 import javax.annotation.Nullable;
 
@@ -299,7 +300,8 @@ public class OrderedMap<K, V> extends ObjectMap<K, V> {
 
     public void remove() {
       if (currentIndex < 0) throw new IllegalStateException("next must be called before remove.");
-      map.remove(entry.key);
+      if (entry.key == null) throw new IllegalStateException("next must be called before remove.");
+      map.remove(Nullability.castToNonnull(entry.key));
       nextIndex--;
       currentIndex = -1;
     }
