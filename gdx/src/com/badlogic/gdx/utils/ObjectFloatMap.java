@@ -18,7 +18,6 @@ package com.badlogic.gdx.utils;
 
 import static com.badlogic.gdx.utils.ObjectSet.tableSize;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -75,9 +74,9 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    */
   protected int mask;
 
-  @Nullable transient Entries entries1, entries2;
-  @Nullable transient Values values1, values2;
-  @Nullable transient Keys keys1, keys2;
+  transient Entries entries1, entries2;
+  transient Values values1, values2;
+  transient Keys keys1, keys2;
 
   /** Creates a new map with an initial capacity of 51 and a load factor of 0.8. */
   public ObjectFloatMap() {
@@ -472,7 +471,6 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    * each time this method is called. Use the {@link Entries} constructor for nested or
    * multithreaded iteration.
    */
-  @SuppressWarnings("NullAway")
   public Entries<K> entries() {
     if (Collections.allocateIterators) return new Entries(this);
     if (entries1 == null) {
@@ -482,11 +480,11 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
     if (!entries1.valid) {
       entries1.reset();
       entries1.valid = true;
-      Nullability.castToNonnull(entries2).valid = false;
+      entries2.valid = false;
       return entries1;
     }
-    Nullability.castToNonnull(entries2).reset();
-    Nullability.castToNonnull(entries2).valid = true;
+    entries2.reset();
+    entries2.valid = true;
     entries1.valid = false;
     return entries2;
   }
@@ -498,7 +496,6 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    * each time this method is called. Use the {@link Values} constructor for nested or multithreaded
    * iteration.
    */
-  @SuppressWarnings("NullAway")
   public Values values() {
     if (Collections.allocateIterators) return new Values(this);
     if (values1 == null) {
@@ -508,11 +505,11 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
     if (!values1.valid) {
       values1.reset();
       values1.valid = true;
-      Nullability.castToNonnull(values2).valid = false;
+      values2.valid = false;
       return values1;
     }
-    Nullability.castToNonnull(values2).reset();
-    Nullability.castToNonnull(values2).valid = true;
+    values2.reset();
+    values2.valid = true;
     values1.valid = false;
     return values2;
   }
@@ -524,7 +521,6 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
    * each time this method is called. Use the {@link Keys} constructor for nested or multithreaded
    * iteration.
    */
-  @Nullable
   public Keys<K> keys() {
     if (Collections.allocateIterators) return new Keys(this);
     if (keys1 == null) {
@@ -534,11 +530,11 @@ public class ObjectFloatMap<K> implements Iterable<ObjectFloatMap.Entry<K>> {
     if (!keys1.valid) {
       keys1.reset();
       keys1.valid = true;
-      Nullability.castToNonnull(keys2).valid = false;
+      keys2.valid = false;
       return keys1;
     }
-    Nullability.castToNonnull(keys2).reset();
-    Nullability.castToNonnull(keys2).valid = true;
+    keys2.reset();
+    keys2.valid = true;
     keys1.valid = false;
     return keys2;
   }
