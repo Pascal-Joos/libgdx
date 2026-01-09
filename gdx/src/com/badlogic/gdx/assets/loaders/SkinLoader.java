@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -78,7 +77,7 @@ public class SkinLoader extends AsynchronousAssetLoader<Skin, SkinLoader.SkinPar
     Skin skin = newSkin(atlas);
     if (resources != null) {
       for (Entry<String, Object> entry : resources.entries()) {
-        if (entry.key != null) skin.add(Nullability.castToNonnull(entry.key), entry.value);
+        skin.add(entry.key, entry.value);
       }
     }
     skin.load(file);
