@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.IntBuffer;
 import javax.annotation.Nullable;
 
@@ -162,7 +163,7 @@ public final class DefaultTextureBinder implements TextureBinder {
   private final int bindTextureLRU(final GLTexture texture) {
     int i;
     for (i = 0; i < count; i++) {
-      final int idx = unitsLRU[i];
+      final int idx = Nullability.castToNonnull(unitsLRU)[i];
       if (textures[idx] == texture) {
         reused = true;
         break;
@@ -172,12 +173,12 @@ public final class DefaultTextureBinder implements TextureBinder {
       }
     }
     if (i >= count) i = count - 1;
-    final int idx = unitsLRU[i];
+    final int idx = Nullability.castToNonnull(unitsLRU)[i];
     while (i > 0) {
-      unitsLRU[i] = unitsLRU[i - 1];
+      Nullability.castToNonnull(unitsLRU)[i] = Nullability.castToNonnull(unitsLRU)[i - 1];
       i--;
     }
-    unitsLRU[0] = idx;
+    Nullability.castToNonnull(unitsLRU)[0] = idx;
     if (!reused) {
       textures[idx] = texture;
       texture.bind(offset + idx);
