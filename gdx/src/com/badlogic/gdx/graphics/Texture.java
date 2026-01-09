@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -124,7 +123,7 @@ public class Texture extends GLTexture {
     }
   }
 
-  @Nullable TextureData data;
+  TextureData data;
 
   public Texture(String internalPath) {
     this(Gdx.files.internal(internalPath));
@@ -169,14 +168,14 @@ public class Texture extends GLTexture {
   }
 
   public void load(TextureData data) {
-    if (this.data != null && Nullability.castToNonnull(data).isManaged() != this.data.isManaged())
+    if (this.data != null && data.isManaged() != this.data.isManaged())
       throw new GdxRuntimeException("New data must have the same managed status as the old data");
     this.data = data;
 
-    if (!Nullability.castToNonnull(data).isPrepared()) Nullability.castToNonnull(data).prepare();
+    if (!data.isPrepared()) data.prepare();
 
     bind();
-    uploadImageData(GL20.GL_TEXTURE_2D, Nullability.castToNonnull(data));
+    uploadImageData(GL20.GL_TEXTURE_2D, data);
 
     unsafeSetFilter(minFilter, magFilter, true);
     unsafeSetWrap(uWrap, vWrap, true);
@@ -191,9 +190,8 @@ public class Texture extends GLTexture {
   @Override
   protected void reload() {
     if (!isManaged()) throw new GdxRuntimeException("Tried to reload unmanaged Texture");
-    if (data == null) throw new GdxRuntimeException("Tried to reload Texture with null data");
     glHandle = Gdx.gl.glGenTexture();
-    load(Nullability.castToNonnull(data));
+    load(data);
   }
 
   /**
@@ -206,8 +204,7 @@ public class Texture extends GLTexture {
    * @param y The y coordinate in pixels
    */
   public void draw(Pixmap pixmap, int x, int y) {
-    if (data == null || data.isManaged())
-      throw new GdxRuntimeException("can't draw to a managed texture");
+    if (data.isManaged()) throw new GdxRuntimeException("can't draw to a managed texture");
 
     bind();
     Gdx.gl.glTexSubImage2D(
@@ -224,13 +221,12 @@ public class Texture extends GLTexture {
 
   @Override
   public int getWidth() {
-    if (data instanceof FileTextureData) return Nullability.castToNonnull(data).getWidth();
-    return 0;
+    return data.getWidth();
   }
 
   @Override
   public int getHeight() {
-    return data == null ? 0 : Nullability.castToNonnull(data).getHeight();
+    return data.getHeight();
   }
 
   @Override
@@ -238,7 +234,6 @@ public class Texture extends GLTexture {
     return 0;
   }
 
-  @Nullable
   public TextureData getTextureData() {
     return data;
   }
@@ -247,7 +242,7 @@ public class Texture extends GLTexture {
    * @return whether this texture is managed or not.
    */
   public boolean isManaged() {
-    return data != null && Nullability.castToNonnull(data).isManaged();
+    return data.isManaged();
   }
 
   /** Disposes all resources associated with the texture */
@@ -258,7 +253,7 @@ public class Texture extends GLTexture {
     // removal from the asset manager.
     if (glHandle == 0) return;
     delete();
-    if (data != null && Nullability.castToNonnull(data).isManaged())
+    if (data.isManaged())
       if (managedTextures.get(Gdx.app) != null)
         managedTextures.get(Gdx.app).removeValue(this, true);
   }
@@ -320,8 +315,7 @@ public class Texture extends GLTexture {
           params.magFilter = texture.getMagFilter();
           params.wrapU = texture.getUWrap();
           params.wrapV = texture.getVWrap();
-          params.genMipMaps =
-              params.textureData != null && params.textureData.useMipMaps(); // not sure about this?
+          params.genMipMaps = texture.data.useMipMaps(); // not sure about this?
           params.texture =
               texture; // special parameter which will ensure that the references stay the same.
           params.loadedCallback =
