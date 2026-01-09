@@ -30,7 +30,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -140,8 +139,7 @@ public class BaseAnimationController {
   protected void end() {
     if (!applying) throw new GdxRuntimeException("You must call begin() first");
     for (Entry<Node, Transform> entry : transforms.entries()) {
-      if (entry.value == null) continue;
-      Nullability.castToNonnull(entry.value).toMatrix4(entry.key.localTransform);
+      entry.value.toMatrix4(entry.key.localTransform);
       transformPool.free(entry.value);
     }
     transforms.clear();
@@ -327,7 +325,7 @@ public class BaseAnimationController {
       for (final ObjectMap.Entry<Node, Transform> e : out.entries()) {
         if (!e.key.isAnimated) {
           e.key.isAnimated = true;
-          if (e.value != null) e.value.lerp(e.key.translation, e.key.rotation, e.key.scale, alpha);
+          e.value.lerp(e.key.translation, e.key.rotation, e.key.scale, alpha);
         }
       }
     }

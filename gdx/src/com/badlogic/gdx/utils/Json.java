@@ -26,7 +26,6 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -1405,10 +1404,8 @@ public class Json {
   public void copyFields(Object from, Object to) {
     OrderedMap<String, FieldMetadata> toFields = getFields(to.getClass());
     for (ObjectMap.Entry<String, FieldMetadata> entry : getFields(from.getClass())) {
-      FieldMetadata fromMetadata = entry.value;
-      if (fromMetadata == null) continue;
       FieldMetadata toField = toFields.get(entry.key);
-      Field fromField = Nullability.castToNonnull(entry.value).field;
+      Field fromField = entry.value.field;
       if (toField == null)
         throw new SerializationException("To object is missing field: " + entry.key);
       try {
