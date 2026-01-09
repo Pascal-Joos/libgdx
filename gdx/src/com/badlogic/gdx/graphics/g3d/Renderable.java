@@ -76,7 +76,7 @@ public class Renderable {
    *
    * @see #environment *
    */
-  public Material material;
+  @Nullable public Material material;
 
   /**
    * The {@link Environment} to be used to render this Renderable, may be null. When specified it
