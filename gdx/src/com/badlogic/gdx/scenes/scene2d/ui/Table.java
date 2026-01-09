@@ -33,7 +33,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -886,9 +885,8 @@ public class Table extends WidgetGroup {
       Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
-      if (Nullability.castToNonnull(c.expandY) != 0 && expandHeight[row] == 0)
-        expandHeight[row] = c.expandY;
-      if (colspan == 1 && Nullability.castToNonnull(c.expandX) != 0 && expandWidth[column] == 0)
+      if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
+      if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
         expandWidth[column] = c.expandX;
 
       // Compute combined padding/spacing for cells.
@@ -938,7 +936,7 @@ public class Table extends WidgetGroup {
 
       // Colspan with expand will expand all spanned columns if none of the spanned columns have
       // expand.
-      int expandX = Nullability.castToNonnull(c.expandX);
+      int expandX = c.expandX;
       outer:
       if (expandX != 0) {
         int nn = column + c.colspan;
