@@ -24,7 +24,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -97,9 +96,6 @@ public abstract class ColorInfluencer extends Influencer {
 
     @Override
     public void activateParticles(int startIndex, int count) {
-      if (colorChannel == null) {
-        colorChannel = controller.particles.addChannel(ParticleChannels.Color);
-      }
       for (int i = startIndex * colorChannel.strideSize,
               a = startIndex * alphaInterpolationChannel.strideSize,
               l = startIndex * lifeChannel.strideSize + ParticleChannels.LifePercentOffset,
@@ -119,21 +115,17 @@ public abstract class ColorInfluencer extends Influencer {
 
     @Override
     public void update() {
-      if (colorChannel == null) return;
       for (int i = 0,
               a = 0,
               l = ParticleChannels.LifePercentOffset,
-              c =
-                  i
-                      + controller.particles.size
-                          * Nullability.castToNonnull(colorChannel).strideSize;
+              c = i + controller.particles.size * colorChannel.strideSize;
           i < c;
-          i += Nullability.castToNonnull(colorChannel).strideSize,
-              a += alphaInterpolationChannel.strideSize, l += lifeChannel.strideSize) {
+          i += colorChannel.strideSize, a += alphaInterpolationChannel.strideSize,
+              l += lifeChannel.strideSize) {
 
         float lifePercent = lifeChannel.data[l];
-        colorValue.getColor(lifePercent, Nullability.castToNonnull(colorChannel).data, i);
-        Nullability.castToNonnull(colorChannel).data[i + ParticleChannels.AlphaOffset] =
+        colorValue.getColor(lifePercent, colorChannel.data, i);
+        colorChannel.data[i + ParticleChannels.AlphaOffset] =
             alphaInterpolationChannel.data[a + ParticleChannels.InterpolationStartOffset]
                 + alphaInterpolationChannel.data[a + ParticleChannels.InterpolationDiffOffset]
                     * alphaValue.getScale(lifePercent);
@@ -158,7 +150,7 @@ public abstract class ColorInfluencer extends Influencer {
     }
   }
 
-  @Nullable FloatChannel colorChannel;
+  FloatChannel colorChannel;
 
   @Override
   public void allocateChannels() {
