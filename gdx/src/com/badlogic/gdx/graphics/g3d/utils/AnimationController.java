@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -75,7 +74,7 @@ public class AnimationController extends BaseAnimationController {
     @Nullable public AnimationListener listener;
 
     /** The animation to be applied. */
-    @Nullable public Animation animation;
+    public Animation animation;
 
     /** The speed at which to play the animation (can be negative), 1.0 for normal speed. */
     public float speed;
@@ -218,12 +217,7 @@ public class AnimationController extends BaseAnimationController {
   @Nullable
   private AnimationDesc obtain(final AnimationDesc anim) {
     return obtain(
-        Nullability.castToNonnull(anim.animation),
-        anim.offset,
-        anim.duration,
-        anim.loopCount,
-        anim.speed,
-        anim.listener);
+        anim.animation, anim.offset, anim.duration, anim.loopCount, anim.speed, anim.listener);
   }
 
   /**
@@ -235,7 +229,7 @@ public class AnimationController extends BaseAnimationController {
   public void update(float delta) {
     if (paused) return;
     if (previous != null && ((transitionCurrentTime += delta) >= transitionTargetTime)) {
-      removeAnimation(Nullability.castToNonnull(previous.animation));
+      removeAnimation(previous.animation);
       justChangedAnimation = true;
       animationPool.free(previous);
       previous = null;
@@ -255,7 +249,7 @@ public class AnimationController extends BaseAnimationController {
     }
     if (previous != null)
       applyAnimations(
-          Nullability.castToNonnull(previous.animation),
+          previous.animation,
           previous.offset + previous.time,
           current.animation,
           current.offset + current.time,
@@ -389,7 +383,7 @@ public class AnimationController extends BaseAnimationController {
     else {
       if (!allowSameAnimation && anim != null && current.animation == anim.animation)
         anim.time = current.time;
-      else removeAnimation(Nullability.castToNonnull(current.animation));
+      else removeAnimation(current.animation);
       animationPool.free(current);
       current = anim;
     }
@@ -534,7 +528,7 @@ public class AnimationController extends BaseAnimationController {
       current = anim;
     } else {
       if (previous != null) {
-        removeAnimation(Nullability.castToNonnull(previous.animation));
+        removeAnimation(previous.animation);
         animationPool.free(previous);
       }
       previous = current;
