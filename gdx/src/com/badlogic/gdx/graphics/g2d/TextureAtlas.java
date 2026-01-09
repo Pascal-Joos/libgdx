@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.StreamUtils;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -490,7 +491,7 @@ public class TextureAtlas implements Disposable {
                   } catch (NumberFormatException ignored) { // Silently ignore non-integer values.
                   }
                 }
-                values.add(entryValues);
+                Nullability.castToNonnull(values).add(entryValues);
               }
             }
             if (region.originalWidth == 0 && region.originalHeight == 0) {
@@ -499,9 +500,9 @@ public class TextureAtlas implements Disposable {
             }
             if (names != null && names.size > 0) {
               region.names = names.toArray(String.class);
-              region.values = values.toArray(int[].class);
+              region.values = Nullability.castToNonnull(values).toArray(int[].class);
               names.clear();
-              values.clear();
+              Nullability.castToNonnull(values).clear();
             }
             regions.add(region);
           }
