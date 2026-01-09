@@ -204,6 +204,7 @@ public class AssetManager implements Disposable {
    * @return the asset
    * @throws GdxRuntimeException if the asset is not loaded
    */
+  @SuppressWarnings("NullAway")
   public synchronized <T> T get(@Nullable AssetDescriptor<T> assetDescriptor) {
     return get(assetDescriptor.fileName, assetDescriptor.type, true);
   }
@@ -333,7 +334,7 @@ public class AssetManager implements Disposable {
    * @return the filename of the asset or null
    */
   @Nullable
-  public synchronized <T> String getAssetFileName(T asset) {
+  public synchronized <T> String getAssetFileName(@Nullable T asset) {
     for (Class assetType : assets.keys()) {
       ObjectMap<String, RefCountedContainer> assetsByType = assets.get(assetType);
       for (Entry<String, RefCountedContainer> entry : assetsByType) {

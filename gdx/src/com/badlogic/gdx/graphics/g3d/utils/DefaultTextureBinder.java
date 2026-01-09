@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.IntBuffer;
 import javax.annotation.Nullable;
 
@@ -118,8 +119,9 @@ public final class DefaultTextureBinder implements TextureBinder {
   }
 
   private final int bindTexture(final TextureDescriptor textureDesc, final boolean rebind) {
+    if (textureDesc == null || textureDesc.texture == null) return -1;
     final int idx, result;
-    final GLTexture texture = textureDesc.texture;
+    final GLTexture texture = Nullability.castToNonnull(textureDesc.texture);
     reused = false;
 
     switch (method) {
@@ -133,19 +135,24 @@ public final class DefaultTextureBinder implements TextureBinder {
         return -1;
     }
 
+    if (texture == null) return result;
+
     if (reused) {
       reuseCount++;
-      if (rebind) texture.bind(result);
+      if (rebind) Nullability.castToNonnull(texture).bind(result);
       else Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + result);
     } else bindCount++;
-    texture.unsafeSetWrap(textureDesc.uWrap, textureDesc.vWrap);
-    texture.unsafeSetFilter(textureDesc.minFilter, textureDesc.magFilter);
+    if (textureDesc.uWrap != null && textureDesc.vWrap != null)
+      Nullability.castToNonnull(texture).unsafeSetWrap(textureDesc.uWrap, textureDesc.vWrap);
+    if (textureDesc.minFilter != null && textureDesc.magFilter != null)
+      Nullability.castToNonnull(texture)
+          .unsafeSetFilter(textureDesc.minFilter, textureDesc.magFilter);
     return result;
   }
 
   private int currentTexture = 0;
 
-  private final int bindTextureRoundRobin(final GLTexture texture) {
+  private final int bindTextureRoundRobin(@Nullable final GLTexture texture) {
     for (int i = 0; i < count; i++) {
       final int idx = (currentTexture + i) % count;
       if (textures[idx] == texture) {
@@ -159,7 +166,7 @@ public final class DefaultTextureBinder implements TextureBinder {
     return currentTexture;
   }
 
-  private final int bindTextureLRU(final GLTexture texture) {
+  private final int bindTextureLRU(@Nullable final GLTexture texture) {
     int i;
     for (i = 0; i < count; i++) {
       final int idx = unitsLRU[i];

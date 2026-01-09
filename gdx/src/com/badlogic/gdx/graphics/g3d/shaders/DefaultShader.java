@@ -1177,7 +1177,9 @@ public class DefaultShader extends BaseShader {
       set(u_fogColor, ((ColorAttribute) attributes.get(ColorAttribute.Fog)).color);
     }
 
-    if (lights != null && lights.shadowMap != null) {
+    if (lights != null
+        && lights.shadowMap != null
+        && lights.shadowMap.getDepthMap().texture != null) {
       set(u_shadowMapProjViewTrans, lights.shadowMap.getProjViewTrans());
       set(u_shadowTexture, lights.shadowMap.getDepthMap());
       set(u_shadowPCFOffset, 1.f / (2f * lights.shadowMap.getDepthMap().texture.getWidth()));

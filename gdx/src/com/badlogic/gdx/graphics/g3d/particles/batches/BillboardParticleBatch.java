@@ -136,7 +136,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   private VertexAttributes currentAttributes;
   protected boolean useGPU = false;
   @Nullable protected AlignMode mode = AlignMode.Screen;
-  protected Texture texture;
+  @Nullable protected Texture texture;
   @Nullable protected BlendingAttribute blendingAttribute;
   @Nullable protected DepthTestAttribute depthTestAttribute;
   @Nullable Shader shader;
@@ -322,6 +322,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
     this.texture = texture;
   }
 
+  @Nullable
   public Texture getTexture() {
     return texture;
   }
