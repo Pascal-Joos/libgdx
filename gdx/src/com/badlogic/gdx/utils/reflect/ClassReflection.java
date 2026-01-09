@@ -16,7 +16,6 @@
 
 package com.badlogic.gdx.utils.reflect;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.lang.reflect.Modifier;
 import javax.annotation.Nullable;
 
@@ -57,7 +56,7 @@ public final class ClassReflection {
    * Class parameter.
    */
   public static boolean isAssignableFrom(Class c1, @Nullable Class c2) {
-    return c1.isAssignableFrom(Nullability.castToNonnull(c2));
+    return c1.isAssignableFrom(c2);
   }
 
   /** Returns true if the class or interface represented by the supplied Class is a member class. */
