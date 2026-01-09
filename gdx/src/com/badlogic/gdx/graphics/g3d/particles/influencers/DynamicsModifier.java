@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -92,7 +93,7 @@ public abstract class DynamicsModifier extends Influencer {
   }
 
   public abstract static class Strength extends DynamicsModifier {
-    protected FloatChannel strengthChannel;
+    @Nullable protected FloatChannel strengthChannel;
     public ScaledNumericValue strengthValue;
 
     public Strength() {
@@ -114,6 +115,7 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void activateParticles(int startIndex, int count) {
+      if (strengthChannel == null) return;
       float start, diff;
       for (int i = startIndex * strengthChannel.strideSize,
               c = i + count * strengthChannel.strideSize;
@@ -227,6 +229,7 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      if (strengthChannel == null) return;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
@@ -292,6 +295,8 @@ public abstract class DynamicsModifier extends Influencer {
       // Algorithm 3
       // Consider a channel which represent a simple angular momentum L
       // Proceed as Algorithm 2
+
+      if (strengthChannel == null) return;
 
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
@@ -364,6 +369,10 @@ public abstract class DynamicsModifier extends Influencer {
         cz = val[Matrix4.M23];
       }
 
+      if (strengthChannel == null) {
+        allocateChannels();
+      }
+
       int lifeOffset = ParticleChannels.LifePercentOffset,
           strengthOffset = 0,
           positionOffset = 0,
@@ -414,6 +423,7 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      if (strengthChannel == null) return;
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
@@ -479,6 +489,9 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      if (strengthChannel == null) {
+        return;
+      }
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
@@ -549,15 +562,18 @@ public abstract class DynamicsModifier extends Influencer {
 
     @Override
     public void update() {
+      if (strengthChannel == null) return;
       int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
       for (int i = 0, c = controller.particles.size;
           i < c;
-          ++i, strengthOffset += strengthChannel.strideSize,
+          ++i, strengthOffset += Nullability.castToNonnull(strengthChannel).strideSize,
               forceOffset += accelerationChannel.strideSize, lifeOffset += lifeChannel.strideSize) {
 
         float strength =
-            strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
-                + strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
+            Nullability.castToNonnull(strengthChannel)
+                    .data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
+                + Nullability.castToNonnull(strengthChannel)
+                        .data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
                     * strengthValue.getScale(lifeChannel.data[lifeOffset]);
         TMP_V3
             .set(MathUtils.random(-1, 1f), MathUtils.random(-1, 1f), MathUtils.random(-1, 1f))
