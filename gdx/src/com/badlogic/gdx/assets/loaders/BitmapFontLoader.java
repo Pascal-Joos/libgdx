@@ -30,7 +30,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -98,7 +97,7 @@ public class BitmapFontLoader
     if (parameter != null && parameter.atlasName != null) {
       TextureAtlas atlas = manager.get(parameter.atlasName, TextureAtlas.class);
       String name = file.sibling(data.imagePaths[0]).nameWithoutExtension().toString();
-      AtlasRegion region = Nullability.castToNonnull(atlas).findRegion(name);
+      AtlasRegion region = atlas.findRegion(name);
 
       if (region == null)
         throw new GdxRuntimeException(

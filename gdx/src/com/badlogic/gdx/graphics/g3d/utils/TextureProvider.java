@@ -21,7 +21,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
-import javax.annotation.Nullable;
 
 /**
  * Used by {@link Model} to load textures from {@link ModelData}.
@@ -29,7 +28,6 @@ import javax.annotation.Nullable;
  * @author badlogic
  */
 public interface TextureProvider {
-  @Nullable
   public Texture load(String fileName);
 
   public static class FileTextureProvider implements TextureProvider {
@@ -72,7 +70,6 @@ public interface TextureProvider {
       this.assetManager = assetManager;
     }
 
-    @Nullable
     @Override
     public Texture load(String fileName) {
       return assetManager.get(fileName, Texture.class);

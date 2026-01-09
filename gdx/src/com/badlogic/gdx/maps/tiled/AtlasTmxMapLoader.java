@@ -54,7 +54,6 @@ public class AtlasTmxMapLoader
 
   protected interface AtlasResolver extends ImageResolver {
 
-    @Nullable
     public TextureAtlas getAtlas();
 
     public static class DirectAtlasResolver implements AtlasTmxMapLoader.AtlasResolver {
@@ -84,7 +83,6 @@ public class AtlasTmxMapLoader
         this.atlasName = atlasName;
       }
 
-      @SuppressWarnings("NullAway")
       @Override
       public TextureAtlas getAtlas() {
         return assetManager.get(atlasName, TextureAtlas.class);
