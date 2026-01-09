@@ -27,7 +27,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.SortedIntList;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -56,7 +55,7 @@ public class DecalBatch implements Disposable {
   private Mesh mesh;
 
   private final SortedIntList<Array<Decal>> groupList = new SortedIntList<Array<Decal>>();
-  @Nullable private GroupStrategy groupStrategy;
+  private GroupStrategy groupStrategy;
   private final Pool<Array<Decal>> groupPool =
       new Pool<Array<Decal>>(16) {
         @Override
@@ -145,9 +144,6 @@ public class DecalBatch implements Disposable {
    * @param decal Decal to add for rendering
    */
   public void add(Decal decal) {
-    if (groupStrategy == null) {
-      throw new IllegalStateException("groupStrategy must be set before adding decals");
-    }
     int groupIndex = groupStrategy.decideGroup(decal);
     Array<Decal> targetGroup = groupList.get(groupIndex);
     if (targetGroup == null) {
@@ -170,17 +166,14 @@ public class DecalBatch implements Disposable {
 
   /** Renders all decals to the buffer and flushes the buffer to the GL when full/done */
   protected void render() {
-    if (groupStrategy == null) {
-      return;
-    }
-    Nullability.castToNonnull(groupStrategy).beforeGroups();
+    groupStrategy.beforeGroups();
     for (SortedIntList.Node<Array<Decal>> group : groupList) {
-      Nullability.castToNonnull(groupStrategy).beforeGroup(group.index, group.value);
-      ShaderProgram shader = Nullability.castToNonnull(groupStrategy).getGroupShader(group.index);
+      groupStrategy.beforeGroup(group.index, group.value);
+      ShaderProgram shader = groupStrategy.getGroupShader(group.index);
       render(shader, group.value);
-      Nullability.castToNonnull(groupStrategy).afterGroup(group.index);
+      groupStrategy.afterGroup(group.index);
     }
-    Nullability.castToNonnull(groupStrategy).afterGroups();
+    groupStrategy.afterGroups();
   }
 
   /**
