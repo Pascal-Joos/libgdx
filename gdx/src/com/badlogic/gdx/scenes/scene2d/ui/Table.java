@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -262,7 +263,7 @@ public class Table extends WidgetGroup {
       // Set cell column and row.
       Cell lastCell = cells.peek();
       if (!lastCell.endRow) {
-        cell.column = lastCell.column + lastCell.colspan;
+        cell.column = lastCell.column + Nullability.castToNonnull(lastCell.colspan);
         cell.row = lastCell.row;
       } else {
         cell.column = 0;
@@ -274,7 +275,9 @@ public class Table extends WidgetGroup {
         outer:
         for (int i = cellCount - 1; i >= 0; i--) {
           Cell other = (Cell) cells[i];
-          for (int column = other.column, nn = column + other.colspan; column < nn; column++) {
+          for (int column = other.column, nn = column + Nullability.castToNonnull(other.colspan);
+              column < nn;
+              column++) {
             if (column == cell.column) {
               cell.cellAboveIndex = i;
               break outer;
@@ -443,7 +446,7 @@ public class Table extends WidgetGroup {
     for (int i = this.cells.size - 1; i >= 0; i--) {
       Cell cell = (Cell) cells[i];
       if (cell.endRow) break;
-      rowColumns += cell.colspan;
+      rowColumns += Nullability.castToNonnull(cell.colspan);
     }
     columns = Math.max(columns, rowColumns);
     rows++;
@@ -881,7 +884,7 @@ public class Table extends WidgetGroup {
     float spaceRightLast = 0;
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
-      int column = c.column, row = c.row, colspan = c.colspan;
+      int column = c.column, row = c.row, colspan = Nullability.castToNonnull(c.colspan);
       Actor a = c.actor;
 
       // Collect rows that expand and colspan=1 columns that expand.
@@ -939,13 +942,13 @@ public class Table extends WidgetGroup {
       int expandX = c.expandX;
       outer:
       if (expandX != 0) {
-        int nn = column + c.colspan;
+        int nn = column + Nullability.castToNonnull(c.colspan);
         for (int ii = column; ii < nn; ii++) if (expandWidth[ii] != 0) break outer;
         for (int ii = column; ii < nn; ii++) expandWidth[ii] = expandX;
       }
 
       // Collect uniform sizes.
-      if (c.uniformX == Boolean.TRUE && c.colspan == 1) {
+      if (c.uniformX == Boolean.TRUE && Nullability.castToNonnull(c.colspan) == 1) {
         float hpadding = c.computedPadLeft + c.computedPadRight;
         uniformMinWidth = Math.max(uniformMinWidth, columnMinWidth[column] - hpadding);
         uniformPrefWidth = Math.max(uniformPrefWidth, columnPrefWidth[column] - hpadding);
@@ -961,7 +964,9 @@ public class Table extends WidgetGroup {
     if (uniformPrefWidth > 0 || uniformPrefHeight > 0) {
       for (int i = 0; i < cellCount; i++) {
         Cell c = (Cell) cells[i];
-        if (uniformPrefWidth > 0 && c.uniformX == Boolean.TRUE && c.colspan == 1) {
+        if (uniformPrefWidth > 0
+            && c.uniformX == Boolean.TRUE
+            && Nullability.castToNonnull(c.colspan) == 1) {
           float hpadding = c.computedPadLeft + c.computedPadRight;
           columnMinWidth[c.column] = uniformMinWidth + hpadding;
           columnPrefWidth[c.column] = uniformPrefWidth + hpadding;
@@ -978,7 +983,7 @@ public class Table extends WidgetGroup {
     // spanned.
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
-      int colspan = c.colspan;
+      int colspan = Nullability.castToNonnull(c.colspan);
       if (colspan == 1) continue;
       int column = c.column;
 
@@ -1084,7 +1089,7 @@ public class Table extends WidgetGroup {
       Actor a = c.actor;
 
       float spannedWeightedWidth = 0;
-      int colspan = c.colspan;
+      int colspan = Nullability.castToNonnull(c.colspan);
       for (int ii = column, nn = ii + colspan; ii < nn; ii++)
         spannedWeightedWidth += columnWeightedWidth[ii];
       float weightedHeight = rowWeightedHeight[row];
@@ -1148,7 +1153,7 @@ public class Table extends WidgetGroup {
     // Distribute any additional width added by colspanned cells to the columns spanned.
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
-      int colspan = c.colspan;
+      int colspan = Nullability.castToNonnull(c.colspan);
       if (colspan == 1) continue;
 
       float extraWidth = 0;
@@ -1186,8 +1191,9 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
 
       float spannedCellWidth = 0;
-      for (int column = c.column, nn = column + c.colspan; column < nn; column++)
-        spannedCellWidth += columnWidth[column];
+      for (int column = c.column, nn = column + Nullability.castToNonnull(c.colspan);
+          column < nn;
+          column++) spannedCellWidth += columnWidth[column];
       spannedCellWidth -= c.computedPadLeft + c.computedPadRight;
 
       currentX += c.computedPadLeft;
@@ -1264,8 +1270,9 @@ public class Table extends WidgetGroup {
 
       // Cell bounds.
       float spannedCellWidth = 0;
-      for (int column = c.column, nn = column + c.colspan; column < nn; column++)
-        spannedCellWidth += columnWidth[column];
+      for (int column = c.column, nn = column + Nullability.castToNonnull(c.colspan);
+          column < nn;
+          column++) spannedCellWidth += columnWidth[column];
       spannedCellWidth -= c.computedPadLeft + c.computedPadRight;
       currentX += c.computedPadLeft;
       if (debug == Debug.cell || debug == Debug.all) {
