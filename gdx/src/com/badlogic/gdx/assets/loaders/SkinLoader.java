@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -91,7 +92,7 @@ public class SkinLoader extends AsynchronousAssetLoader<Skin, SkinLoader.SkinPar
    * @return A new Skin (or subclass of Skin) instance based on the provided TextureAtlas.
    */
   protected Skin newSkin(TextureAtlas atlas) {
-    return new Skin(atlas);
+    return new Skin(Nullability.castToNonnull(atlas));
   }
 
   public static class SkinParameter extends AssetLoaderParameters<Skin> {

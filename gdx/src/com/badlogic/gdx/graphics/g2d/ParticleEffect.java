@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StreamUtils;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -171,7 +172,7 @@ public class ParticleEffect implements Disposable {
 
   public void load(FileHandle effectFile, TextureAtlas atlas, @Nullable String atlasPrefix) {
     loadEmitters(effectFile);
-    loadEmitterImages(atlas, atlasPrefix);
+    loadEmitterImages(Nullability.castToNonnull(atlas), atlasPrefix);
   }
 
   public void loadEmitters(FileHandle effectFile) {
