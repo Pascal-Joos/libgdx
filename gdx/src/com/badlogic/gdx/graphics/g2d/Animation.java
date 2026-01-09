@@ -19,8 +19,6 @@ package com.badlogic.gdx.graphics.g2d;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * An Animation stores a list of objects representing an animated sequence, e.g. for running or
@@ -52,7 +50,7 @@ public class Animation<T> {
    * Length must not be modified without updating {@link #animationDuration}. See {@link
    * #setKeyFrames(T[])}.
    */
-  @Nullable T[] keyFrames;
+  T[] keyFrames;
 
   private float frameDuration;
   private float animationDuration;
@@ -136,9 +134,6 @@ public class Animation<T> {
    * @return the frame of animation for the given state time.
    */
   public T getKeyFrame(float stateTime) {
-    if (keyFrames == null || keyFrames.length == 0) {
-      return null;
-    }
     int frameNumber = getKeyFrameIndex(stateTime);
     return keyFrames[frameNumber];
   }
@@ -150,39 +145,35 @@ public class Animation<T> {
    * @return current frame number
    */
   public int getKeyFrameIndex(float stateTime) {
-    if (keyFrames == null || keyFrames.length == 0) return 0;
-    if (Nullability.castToNonnull(keyFrames).length == 1) return 0;
+    if (keyFrames.length == 1) return 0;
 
     int frameNumber = (int) (stateTime / frameDuration);
     switch (playMode) {
       case NORMAL:
-        frameNumber = Math.min(Nullability.castToNonnull(keyFrames).length - 1, frameNumber);
+        frameNumber = Math.min(keyFrames.length - 1, frameNumber);
         break;
       case LOOP:
-        frameNumber = frameNumber % Nullability.castToNonnull(keyFrames).length;
+        frameNumber = frameNumber % keyFrames.length;
         break;
       case LOOP_PINGPONG:
-        frameNumber = frameNumber % ((Nullability.castToNonnull(keyFrames).length * 2) - 2);
-        if (frameNumber >= Nullability.castToNonnull(keyFrames).length)
-          frameNumber =
-              Nullability.castToNonnull(keyFrames).length
-                  - 2
-                  - (frameNumber - Nullability.castToNonnull(keyFrames).length);
+        frameNumber = frameNumber % ((keyFrames.length * 2) - 2);
+        if (frameNumber >= keyFrames.length)
+          frameNumber = keyFrames.length - 2 - (frameNumber - keyFrames.length);
         break;
       case LOOP_RANDOM:
         int lastFrameNumber = (int) ((lastStateTime) / frameDuration);
         if (lastFrameNumber != frameNumber) {
-          frameNumber = MathUtils.random(Nullability.castToNonnull(keyFrames).length - 1);
+          frameNumber = MathUtils.random(keyFrames.length - 1);
         } else {
           frameNumber = this.lastFrameNumber;
         }
         break;
       case REVERSED:
-        frameNumber = Math.max(Nullability.castToNonnull(keyFrames).length - frameNumber - 1, 0);
+        frameNumber = Math.max(keyFrames.length - frameNumber - 1, 0);
         break;
       case LOOP_REVERSED:
-        frameNumber = frameNumber % Nullability.castToNonnull(keyFrames).length;
-        frameNumber = Nullability.castToNonnull(keyFrames).length - frameNumber - 1;
+        frameNumber = frameNumber % keyFrames.length;
+        frameNumber = keyFrames.length - frameNumber - 1;
         break;
     }
 
@@ -198,7 +189,6 @@ public class Animation<T> {
    * @return The keyframes[] field. This array is an Object[] if the animation was instantiated with
    *     an Array that was not type-aware.
    */
-  @Nullable
   public T[] getKeyFrames() {
     return keyFrames;
   }
@@ -230,7 +220,6 @@ public class Animation<T> {
    * @return whether the animation is finished.
    */
   public boolean isAnimationFinished(float stateTime) {
-    if (keyFrames == null) return true;
     int frameNumber = (int) (stateTime / frameDuration);
     return keyFrames.length - 1 < frameNumber;
   }
@@ -242,9 +231,7 @@ public class Animation<T> {
    */
   public void setFrameDuration(float frameDuration) {
     this.frameDuration = frameDuration;
-    if (keyFrames != null) {
-      this.animationDuration = Nullability.castToNonnull(keyFrames).length * frameDuration;
-    }
+    this.animationDuration = keyFrames.length * frameDuration;
   }
 
   /**
