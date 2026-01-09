@@ -149,13 +149,25 @@ public class PointSpriteParticleBatch
 
   @Override
   protected void flush(int[] offsets) {
+    if (vertices == null) return;
+
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
+      if (data == null) continue;
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
       FloatChannel colorChannel = data.colorChannel;
       FloatChannel rotationChannel = data.rotationChannel;
+
+      if (regionChannel == null
+          || positionChannel == null
+          || colorChannel == null
+          || rotationChannel == null
+          || scaleChannel == null) continue;
+
+      float[] scaleData = scaleChannel.data;
+      if (scaleData == null || colorChannel.data == null) continue;
 
       for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
         int offset = offsets[tp] * CPU_VERTEX_SIZE;
@@ -178,8 +190,7 @@ public class PointSpriteParticleBatch
             colorChannel.data[colorOffset + ParticleChannels.BlueOffset];
         vertices[offset + CPU_COLOR_OFFSET + 3] =
             colorChannel.data[colorOffset + ParticleChannels.AlphaOffset];
-        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] =
-            scaleChannel.data[p * scaleChannel.strideSize];
+        vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET] = scaleData[p * scaleChannel.strideSize];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 1] =
             rotationChannel.data[rotationOffset + ParticleChannels.CosineOffset];
         vertices[offset + CPU_SIZE_AND_ROTATION_OFFSET + 2] =
@@ -195,9 +206,11 @@ public class PointSpriteParticleBatch
       }
     }
 
-    renderable.meshPart.size = bufferedParticlesCount;
-    renderable.meshPart.mesh.setVertices(vertices, 0, bufferedParticlesCount * CPU_VERTEX_SIZE);
-    renderable.meshPart.update();
+    if (renderable.meshPart.mesh != null) {
+      renderable.meshPart.size = bufferedParticlesCount;
+      renderable.meshPart.mesh.setVertices(vertices, 0, bufferedParticlesCount * CPU_VERTEX_SIZE);
+      renderable.meshPart.update();
+    }
   }
 
   @Override
