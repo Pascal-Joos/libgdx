@@ -119,8 +119,7 @@ public class Mesh implements Disposable {
    * @param attributes the {@link VertexAttributes}. Each vertex attribute defines one property of a
    *     vertex such as position, normal or texture coordinate
    */
-  public Mesh(
-      boolean isStatic, int maxVertices, int maxIndices, @Nullable VertexAttributes attributes) {
+  public Mesh(boolean isStatic, int maxVertices, int maxIndices, VertexAttributes attributes) {
     vertices = makeVertexBuffer(isStatic, maxVertices, attributes);
     indices = new IndexBufferObject(isStatic, maxIndices);
     isVertexArray = false;
