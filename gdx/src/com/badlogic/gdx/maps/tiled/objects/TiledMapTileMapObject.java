@@ -22,6 +22,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -44,7 +45,8 @@ public class TiledMapTileMapObject extends TextureMapObject {
     this.flipVertically = flipVertically;
     this.tile = tile;
 
-    TextureRegion textureRegion = new TextureRegion(tile.getTextureRegion());
+    TextureRegion textureRegion =
+        new TextureRegion(Nullability.castToNonnull(tile).getTextureRegion());
     textureRegion.flip(flipHorizontally, flipVertically);
     setTextureRegion(textureRegion);
   }
