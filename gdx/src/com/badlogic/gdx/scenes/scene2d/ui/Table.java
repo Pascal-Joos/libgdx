@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
@@ -883,6 +884,7 @@ public class Table extends WidgetGroup {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row, colspan = c.colspan;
       Actor a = c.actor;
+      if (a == null) continue;
 
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
@@ -891,22 +893,55 @@ public class Table extends WidgetGroup {
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
+      Value padLeftValue = c.padLeft == null ? Value.zero : c.padLeft;
+      Value spaceLeftValue = c.spaceLeft == null ? Value.zero : c.spaceLeft;
       c.computedPadLeft =
-          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
-      c.computedPadTop = c.padTop.get(a);
+          Nullability.castToNonnull(padLeftValue).get(a)
+              + (column == 0
+                  ? 0
+                  : Math.max(0, Nullability.castToNonnull(spaceLeftValue).get(a) - spaceRightLast));
+      c.computedPadTop = Nullability.castToNonnull(c.padTop == null ? Value.zero : c.padTop).get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
-        c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
+        Actor aboveActor = Nullability.castToNonnull(above.actor);
+        c.computedPadTop +=
+            Math.max(
+                0,
+                Nullability.castToNonnull(c.spaceTop == null ? Value.zero : c.spaceTop).get(a)
+                    - Nullability.castToNonnull(
+                            above.spaceBottom == null ? Value.zero : above.spaceBottom)
+                        .get(aboveActor));
       }
-      float spaceRight = c.spaceRight.get(a);
-      c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
-      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
+      float spaceRight =
+          Nullability.castToNonnull(c.spaceRight == null ? Value.zero : c.spaceRight).get(a);
+      c.computedPadRight =
+          Nullability.castToNonnull(c.padRight == null ? Value.zero : c.padRight).get(a)
+              + ((column + colspan) == columns ? 0 : spaceRight);
+      c.computedPadBottom =
+          Nullability.castToNonnull(c.padBottom == null ? Value.zero : c.padBottom).get(a)
+              + (row == rows - 1
+                  ? 0
+                  : Nullability.castToNonnull(c.spaceBottom == null ? Value.zero : c.spaceBottom)
+                      .get(a));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
-      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
-      float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
-      float maxWidth = c.maxWidth.get(a), maxHeight = c.maxHeight.get(a);
+      float
+          prefWidth =
+              Nullability.castToNonnull(c.prefWidth == null ? Value.prefWidth : c.prefWidth).get(a),
+          prefHeight =
+              Nullability.castToNonnull(c.prefHeight == null ? Value.prefHeight : c.prefHeight)
+                  .get(a);
+      float
+          minWidth =
+              Nullability.castToNonnull(c.minWidth == null ? Value.minWidth : c.minWidth).get(a),
+          minHeight =
+              Nullability.castToNonnull(c.minHeight == null ? Value.minHeight : c.minHeight).get(a);
+      float
+          maxWidth =
+              Nullability.castToNonnull(c.maxWidth == null ? Value.maxWidth : c.maxWidth).get(a),
+          maxHeight =
+              Nullability.castToNonnull(c.maxHeight == null ? Value.maxHeight : c.maxHeight).get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
@@ -982,10 +1017,14 @@ public class Table extends WidgetGroup {
       if (colspan == 1) continue;
       int column = c.column;
 
-      Actor a = c.actor;
-      float minWidth = c.minWidth.get(a),
-          prefWidth = c.prefWidth.get(a),
-          maxWidth = c.maxWidth.get(a);
+      Actor a = Nullability.castToNonnull(c.actor);
+      float
+          minWidth =
+              Nullability.castToNonnull(c.minWidth == null ? Value.minWidth : c.minWidth).get(a),
+          prefWidth =
+              Nullability.castToNonnull(c.prefWidth == null ? Value.prefWidth : c.prefWidth).get(a),
+          maxWidth =
+              Nullability.castToNonnull(c.maxWidth == null ? Value.maxWidth : c.maxWidth).get(a);
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
       if (round) {
