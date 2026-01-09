@@ -47,6 +47,7 @@ import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -127,10 +128,11 @@ public class Skin implements Disposable {
     for (int i = 0, n = regions.size; i < n; i++) {
       AtlasRegion region = regions.get(i);
       String name = region.name;
+      if (name == null) continue;
       if (region.index != -1) {
         name += "_" + region.index;
       }
-      add(name, region, TextureRegion.class);
+      add(Nullability.castToNonnull(name), region, TextureRegion.class);
     }
   }
 
