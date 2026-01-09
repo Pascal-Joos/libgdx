@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -22,7 +21,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Container<T extends Actor> extends WidgetGroup {
-  @Nullable private @Null T actor;
+  private @Null T actor;
   private Value minWidth = Value.minWidth, minHeight = Value.minHeight;
   private Value prefWidth = Value.prefWidth, prefHeight = Value.prefHeight;
   private Value maxWidth = Value.zero, maxHeight = Value.zero;
@@ -190,7 +189,6 @@ public class Container<T extends Actor> extends WidgetGroup {
   /**
    * @return May be null.
    */
-  @Nullable
   public @Null T getActor() {
     return actor;
   }
@@ -666,7 +664,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMinWidth() {
-    return minWidth.get(Nullability.castToNonnull(actor)) + padLeft.get(this) + padRight.get(this);
+    return minWidth.get(actor) + padLeft.get(this) + padRight.get(this);
   }
 
   public Value getMinHeightValue() {
@@ -674,7 +672,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMinHeight() {
-    return minHeight.get(Nullability.castToNonnull(actor)) + padTop.get(this) + padBottom.get(this);
+    return minHeight.get(actor) + padTop.get(this) + padBottom.get(this);
   }
 
   public Value getPrefWidthValue() {
@@ -682,7 +680,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getPrefWidth() {
-    float v = prefWidth.get(Nullability.castToNonnull(actor));
+    float v = prefWidth.get(actor);
     if (background != null) v = Math.max(v, background.getMinWidth());
     return Math.max(getMinWidth(), v + padLeft.get(this) + padRight.get(this));
   }
@@ -692,7 +690,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getPrefHeight() {
-    float v = prefHeight.get(Nullability.castToNonnull(actor));
+    float v = prefHeight.get(actor);
     if (background != null) v = Math.max(v, background.getMinHeight());
     return Math.max(getMinHeight(), v + padTop.get(this) + padBottom.get(this));
   }
@@ -702,7 +700,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMaxWidth() {
-    float v = maxWidth.get(Nullability.castToNonnull(actor));
+    float v = maxWidth.get(actor);
     if (v > 0) v += padLeft.get(this) + padRight.get(this);
     return v;
   }
@@ -712,7 +710,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   }
 
   public float getMaxHeight() {
-    float v = maxHeight.get(Nullability.castToNonnull(actor));
+    float v = maxHeight.get(actor);
     if (v > 0) v += padTop.get(this) + padBottom.get(this);
     return v;
   }
