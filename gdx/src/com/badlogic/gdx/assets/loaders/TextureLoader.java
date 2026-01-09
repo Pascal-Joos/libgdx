@@ -26,7 +26,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.Array;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -89,9 +88,9 @@ public class TextureLoader
     if (info == null) return null;
     Texture texture = info.texture;
     if (texture != null) {
-      texture.load(Nullability.castToNonnull(info.data));
+      texture.load(info.data);
     } else {
-      texture = new Texture(Nullability.castToNonnull(info.data));
+      texture = new Texture(info.data);
     }
     if (parameter != null) {
       texture.setFilter(parameter.minFilter, parameter.magFilter);
