@@ -17,7 +17,6 @@
 package com.badlogic.gdx.utils;
 
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -153,8 +152,8 @@ public class PooledLinkedList<T> {
     }
 
     if (c == head) {
-      Nullability.castToNonnull(n).prev = null;
-      head = Nullability.castToNonnull(n);
+      n.prev = null;
+      head = n;
       return;
     }
 
@@ -164,8 +163,8 @@ public class PooledLinkedList<T> {
       return;
     }
 
-    p.next = Nullability.castToNonnull(n);
-    Nullability.castToNonnull(n).prev = p;
+    p.next = n;
+    n.prev = p;
   }
 
   /** Removes the tail of the list regardless of iteration status */
