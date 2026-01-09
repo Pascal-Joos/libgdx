@@ -13,9 +13,6 @@
 
 package com.badlogic.gdx.utils;
 
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
-
 /**
  * This is a near duplicate of {@link TimSort}, modified for use with arrays of objects that
  * implement {@link Comparable}, instead of using explicit comparators.
@@ -43,7 +40,7 @@ class ComparableTimSort {
   private static final int MIN_MERGE = 32;
 
   /** The array being sorted. */
-  @Nullable private Object[] a;
+  private Object[] a;
 
   /**
    * When we get into galloping mode, we stay there until both runs win less often than MIN_GALLOP
@@ -426,8 +423,6 @@ class ComparableTimSort {
     if (DEBUG) assert i >= 0;
     if (DEBUG) assert i == stackSize - 2 || i == stackSize - 3;
 
-    if (a == null) return;
-
     int base1 = runBase[i];
     int len1 = runLen[i];
     int base2 = runBase[i + 1];
@@ -450,13 +445,7 @@ class ComparableTimSort {
      * Find where the first element of run2 goes in run1. Prior elements in run1 can be ignored (because they're already in
      * place).
      */
-    int k =
-        gallopRight(
-            (Comparable<Object>) Nullability.castToNonnull(a)[base2],
-            Nullability.castToNonnull(a),
-            base1,
-            len1,
-            0);
+    int k = gallopRight((Comparable<Object>) a[base2], a, base1, len1, 0);
     if (DEBUG) assert k >= 0;
     base1 += k;
     len1 -= k;
@@ -466,13 +455,7 @@ class ComparableTimSort {
      * Find where the last element of run1 goes in run2. Subsequent elements in run2 can be ignored (because they're already in
      * place).
      */
-    len2 =
-        gallopLeft(
-            (Comparable<Object>) Nullability.castToNonnull(a)[base1 + len1 - 1],
-            Nullability.castToNonnull(a),
-            base2,
-            len2,
-            len2 - 1);
+    len2 = gallopLeft((Comparable<Object>) a[base1 + len1 - 1], a, base2, len2, len2 - 1);
     if (DEBUG) assert len2 >= 0;
     if (len2 == 0) return;
 
@@ -630,10 +613,7 @@ class ComparableTimSort {
     if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
     // Copy first run into temp array
-    Object[] a = Nullability.castToNonnull(this.a); // For performance
-    if (a == null) {
-      throw new NullPointerException();
-    }
+    Object[] a = this.a; // For performance
     Object[] tmp = ensureCapacity(len1);
     System.arraycopy(a, base1, tmp, 0, len1);
 
@@ -642,7 +622,7 @@ class ComparableTimSort {
     int dest = base1; // Indexes int a
 
     // Move first element of second run and deal with degenerate cases
-    Nullability.castToNonnull(a)[dest++] = Nullability.castToNonnull(a)[cursor2++];
+    a[dest++] = a[cursor2++];
     if (--len2 == 0) {
       System.arraycopy(tmp, cursor1, a, dest, len1);
       return;
@@ -740,28 +720,24 @@ class ComparableTimSort {
 
     // Copy second run into temp array
     Object[] a = this.a; // For performance
-    if (a == null) {
-      throw new IllegalStateException();
-    }
     Object[] tmp = ensureCapacity(len2);
-    System.arraycopy(Nullability.castToNonnull(a), base2, tmp, 0, len2);
+    System.arraycopy(a, base2, tmp, 0, len2);
 
     int cursor1 = base1 + len1 - 1; // Indexes into a
     int cursor2 = len2 - 1; // Indexes into tmp array
     int dest = base2 + len2 - 1; // Indexes into a
 
     // Move last element of first run and deal with degenerate cases
-    Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+    a[dest--] = a[cursor1--];
     if (--len1 == 0) {
-      System.arraycopy(tmp, 0, Nullability.castToNonnull(a), dest - (len2 - 1), len2);
+      System.arraycopy(tmp, 0, a, dest - (len2 - 1), len2);
       return;
     }
     if (len2 == 1) {
       dest -= len1;
       cursor1 -= len1;
-      System.arraycopy(
-          Nullability.castToNonnull(a), cursor1 + 1, Nullability.castToNonnull(a), dest + 1, len1);
-      Nullability.castToNonnull(a)[dest] = tmp[cursor2];
+      System.arraycopy(a, cursor1 + 1, a, dest + 1, len1);
+      a[dest] = tmp[cursor2];
       return;
     }
 
@@ -776,13 +752,13 @@ class ComparableTimSort {
        */
       do {
         if (DEBUG) assert len1 > 0 && len2 > 1;
-        if (((Comparable) tmp[cursor2]).compareTo(Nullability.castToNonnull(a)[cursor1]) < 0) {
-          Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+        if (((Comparable) tmp[cursor2]).compareTo(a[cursor1]) < 0) {
+          a[dest--] = a[cursor1--];
           count1++;
           count2 = 0;
           if (--len1 == 0) break outer;
         } else {
-          Nullability.castToNonnull(a)[dest--] = tmp[cursor2--];
+          a[dest--] = tmp[cursor2--];
           count2++;
           count1 = 0;
           if (--len2 == 1) break outer;
@@ -795,37 +771,26 @@ class ComparableTimSort {
        */
       do {
         if (DEBUG) assert len1 > 0 && len2 > 1;
-        count1 =
-            len1
-                - gallopRight(
-                    (Comparable) tmp[cursor2], Nullability.castToNonnull(a), base1, len1, len1 - 1);
+        count1 = len1 - gallopRight((Comparable) tmp[cursor2], a, base1, len1, len1 - 1);
         if (count1 != 0) {
           dest -= count1;
           cursor1 -= count1;
           len1 -= count1;
-          System.arraycopy(
-              Nullability.castToNonnull(a),
-              cursor1 + 1,
-              Nullability.castToNonnull(a),
-              dest + 1,
-              count1);
+          System.arraycopy(a, cursor1 + 1, a, dest + 1, count1);
           if (len1 == 0) break outer;
         }
-        Nullability.castToNonnull(a)[dest--] = tmp[cursor2--];
+        a[dest--] = tmp[cursor2--];
         if (--len2 == 1) break outer;
 
-        count2 =
-            len2
-                - gallopLeft(
-                    (Comparable) Nullability.castToNonnull(a)[cursor1], tmp, 0, len2, len2 - 1);
+        count2 = len2 - gallopLeft((Comparable) a[cursor1], tmp, 0, len2, len2 - 1);
         if (count2 != 0) {
           dest -= count2;
           cursor2 -= count2;
           len2 -= count2;
-          System.arraycopy(tmp, cursor2 + 1, Nullability.castToNonnull(a), dest + 1, count2);
+          System.arraycopy(tmp, cursor2 + 1, a, dest + 1, count2);
           if (len2 <= 1) break outer; // len2 == 1 || len2 == 0
         }
-        Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+        a[dest--] = a[cursor1--];
         if (--len1 == 0) break outer;
         minGallop--;
       } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
@@ -838,15 +803,14 @@ class ComparableTimSort {
       if (DEBUG) assert len1 > 0;
       dest -= len1;
       cursor1 -= len1;
-      System.arraycopy(
-          Nullability.castToNonnull(a), cursor1 + 1, Nullability.castToNonnull(a), dest + 1, len1);
-      Nullability.castToNonnull(a)[dest] = tmp[cursor2]; // Move first elt of run2 to front of merge
+      System.arraycopy(a, cursor1 + 1, a, dest + 1, len1);
+      a[dest] = tmp[cursor2]; // Move first elt of run2 to front of merge
     } else if (len2 == 0) {
       throw new IllegalArgumentException("Comparison method violates its general contract!");
     } else {
       if (DEBUG) assert len1 == 0;
       if (DEBUG) assert len2 > 0;
-      System.arraycopy(tmp, 0, Nullability.castToNonnull(a), dest - (len2 - 1), len2);
+      System.arraycopy(tmp, 0, a, dest - (len2 - 1), len2);
     }
   }
 
@@ -861,7 +825,6 @@ class ComparableTimSort {
   private Object[] ensureCapacity(int minCapacity) {
     tmpCount = Math.max(tmpCount, minCapacity);
     if (tmp.length < minCapacity) {
-      Object[] aLocal = this.a;
       // Compute smallest power of 2 > minCapacity
       int newSize = minCapacity;
       newSize |= newSize >> 1;
@@ -873,8 +836,7 @@ class ComparableTimSort {
 
       if (newSize < 0) // Not bloody likely!
       newSize = minCapacity;
-      else if (aLocal != null)
-        newSize = Math.min(newSize, Nullability.castToNonnull(aLocal).length >>> 1);
+      else newSize = Math.min(newSize, a.length >>> 1);
 
       Object[] newArray = new Object[newSize];
       tmp = newArray;
