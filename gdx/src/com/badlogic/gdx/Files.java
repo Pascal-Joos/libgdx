@@ -18,6 +18,7 @@ package com.badlogic.gdx;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import javax.annotation.Nullable;
 
 /**
  * Provides standard access to the filesystem, classpath, Android app storage (internal and
@@ -80,7 +81,7 @@ public interface Files {
   public FileHandle classpath(String path);
 
   /** Convenience method that returns a {@link FileType#Internal} file handle. */
-  public FileHandle internal(String path);
+  public FileHandle internal(@Nullable String path);
 
   /** Convenience method that returns a {@link FileType#External} file handle. */
   public FileHandle external(String path);

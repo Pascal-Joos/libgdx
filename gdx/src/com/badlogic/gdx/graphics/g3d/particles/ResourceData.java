@@ -97,6 +97,7 @@ public class ResourceData<T> implements Json.Serializable {
     public AssetDescriptor loadAsset() {
       if (loadIndex == assets.size) return null;
       AssetData data = (AssetData) resources.sharedAssets.get(assets.get(loadIndex++));
+      if (data == null || data.filename == null || data.type == null) return null;
       return new AssetDescriptor(data.filename, data.type);
     }
 
@@ -119,7 +120,7 @@ public class ResourceData<T> implements Json.Serializable {
 
   /** This class contains all the information related to a given asset */
   public static class AssetData<T> implements Json.Serializable {
-    public String filename;
+    @Nullable public String filename;
     public Class<T> type;
 
     public AssetData() {}
@@ -132,7 +133,7 @@ public class ResourceData<T> implements Json.Serializable {
     @Override
     public void write(Json json) {
       json.writeValue("filename", filename);
-      json.writeValue("type", type.getName());
+      json.writeValue("type", type != null ? type.getName() : null);
     }
 
     @Initializer
@@ -179,7 +180,10 @@ public class ResourceData<T> implements Json.Serializable {
   <K> int getAssetData(@Nullable String filename, Class<K> type) {
     int i = 0;
     for (AssetData data : sharedAssets) {
-      if (data.filename.equals(filename) && data.type.equals(type)) {
+      if (filename != null
+          && type != null
+          && filename.equals(data.filename)
+          && type.equals(data.type)) {
         return i;
       }
       ++i;
@@ -190,7 +194,9 @@ public class ResourceData<T> implements Json.Serializable {
   public Array<AssetDescriptor> getAssetDescriptors() {
     Array<AssetDescriptor> descriptors = new Array<AssetDescriptor>();
     for (AssetData data : sharedAssets) {
-      descriptors.add(new AssetDescriptor<T>(data.filename, data.type));
+      if (data.filename != null) {
+        descriptors.add(new AssetDescriptor<T>(data.filename, data.type));
+      }
     }
     return descriptors;
   }
