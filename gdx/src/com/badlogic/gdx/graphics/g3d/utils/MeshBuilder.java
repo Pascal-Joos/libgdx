@@ -45,6 +45,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.ShortArray;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -638,7 +639,7 @@ public class MeshBuilder implements MeshPartBuilder {
       @Nullable Vector3 pos, @Nullable Vector3 nor, @Nullable Color col, @Nullable Vector2 uv) {
     if (vindex > MAX_INDEX) throw new GdxRuntimeException("Too many vertices used");
 
-    vertex[posOffset] = pos.x;
+    vertex[posOffset] = Nullability.castToNonnull(pos).x;
     if (posSize > 1) vertex[posOffset + 1] = pos.y;
     if (posSize > 2) vertex[posOffset + 2] = pos.z;
 
