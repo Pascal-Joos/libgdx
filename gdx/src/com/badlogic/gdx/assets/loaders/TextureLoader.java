@@ -75,7 +75,7 @@ public class TextureLoader
       info.data = parameter.textureData;
       info.texture = parameter.texture;
     }
-    if (info != null && info.data != null && !info.data.isPrepared()) info.data.prepare();
+    if (!info.data.isPrepared()) info.data.prepare();
   }
 
   @Nullable
@@ -85,7 +85,7 @@ public class TextureLoader
       String fileName,
       FileHandle file,
       @Nullable TextureParameter parameter) {
-    if (info == null || info.data == null) return null;
+    if (info == null) return null;
     Texture texture = info.texture;
     if (texture != null) {
       texture.load(info.data);
