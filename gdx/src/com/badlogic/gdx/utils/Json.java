@@ -1123,6 +1123,7 @@ public class Json {
    * @param type May be null if the type is unknown.
    * @return May be null.
    */
+  @Nullable
   public @Null <T> T readValue(
       String name, @Null Class<T> type, @Nullable T defaultValue, JsonValue jsonMap) {
     JsonValue jsonValue = jsonMap.get(name);
