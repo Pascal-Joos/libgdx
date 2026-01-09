@@ -63,7 +63,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
   protected static final int MASK_CLEAR = 0xE0000000;
 
   protected XmlReader xml = new XmlReader();
-  @Nullable protected Element root;
+  protected Element root;
   protected boolean convertObjectToTileSpace;
   protected boolean flipY = true;
 
@@ -72,7 +72,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
   protected int mapWidthInPixels;
   protected int mapHeightInPixels;
 
-  @Nullable protected TiledMap map;
+  protected TiledMap map;
 
   public BaseTmxMapLoader(FileHandleResolver resolver) {
     super(resolver);
@@ -114,10 +114,6 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
     } else {
       this.convertObjectToTileSpace = false;
       this.flipY = true;
-    }
-
-    if (root == null) {
-      this.root = xml.parse(tmxFile);
     }
 
     String mapOrientation = root.getAttribute("orientation", null);
@@ -693,9 +689,7 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
         tileSet.putTile(animatedTile.getId(), animatedTile);
       }
 
-      if (map != null) {
-        map.getTileSets().addTileSet(tileSet);
-      }
+      map.getTileSets().addTileSet(tileSet);
     }
   }
 
@@ -739,7 +733,6 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
   }
 
   protected void addTileObjectGroup(TiledMapTile tile, Element tileElement) {
-    if (map == null) return;
     Element objectgroupElement = tileElement.getChildByName("objectgroup");
     if (objectgroupElement != null) {
       for (Element objectElement : objectgroupElement.getChildrenByName("object")) {

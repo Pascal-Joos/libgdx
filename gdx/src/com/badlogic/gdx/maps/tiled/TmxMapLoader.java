@@ -99,7 +99,6 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
     this.map = loadTiledMap(tmxFile, parameter, new AssetManagerImageResolver(manager));
   }
 
-  @Nullable
   @Override
   public TiledMap loadSync(
       AssetManager manager, String fileName, FileHandle file, @Nullable Parameters parameter) {
@@ -121,8 +120,6 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
 
   protected Array<FileHandle> getDependencyFileHandles(FileHandle tmxFile) {
     Array<FileHandle> fileHandles = new Array<FileHandle>();
-
-    if (root == null) return fileHandles;
 
     // TileSet descriptors
     for (Element tileset : root.getChildrenByName("tileset")) {

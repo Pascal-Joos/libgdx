@@ -138,7 +138,6 @@ public class AtlasTmxMapLoader
     this.map = loadTiledMap(tmxFile, parameter, atlasResolver);
   }
 
-  @Nullable
   @Override
   public TiledMap loadSync(
       AssetManager manager,
@@ -235,7 +234,7 @@ public class AtlasTmxMapLoader
   }
 
   protected FileHandle getAtlasFileHandle(FileHandle tmxFile) {
-    Element properties = this.root.getChildByName("properties");
+    Element properties = root.getChildByName("properties");
 
     String atlasFilePath = null;
     if (properties != null) {
