@@ -18,6 +18,7 @@ package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -1299,6 +1300,7 @@ public class JsonValue implements Iterable<JsonValue> {
 
   private void prettyPrint(
       JsonValue object, StringBuilder buffer, int indent, PrettyPrintSettings settings) {
+    if (settings.outputType == null) settings.outputType = OutputType.minimal;
     OutputType outputType = settings.outputType;
     if (object.isObject()) {
       if (object.child == null) buffer.append("{}");
@@ -1311,7 +1313,7 @@ public class JsonValue implements Iterable<JsonValue> {
           int i = 0;
           for (JsonValue child = object.child; child != null; child = child.next) {
             if (newLines) indent(indent, buffer);
-            buffer.append(outputType.quoteName(child.name));
+            buffer.append(Nullability.castToNonnull(outputType).quoteName(child.name));
             buffer.append(": ");
             prettyPrint(child, buffer, indent + 1, settings);
             if ((!newLines || outputType != OutputType.minimal) && child.next != null)
@@ -1355,7 +1357,7 @@ public class JsonValue implements Iterable<JsonValue> {
         buffer.append(']');
       }
     } else if (object.isString()) {
-      buffer.append(outputType.quoteValue(object.asString()));
+      buffer.append(Nullability.castToNonnull(outputType).quoteValue(object.asString()));
     } else if (object.isDouble()) {
       double doubleValue = object.asDouble();
       long longValue = object.asLong();
@@ -1383,7 +1385,8 @@ public class JsonValue implements Iterable<JsonValue> {
   private void prettyPrint(
       JsonValue object, Writer writer, int indent, PrettyPrintSettings settings)
       throws IOException {
-    OutputType outputType = settings.outputType;
+    OutputType outputType =
+        settings != null && settings.outputType != null ? settings.outputType : OutputType.minimal;
     if (object.isObject()) {
       if (object.child == null) writer.append("{}");
       else {
@@ -1392,11 +1395,11 @@ public class JsonValue implements Iterable<JsonValue> {
         int i = 0;
         for (JsonValue child = object.child; child != null; child = child.next) {
           if (newLines) indent(indent, writer);
-          writer.append(outputType.quoteName(child.name));
+          writer.append(Nullability.castToNonnull(outputType).quoteName(child.name));
           writer.append(": ");
           prettyPrint(child, writer, indent + 1, settings);
-          if ((!newLines || outputType != OutputType.minimal) && child.next != null)
-            writer.append(',');
+          if ((!newLines || Nullability.castToNonnull(outputType) != OutputType.minimal)
+              && child.next != null) writer.append(',');
           writer.append(newLines ? '\n' : ' ');
         }
         if (newLines) indent(indent - 1, writer);
@@ -1411,15 +1414,15 @@ public class JsonValue implements Iterable<JsonValue> {
         for (JsonValue child = object.child; child != null; child = child.next) {
           if (newLines) indent(indent, writer);
           prettyPrint(child, writer, indent + 1, settings);
-          if ((!newLines || outputType != OutputType.minimal) && child.next != null)
-            writer.append(',');
+          if ((!newLines || Nullability.castToNonnull(outputType) != OutputType.minimal)
+              && child.next != null) writer.append(',');
           writer.append(newLines ? '\n' : ' ');
         }
         if (newLines) indent(indent - 1, writer);
         writer.append(']');
       }
     } else if (object.isString()) {
-      writer.append(outputType.quoteValue(object.asString()));
+      writer.append(Nullability.castToNonnull(outputType).quoteValue(object.asString()));
     } else if (object.isDouble()) {
       double doubleValue = object.asDouble();
       long longValue = object.asLong();
@@ -1495,7 +1498,7 @@ public class JsonValue implements Iterable<JsonValue> {
   }
 
   public static class PrettyPrintSettings {
-    public OutputType outputType;
+    @Nullable public OutputType outputType;
 
     /** If an object on a single line fits this many columns, it won't wrap. */
     public int singleLineColumns;
