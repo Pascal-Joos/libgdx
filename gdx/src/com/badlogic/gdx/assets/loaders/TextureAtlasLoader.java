@@ -49,6 +49,7 @@ public class TextureAtlasLoader
       String fileName,
       FileHandle file,
       @Nullable TextureAtlasParameter parameter) {
+    if (data == null) return null;
     for (Page page : data.getPages()) {
       Texture texture =
           assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
