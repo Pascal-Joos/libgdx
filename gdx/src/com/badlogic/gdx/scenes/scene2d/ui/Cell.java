@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -830,7 +829,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getSpaceLeft() {
-    return spaceLeft.get(Nullability.castToNonnull(actor));
+    return spaceLeft.get(actor);
   }
 
   /**
