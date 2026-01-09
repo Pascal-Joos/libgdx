@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -321,7 +322,7 @@ public class BaseAnimationController {
     } else {
       for (final Node node : out.keys()) node.isAnimated = false;
       for (final NodeAnimation nodeAnim : animation.nodeAnimations)
-        applyNodeAnimationBlending(nodeAnim, out, pool, alpha, time);
+        applyNodeAnimationBlending(nodeAnim, out, Nullability.castToNonnull(pool), alpha, time);
       for (final ObjectMap.Entry<Node, Transform> e : out.entries()) {
         if (!e.key.isAnimated) {
           e.key.isAnimated = true;
