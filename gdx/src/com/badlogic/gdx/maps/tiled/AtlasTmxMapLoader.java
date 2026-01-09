@@ -68,6 +68,7 @@ public class AtlasTmxMapLoader
         return atlas;
       }
 
+      @Nullable
       @Override
       public TextureRegion getImage(String name) {
         return atlas.findRegion(name);
@@ -88,6 +89,7 @@ public class AtlasTmxMapLoader
         return assetManager.get(atlasName, TextureAtlas.class);
       }
 
+      @Nullable
       @Override
       public TextureRegion getImage(String name) {
         return getAtlas().findRegion(name);
