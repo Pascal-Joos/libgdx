@@ -74,7 +74,6 @@ public abstract class ParticleSorter {
       float cx = val[Matrix4.M20], cy = val[Matrix4.M21], cz = val[Matrix4.M22];
       int count = 0, i = 0;
       for (ParticleControllerRenderData data : renderData) {
-        if (data.positionChannel == null) continue;
         for (int k = 0, c = i + data.controller.particles.size;
             i < c;
             ++i, k += data.positionChannel.strideSize) {

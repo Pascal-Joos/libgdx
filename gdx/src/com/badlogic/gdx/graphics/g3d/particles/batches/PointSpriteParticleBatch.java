@@ -41,7 +41,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -152,14 +151,6 @@ public class PointSpriteParticleBatch
   protected void flush(int[] offsets) {
     int tp = 0;
     for (PointSpriteControllerRenderData data : renderData) {
-      if (data.positionChannel == null
-          || data.regionChannel == null
-          || data.colorChannel == null
-          || data.scaleChannel == null
-          || data.rotationChannel == null) {
-        continue;
-      }
-
       FloatChannel scaleChannel = data.scaleChannel;
       FloatChannel regionChannel = data.regionChannel;
       FloatChannel positionChannel = data.positionChannel;
@@ -169,19 +160,16 @@ public class PointSpriteParticleBatch
       for (int p = 0; p < data.controller.particles.size; ++p, ++tp) {
         int offset = offsets[tp] * CPU_VERTEX_SIZE;
         int regionOffset = p * regionChannel.strideSize;
-        int positionOffset = p * Nullability.castToNonnull(positionChannel).strideSize;
+        int positionOffset = p * positionChannel.strideSize;
         int colorOffset = p * colorChannel.strideSize;
         int rotationOffset = p * rotationChannel.strideSize;
 
         vertices[offset + CPU_POSITION_OFFSET] =
-            Nullability.castToNonnull(positionChannel)
-                .data[positionOffset + ParticleChannels.XOffset];
+            positionChannel.data[positionOffset + ParticleChannels.XOffset];
         vertices[offset + CPU_POSITION_OFFSET + 1] =
-            Nullability.castToNonnull(positionChannel)
-                .data[positionOffset + ParticleChannels.YOffset];
+            positionChannel.data[positionOffset + ParticleChannels.YOffset];
         vertices[offset + CPU_POSITION_OFFSET + 2] =
-            Nullability.castToNonnull(positionChannel)
-                .data[positionOffset + ParticleChannels.ZOffset];
+            positionChannel.data[positionOffset + ParticleChannels.ZOffset];
         vertices[offset + CPU_COLOR_OFFSET] =
             colorChannel.data[colorOffset + ParticleChannels.RedOffset];
         vertices[offset + CPU_COLOR_OFFSET + 1] =
