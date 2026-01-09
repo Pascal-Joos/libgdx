@@ -30,7 +30,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.FlushablePool;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Pool;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -278,7 +277,7 @@ public class ModelBatch implements Disposable {
       if (currentShader != renderable.shader) {
         if (currentShader != null) currentShader.end();
         currentShader = renderable.shader;
-        currentShader.begin(Nullability.castToNonnull(camera), context);
+        currentShader.begin(camera, context);
       }
       currentShader.render(renderable);
     }
