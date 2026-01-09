@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class Container<T extends Actor> extends WidgetGroup {
-  private @Null T actor;
+  @Nullable private @Null T actor;
   private Value minWidth = Value.minWidth, minHeight = Value.minHeight;
   private Value prefWidth = Value.prefWidth, prefHeight = Value.prefHeight;
   private Value maxWidth = Value.zero, maxHeight = Value.zero;
@@ -189,6 +189,7 @@ public class Container<T extends Actor> extends WidgetGroup {
   /**
    * @return May be null.
    */
+  @Nullable
   public @Null T getActor() {
     return actor;
   }

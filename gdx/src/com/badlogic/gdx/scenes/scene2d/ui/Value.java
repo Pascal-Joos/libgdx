@@ -19,6 +19,7 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Null;
+import javax.annotation.Nullable;
 
 /**
  * Value placeholder, allowing the value to be computed on request. Values can be provided an actor
@@ -36,7 +37,7 @@ public abstract class Value {
   /**
    * @param context May be null.
    */
-  public abstract float get(@Null Actor context);
+  public abstract float get(@Nullable @Null Actor context);
 
   /** A value that is always zero. */
   public static final Fixed zero = new Fixed(0);
