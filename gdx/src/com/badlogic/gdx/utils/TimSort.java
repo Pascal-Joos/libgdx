@@ -13,8 +13,10 @@
 
 package com.badlogic.gdx.utils;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Comparator;
+import javax.annotation.Nullable;
 
 /**
  * A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when
@@ -63,7 +65,7 @@ class TimSort<T> {
   private T[] a;
 
   /** The comparator for this sort. */
-  private Comparator<? super T> c;
+  @Nullable private Comparator<? super T> c;
 
   /**
    * When we get into galloping mode, we stay there until both runs win less often than MIN_GALLOP
@@ -483,7 +485,8 @@ class TimSort<T> {
      * Find where the first element of run2 goes in run1. Prior elements in run1 can be ignored (because they're already in
      * place).
      */
-    int k = gallopRight(a[base2], a, base1, len1, 0, c);
+    Comparator<? super T> comparator = this.c == null ? Comparator.naturalOrder() : this.c;
+    int k = gallopRight(a[base2], a, base1, len1, 0, comparator);
     if (DEBUG) assert k >= 0;
     base1 += k;
     len1 -= k;
@@ -493,7 +496,7 @@ class TimSort<T> {
      * Find where the last element of run1 goes in run2. Subsequent elements in run2 can be ignored (because they're already in
      * place).
      */
-    len2 = gallopLeft(a[base1 + len1 - 1], a, base2, len2, len2 - 1, c);
+    len2 = gallopLeft(a[base1 + len1 - 1], a, base2, len2, len2 - 1, comparator);
     if (DEBUG) assert len2 >= 0;
     if (len2 == 0) return;
 
@@ -519,7 +522,7 @@ class TimSort<T> {
    *     follow it.
    */
   private static <T> int gallopLeft(
-      T key, T[] a, int base, int len, int hint, Comparator<? super T> c) {
+      T key, T[] a, int base, int len, int hint, @Nullable Comparator<? super T> c) {
     if (DEBUG) assert len > 0 && hint >= 0 && hint < len;
     int lastOfs = 0;
     int ofs = 1;
@@ -584,7 +587,7 @@ class TimSort<T> {
    * @return the int k, 0 <= k <= n such that a[b + k - 1] <= key < a[b + k]
    */
   private static <T> int gallopRight(
-      T key, T[] a, int base, int len, int hint, Comparator<? super T> c) {
+      T key, T[] a, int base, int len, int hint, @Nullable Comparator<? super T> c) {
     if (DEBUG) assert len > 0 && hint >= 0 && hint < len;
 
     int ofs = 1;
@@ -652,16 +655,18 @@ class TimSort<T> {
   private void mergeLo(int base1, int len1, int base2, int len2) {
     if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
-    // Copy first run into temp array
-    T[] a = this.a; // For performance
+    T[] a = this.a;
+    Comparator<? super T> c = this.c;
+    if (c == null) {
+      throw new IllegalStateException("Comparator is null");
+    }
     T[] tmp = ensureCapacity(len1);
     System.arraycopy(a, base1, tmp, 0, len1);
 
-    int cursor1 = 0; // Indexes into tmp array
-    int cursor2 = base2; // Indexes int a
-    int dest = base1; // Indexes int a
+    int cursor1 = 0;
+    int cursor2 = base2;
+    int dest = base1;
 
-    // Move first element of second run and deal with degenerate cases
     a[dest++] = a[cursor2++];
     if (--len2 == 0) {
       System.arraycopy(tmp, cursor1, a, dest, len1);
@@ -669,20 +674,16 @@ class TimSort<T> {
     }
     if (len1 == 1) {
       System.arraycopy(a, cursor2, a, dest, len2);
-      a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+      a[dest + len2] = tmp[cursor1];
       return;
     }
 
-    Comparator<? super T> c = this.c; // Use local variable for performance
-    int minGallop = this.minGallop; // " " " " "
+    int minGallop = this.minGallop;
     outer:
     while (true) {
-      int count1 = 0; // Number of times in a row that first run won
-      int count2 = 0; // Number of times in a row that second run won
+      int count1 = 0;
+      int count2 = 0;
 
-      /*
-       * Do the straightforward thing until (if ever) one run starts winning consistently.
-       */
       do {
         if (DEBUG) assert len1 > 1 && len2 > 0;
         if (c.compare(a[cursor2], tmp[cursor1]) < 0) {
@@ -698,10 +699,6 @@ class TimSort<T> {
         }
       } while ((count1 | count2) < minGallop);
 
-      /*
-       * One run is winning so consistently that galloping may be a huge win. So try that, and continue galloping until (if
-       * ever) neither run appears to be winning consistently anymore.
-       */
       do {
         if (DEBUG) assert len1 > 1 && len2 > 0;
         count1 = gallopRight(a[cursor2], tmp, cursor1, len1, 0, c);
@@ -710,8 +707,7 @@ class TimSort<T> {
           dest += count1;
           cursor1 += count1;
           len1 -= count1;
-          if (len1 <= 1) // len1 == 1 || len1 == 0
-          break outer;
+          if (len1 <= 1) break outer;
         }
         a[dest++] = a[cursor2++];
         if (--len2 == 0) break outer;
@@ -729,14 +725,14 @@ class TimSort<T> {
         minGallop--;
       } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
       if (minGallop < 0) minGallop = 0;
-      minGallop += 2; // Penalize for leaving gallop mode
-    } // End of "outer" loop
-    this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
+      minGallop += 2;
+    }
+    this.minGallop = minGallop < 1 ? 1 : minGallop;
 
     if (len1 == 1) {
       if (DEBUG) assert len2 > 0;
       System.arraycopy(a, cursor2, a, dest, len2);
-      a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+      a[dest + len2] = tmp[cursor1];
     } else if (len1 == 0) {
       throw new IllegalArgumentException("Comparison method violates its general contract!");
     } else {
@@ -782,6 +778,7 @@ class TimSort<T> {
     }
 
     Comparator<? super T> c = this.c; // Use local variable for performance
+    if (c == null) throw new IllegalStateException("Comparator is null");
     int minGallop = this.minGallop; // " " " " "
     outer:
     while (true) {
@@ -793,7 +790,7 @@ class TimSort<T> {
        */
       do {
         if (DEBUG) assert len1 > 0 && len2 > 1;
-        if (c.compare(tmp[cursor2], a[cursor1]) < 0) {
+        if (Nullability.castToNonnull(c).compare(tmp[cursor2], a[cursor1]) < 0) {
           a[dest--] = a[cursor1--];
           count1++;
           count2 = 0;
@@ -812,7 +809,9 @@ class TimSort<T> {
        */
       do {
         if (DEBUG) assert len1 > 0 && len2 > 1;
-        count1 = len1 - gallopRight(tmp[cursor2], a, base1, len1, len1 - 1, c);
+        count1 =
+            len1
+                - gallopRight(tmp[cursor2], a, base1, len1, len1 - 1, Nullability.castToNonnull(c));
         if (count1 != 0) {
           dest -= count1;
           cursor1 -= count1;
@@ -823,7 +822,8 @@ class TimSort<T> {
         a[dest--] = tmp[cursor2--];
         if (--len2 == 1) break outer;
 
-        count2 = len2 - gallopLeft(a[cursor1], tmp, 0, len2, len2 - 1, c);
+        count2 =
+            len2 - gallopLeft(a[cursor1], tmp, 0, len2, len2 - 1, Nullability.castToNonnull(c));
         if (count2 != 0) {
           dest -= count2;
           cursor2 -= count2;
