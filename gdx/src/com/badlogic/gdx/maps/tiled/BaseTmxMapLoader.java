@@ -508,9 +508,6 @@ public abstract class BaseTmxMapLoader<P extends BaseTmxMapLoader.Parameters>
 
   public static int[] getTileIds(Element element, int width, int height) {
     Element data = element.getChildByName("data");
-    if (data == null) {
-      throw new GdxRuntimeException("Missing 'data' element for TMX Layer");
-    }
     String encoding = data.getAttribute("encoding", null);
     if (encoding == null) { // no 'encoding' attribute means that the encoding is XML
       throw new GdxRuntimeException("Unsupported encoding (XML) for TMX Layer Data");
