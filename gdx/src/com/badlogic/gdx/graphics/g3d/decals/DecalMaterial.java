@@ -18,11 +18,12 @@ package com.badlogic.gdx.graphics.g3d.decals;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import javax.annotation.Nullable;
 
 /** Material used by the {@link Decal} class */
 public class DecalMaterial {
   public static final int NO_BLEND = -1;
-  protected TextureRegion textureRegion;
+  @Nullable protected TextureRegion textureRegion;
   protected int srcBlendFactor;
   protected int dstBlendFactor;
 
@@ -31,6 +32,9 @@ public class DecalMaterial {
    * used by it.
    */
   public void set() {
+    if (textureRegion == null) {
+      return;
+    }
     textureRegion.getTexture().bind(0);
     if (!isOpaque()) {
       Gdx.gl.glBlendFunc(srcBlendFactor, dstBlendFactor);
@@ -61,11 +65,19 @@ public class DecalMaterial {
 
     return dstBlendFactor == material.dstBlendFactor
         && srcBlendFactor == material.srcBlendFactor
-        && textureRegion.getTexture() == material.textureRegion.getTexture();
+        && ((textureRegion == null && material.textureRegion == null)
+            || (textureRegion != null
+                && material.textureRegion != null
+                && textureRegion.getTexture() != null
+                && material.textureRegion.getTexture() != null
+                && textureRegion.getTexture() == material.textureRegion.getTexture()));
   }
 
   @Override
   public int hashCode() {
+    if (textureRegion == null) {
+      return 1;
+    }
     int result = textureRegion.getTexture() != null ? textureRegion.getTexture().hashCode() : 0;
     result = 31 * result + srcBlendFactor;
     result = 31 * result + dstBlendFactor;

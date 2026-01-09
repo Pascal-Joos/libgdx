@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.NumberUtils;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -638,19 +639,22 @@ public class Decal {
    * vertices array
    */
   protected void updateUVs() {
+    if (material.textureRegion == null) {
+      return;
+    }
     TextureRegion tr = material.textureRegion;
     // left top
-    vertices[U1] = tr.getU();
-    vertices[V1] = tr.getV();
+    vertices[U1] = Nullability.castToNonnull(tr).getU();
+    vertices[V1] = Nullability.castToNonnull(tr).getV();
     // right top
-    vertices[U2] = tr.getU2();
-    vertices[V2] = tr.getV();
+    vertices[U2] = Nullability.castToNonnull(tr).getU2();
+    vertices[V2] = Nullability.castToNonnull(tr).getV();
     // left bot
-    vertices[U3] = tr.getU();
-    vertices[V3] = tr.getV2();
+    vertices[U3] = Nullability.castToNonnull(tr).getU();
+    vertices[V3] = Nullability.castToNonnull(tr).getV2();
     // right bot
-    vertices[U4] = tr.getU2();
-    vertices[V4] = tr.getV2();
+    vertices[U4] = Nullability.castToNonnull(tr).getU2();
+    vertices[V4] = Nullability.castToNonnull(tr).getV2();
   }
 
   /**
@@ -666,6 +670,7 @@ public class Decal {
   /**
    * @return the texture region this Decal uses. Do not modify it!
    */
+  @Nullable
   public TextureRegion getTextureRegion() {
     return this.material.textureRegion;
   }
