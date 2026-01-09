@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -357,7 +358,7 @@ public class ModelInstance implements RenderableProvider {
       ArrayMap<Node, Matrix4> bindPose = part.invBoneBindTransforms;
       if (bindPose != null) {
         for (int j = 0; j < bindPose.size; ++j) {
-          bindPose.keys[j] = getNode(bindPose.keys[j].id);
+          bindPose.keys[j] = getNode(Nullability.castToNonnull(bindPose.keys[j].id));
         }
       }
       if (!materials.contains(part.material, true)) {
