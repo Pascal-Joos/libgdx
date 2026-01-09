@@ -29,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -130,10 +129,9 @@ public class SplitPane extends WidgetGroup {
             if (pointer != draggingPointer) return;
 
             Drawable handle = style.handle;
-            if (handle == null) return;
             if (!vertical) {
               float delta = x - lastPoint.x;
-              float availWidth = getWidth() - Nullability.castToNonnull(handle).getMinWidth();
+              float availWidth = getWidth() - handle.getMinWidth();
               float dragX = handlePosition.x + delta;
               handlePosition.x = dragX;
               dragX = Math.max(0, dragX);
@@ -142,7 +140,7 @@ public class SplitPane extends WidgetGroup {
               lastPoint.set(x, y);
             } else {
               float delta = y - lastPoint.y;
-              float availHeight = getHeight() - Nullability.castToNonnull(handle).getMinHeight();
+              float availHeight = getHeight() - handle.getMinHeight();
               float dragY = handlePosition.y + delta;
               handlePosition.y = dragY;
               dragY = Math.max(0, dragY);
@@ -214,8 +212,7 @@ public class SplitPane extends WidgetGroup {
                 ? ((Layout) secondWidget).getPrefWidth()
                 : secondWidget.getWidth());
     if (vertical) return Math.max(first, second);
-    float handleMinWidth = style == null || style.handle == null ? 0 : style.handle.getMinWidth();
-    return first + Nullability.castToNonnull(style.handle).getMinWidth() + second;
+    return first + style.handle.getMinWidth() + second;
   }
 
   public float getPrefHeight() {
@@ -232,22 +229,21 @@ public class SplitPane extends WidgetGroup {
                 ? ((Layout) secondWidget).getPrefHeight()
                 : secondWidget.getHeight());
     if (!vertical) return Math.max(first, second);
-    Drawable handle = style.handle;
-    return first + (handle == null ? 0 : handle.getMinHeight()) + second;
+    return first + style.handle.getMinHeight() + second;
   }
 
   public float getMinWidth() {
     float first = firstWidget instanceof Layout ? ((Layout) firstWidget).getMinWidth() : 0;
     float second = secondWidget instanceof Layout ? ((Layout) secondWidget).getMinWidth() : 0;
     if (vertical) return Math.max(first, second);
-    return first + Nullability.castToNonnull(style.handle).getMinWidth() + second;
+    return first + style.handle.getMinWidth() + second;
   }
 
   public float getMinHeight() {
     float first = firstWidget instanceof Layout ? ((Layout) firstWidget).getMinHeight() : 0;
     float second = secondWidget instanceof Layout ? ((Layout) secondWidget).getMinHeight() : 0;
     if (!vertical) return Math.max(first, second);
-    return first + (style.handle != null ? style.handle.getMinHeight() : 0) + second;
+    return first + style.handle.getMinHeight() + second;
   }
 
   public void setVertical(boolean vertical) {
@@ -262,14 +258,13 @@ public class SplitPane extends WidgetGroup {
 
   private void calculateHorizBoundsAndPositions() {
     Drawable handle = style.handle;
-    if (handle == null) return;
 
     float height = getHeight();
 
-    float availWidth = getWidth() - Nullability.castToNonnull(handle).getMinWidth();
+    float availWidth = getWidth() - handle.getMinWidth();
     float leftAreaWidth = (int) (availWidth * splitAmount);
     float rightAreaWidth = availWidth - leftAreaWidth;
-    float handleWidth = Nullability.castToNonnull(handle).getMinWidth();
+    float handleWidth = handle.getMinWidth();
 
     firstWidgetBounds.set(0, 0, leftAreaWidth, height);
     secondWidgetBounds.set(leftAreaWidth + handleWidth, 0, rightAreaWidth, height);
@@ -278,15 +273,14 @@ public class SplitPane extends WidgetGroup {
 
   private void calculateVertBoundsAndPositions() {
     Drawable handle = style.handle;
-    if (handle == null) return;
 
     float width = getWidth();
     float height = getHeight();
 
-    float availHeight = height - Nullability.castToNonnull(handle).getMinHeight();
+    float availHeight = height - handle.getMinHeight();
     float topAreaHeight = (int) (availHeight * splitAmount);
     float bottomAreaHeight = availHeight - topAreaHeight;
-    float handleHeight = Nullability.castToNonnull(handle).getMinHeight();
+    float handleHeight = handle.getMinHeight();
 
     firstWidgetBounds.set(0, height - topAreaHeight, width, topAreaHeight);
     secondWidgetBounds.set(0, 0, width, bottomAreaHeight);
@@ -322,10 +316,8 @@ public class SplitPane extends WidgetGroup {
       }
     }
     batch.setColor(color.r, color.g, color.b, alpha);
-    if (style.handle != null) {
-      style.handle.draw(
-          batch, handleBounds.x, handleBounds.y, handleBounds.width, handleBounds.height);
-    }
+    style.handle.draw(
+        batch, handleBounds.x, handleBounds.y, handleBounds.width, handleBounds.height);
     resetTransform(batch);
   }
 
@@ -352,8 +344,7 @@ public class SplitPane extends WidgetGroup {
     float effectiveMinAmount = minAmount, effectiveMaxAmount = maxAmount;
 
     if (vertical) {
-      Drawable handle = style.handle;
-      float availableHeight = getHeight() - handle.getMinHeight();
+      float availableHeight = getHeight() - style.handle.getMinHeight();
       if (firstWidget instanceof Layout)
         effectiveMinAmount =
             Math.max(
@@ -365,8 +356,7 @@ public class SplitPane extends WidgetGroup {
                 effectiveMaxAmount,
                 1 - Math.min(((Layout) secondWidget).getMinHeight() / availableHeight, 1));
     } else {
-      Drawable handle = style.handle;
-      float availableWidth = getWidth() - handle.getMinWidth();
+      float availableWidth = getWidth() - style.handle.getMinWidth();
       if (firstWidget instanceof Layout)
         effectiveMinAmount =
             Math.max(
@@ -491,7 +481,7 @@ public class SplitPane extends WidgetGroup {
    * @author Nathan Sweet
    */
   public static class SplitPaneStyle {
-    @Nullable public Drawable handle;
+    public Drawable handle;
 
     public SplitPaneStyle() {}
 
