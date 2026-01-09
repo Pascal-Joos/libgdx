@@ -32,7 +32,6 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.StreamUtils;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -98,10 +97,8 @@ public class TextureAtlas implements Disposable {
   public void load(TextureAtlasData data) {
     textures.ensureCapacity(data.pages.size);
     for (Page page : data.pages) {
-      if (page.texture == null && page.textureFile != null)
-        page.texture =
-            new Texture(Nullability.castToNonnull(page.textureFile), page.format, page.useMipMaps);
-      if (page.texture == null) continue;
+      if (page.texture == null)
+        page.texture = new Texture(page.textureFile, page.format, page.useMipMaps);
       page.texture.setFilter(page.minFilter, page.magFilter);
       page.texture.setWrap(page.uWrap, page.vWrap);
       textures.add(page.texture);
@@ -109,7 +106,6 @@ public class TextureAtlas implements Disposable {
 
     regions.ensureCapacity(data.regions.size);
     for (Region region : data.regions) {
-      if (region.page == null || region.page.texture == null) continue;
       AtlasRegion atlasRegion =
           new AtlasRegion(
               region.page.texture,
@@ -566,7 +562,7 @@ public class TextureAtlas implements Disposable {
        * May be null if this page isn't associated with a file. In that case, {@link #texture} must
        * be set.
        */
-      @Nullable public @Null FileHandle textureFile;
+      public @Null FileHandle textureFile;
 
       /** May be null if the texture is not yet loaded. */
       @Nullable public @Null Texture texture;

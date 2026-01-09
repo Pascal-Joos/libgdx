@@ -26,7 +26,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Page;
 import com.badlogic.gdx.utils.Array;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -51,7 +50,6 @@ public class TextureAtlasLoader
       FileHandle file,
       @Nullable TextureAtlasParameter parameter) {
     for (Page page : data.getPages()) {
-      if (page.textureFile == null) continue;
       Texture texture =
           assetManager.get(page.textureFile.path().replaceAll("\\\\", "/"), Texture.class);
       page.texture = texture;
@@ -74,14 +72,12 @@ public class TextureAtlasLoader
 
     Array<AssetDescriptor> dependencies = new Array();
     for (Page page : data.getPages()) {
-      if (page.textureFile == null) continue;
       TextureParameter params = new TextureParameter();
       params.format = page.format;
       params.genMipMaps = page.useMipMaps;
       params.minFilter = page.minFilter;
       params.magFilter = page.magFilter;
-      dependencies.add(
-          new AssetDescriptor(Nullability.castToNonnull(page.textureFile), Texture.class, params));
+      dependencies.add(new AssetDescriptor(page.textureFile, Texture.class, params));
     }
     return dependencies;
   }
