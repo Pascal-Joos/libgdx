@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -42,7 +43,7 @@ import javax.annotation.Nullable;
  * @author Josh Street
  */
 public class Touchpad extends Widget {
-  private TouchpadStyle style;
+  @Nullable private TouchpadStyle style;
   boolean touched;
   boolean resetOnTouchUp = true;
   private float deadzoneRadius;
@@ -146,6 +147,7 @@ public class Touchpad extends Widget {
    * Returns the touchpad's style. Modifying the returned style may not have an effect until {@link
    * #setStyle(TouchpadStyle)} is called.
    */
+  @Nullable
   public TouchpadStyle getStyle() {
     return style;
   }
@@ -163,6 +165,8 @@ public class Touchpad extends Widget {
     float halfHeight = getHeight() / 2;
     float radius = Math.min(halfWidth, halfHeight);
     touchBounds.set(halfWidth, halfHeight, radius);
+    TouchpadStyle style = this.style;
+    if (style == null) throw new IllegalStateException("style cannot be null");
     if (style.knob != null)
       radius -= Math.max(style.knob.getMinWidth(), style.knob.getMinHeight()) / 2;
     knobBounds.set(halfWidth, halfHeight, radius);
@@ -183,10 +187,13 @@ public class Touchpad extends Widget {
     float w = getWidth();
     float h = getHeight();
 
-    final Drawable bg = style.background;
+    TouchpadStyle style = this.style;
+    if (style == null) throw new IllegalStateException("style cannot be null");
+
+    final Drawable bg = Nullability.castToNonnull(style).background;
     if (bg != null) bg.draw(batch, x, y, w, h);
 
-    final Drawable knob = style.knob;
+    final Drawable knob = Nullability.castToNonnull(style).knob;
     if (knob != null) {
       x += knobPosition.x - knob.getMinWidth() / 2f;
       y += knobPosition.y - knob.getMinHeight() / 2f;
@@ -195,11 +202,17 @@ public class Touchpad extends Widget {
   }
 
   public float getPrefWidth() {
-    return style.background != null ? style.background.getMinWidth() : 0;
+    if (style == null) throw new IllegalStateException("style cannot be null");
+    return Nullability.castToNonnull(style).background != null
+        ? Nullability.castToNonnull(style).background.getMinWidth()
+        : 0;
   }
 
   public float getPrefHeight() {
-    return style.background != null ? style.background.getMinHeight() : 0;
+    if (style == null) throw new IllegalStateException("style has not been set");
+    return Nullability.castToNonnull(style).background != null
+        ? Nullability.castToNonnull(style).background.getMinHeight()
+        : 0;
   }
 
   public boolean isTouched() {
