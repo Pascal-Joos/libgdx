@@ -426,7 +426,6 @@ public class ModelInstance implements RenderableProvider {
     animation.id = sourceAnim.id;
     animation.duration = sourceAnim.duration;
     for (final NodeAnimation nanim : sourceAnim.nodeAnimations) {
-      if (nanim == null || nanim.node == null) continue;
       final Node node = getNode(nanim.node.id);
       if (node == null) continue;
       NodeAnimation nodeAnim = new NodeAnimation();

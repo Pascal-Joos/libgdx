@@ -30,7 +30,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -212,8 +211,7 @@ public class BaseAnimationController {
 
   private static final Vector3 getTranslationAtTime(
       final NodeAnimation nodeAnim, final float time, final Vector3 out) {
-    if (nodeAnim.translation == null)
-      return out.set(nodeAnim.node == null ? out : nodeAnim.node.translation);
+    if (nodeAnim.translation == null) return out.set(nodeAnim.node.translation);
     if (nodeAnim.translation.size == 1) return out.set(nodeAnim.translation.get(0).value);
 
     int index = getFirstKeyframeIndexAtTime(nodeAnim.translation, time);
@@ -231,10 +229,7 @@ public class BaseAnimationController {
 
   private static final Quaternion getRotationAtTime(
       final NodeAnimation nodeAnim, final float time, final Quaternion out) {
-    if (nodeAnim.rotation == null) {
-      if (nodeAnim.node == null || nodeAnim.node.rotation == null) return out;
-      return out.set(nodeAnim.node.rotation);
-    }
+    if (nodeAnim.rotation == null) return out.set(nodeAnim.node.rotation);
     if (nodeAnim.rotation.size == 1) return out.set(nodeAnim.rotation.get(0).value);
 
     int index = getFirstKeyframeIndexAtTime(nodeAnim.rotation, time);
@@ -252,7 +247,7 @@ public class BaseAnimationController {
 
   private static final Vector3 getScalingAtTime(
       final NodeAnimation nodeAnim, final float time, final Vector3 out) {
-    if (nodeAnim.scaling == null) return out.set(nodeAnim.node == null ? out : nodeAnim.node.scale);
+    if (nodeAnim.scaling == null) return out.set(nodeAnim.node.scale);
     if (nodeAnim.scaling.size == 1) return out.set(nodeAnim.scaling.get(0).value);
 
     int index = getFirstKeyframeIndexAtTime(nodeAnim.scaling, time);
@@ -280,10 +275,9 @@ public class BaseAnimationController {
   private static final void applyNodeAnimationDirectly(
       final NodeAnimation nodeAnim, final float time) {
     final Node node = nodeAnim.node;
-    if (node == null) return;
-    Nullability.castToNonnull(node).isAnimated = true;
+    node.isAnimated = true;
     final Transform transform = getNodeAnimationTransform(nodeAnim, time);
-    transform.toMatrix4(Nullability.castToNonnull(node).localTransform);
+    transform.toMatrix4(node.localTransform);
   }
 
   private static final void applyNodeAnimationBlending(
@@ -294,25 +288,19 @@ public class BaseAnimationController {
       final float time) {
 
     final Node node = nodeAnim.node;
-    if (node == null) return;
-    Nullability.castToNonnull(node).isAnimated = true;
+    node.isAnimated = true;
     final Transform transform = getNodeAnimationTransform(nodeAnim, time);
 
-    Transform t = out.get(Nullability.castToNonnull(node), null);
+    Transform t = out.get(node, null);
     if (t != null) {
       if (alpha > 0.999999f) t.set(transform);
       else t.lerp(transform, alpha);
     } else {
-      if (alpha > 0.999999f) out.put(Nullability.castToNonnull(node), pool.obtain().set(transform));
+      if (alpha > 0.999999f) out.put(node, pool.obtain().set(transform));
       else
         out.put(
-            Nullability.castToNonnull(node),
-            pool.obtain()
-                .set(
-                    Nullability.castToNonnull(node).translation,
-                    Nullability.castToNonnull(node).rotation,
-                    Nullability.castToNonnull(node).scale)
-                .lerp(transform, alpha));
+            node,
+            pool.obtain().set(node.translation, node.rotation, node.scale).lerp(transform, alpha));
     }
   }
 
@@ -349,8 +337,7 @@ public class BaseAnimationController {
    */
   protected void removeAnimation(final Animation animation) {
     for (final NodeAnimation nodeAnim : animation.nodeAnimations) {
-      if (nodeAnim.node == null) continue;
-      Nullability.castToNonnull(nodeAnim.node).isAnimated = false;
+      nodeAnim.node.isAnimated = false;
     }
   }
 }
