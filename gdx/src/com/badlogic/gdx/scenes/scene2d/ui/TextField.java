@@ -45,6 +45,7 @@ import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -161,7 +162,7 @@ public class TextField extends Widget implements Disableable {
     x -=
         textOffset
             + fontOffset
-            - style.font.getData().cursorX
+            - (style.font == null ? 0 : Nullability.castToNonnull(style.font).getData().cursorX)
             - glyphPositions.get(visibleTextStart);
     Drawable background = getBackgroundDrawable();
     if (background != null) x -= style.background.getLeftWidth();
@@ -232,7 +233,10 @@ public class TextField extends Widget implements Disableable {
     if (style == null) throw new IllegalArgumentException("style cannot be null.");
     this.style = style;
 
-    textHeight = style.font.getCapHeight() - style.font.getDescent() * 2;
+    if (style.font != null)
+      textHeight =
+          Nullability.castToNonnull(style.font).getCapHeight()
+              - Nullability.castToNonnull(style.font).getDescent() * 2;
     if (text != null) updateDisplayText();
     invalidateHierarchy();
   }
@@ -298,7 +302,7 @@ public class TextField extends Widget implements Disableable {
     } else textOffset = startX + renderOffset;
 
     // calculate selection x position and width
-    if (hasSelection) {
+    if (hasSelection && style.font != null) {
       int minIndex = Math.min(cursor, selectionStart);
       int maxIndex = Math.max(cursor, selectionStart);
       float minX =
@@ -308,7 +312,7 @@ public class TextField extends Widget implements Disableable {
               glyphPositions[maxIndex] - glyphPositions[visibleTextStart],
               visibleWidth - textOffset);
       selectionX = minX;
-      selectionWidth = maxX - minX - style.font.getData().cursorX;
+      selectionWidth = maxX - minX - Nullability.castToNonnull(style.font).getData().cursorX;
     }
   }
 
@@ -329,6 +333,7 @@ public class TextField extends Widget implements Disableable {
     } else if (!focused) //
     cursorOn = false;
 
+    if (style.font == null) return;
     final BitmapFont font = style.font;
     final Color fontColor =
         (disabled && style.disabledFontColor != null)
@@ -354,17 +359,19 @@ public class TextField extends Widget implements Disableable {
       bgRightWidth = background.getRightWidth();
     }
 
-    float textY = getTextY(font, background);
+    if (font == null) return;
+    float textY = getTextY(Nullability.castToNonnull(font), background);
     calculateOffsets();
 
     if (focused && hasSelection && selection != null) {
-      drawSelection(selection, batch, font, x + bgLeftWidth, y + textY);
+      drawSelection(selection, batch, Nullability.castToNonnull(font), x + bgLeftWidth, y + textY);
     }
 
-    float yOffset = font.isFlipped() ? -textHeight : 0;
+    float yOffset = Nullability.castToNonnull(font).isFlipped() ? -textHeight : 0;
     if (displayText.length() == 0) {
       if ((!focused || disabled) && messageText != null) {
-        BitmapFont messageFont = style.messageFont != null ? style.messageFont : font;
+        BitmapFont messageFont =
+            style.messageFont != null ? style.messageFont : Nullability.castToNonnull(font);
         if (style.messageFontColor != null) {
           messageFont.setColor(
               style.messageFontColor.r,
@@ -380,11 +387,12 @@ public class TextField extends Widget implements Disableable {
             width - bgLeftWidth - bgRightWidth);
       }
     } else {
-      font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * color.a * parentAlpha);
-      drawText(batch, font, x + bgLeftWidth, y + textY + yOffset);
+      Nullability.castToNonnull(font)
+          .setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * color.a * parentAlpha);
+      drawText(batch, Nullability.castToNonnull(font), x + bgLeftWidth, y + textY + yOffset);
     }
     if (!disabled && cursorOn && cursorPatch != null) {
-      drawCursor(cursorPatch, batch, font, x + bgLeftWidth, y + textY);
+      drawCursor(cursorPatch, batch, Nullability.castToNonnull(font), x + bgLeftWidth, y + textY);
     }
   }
 
@@ -445,7 +453,8 @@ public class TextField extends Widget implements Disableable {
 
   void updateDisplayText() {
     BitmapFont font = style.font;
-    BitmapFontData data = font.getData();
+    if (font == null) return;
+    BitmapFontData data = Nullability.castToNonnull(font).getData();
     String text = this.text;
     int textLength = text.length();
 
@@ -466,7 +475,9 @@ public class TextField extends Widget implements Disableable {
       displayText = passwordBuffer;
     } else displayText = newDisplayText;
 
-    layout.setText(font, displayText.toString().replace('\r', ' ').replace('\n', ' '));
+    layout.setText(
+        Nullability.castToNonnull(font),
+        displayText.toString().replace('\r', ' ').replace('\n', ' '));
     glyphPositions.clear();
     float x = 0;
     if (layout.runs.size > 0) {
@@ -515,10 +526,11 @@ public class TextField extends Widget implements Disableable {
 
   void paste(@Null String content, boolean fireChangeEvent) {
     if (content == null) return;
+    if (style.font == null) return;
     StringBuilder buffer = new StringBuilder();
     int textLength = text.length();
     if (hasSelection) textLength -= Math.abs(cursor - selectionStart);
-    BitmapFontData data = style.font.getData();
+    BitmapFontData data = Nullability.castToNonnull(style.font).getData();
     for (int i = 0, n = content.length(); i < n; i++) {
       if (!withinMaxLength(textLength + buffer.length())) break;
       char c = content.charAt(i);
@@ -1166,7 +1178,10 @@ public class TextField extends Widget implements Disableable {
         boolean delete = character == DELETE;
         boolean backspace = character == BACKSPACE;
         boolean add =
-            enter ? writeEnters : (!onlyFontChars || style.font.getData().hasGlyph(character));
+            enter
+                ? writeEnters
+                : (!onlyFontChars
+                    || (Nullability.castToNonnull(style.font).getData().hasGlyph(character)));
         boolean remove = backspace || delete;
         if (add || remove) {
           String oldText = text;
@@ -1216,7 +1231,7 @@ public class TextField extends Widget implements Disableable {
    * @author Nathan Sweet
    */
   public static class TextFieldStyle {
-    public BitmapFont font;
+    @Nullable public BitmapFont font;
     @Nullable public Color fontColor;
     @Nullable public @Null Color focusedFontColor, disabledFontColor;
     @Nullable
