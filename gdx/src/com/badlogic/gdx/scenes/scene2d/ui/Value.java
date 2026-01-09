@@ -19,7 +19,6 @@ package com.badlogic.gdx.scenes.scene2d.ui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Null;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 
 /**
  * Value placeholder, allowing the value to be computed on request. Values can be provided an actor
@@ -31,7 +30,7 @@ import edu.ucr.cs.riple.annotator.util.Nullability;
 public abstract class Value {
   /** Calls {@link #get(Actor)} with null. */
   public float get() {
-    return get(Nullability.castToNonnull(null));
+    return get(null);
   }
 
   /**
