@@ -22,8 +22,6 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleChannels;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.uber.nullaway.annotations.Initializer;
-import edu.ucr.cs.riple.annotator.util.Nullability;
-import javax.annotation.Nullable;
 
 /**
  * It's an {@link Influencer} which updates the simulation of particles containing a {@link
@@ -33,7 +31,7 @@ import javax.annotation.Nullable;
  * @author Inferno
  */
 public class ParticleControllerFinalizerInfluencer extends Influencer {
-  @Nullable FloatChannel positionChannel, scaleChannel, rotationChannel;
+  FloatChannel positionChannel, scaleChannel, rotationChannel;
   ObjectChannel<ParticleController> controllerChannel;
   boolean hasScale, hasRotation;
 
@@ -59,30 +57,18 @@ public class ParticleControllerFinalizerInfluencer extends Influencer {
 
   @Override
   public void update() {
-    if (positionChannel == null
-        || controllerChannel == null
-        || (hasScale && scaleChannel == null)
-        || (hasRotation && rotationChannel == null)) return;
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
         ++i, positionOffset += positionChannel.strideSize) {
       ParticleController particleController = controllerChannel.data[i];
-      float scale = hasScale ? Nullability.castToNonnull(scaleChannel).data[i] : 1;
+      float scale = hasScale ? scaleChannel.data[i] : 1;
       float qx = 0, qy = 0, qz = 0, qw = 1;
       if (hasRotation) {
-        int rotationOffset = i * Nullability.castToNonnull(rotationChannel).strideSize;
-        qx =
-            Nullability.castToNonnull(rotationChannel)
-                .data[rotationOffset + ParticleChannels.XOffset];
-        qy =
-            Nullability.castToNonnull(rotationChannel)
-                .data[rotationOffset + ParticleChannels.YOffset];
-        qz =
-            Nullability.castToNonnull(rotationChannel)
-                .data[rotationOffset + ParticleChannels.ZOffset];
-        qw =
-            Nullability.castToNonnull(rotationChannel)
-                .data[rotationOffset + ParticleChannels.WOffset];
+        int rotationOffset = i * rotationChannel.strideSize;
+        qx = rotationChannel.data[rotationOffset + ParticleChannels.XOffset];
+        qy = rotationChannel.data[rotationOffset + ParticleChannels.YOffset];
+        qz = rotationChannel.data[rotationOffset + ParticleChannels.ZOffset];
+        qw = rotationChannel.data[rotationOffset + ParticleChannels.WOffset];
       }
       particleController.setTransform(
           positionChannel.data[positionOffset + ParticleChannels.XOffset],
