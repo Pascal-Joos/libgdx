@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ObjectMap;
-import javax.annotation.Nullable;
 
 /**
  * Resolves an image by a string, wrapper around a Map or AssetManager to load maps either directly
@@ -34,7 +33,6 @@ public interface ImageResolver {
    * @param name
    * @return the Texture for the given image name or null.
    */
-  @Nullable
   public TextureRegion getImage(String name);
 
   public static class DirectImageResolver implements ImageResolver {
@@ -70,7 +68,6 @@ public interface ImageResolver {
       this.atlas = atlas;
     }
 
-    @Nullable
     @Override
     public TextureRegion getImage(String name) {
       return atlas.findRegion(name);

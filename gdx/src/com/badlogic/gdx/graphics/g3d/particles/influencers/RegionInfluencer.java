@@ -204,7 +204,6 @@ public abstract class RegionInfluencer extends Influencer {
         return;
       }
       TextureAtlas.AtlasRegion region = atlas.findRegion(imageName);
-      if (region == null) return;
       this.u = region.getU();
       this.v = region.getV();
       this.u2 = region.getU2();
