@@ -34,7 +34,7 @@ public abstract class PluggableGroupStrategy implements GroupStrategy {
 
   @Override
   public void afterGroup(int group) {
-    plugs.get(group).afterGroup();
+    if (plugs.get(group) != null) plugs.get(group).afterGroup();
   }
 
   /**
