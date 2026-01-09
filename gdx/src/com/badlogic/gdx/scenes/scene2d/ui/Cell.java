@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -1018,28 +1019,29 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Initializer
   void set(@Nullable Cell cell) {
-    minWidth = cell.minWidth;
-    minHeight = cell.minHeight;
-    prefWidth = cell.prefWidth;
-    prefHeight = cell.prefHeight;
-    maxWidth = cell.maxWidth;
-    maxHeight = cell.maxHeight;
-    spaceTop = cell.spaceTop;
-    spaceLeft = cell.spaceLeft;
-    spaceBottom = cell.spaceBottom;
-    spaceRight = cell.spaceRight;
-    padTop = cell.padTop;
-    padLeft = cell.padLeft;
-    padBottom = cell.padBottom;
-    padRight = cell.padRight;
-    fillX = cell.fillX;
-    fillY = cell.fillY;
-    align = cell.align;
-    expandX = cell.expandX;
-    expandY = cell.expandY;
-    colspan = cell.colspan;
-    uniformX = cell.uniformX;
-    uniformY = cell.uniformY;
+    Cell nonNullCell = Nullability.castToNonnull(cell);
+    minWidth = nonNullCell.minWidth;
+    minHeight = nonNullCell.minHeight;
+    prefWidth = nonNullCell.prefWidth;
+    prefHeight = nonNullCell.prefHeight;
+    maxWidth = nonNullCell.maxWidth;
+    maxHeight = nonNullCell.maxHeight;
+    spaceTop = nonNullCell.spaceTop;
+    spaceLeft = nonNullCell.spaceLeft;
+    spaceBottom = nonNullCell.spaceBottom;
+    spaceRight = nonNullCell.spaceRight;
+    padTop = nonNullCell.padTop;
+    padLeft = nonNullCell.padLeft;
+    padBottom = nonNullCell.padBottom;
+    padRight = nonNullCell.padRight;
+    fillX = nonNullCell.fillX;
+    fillY = nonNullCell.fillY;
+    align = nonNullCell.align;
+    expandX = nonNullCell.expandX;
+    expandY = nonNullCell.expandY;
+    colspan = nonNullCell.colspan;
+    uniformX = nonNullCell.uniformX;
+    uniformY = nonNullCell.uniformY;
   }
 
   void merge(@Nullable @Null Cell cell) {
