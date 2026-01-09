@@ -43,6 +43,7 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -315,8 +316,11 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
     renderables.clear();
     for (int i = 0, free = renderablePool.getFree(); i < free; ++i) {
       Renderable renderable = renderablePool.obtain();
+      if (renderable.material == null) continue;
       TextureAttribute attribute =
-          (TextureAttribute) renderable.material.get(TextureAttribute.Diffuse);
+          (TextureAttribute)
+              Nullability.castToNonnull(renderable.material).get(TextureAttribute.Diffuse);
+      if (attribute == null) continue;
       attribute.textureDescription.texture = texture;
     }
     this.texture = texture;
