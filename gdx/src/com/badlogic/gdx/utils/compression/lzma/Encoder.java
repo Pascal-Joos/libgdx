@@ -133,7 +133,7 @@ public class Encoder {
       }
     }
 
-    Encoder2[] m_Coders;
+    @Nullable Encoder2[] m_Coders;
     int m_NumPrevBits;
     int m_NumPosBits;
     int m_PosMask;
@@ -149,11 +149,15 @@ public class Encoder {
     }
 
     public void Init() {
+      if (m_Coders == null) return;
       int numStates = 1 << (m_NumPrevBits + m_NumPosBits);
       for (int i = 0; i < numStates; i++) m_Coders[i].Init();
     }
 
     public Encoder2 GetSubCoder(int pos, byte prevByte) {
+      if (m_Coders == null) {
+        Create(m_NumPosBits, m_NumPrevBits);
+      }
       return m_Coders[
           ((pos & m_PosMask) << m_NumPrevBits) + ((prevByte & 0xFF) >>> (8 - m_NumPrevBits))];
     }
