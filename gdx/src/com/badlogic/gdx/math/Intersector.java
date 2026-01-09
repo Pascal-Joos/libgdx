@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -198,13 +199,17 @@ public final class Intersector {
     FloatArray floatArray = Intersector.floatArray, floatArray2 = Intersector.floatArray2;
     floatArray.clear();
     floatArray2.clear();
-    floatArray2.addAll(p1.getTransformedVertices());
+    floatArray2.addAll(Nullability.castToNonnull(p1.getTransformedVertices()));
     float[] vertices2 = p2.getTransformedVertices();
-    for (int i = 0, last = vertices2.length - 2; i <= last; i += 2) {
-      ep1.set(vertices2[i], vertices2[i + 1]);
+    for (int i = 0, last = Nullability.castToNonnull(vertices2).length - 2; i <= last; i += 2) {
+      ep1.set(Nullability.castToNonnull(vertices2)[i], Nullability.castToNonnull(vertices2)[i + 1]);
       // wrap around to beginning of array if index points to end;
-      if (i < last) ep2.set(vertices2[i + 2], vertices2[i + 3]);
-      else ep2.set(vertices2[0], vertices2[1]);
+      if (i < last)
+        ep2.set(
+            Nullability.castToNonnull(vertices2)[i + 2],
+            Nullability.castToNonnull(vertices2)[i + 3]);
+      else
+        ep2.set(Nullability.castToNonnull(vertices2)[0], Nullability.castToNonnull(vertices2)[1]);
       if (floatArray2.size == 0) return false;
       s.set(floatArray2.get(floatArray2.size - 2), floatArray2.get(floatArray2.size - 1));
       for (int j = 0; j < floatArray2.size; j += 2) {
@@ -1144,11 +1149,13 @@ public final class Intersector {
    */
   public static boolean intersectLinePolygon(Vector2 p1, Vector2 p2, Polygon polygon) {
     float[] vertices = polygon.getTransformedVertices();
+    int n = Nullability.castToNonnull(vertices).length;
     float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
-    int n = vertices.length;
-    float x3 = vertices[n - 2], y3 = vertices[n - 1];
+    float x3 = Nullability.castToNonnull(vertices)[n - 2],
+        y3 = Nullability.castToNonnull(vertices)[n - 1];
     for (int i = 0; i < n; i += 2) {
-      float x4 = vertices[i], y4 = vertices[i + 1];
+      float x4 = Nullability.castToNonnull(vertices)[i],
+          y4 = Nullability.castToNonnull(vertices)[i + 1];
       float d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
       if (d != 0) {
         float yd = y1 - y3;
@@ -1234,11 +1241,13 @@ public final class Intersector {
    */
   public static boolean intersectSegmentPolygon(Vector2 p1, Vector2 p2, Polygon polygon) {
     float[] vertices = polygon.getTransformedVertices();
+    int n = Nullability.castToNonnull(vertices).length;
     float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
-    int n = vertices.length;
-    float x3 = vertices[n - 2], y3 = vertices[n - 1];
+    float x3 = Nullability.castToNonnull(vertices)[n - 2],
+        y3 = Nullability.castToNonnull(vertices)[n - 1];
     for (int i = 0; i < n; i += 2) {
-      float x4 = vertices[i], y4 = vertices[i + 1];
+      float x4 = Nullability.castToNonnull(vertices)[i],
+          y4 = Nullability.castToNonnull(vertices)[i + 1];
       float d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
       if (d != 0) {
         float yd = y1 - y3;
@@ -1378,7 +1387,8 @@ public final class Intersector {
    */
   public static boolean overlapConvexPolygons(
       Polygon p1, Polygon p2, @Nullable MinimumTranslationVector mtv) {
-    return overlapConvexPolygons(p1.getTransformedVertices(), p2.getTransformedVertices(), mtv);
+    return overlapConvexPolygons(
+        Nullability.castToNonnull(p1.getTransformedVertices()), p2.getTransformedVertices(), mtv);
   }
 
   /**
@@ -1386,7 +1396,14 @@ public final class Intersector {
    */
   public static boolean overlapConvexPolygons(
       float[] verts1, float[] verts2, @Nullable MinimumTranslationVector mtv) {
-    return overlapConvexPolygons(verts1, 0, verts1.length, verts2, 0, verts2.length, mtv);
+    return overlapConvexPolygons(
+        Nullability.castToNonnull(verts1),
+        0,
+        verts1.length,
+        Nullability.castToNonnull(verts2),
+        0,
+        verts2.length,
+        mtv);
   }
 
   /**

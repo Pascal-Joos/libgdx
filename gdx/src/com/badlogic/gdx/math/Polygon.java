@@ -16,6 +16,7 @@
 
 package com.badlogic.gdx.math;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -63,6 +64,7 @@ public class Polygon implements Shape2D {
    *
    * @return vertices scaled, rotated, and offset by the polygon position.
    */
+  @Nullable
   public float[] getTransformedVertices() {
     if (!dirty) return worldVertices;
     dirty = false;
@@ -193,6 +195,7 @@ public class Polygon implements Shape2D {
   /** Returns the area contained within the polygon. */
   public float area() {
     float[] vertices = getTransformedVertices();
+    if (vertices == null) return 0;
     return GeometryUtils.polygonArea(vertices, 0, vertices.length);
   }
 
@@ -206,12 +209,13 @@ public class Polygon implements Shape2D {
   public Vector2 getVertex(int vertexNum, Vector2 pos) {
     if (vertexNum < 0 || vertexNum > getVertexCount())
       throw new IllegalArgumentException("the vertex " + vertexNum + " doesn't exist");
-    float[] vertices = this.getTransformedVertices();
+    final float[] vertices = this.getTransformedVertices();
     return pos.set(vertices[2 * vertexNum], vertices[2 * vertexNum + 1]);
   }
 
   public Vector2 getCentroid(Vector2 centroid) {
     float[] vertices = getTransformedVertices();
+    if (vertices == null) return centroid;
     return GeometryUtils.polygonCentroid(vertices, 0, vertices.length, centroid);
   }
 
@@ -225,6 +229,14 @@ public class Polygon implements Shape2D {
    */
   public Rectangle getBoundingRectangle() {
     float[] vertices = getTransformedVertices();
+    if (vertices == null || vertices.length == 0) {
+      if (bounds == null) bounds = new Rectangle();
+      bounds.x = 0;
+      bounds.y = 0;
+      bounds.width = 0;
+      bounds.height = 0;
+      return bounds;
+    }
 
     float minX = vertices[0];
     float minY = vertices[1];
@@ -252,14 +264,14 @@ public class Polygon implements Shape2D {
   @Override
   public boolean contains(float x, float y) {
     final float[] vertices = getTransformedVertices();
-    final int numFloats = vertices.length;
+    final int numFloats = Nullability.castToNonnull(vertices).length;
     int intersects = 0;
 
     for (int i = 0; i < numFloats; i += 2) {
-      float x1 = vertices[i];
-      float y1 = vertices[i + 1];
-      float x2 = vertices[(i + 2) % numFloats];
-      float y2 = vertices[(i + 3) % numFloats];
+      float x1 = Nullability.castToNonnull(vertices)[i];
+      float y1 = Nullability.castToNonnull(vertices)[i + 1];
+      float x2 = Nullability.castToNonnull(vertices)[(i + 2) % numFloats];
+      float y2 = Nullability.castToNonnull(vertices)[(i + 3) % numFloats];
       if (((y1 <= y && y < y2) || (y2 <= y && y < y1))
           && x < ((x2 - x1) / (y2 - y1) * (y - y1) + x1)) intersects++;
     }
