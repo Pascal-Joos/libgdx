@@ -35,6 +35,7 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -304,7 +305,7 @@ public class Actor {
   }
 
   public void addAction(@Nullable Action action) {
-    action.setActor(this);
+    Nullability.castToNonnull(action).setActor(this);
     actions.add(action);
 
     if (stage != null && stage.getActionsRequestRendering()) Gdx.graphics.requestRendering();
