@@ -18,7 +18,6 @@ package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
-import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -752,7 +751,7 @@ public class Array<T> implements Iterable<T> {
   public static class ArrayIterable<T> implements Iterable<T> {
     private final Array<T> array;
     private final boolean allowRemove;
-    @Nullable private ArrayIterator iterator1, iterator2;
+    private ArrayIterator iterator1, iterator2;
 
     // java.io.StringWriter lastAcquire = new java.io.StringWriter();
 
@@ -768,7 +767,6 @@ public class Array<T> implements Iterable<T> {
     /**
      * @see Collections#allocateIterators
      */
-    @SuppressWarnings("NullAway")
     public ArrayIterator<T> iterator() {
       if (Collections.allocateIterators) return new ArrayIterator(array, allowRemove);
       // lastAcquire.getBuffer().setLength(0);
@@ -782,11 +780,11 @@ public class Array<T> implements Iterable<T> {
       if (!iterator1.valid) {
         iterator1.index = 0;
         iterator1.valid = true;
-        Nullability.castToNonnull(iterator2).valid = false;
+        iterator2.valid = false;
         return iterator1;
       }
-      Nullability.castToNonnull(iterator2).index = 0;
-      Nullability.castToNonnull(iterator2).valid = true;
+      iterator2.index = 0;
+      iterator2.valid = true;
       iterator1.valid = false;
       return iterator2;
     }
