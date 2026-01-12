@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
  */
 public class ImageButton extends Button {
   private final Image image;
-  private ImageButtonStyle style;
+  @Nullable private ImageButtonStyle style;
 
   public ImageButton(Skin skin) {
     this(skin.get(ImageButtonStyle.class));
@@ -79,30 +80,41 @@ public class ImageButton extends Button {
     if (image != null) updateImage();
   }
 
+  @Nullable
   public ImageButtonStyle getStyle() {
     return style;
   }
 
   /** Returns the appropriate image drawable from the style based on the current button state. */
   @Nullable
-  protected @Null Drawable getImageDrawable() {
-    if (isDisabled() && style.imageDisabled != null) return style.imageDisabled;
+  @Null
+  protected Drawable getImageDrawable() {
+    if (style == null) return null;
+    if (isDisabled() && Nullability.castToNonnull(style).imageDisabled != null)
+      return Nullability.castToNonnull(style).imageDisabled;
     if (isPressed()) {
-      if (isChecked() && style.imageCheckedDown != null) return style.imageCheckedDown;
-      if (style.imageDown != null) return style.imageDown;
+      if (isChecked() && Nullability.castToNonnull(style).imageCheckedDown != null)
+        return Nullability.castToNonnull(style).imageCheckedDown;
+      if (Nullability.castToNonnull(style).imageDown != null)
+        return Nullability.castToNonnull(style).imageDown;
     }
     if (isOver()) {
       if (isChecked()) {
-        if (style.imageCheckedOver != null) return style.imageCheckedOver;
+        if (Nullability.castToNonnull(style).imageCheckedOver != null)
+          return Nullability.castToNonnull(style).imageCheckedOver;
       } else {
-        if (style.imageOver != null) return style.imageOver;
+        if (Nullability.castToNonnull(style).imageOver != null)
+          return Nullability.castToNonnull(style).imageOver;
       }
     }
     if (isChecked()) {
-      if (style.imageChecked != null) return style.imageChecked;
-      if (isOver() && style.imageOver != null) return style.imageOver;
+      if (Nullability.castToNonnull(style).imageChecked != null)
+        return Nullability.castToNonnull(style).imageChecked;
+      if (isOver() && Nullability.castToNonnull(style).imageOver != null)
+        return Nullability.castToNonnull(style).imageOver;
     }
-    return style.imageUp;
+    if (style == null) return null;
+    return Nullability.castToNonnull(style).imageUp;
   }
 
   /**
