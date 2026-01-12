@@ -114,15 +114,15 @@ public class TideMapLoader extends SynchronousAssetLoader<TiledMap, TideMapLoade
   private TiledMap loadMap(
       @Nullable Element root, FileHandle tmxFile, ImageResolver imageResolver) {
     TiledMap map = new TiledMap();
-    Element properties = root.getChildByName("Properties");
+    Element properties = Nullability.castToNonnull(root).getChildByName("Properties");
     if (properties != null) {
       loadProperties(map.getProperties(), properties);
     }
-    Element tilesheets = root.getChildByName("TileSheets");
+    Element tilesheets = Nullability.castToNonnull(root).getChildByName("TileSheets");
     for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
       loadTileSheet(map, tilesheet, tmxFile, imageResolver);
     }
-    Element layers = root.getChildByName("Layers");
+    Element layers = Nullability.castToNonnull(root).getChildByName("Layers");
     for (Element layer : layers.getChildrenByName("Layer")) {
       loadLayer(map, layer);
     }
