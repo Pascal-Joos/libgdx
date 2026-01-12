@@ -328,11 +328,12 @@ public class Model implements Disposable {
     if (mtl.textures != null) {
       for (ModelTexture tex : mtl.textures) {
         Texture texture;
-        if (textures.containsKey(tex.fileName)) {
-          texture = textures.get(tex.fileName);
+        String fileName = Nullability.castToNonnull(tex.fileName);
+        if (textures.containsKey(Nullability.castToNonnull(tex.fileName))) {
+          texture = textures.get(fileName);
         } else {
-          texture = textureProvider.load(tex.fileName);
-          textures.put(tex.fileName, texture);
+          texture = textureProvider.load(Nullability.castToNonnull(tex.fileName));
+          textures.put(fileName, texture);
           disposables.add(texture);
         }
 
