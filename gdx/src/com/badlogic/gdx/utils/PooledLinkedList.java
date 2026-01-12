@@ -159,13 +159,13 @@ public class PooledLinkedList<T> {
     }
 
     if (c == tail) {
-      p.next = null;
-      tail = p;
+      tail = Nullability.castToNonnull(p);
+      tail.next = null;
       return;
     }
 
-    p.next = Nullability.castToNonnull(n);
-    Nullability.castToNonnull(n).prev = p;
+    Nullability.castToNonnull(p).next = Nullability.castToNonnull(n);
+    Nullability.castToNonnull(n).prev = Nullability.castToNonnull(p);
   }
 
   /** Removes the tail of the list regardless of iteration status */
@@ -186,7 +186,7 @@ public class PooledLinkedList<T> {
       head = null;
       tail = null;
     } else {
-      tail = p;
+      tail = Nullability.castToNonnull(p);
       tail.next = null;
     }
 
