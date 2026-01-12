@@ -36,7 +36,7 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
   @Nullable Integer expandX, expandY;
-  Integer colspan;
+  @Nullable Integer colspan;
   @Nullable Boolean uniformX, uniformY;
 
   @Nullable @Null Actor actor;
@@ -990,6 +990,7 @@ public class Cell<T extends Actor> implements Poolable {
     return expandY;
   }
 
+  @Nullable
   public @Null Integer getColspan() {
     return colspan;
   }
