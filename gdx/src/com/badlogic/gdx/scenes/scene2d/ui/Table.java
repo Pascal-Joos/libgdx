@@ -1252,16 +1252,24 @@ public class Table extends WidgetGroup {
       float fillX = c.fillX, fillY = c.fillY;
       if (fillX > 0) {
         float minWidth =
-            c.minWidth == null ? 0 : Nullability.castToNonnull(c.minWidth).get(c.actor);
-        c.actorWidth = Math.max(spannedCellWidth * fillX, minWidth);
-        float maxWidth = c.maxWidth == null ? 0 : c.maxWidth.get(c.actor);
+            c.minWidth == null
+                ? 0
+                : Nullability.castToNonnull(c.minWidth).get(Nullability.castToNonnull(c.actor));
+        c.actorWidth =
+            Math.max(
+                spannedCellWidth * fillX,
+                Nullability.castToNonnull(c.minWidth).get(Nullability.castToNonnull(c.actor)));
+        float maxWidth =
+            c.maxWidth == null ? 0 : c.maxWidth.get(Nullability.castToNonnull(c.actor));
         if (maxWidth > 0) c.actorWidth = Math.min(c.actorWidth, maxWidth);
       }
       if (fillY > 0) {
-        float minHeight = c.minHeight == null ? 0 : c.minHeight.get(c.actor);
+        float minHeight =
+            c.minHeight == null ? 0 : c.minHeight.get(Nullability.castToNonnull(c.actor));
         c.actorHeight =
             Math.max(rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom, minHeight);
-        float maxHeight = c.maxHeight == null ? 0 : c.maxHeight.get(c.actor);
+        float maxHeight =
+            c.maxHeight == null ? 0 : c.maxHeight.get(Nullability.castToNonnull(c.actor));
         if (maxHeight > 0) c.actorHeight = Math.min(c.actorHeight, maxHeight);
       }
 
@@ -1284,7 +1292,9 @@ public class Table extends WidgetGroup {
         c.actorY = (float) Math.floor(c.actorY);
       }
 
-      if (c.actor != null) c.actor.setBounds(c.actorX, c.actorY, c.actorWidth, c.actorHeight);
+      if (c.actor != null)
+        Nullability.castToNonnull(c.actor)
+            .setBounds(c.actorX, c.actorY, c.actorWidth, c.actorHeight);
 
       if (c.endRow) {
         currentX = x;
