@@ -63,6 +63,7 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.ThreadUtils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -205,7 +206,10 @@ public class AssetManager implements Disposable {
    * @throws GdxRuntimeException if the asset is not loaded
    */
   public synchronized <T> T get(@Nullable AssetDescriptor<T> assetDescriptor) {
-    return get(assetDescriptor.fileName, assetDescriptor.type, true);
+    return get(
+        Nullability.castToNonnull(assetDescriptor).fileName,
+        Nullability.castToNonnull(assetDescriptor).type,
+        true);
   }
 
   /**
