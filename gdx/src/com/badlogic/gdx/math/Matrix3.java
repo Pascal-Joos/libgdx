@@ -17,6 +17,7 @@
 package com.badlogic.gdx.math;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.Serializable;
 import javax.annotation.Nullable;
 
@@ -402,15 +403,15 @@ public class Matrix3 implements Serializable {
    */
   public Matrix3 set(@Nullable Matrix4 mat) {
     float[] val = this.val;
-    val[M00] = mat.val[Matrix4.M00];
-    val[M10] = mat.val[Matrix4.M10];
-    val[M20] = mat.val[Matrix4.M20];
-    val[M01] = mat.val[Matrix4.M01];
-    val[M11] = mat.val[Matrix4.M11];
-    val[M21] = mat.val[Matrix4.M21];
-    val[M02] = mat.val[Matrix4.M02];
-    val[M12] = mat.val[Matrix4.M12];
-    val[M22] = mat.val[Matrix4.M22];
+    val[M00] = Nullability.castToNonnull(mat).val[Matrix4.M00];
+    val[M10] = Nullability.castToNonnull(mat).val[Matrix4.M10];
+    val[M20] = Nullability.castToNonnull(mat).val[Matrix4.M20];
+    val[M01] = Nullability.castToNonnull(mat).val[Matrix4.M01];
+    val[M11] = Nullability.castToNonnull(mat).val[Matrix4.M11];
+    val[M21] = Nullability.castToNonnull(mat).val[Matrix4.M21];
+    val[M02] = Nullability.castToNonnull(mat).val[Matrix4.M02];
+    val[M12] = Nullability.castToNonnull(mat).val[Matrix4.M12];
+    val[M22] = Nullability.castToNonnull(mat).val[Matrix4.M22];
     return this;
   }
 
