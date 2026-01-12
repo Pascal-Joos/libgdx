@@ -617,7 +617,8 @@ public class Skin implements Disposable {
         new ReadOnlySerializer<BitmapFont>() {
           public BitmapFont read(Json json, JsonValue jsonData, @Nullable Class type) {
             String path = json.readValue("file", String.class, jsonData);
-            int scaledSize = json.readValue("scaledSize", int.class, -1, jsonData);
+            int scaledSize =
+                Nullability.castToNonnull(json.readValue("scaledSize", int.class, -1, jsonData));
             Boolean flip = json.readValue("flip", Boolean.class, false, jsonData);
             Boolean markupEnabled = json.readValue("markupEnabled", Boolean.class, false, jsonData);
 
@@ -633,17 +634,23 @@ public class Skin implements Disposable {
               BitmapFont font;
               Array<TextureRegion> regions = skin.getRegions(regionName);
               if (regions != null)
-                font = new BitmapFont(new BitmapFontData(fontFile, flip), regions, true);
+                font =
+                    new BitmapFont(
+                        new BitmapFontData(fontFile, Nullability.castToNonnull(flip)),
+                        regions,
+                        true);
               else {
                 TextureRegion region = skin.optional(regionName, TextureRegion.class);
-                if (region != null) font = new BitmapFont(fontFile, region, flip);
+                if (region != null)
+                  font = new BitmapFont(fontFile, region, Nullability.castToNonnull(flip));
                 else {
                   FileHandle imageFile = fontFile.parent().child(regionName + ".png");
-                  if (imageFile.exists()) font = new BitmapFont(fontFile, imageFile, flip);
-                  else font = new BitmapFont(fontFile, flip);
+                  if (imageFile.exists())
+                    font = new BitmapFont(fontFile, imageFile, Nullability.castToNonnull(flip));
+                  else font = new BitmapFont(fontFile, Nullability.castToNonnull(flip));
                 }
               }
-              font.getData().markupEnabled = markupEnabled;
+              font.getData().markupEnabled = Nullability.castToNonnull(markupEnabled);
               // Scaled size is the desired cap height to scale the font to.
               if (scaledSize != -1) font.getData().setScale(scaledSize / font.getCapHeight());
               return font;
@@ -660,10 +667,10 @@ public class Skin implements Disposable {
             if (jsonData.isString()) return get(jsonData.asString(), Color.class);
             String hex = json.readValue("hex", String.class, (String) null, jsonData);
             if (hex != null) return Color.valueOf(hex);
-            float r = json.readValue("r", float.class, 0f, jsonData);
-            float g = json.readValue("g", float.class, 0f, jsonData);
-            float b = json.readValue("b", float.class, 0f, jsonData);
-            float a = json.readValue("a", float.class, 1f, jsonData);
+            float r = Nullability.castToNonnull(json.readValue("r", float.class, 0f, jsonData));
+            float g = Nullability.castToNonnull(json.readValue("g", float.class, 0f, jsonData));
+            float b = Nullability.castToNonnull(json.readValue("b", float.class, 0f, jsonData));
+            float a = Nullability.castToNonnull(json.readValue("a", float.class, 1f, jsonData));
             return new Color(r, g, b, a);
           }
         });
