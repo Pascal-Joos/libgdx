@@ -153,8 +153,8 @@ public class PooledLinkedList<T> {
     }
 
     if (c == head) {
-      n.prev = null;
-      head = n;
+      Nullability.castToNonnull(n).prev = null;
+      head = Nullability.castToNonnull(n);
       return;
     }
 
@@ -164,8 +164,8 @@ public class PooledLinkedList<T> {
       return;
     }
 
-    p.next = n;
-    n.prev = p;
+    p.next = Nullability.castToNonnull(n);
+    Nullability.castToNonnull(n).prev = p;
   }
 
   /** Removes the tail of the list regardless of iteration status */
