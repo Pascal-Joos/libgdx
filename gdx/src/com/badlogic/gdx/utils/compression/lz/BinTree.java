@@ -97,7 +97,8 @@ public class BinTree extends InWindow {
   }
 
   public int GetMatches(int[] distances) throws IOException {
-    if (_hash == null || _son == null) return 0;
+    if (_hash == null || _son == null || _bufferBase == null) return 0;
+    byte[] nonNullBufferBase = Nullability.castToNonnull(_bufferBase);
     int lenLimit;
     if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
     else {
@@ -115,12 +116,15 @@ public class BinTree extends InWindow {
     int hashValue, hash2Value = 0, hash3Value = 0;
 
     if (HASH_ARRAY) {
-      int temp = CrcTable[_bufferBase[cur] & 0xFF] ^ (_bufferBase[cur + 1] & 0xFF);
+      int temp = CrcTable[nonNullBufferBase[cur] & 0xFF] ^ (nonNullBufferBase[cur + 1] & 0xFF);
       hash2Value = temp & (kHash2Size - 1);
-      temp ^= ((int) (_bufferBase[cur + 2] & 0xFF) << 8);
+      temp ^= ((int) (nonNullBufferBase[cur + 2] & 0xFF) << 8);
       hash3Value = temp & (kHash3Size - 1);
-      hashValue = (temp ^ (CrcTable[_bufferBase[cur + 3] & 0xFF] << 5)) & _hashMask;
-    } else hashValue = ((_bufferBase[cur] & 0xFF) ^ ((int) (_bufferBase[cur + 1] & 0xFF) << 8));
+      hashValue = (temp ^ (CrcTable[nonNullBufferBase[cur + 3] & 0xFF] << 5)) & _hashMask;
+    } else
+      hashValue =
+          ((Nullability.castToNonnull(_bufferBase)[cur] & 0xFF)
+              ^ ((int) (Nullability.castToNonnull(_bufferBase)[cur + 1] & 0xFF) << 8));
 
     int curMatch = _hash[kFixHashSize + hashValue];
     if (HASH_ARRAY) {
@@ -129,12 +133,12 @@ public class BinTree extends InWindow {
       _hash[hash2Value] = _pos;
       _hash[kHash3Offset + hash3Value] = _pos;
       if (curMatch2 > matchMinPos)
-        if (_bufferBase[_bufferOffset + curMatch2] == _bufferBase[cur]) {
+        if (nonNullBufferBase[_bufferOffset + curMatch2] == nonNullBufferBase[cur]) {
           distances[offset++] = maxLen = 2;
           distances[offset++] = _pos - curMatch2 - 1;
         }
       if (curMatch3 > matchMinPos)
-        if (_bufferBase[_bufferOffset + curMatch3] == _bufferBase[cur]) {
+        if (nonNullBufferBase[_bufferOffset + curMatch3] == nonNullBufferBase[cur]) {
           if (curMatch3 == curMatch2) offset -= 2;
           distances[offset++] = maxLen = 3;
           distances[offset++] = _pos - curMatch3 - 1;
@@ -156,8 +160,8 @@ public class BinTree extends InWindow {
 
     if (kNumHashDirectBytes != 0) {
       if (curMatch > matchMinPos) {
-        if (_bufferBase[_bufferOffset + curMatch + kNumHashDirectBytes]
-            != _bufferBase[cur + kNumHashDirectBytes]) {
+        if (nonNullBufferBase[_bufferOffset + curMatch + kNumHashDirectBytes]
+            != nonNullBufferBase[cur + kNumHashDirectBytes]) {
           distances[offset++] = maxLen = kNumHashDirectBytes;
           distances[offset++] = _pos - curMatch - 1;
         }
@@ -182,8 +186,9 @@ public class BinTree extends InWindow {
 
       int pby1 = _bufferOffset + curMatch;
       int len = Math.min(len0, len1);
-      if (_bufferBase[pby1 + len] == _bufferBase[cur + len]) {
-        while (++len != lenLimit) if (_bufferBase[pby1 + len] != _bufferBase[cur + len]) break;
+      if (nonNullBufferBase[pby1 + len] == nonNullBufferBase[cur + len]) {
+        while (++len != lenLimit)
+          if (nonNullBufferBase[pby1 + len] != nonNullBufferBase[cur + len]) break;
         if (maxLen < len) {
           distances[offset++] = maxLen = len;
           distances[offset++] = delta - 1;
@@ -195,7 +200,7 @@ public class BinTree extends InWindow {
           }
         }
       }
-      if ((_bufferBase[pby1 + len] & 0xFF) < (_bufferBase[cur + len] & 0xFF)) {
+      if ((nonNullBufferBase[pby1 + len] & 0xFF) < (nonNullBufferBase[cur + len] & 0xFF)) {
         if (_son == null) return offset;
         Nullability.castToNonnull(_son)[ptr1] = curMatch;
         ptr1 = cyclicPos + 1;
@@ -217,6 +222,8 @@ public class BinTree extends InWindow {
     if (_hash == null) return;
     if (_hashSizeSum == 0) return;
     if (_son == null) return;
+    byte[] bufferBase = _bufferBase;
+    if (bufferBase == null) return;
     do {
       int lenLimit;
       if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
@@ -234,14 +241,17 @@ public class BinTree extends InWindow {
       int hashValue;
 
       if (HASH_ARRAY) {
-        int temp = CrcTable[_bufferBase[cur] & 0xFF] ^ (_bufferBase[cur + 1] & 0xFF);
+        int temp = CrcTable[bufferBase[cur] & 0xFF] ^ (bufferBase[cur + 1] & 0xFF);
         int hash2Value = temp & (kHash2Size - 1);
         Nullability.castToNonnull(_hash)[hash2Value] = _pos;
-        temp ^= ((int) (_bufferBase[cur + 2] & 0xFF) << 8);
+        temp ^= ((int) (bufferBase[cur + 2] & 0xFF) << 8);
         int hash3Value = temp & (kHash3Size - 1);
         Nullability.castToNonnull(_hash)[kHash3Offset + hash3Value] = _pos;
-        hashValue = (temp ^ (CrcTable[_bufferBase[cur + 3] & 0xFF] << 5)) & _hashMask;
-      } else hashValue = ((_bufferBase[cur] & 0xFF) ^ ((int) (_bufferBase[cur + 1] & 0xFF) << 8));
+        hashValue = (temp ^ (CrcTable[bufferBase[cur + 3] & 0xFF] << 5)) & _hashMask;
+      } else
+        hashValue =
+            ((Nullability.castToNonnull(_bufferBase)[cur] & 0xFF)
+                ^ ((int) (Nullability.castToNonnull(_bufferBase)[cur + 1] & 0xFF) << 8));
 
       int curMatch = Nullability.castToNonnull(_hash)[kFixHashSize + hashValue];
       Nullability.castToNonnull(_hash)[kFixHashSize + hashValue] = _pos;
@@ -269,8 +279,8 @@ public class BinTree extends InWindow {
 
         int pby1 = _bufferOffset + curMatch;
         int len = Math.min(len0, len1);
-        if (_bufferBase[pby1 + len] == _bufferBase[cur + len]) {
-          while (++len != lenLimit) if (_bufferBase[pby1 + len] != _bufferBase[cur + len]) break;
+        if (bufferBase[pby1 + len] == bufferBase[cur + len]) {
+          while (++len != lenLimit) if (bufferBase[pby1 + len] != bufferBase[cur + len]) break;
           if (len == lenLimit) {
             int[] son = Nullability.castToNonnull(_son);
             son[ptr1] = son[cyclicPos];
@@ -278,7 +288,7 @@ public class BinTree extends InWindow {
             break;
           }
         }
-        if ((_bufferBase[pby1 + len] & 0xFF) < (_bufferBase[cur + len] & 0xFF)) {
+        if ((bufferBase[pby1 + len] & 0xFF) < (bufferBase[cur + len] & 0xFF)) {
           int[] son = Nullability.castToNonnull(_son);
           son[ptr1] = curMatch;
           ptr1 = cyclicPos + 1;
