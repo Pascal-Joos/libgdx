@@ -55,7 +55,7 @@ public class InputListener implements EventListener {
     if (!(e instanceof InputEvent)) return false;
     InputEvent event = (InputEvent) e;
 
-    switch (event.getType()) {
+    switch (Nullability.castToNonnull(event.getType())) {
       case keyDown:
         return keyDown(event, event.getKeyCode());
       case keyUp:
@@ -66,7 +66,7 @@ public class InputListener implements EventListener {
 
     event.toCoordinates(event.getListenerActor(), tmpCoords);
 
-    switch (event.getType()) {
+    switch (Nullability.castToNonnull(event.getType())) {
       case touchDown:
         boolean handled =
             touchDown(event, tmpCoords.x, tmpCoords.y, event.getPointer(), event.getButton());
