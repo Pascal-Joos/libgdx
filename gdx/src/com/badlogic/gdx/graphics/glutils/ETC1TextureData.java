@@ -24,11 +24,12 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.ETC1.ETC1Data;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 public class ETC1TextureData implements TextureData {
   @Nullable FileHandle file;
-  ETC1Data data;
+  @Nullable ETC1Data data;
   boolean useMipMaps;
   int width = 0;
   int height = 0;
@@ -66,8 +67,9 @@ public class ETC1TextureData implements TextureData {
     if (file != null) {
       data = new ETC1Data(file);
     }
-    width = data.width;
-    height = data.height;
+    ETC1Data nonnullData = Nullability.castToNonnull(data);
+    width = nonnullData.width;
+    height = nonnullData.height;
     isPrepared = true;
   }
 
@@ -76,8 +78,15 @@ public class ETC1TextureData implements TextureData {
     if (!isPrepared)
       throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
+    if (data == null)
+      throw new GdxRuntimeException("ETC1Data must not be null before calling consumeCustomData()");
+
+    ETC1Data localData = data;
+    if (localData == null)
+      throw new GdxRuntimeException("ETC1Data must not be null before calling consumeCustomData()");
+
     if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
-      Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
+      Pixmap pixmap = ETC1.decodeImage(Nullability.castToNonnull(data), Format.RGB565);
       Gdx.gl.glTexImage2D(
           target,
           0,
@@ -100,11 +109,11 @@ public class ETC1TextureData implements TextureData {
           width,
           height,
           0,
-          data.compressedData.capacity() - data.dataOffset,
-          data.compressedData);
+          localData.compressedData.capacity() - localData.dataOffset,
+          localData.compressedData);
       if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
     }
-    data.dispose();
+    Nullability.castToNonnull(localData).dispose();
     data = null;
     isPrepared = false;
   }
