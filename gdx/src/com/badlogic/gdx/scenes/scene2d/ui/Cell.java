@@ -30,7 +30,7 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Nullable Value minWidth, minHeight;
   Value prefWidth, prefHeight;
-  Value maxWidth, maxHeight;
+  @Nullable Value maxWidth, maxHeight;
   Value spaceTop, spaceLeft, spaceBottom, spaceRight;
   Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
@@ -795,22 +795,26 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this cell is row defaults.
    */
+  @Nullable
   public @Null Value getMaxWidthValue() {
     return maxWidth;
   }
 
   public float getMaxWidth() {
-    return maxWidth.get(actor);
+    return maxWidth == null || actor == null ? 0 : Nullability.castToNonnull(maxWidth).get(actor);
   }
 
   /**
    * @return May be null if this cell is row defaults.
    */
+  @Nullable
   public @Null Value getMaxHeightValue() {
     return maxHeight;
   }
 
   public float getMaxHeight() {
+    if (maxHeight == null) return 0;
+    if (actor == null) return 0;
     return maxHeight.get(actor);
   }
 
