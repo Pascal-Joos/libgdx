@@ -27,6 +27,6 @@ import javax.annotation.Nullable;
  * @author Inferno
  */
 public class ModelInstanceControllerRenderData extends ParticleControllerRenderData {
-  public ObjectChannel<ModelInstance> modelInstanceChannel;
+  @Nullable public ObjectChannel<ModelInstance> modelInstanceChannel;
   @Nullable public FloatChannel colorChannel, scaleChannel, rotationChannel;
 }

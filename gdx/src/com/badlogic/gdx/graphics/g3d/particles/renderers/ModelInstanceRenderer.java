@@ -64,6 +64,7 @@ public class ModelInstanceRenderer
 
   @Override
   public void update() {
+    if (renderData.modelInstanceChannel == null) return;
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
         ++i, positionOffset += renderData.positionChannel.strideSize) {
