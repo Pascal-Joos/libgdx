@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.utils.Null;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -31,7 +32,7 @@ public abstract class FocusListener implements EventListener {
   public boolean handle(Event event) {
     if (!(event instanceof FocusEvent)) return false;
     FocusEvent focusEvent = (FocusEvent) event;
-    switch (focusEvent.getType()) {
+    switch (Nullability.castToNonnull(focusEvent.getType())) {
       case keyboard:
         keyboardFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
         break;
