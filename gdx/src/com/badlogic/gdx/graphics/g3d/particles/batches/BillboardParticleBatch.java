@@ -597,6 +597,7 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
    */
 
   private void fillVerticesToViewPointCPU(int[] particlesOffset) {
+    if (camera == null) return;
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
       FloatChannel scaleChannel = data.scaleChannel;
@@ -744,9 +745,10 @@ public class BillboardParticleBatch extends BufferedParticleBatch<BillboardContr
   }
 
   private void fillVerticesToScreenCPU(int[] particlesOffset) {
-    Vector3 look = TMP_V3.set(camera.direction).scl(-1), // normal
-        right = TMP_V4.set(camera.up).crs(look).nor(), // tangent
-        up = camera.up;
+    if (camera == null) return;
+    Vector3 look = TMP_V3.set(Nullability.castToNonnull(camera).direction).scl(-1), // normal
+        right = TMP_V4.set(Nullability.castToNonnull(camera).up).crs(look).nor(), // tangent
+        up = Nullability.castToNonnull(camera).up;
 
     int tp = 0;
     for (BillboardControllerRenderData data : renderData) {
