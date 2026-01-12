@@ -17,6 +17,7 @@
 package com.badlogic.gdx.utils;
 
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -65,7 +66,7 @@ public class PooledLinkedList<T> {
     }
 
     item.prev = tail;
-    tail.next = item;
+    Nullability.castToNonnull(tail).next = item;
     tail = item;
     size++;
   }
