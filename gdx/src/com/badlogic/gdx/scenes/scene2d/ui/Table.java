@@ -1273,7 +1273,7 @@ public class Table extends WidgetGroup {
         if (maxHeight > 0) c.actorHeight = Math.min(c.actorHeight, maxHeight);
       }
 
-      align = c.align;
+      align = Nullability.castToNonnull(c.align);
       if ((align & Align.left) != 0) c.actorX = currentX;
       else if ((align & Align.right) != 0) c.actorX = currentX + spannedCellWidth - c.actorWidth;
       else c.actorX = currentX + (spannedCellWidth - c.actorWidth) / 2;
