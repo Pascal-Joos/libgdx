@@ -130,27 +130,33 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
         tileset = xml.parse(tsxFile);
         Element imageElement = tileset.getChildByName("image");
         if (imageElement != null) {
-          String imageSource = tileset.getChildByName("image").getAttribute("source");
-          FileHandle image = getRelativeFileHandle(tsxFile, imageSource);
+          String imageSource = imageElement.getAttribute("source");
+          FileHandle image = getRelativeFileHandle(tmxFile, imageSource);
           fileHandles.add(image);
         } else {
           for (Element tile : tileset.getChildrenByName("tile")) {
-            String imageSource = tile.getChildByName("image").getAttribute("source");
-            FileHandle image = getRelativeFileHandle(tsxFile, imageSource);
-            fileHandles.add(image);
+            Element tileImageElement = tile.getChildByName("image");
+            if (tileImageElement != null) {
+              String imageSource = tileImageElement.getAttribute("source");
+              FileHandle image = getRelativeFileHandle(tsxFile, imageSource);
+              fileHandles.add(image);
+            }
           }
         }
       } else {
         Element imageElement = tileset.getChildByName("image");
         if (imageElement != null) {
-          String imageSource = tileset.getChildByName("image").getAttribute("source");
+          String imageSource = imageElement.getAttribute("source");
           FileHandle image = getRelativeFileHandle(tmxFile, imageSource);
           fileHandles.add(image);
         } else {
           for (Element tile : tileset.getChildrenByName("tile")) {
-            String imageSource = tile.getChildByName("image").getAttribute("source");
-            FileHandle image = getRelativeFileHandle(tmxFile, imageSource);
-            fileHandles.add(image);
+            Element tileImageElement = tile.getChildByName("image");
+            if (tileImageElement != null) {
+              String imageSource = tileImageElement.getAttribute("source");
+              FileHandle image = getRelativeFileHandle(tmxFile, imageSource);
+              fileHandles.add(image);
+            }
           }
         }
       }
@@ -159,11 +165,13 @@ public class TmxMapLoader extends BaseTmxMapLoader<TmxMapLoader.Parameters> {
     // ImageLayer descriptors
     for (Element imageLayer : root.getChildrenByName("imagelayer")) {
       Element image = imageLayer.getChildByName("image");
-      String source = image.getAttribute("source", null);
+      if (image != null) {
+        String source = image.getAttribute("source", null);
 
-      if (source != null) {
-        FileHandle handle = getRelativeFileHandle(tmxFile, source);
-        fileHandles.add(handle);
+        if (source != null) {
+          FileHandle handle = getRelativeFileHandle(tmxFile, source);
+          fileHandles.add(handle);
+        }
       }
     }
 
