@@ -779,7 +779,7 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public float getPrefWidth() {
-    return prefWidth.get(actor);
+    return prefWidth.get(Nullability.castToNonnull(actor));
   }
 
   /**
