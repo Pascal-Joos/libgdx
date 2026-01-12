@@ -69,7 +69,7 @@ public class ReflectionPool<T> extends Pool<T> {
       throw new GdxRuntimeException(
           "Class cannot be created (missing no-arg constructor): " + getClass().getName());
     try {
-      return (T) constructor.newInstance((Object[]) null);
+      return (T) constructor.newInstance(Nullability.castToNonnull((Object[]) null));
     } catch (Exception ex) {
       throw new GdxRuntimeException(
           "Unable to create new instance: "
