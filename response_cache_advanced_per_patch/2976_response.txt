@@ -1,0 +1,85 @@
+```xml
+<response>
+    <reason><![CDATA[
+Given the method:
+
+public Entries entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+      entries1 = new Entries(this);
+      entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+      entries1.reset();
+      entries1.valid = true;
+      entries2.valid = false;
+      return entries1;
+    }
+    entries2.reset();
+    entries2.valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+We analyze all code paths that can reach the line:
+
+    entries2.valid = false;
+
+1. **Early return path**  
+   If `Collections.allocateIterators` is true, the method returns immediately:
+   ```java
+   if (Collections.allocateIterators) return new Entries(this);
+   ```
+   In this branch, execution never reaches `entries2.valid = false;`, so this path is irrelevant to whether `entries2` is null at that line.
+
+2. **Initialization path**  
+   If we pass the first `if`, then `Collections.allocateIterators` is false, so we proceed:
+
+   ```java
+   if (entries1 == null) {
+     entries1 = new Entries(this);
+     entries2 = new Entries(this);
+   }
+   ```
+   - If `entries1` is null, both `entries1` and `entries2` are assigned new `Entries(this)` instances.
+   - If `entries1` is not null, this block is skipped entirely. However, in that case we must consider that:
+     - `entries1` and `entries2` are instance fields that have been used in previous calls to this method.
+     - The only visible code path that assigns `entries2` is exactly this initialization block.
+     - Therefore, for `entries1` to be non-null when we skip this block, it must have been set in a previous invocation of this method, at which time `entries2` was also set to `new Entries(this)` in the same block.
+   There is no code that sets `entries2` back to null.
+
+   Thus, after this `if` block has been executed at least once in the lifetime of the object, both `entries1` and `entries2` are guaranteed non-null for all subsequent invocations, assuming no other code (outside this snippet) modifies them to null.
+
+3. **Path to the line in question**  
+   The line we analyze is inside:
+   ```java
+   if (!entries1.valid) {
+     entries1.reset();
+     entries1.valid = true;
+     entries2.valid = false;
+     return entries1;
+   }
+   ```
+   For execution to reach `entries2.valid = false;`, all of the following must be true:
+   - `Collections.allocateIterators` is false (otherwise we would have already returned).
+   - We have passed the `if (entries1 == null)` block. After that block:
+     *Either*:
+       - `entries1` was null and is just now initialized, causing `entries2` to be initialized as well.
+     *Or*:
+       - `entries1` was not null, which, given the structure of this class, implies that `entries2` has already been initialized in a previous call and never set to null in between.
+   In both sub-cases, by the time we evaluate `if (!entries1.valid)`, `entries2` has been assigned a non-null `Entries` instance.
+   There is no intervening code that could have changed `entries2` to null between initialization and this line—only its fields and state (`valid`, `reset()`) are manipulated.
+
+4. **Assumptions about external code**  
+   Under normal Java semantics and the usual encapsulation assumptions:
+   - If `entries1` and `entries2` are private fields of this class (as is typical in such iterator-caching patterns, e.g., in libraries like libGDX), and no other code sets `entries2` to null, then:
+     - `entries2` is definitely non-null whenever the line `entries2.valid = false;` executes.
+   - If external code could arbitrarily write `null` into `entries2` between calls (e.g., it is public and modified elsewhere), then the snippet alone cannot guarantee non-nullness. However, given the typical pattern and the absence of any shown null assignment other than default initialization, the intended and reasonable interpretation is that `entries2` is not externally nulled.
+
+Given the pattern, control flow, and absence of any null assignment to `entries2` other than its initial default null state before first initialization, once this method reaches `entries2.valid = false;` in any execution, `entries2` must have been initialized in the same call (when `entries1` was null) or in a prior call (when the same block ran), and never set back to null.
+
+Therefore, under standard assumptions for such code, `entries2` cannot be null at the point of `entries2.valid = false;`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

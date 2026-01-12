@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setWrap(TextureWrap u, TextureWrap v) {
+      this.uWrap = u;
+      this.vWrap = v;
+      bind();
+      if (Gdx.gl != null) {
+          Gdx.gl.glTexParameteri(glTarget, GL20.GL_TEXTURE_WRAP_S, u.getGLEnum());
+          Gdx.gl.glTexParameteri(glTarget, GL20.GL_TEXTURE_WRAP_T, v.getGLEnum());
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

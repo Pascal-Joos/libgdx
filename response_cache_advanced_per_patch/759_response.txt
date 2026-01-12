@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+          public void set(
+              BaseShader shader,
+              int inputID,
+              Renderable renderable,
+              Attributes combinedAttributes) {
+            FloatAttribute shininess = (FloatAttribute) combinedAttributes.get(FloatAttribute.Shininess);
+            if (shininess == null) return;
+            shader.set(
+                inputID,
+                shininess.value);
+}
+  ```
+    ]]>
+  </code>
+</response>

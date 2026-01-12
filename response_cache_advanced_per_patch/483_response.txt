@@ -1,0 +1,41 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void calculateBoundingBox(BoundingBox bbox) {
+    final int numVertices = getNumVertices();
+    if (numVertices == 0) throw new GdxRuntimeException("No vertices defined");
+
+    final FloatBuffer verts = vertices.getBuffer();
+    bbox.inf();
+    final VertexAttribute posAttrib = getVertexAttribute(Usage.Position);
+    if (posAttrib == null) throw new GdxRuntimeException("Mesh vertices must have Usage.Position");
+    final int offset = posAttrib.offset / 4;
+    final int vertexSize = vertices.getAttributes().vertexSize / 4;
+    int idx = offset;
+
+    switch (posAttrib.numComponents) {
+      case 1:
+        for (int i = 0; i < numVertices; i++) {
+          bbox.ext(verts.get(idx), 0, 0);
+          idx += vertexSize;
+        }
+        break;
+      case 2:
+        for (int i = 0; i < numVertices; i++) {
+          bbox.ext(verts.get(idx), verts.get(idx + 1), 0);
+          idx += vertexSize;
+        }
+        break;
+      case 3:
+        for (int i = 0; i < numVertices; i++) {
+          bbox.ext(verts.get(idx), verts.get(idx + 1), verts.get(idx + 2));
+          idx += vertexSize;
+        }
+        break;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public FileHandle parent() {
+      File file = file();
+      File parent = file.getParentFile();
+      if (parent == null) {
+        if (type == FileType.Absolute) parent = new File("/");
+        else parent = new File("");
+      }
+      return new FileHandle(parent, type);
+  }
+  ```
+    ]]>
+  </code>
+</response>

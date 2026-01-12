@@ -1,0 +1,67 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the expression
+
+    c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+
+you are specifically asking about the inner occurrence of `c.spaceLeft` at:
+
+    c.spaceLeft.get(a)
+
+within the rewritten version:
+
+    Value padLeftValue = c.padLeft == null ? Value.zero : c.padLeft;
+    Value spaceLeftValue = c.spaceLeft == null ? Value.zero : c.spaceLeft;
+    c.computedPadLeft =
+        Nullability.castToNonnull(padLeftValue).get(a)
+            + (column == 0
+                ? 0
+                : Math.max(
+                    0,
+                    Nullability.castToNonnull(spaceLeftValue).get(a) - spaceRightLast));
+
+Key points:
+
+1. **Direct null handling for `c.spaceLeft`:**
+
+   ```java
+   Value spaceLeftValue = c.spaceLeft == null ? Value.zero : c.spaceLeft;
+   ```
+
+   This guarantees that `spaceLeftValue` is never null at this point:
+   - If `c.spaceLeft == null`, then `spaceLeftValue` is set to `Value.zero`.
+   - Otherwise, `spaceLeftValue` is set to `c.spaceLeft`.
+
+2. **Use of `Nullability.castToNonnull`**:
+
+   ```java
+   Nullability.castToNonnull(spaceLeftValue).get(a)
+   ```
+
+   Since `spaceLeftValue` has just been assigned via the ternary operator above, it is non-null by construction:
+   - Either `Value.zero` (assumed non-null constant),
+   - Or the original non-null `c.spaceLeft`.
+
+   `castToNonnull` acts as an assertion/wrapper here; if `Value.zero` or `c.spaceLeft` could be null, that would violate the intended contract of those fields/constants, not this method’s logic. Under normal library contracts (e.g., LibGDX’s `Value.zero`), these are non-null singleton instances.
+
+3. **Control flow and usage:**
+
+   - The code only reaches `spaceLeftValue` after a cell `c` and its `actor a` are verified non-null (since it does `if (a == null) continue;` at the top of the loop).
+   - There is no alternate branch that bypasses the null check or reassigns `spaceLeftValue` before it is used.
+
+Given the explicit null-guard:
+
+   `spaceLeftValue = c.spaceLeft == null ? Value.zero : c.spaceLeft;`
+
+and assuming the standard contract that `Value.zero` is non-null, the expression used in the computation:
+
+   `Nullability.castToNonnull(spaceLeftValue).get(a)`
+
+—and correspondingly what replaced the original `c.spaceLeft.get(a)`—cannot be null at the point of use in this method.
+
+If the question is instead about whether `c.spaceLeft` (the field itself, before the ternary) can be null: yes, it can be null as a field, but it is *safely normalized* to a non-null `Value` (`Value.zero`) before being dereferenced. Therefore, the dereferenced expression used in the computation is not null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

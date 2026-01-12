@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private static final int
+            GPU_POSITION_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.Position, -1)),
+            GPU_UV_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1)),
+            GPU_SIZE_ROTATION_OFFSET =
+                (short) (GPU_ATTRIBUTES.getOffset(sizeAndRotationUsage, -1)),
+            GPU_COLOR_OFFSET = (short) (GPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1)),
+            GPU_VERTEX_SIZE = GPU_ATTRIBUTES.vertexSize / 4,
+    
+            // Cpu
+            CPU_POSITION_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.Position, -1)),
+            CPU_UV_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1)),
+            CPU_COLOR_OFFSET = (short) (CPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1)),
+            CPU_VERTEX_SIZE = CPU_ATTRIBUTES.vertexSize / 4
+  ```
+    ]]>
+  </code>
+</response>

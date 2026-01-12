@@ -1,0 +1,38 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void next(boolean up) {
+    Stage stage = getStage();
+    if (stage == null) return;
+    TextField current = this;
+    Group parent = current.getParent();
+    if (parent == null) return;
+    Vector2 currentCoords =
+        parent.localToStageCoordinates(tmp2.set(current.getX(), current.getY()));
+    Vector2 bestCoords = tmp1;
+    while (true) {
+      TextField textField =
+          current.findNextTextField(stage.getActors(), null, bestCoords, currentCoords, up);
+      if (textField == null) { // Try to wrap around.
+        if (up) currentCoords.set(-Float.MAX_VALUE, -Float.MAX_VALUE);
+        else currentCoords.set(Float.MAX_VALUE, Float.MAX_VALUE);
+        textField =
+            current.findNextTextField(stage.getActors(), null, bestCoords, currentCoords, up);
+      }
+      if (textField == null) {
+        Gdx.input.setOnscreenKeyboardVisible(false);
+        break;
+      }
+      if (stage.setKeyboardFocus(textField)) {
+        textField.selectAll();
+        break;
+      }
+      current = textField;
+      currentCoords.set(bestCoords);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,37 @@
+```xml
+<response>
+    <reason><![CDATA[
+`Gdx.gl30` is a static field from libGDX that is only non‑null when:
+
+1. The underlying OpenGL context actually supports OpenGL 3.0+ (or GLES3), and
+2. The corresponding `Graphics` implementation initializes it.
+
+On platforms or configurations where only GL20/GLES2 is available (which libGDX fully supports), `Gdx.gl20` will be initialized, but `Gdx.gl30` will remain null. This is intentional and documented behavior: libGDX exposes `Gdx.gl20` as the baseline, and `Gdx.gl30` is optional.
+
+In the given method:
+
+- The code uses `GL20 gl = Gdx.gl20;` (this assumes at least GL20 is present).
+- Later, for multiple render targets (MRT), it does:
+
+  ```java
+  if (isMRT) {
+      ...
+      if (Gdx.gl30 != null) {
+          Gdx.gl30.glDrawBuffers(colorTextureCounter, buffer);
+      }
+  }
+  ```
+
+The presence of the explicit null check `if (Gdx.gl30 != null)` is already an acknowledgement by the author that `Gdx.gl30` can be null in some environments. There is no earlier code in this method or any universal libGDX guarantee that `Gdx.gl30` must be non‑null whenever this method is called.
+
+Therefore, along any code path where:
+- the application is running on a GL20/GLES2‑only backend, or
+- the context does not provide GL3 capabilities,
+
+`Gdx.gl30` will indeed be null at this line, and the guarded call `Gdx.gl30.glDrawBuffers(...)` will simply be skipped.
+
+So, yes, it can be null; the method is already written to handle that case safely via the null check.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

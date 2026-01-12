@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public byte GetByte(int distance) {
+      if (_buffer == null) {
+          throw new IllegalStateException("Buffer is not initialized");
+      }
+      int pos = _pos - distance - 1;
+      if (pos < 0) pos += _windowSize;
+      return _buffer[pos];
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,78 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all control-flow paths that reach the line:
+
+    values2.valid = true;
+
+The full method:
+
+public Values<V> values() {
+    if (Collections.allocateIterators) return new OrderedMapValues(this);
+    if (values1 == null) {
+        values1 = new OrderedMapValues(this);
+        values2 = new OrderedMapValues(this);
+    }
+    if (!values1.valid) {
+        values1.reset();
+        values1.valid = true;
+        Nullability.castToNonnull(values2).valid = false;
+        return values1;
+    }
+    Nullability.castToNonnull(values2).reset();
+    values2.valid = true;
+    values1.valid = false;
+    return values2;
+}
+
+Key points:
+
+1. Early return:
+   - If `Collections.allocateIterators` is true, the method returns immediately and never reaches `values2.valid = true;`. So that branch is irrelevant for this line.
+
+2. Initialization:
+   - The only place `values2` is assigned is inside:
+     if (values1 == null) {
+         values1 = new OrderedMapValues(this);
+         values2 = new OrderedMapValues(this);
+     }
+   - In any execution that does reach the later lines, there are two possibilities:
+     a) `values1 == null` on entry:
+        - Then we execute the `if (values1 == null)` block and explicitly assign `values2 = new OrderedMapValues(this);`. After this, `values2` is non-null.
+     b) `values1 != null` on entry:
+        - Then this object has been in a state where `values()` was called before and `values1` had already been initialized.
+        - Because the only assignment to `values2` is coupled with the assignment to `values1`, and there are no assignments that can set `values2` back to null, `values2` must already have been initialized on that earlier call (when `values1` was first null).
+        - No code path in the method ever writes `null` into `values2`.
+
+   Therefore, at and after the `if (values1 == null)` block, `values2` is guaranteed non-null.
+
+3. Paths to the specific line:
+   - The line in question is in the `else` branch of:
+     if (!values1.valid) {
+         ...
+         return values1;
+     }
+     // else branch:
+     Nullability.castToNonnull(values2).reset();
+     values2.valid = true;
+     values1.valid = false;
+     return values2;
+
+   To reach `values2.valid = true;`, the following must hold:
+   - We did not return early due to `Collections.allocateIterators`.
+   - We executed the `if (values1 == null)` block at least once in this object's lifetime (either on this call or prior), thereby initializing `values2`.
+   - We did not take the `return values1;` branch in the `if (!values1.valid)` check, i.e., we are in the `else`, but that check does not affect the nullness of `values2`.
+
+   Before `values2.valid = true;`, we also call `Nullability.castToNonnull(values2).reset();`. The presence of `castToNonnull(values2)` is consistent with the intention/contract that `values2` is non-null at this point; even if that method is a no-op at runtime, its existence suggests a static assertion of non-nullness.
+
+4. No hidden nullification:
+   - The snippet shows no other assignments to `values2`.
+   - No method call shown (such as `reset()`) mutates the variable reference itself; they can only affect the object state, not set `values2` to null.
+   - Thus, there is no visible code path that could make `values2` null after it is first assigned.
+
+Given this analysis, along any path that reaches the line `values2.valid = true;`, `values2` has necessarily been initialized and cannot be null.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void dispose() {
+        if (Gdx.gl30 == null) return;
+        GL30 gl = Gdx.gl30;
+    
+        Nullability.castToNonnull(gl).glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
+        Nullability.castToNonnull(gl).glDeleteBuffer(bufferHandle);
+        bufferHandle = 0;
+        if (ownsBuffer) {
+          BufferUtils.disposeUnsafeByteBuffer(byteBuffer);
+        }
+        deleteVAO();
+  }
+  ```
+    ]]>
+  </code>
+</response>

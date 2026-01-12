@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected static final int CPU_VERTEX_SIZE = (short) (CPU_ATTRIBUTES.vertexSize / 4),
+          CPU_POSITION_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.Position, -1),
+          CPU_COLOR_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.ColorUnpacked, -1),
+          CPU_REGION_OFFSET = (short) CPU_ATTRIBUTES.getOffset(Usage.TextureCoordinates, -1),
+          CPU_SIZE_AND_ROTATION_OFFSET =
+              (short) CPU_ATTRIBUTES.getOffset(sizeAndRotationUsage, -1);
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `allocateChannels` does not start with "init" or "initialize" and is not one of the well-known framework lifecycle methods explicitly listed (e.g., `onCreate`, `init` from specific interfaces). Although it initializes fields, by your criteria that alone is not sufficient; and this method also does not follow the naming convention you've specified for initializer methods. Therefore it should not be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

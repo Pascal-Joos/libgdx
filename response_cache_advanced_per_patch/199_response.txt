@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float unsafeSetAnisotropicFilter(float level, boolean force) {
+    if (Gdx.gl20 == null) return 1f;
+    float max = getMaxAnisotropicFilterLevel();
+    if (max == 1f) return 1f;
+    level = Math.min(level, max);
+    if (!force && MathUtils.isEqual(level, anisotropicFilterLevel, 0.1f))
+      return anisotropicFilterLevel;
+    Gdx.gl20.glTexParameterf(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
+    return anisotropicFilterLevel = level;
+}
+  ```
+    ]]>
+  </code>
+</response>

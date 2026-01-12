@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of the method, the expression that is actually dereferenced is the local variable `localHttpRequest`:
+
+    HttpRequest localHttpRequest = httpRequest;
+    if (localHttpRequest == null) {
+      throw new IllegalStateException(
+          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
+    }
+    localHttpRequest.setHeader(name, value);
+
+Control flow is such that:
+
+1. `localHttpRequest` is assigned the value of the field `httpRequest`.
+2. There is an explicit null check: if `localHttpRequest == null`, the method throws `IllegalStateException` and does not proceed further.
+3. The call to `setHeader` on the request object only occurs after this null check, and only on `localHttpRequest`, not directly on `httpRequest`.
+
+Therefore, along all reachable paths to the call `localHttpRequest.setHeader(name, value);`, `localHttpRequest` is guaranteed to be non-null (assuming no unsafe operations like reflection or memory corruption). Consequently, the object on which `setHeader` is invoked in this method cannot be null at that point.
+
+If your tool or concern is about the field `httpRequest` specifically being dereferenced: in this method, it is not dereferenced directly; it is first copied to `localHttpRequest`, which is then null-checked before use. So the dereferenced expression is effectively non-null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

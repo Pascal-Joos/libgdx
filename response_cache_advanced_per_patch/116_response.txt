@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void consumeCustomData(int target) {
+    if (Gdx.gl == null) {
+      return;
+    }
+    Gdx.gl.glTexImage2D(target, mipLevel, internalFormat, width, height, 0, format, type, null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

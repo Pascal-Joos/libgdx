@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public FileHandle resolve(String fileName) {
+    if (Gdx.files == null) throw new GdxRuntimeException("Gdx.files is not initialized");
+    return Gdx.files.classpath(fileName);
+  }
+  ```
+    ]]>
+  </code>
+</response>

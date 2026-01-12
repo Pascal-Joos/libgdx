@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided snippet, we only know that `getStage()` returns the value of a field or variable named `stage`:
+
+public Stage getStage() {
+    return stage;
+}
+
+There is no information about:
+- Where or how `stage` is declared (whether it's initialized at declaration),
+- Whether it is assigned in all constructors,
+- Whether it can be explicitly set to null anywhere,
+- Whether there are any framework or library guarantees that `stage` is never null,
+- Any annotations (@NonNull, @Nullable, etc.) or invariants that apply.
+
+Without seeing the class definition, the initialization of `stage`, or its mutation points, we cannot soundly conclude that `stage` is always non-null or that it can be null. Therefore, the nullability of `stage` at the `return stage;` line is indeterminate with the information given.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of the `stage` field/variable (including any annotations and its initial value, if any).]]></request>
+        <request><![CDATA[Show all constructors and any methods that assign to `stage` (e.g., setters, initialization methods).]]></request>
+        <request><![CDATA[Indicate whether any framework or external contract guarantees that `stage` is always non-null.]]></request>
+    </requests>
+</response>
+```

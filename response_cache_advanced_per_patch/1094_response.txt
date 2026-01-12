@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void allocateChannels() {
+      super.allocateChannels();
+      if (controller != null) {
+        accelerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

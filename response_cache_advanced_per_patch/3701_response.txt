@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public int DecodeBit(short[] probs, int index) throws IOException {
+    if (Stream == null) {
+        throw new IOException("Stream is not set");
+    }
+    int prob = probs[index];
+    int newBound = (Range >>> kNumBitModelTotalBits) * prob;
+    if ((Code ^ 0x80000000) < (newBound ^ 0x80000000)) {
+      Range = newBound;
+      probs[index] = (short) (prob + ((kBitModelTotal - prob) >>> kNumMoveBits));
+      if ((Range & kTopMask) == 0) {
+        Code = (Code << 8) | Stream.read();
+        Range <<= 8;
+      }
+      return 0;
+    } else {
+      Range -= newBound;
+      Code -= newBound;
+      probs[index] = (short) (prob - ((prob) >>> kNumMoveBits));
+      if ((Range & kTopMask) == 0) {
+        Code = (Code << 8) | Stream.read();
+        Range <<= 8;
+      }
+      return 1;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

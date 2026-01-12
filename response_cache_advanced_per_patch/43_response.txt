@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static int getNumManagedShaderPrograms() {
+    return shaders.get(Gdx.app) == null ? 0 : shaders.get(Gdx.app).size;
+}
+  ```
+    ]]>
+  </code>
+</response>

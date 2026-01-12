@@ -1,0 +1,31 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is `son[ptr0] = curMatch;`, where `son` is a local variable assigned from `_son`:
+
+    if (_son == null) {
+      return;
+    }
+    int[] son = _son;
+
+This method immediately returns if `_son` is null. Only after that guard does it execute:
+
+    int[] son = _son;
+
+Since Java array variables are references, `son` will either be:
+- a non-null reference to the same array as `_son`, or
+- never assigned at all if `_son` was null (but in that case, the method has already returned before the assignment).
+
+Thus, on all code paths that reach `son[ptr0] = curMatch;`, the following is guaranteed:
+- `_son` is not null (due to the early return),
+- therefore `son` is not null (since it is set directly from `_son`).
+
+There are no reassignments to `_son` or `son` between the null-check and the use of `son[ptr0]`. The loop and method calls (`MovePos()`) do not reference `_son` in a way that would allow it to become null between those points (and in Java, another thread setting `_son` to null would not affect the already-captured local reference `son`).
+
+Therefore, the expression `son[ptr0]` itself cannot be null because `son` is guaranteed non-null at that point, and array element assignment `son[ptr0] = curMatch;` does not use any null dereference: it only writes an `int` to a valid `int[]`.
+
+The only nullability concern here would be the array object `son` itself, and that has been guarded against by the early return.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

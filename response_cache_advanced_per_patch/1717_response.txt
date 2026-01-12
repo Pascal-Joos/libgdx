@@ -1,0 +1,31 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the scope of this method, the null check at the beginning:
+
+    if (target == null) return;
+
+ensures that any execution that reaches
+
+    target.setSize(width, height);
+
+must have `target != null` at that moment (assuming single-threaded execution and no concurrent modification of `target` from other threads).
+
+Control-flow analysis:
+- If `target` is null at method entry, the method returns immediately and never reaches `target.setSize(...)`.
+- All paths that compute `width` and `height` and proceed to the final line are only reachable if `target` was not null at the time of the `if (target == null)` check.
+
+The only scenario in which `target` could still be null at `target.setSize(width, height)` is if:
+- Another thread modifies the `target` field and sets it to null after the null check but before the call to `setSize`, and there is no synchronization or other memory-safety mechanism governing access to `target`.
+
+Since the snippet does not show any concurrency controls, under standard single-threaded assumptions, `target` cannot be null at the call site. Under concurrent access without synchronization, it *can* be null due to a race condition.
+
+Because no threading or synchronization context is provided, we cannot categorically rule out concurrent modification. Therefore, from the snippet alone, and without assumptions about threading or immutability of `target`, we cannot guarantee that `target` is never null at the call.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Indicate whether this code can be executed concurrently from multiple threads, and whether `target` is a shared mutable field accessible from other threads.]]></request>
+        <request><![CDATA[Provide the declaration of `target` (field vs local, final vs non-final) and any synchronization or threading model used around this method or the class.]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void set(
+      BaseShader shader,
+      int inputID,
+      Renderable renderable,
+      Attributes combinedAttributes) {
+    ColorAttribute emissive = (ColorAttribute) combinedAttributes.get(ColorAttribute.Emissive);
+    if (emissive != null) {
+      shader.set(inputID, emissive.color);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

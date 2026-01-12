@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setUniformi(int location, int value) {
+      GL20 gl = Gdx.gl20;
+      if (gl == null) return;
+      checkManaged();
+      gl.glUniform1i(location, value);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,55 @@
+<response>
+  <reason><![CDATA[The implementation of `VertexAttributes.findByUsage(int usage)` clearly has a null-return path:
+
+```java
+public VertexAttribute findByUsage(int usage) {
+    int len = size();
+    for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
+    return null;
+}
+```
+
+It returns `null` when no `VertexAttribute` in the collection has a `usage` equal to the passed-in value.
+
+At the specific call site you ask about, the method is invoked as:
+
+```java
+CPU_ATTRIBUTES.findByUsage(sizeAndRotationUsage)
+```
+
+From the provided code, there is no guarantee that:
+1. `CPU_ATTRIBUTES` always contains a `VertexAttribute` whose `usage` equals `sizeAndRotationUsage`, nor
+2. `sizeAndRotationUsage` is constrained to a value that is known to always exist in `CPU_ATTRIBUTES`.
+
+The other usages of `findByUsage` in the code you showed confirm that the library itself treats `null` as a real possibility:
+
+- In `WeightMeshSpawnShapeValue.calculateWeights()`:
+
+  ```java
+  VertexAttribute positionAttribute = attributes.findByUsage(Usage.Position);
+  if (positionAttribute == null) return;
+  ```
+
+  The early return explicitly handles the case where `findByUsage` returns `null`.
+
+- In `VertexAttributes.getOffset(int usage, int defaultIfNotFound)`:
+
+  ```java
+  VertexAttribute vertexAttribute = findByUsage(usage);
+  if (vertexAttribute == null) return defaultIfNotFound;
+  ```
+
+  Again, the API is designed on the assumption that `findByUsage` may return `null`.
+
+- In `MeshBuilder.begin(VertexAttributes attributes, int primitiveType)`:
+
+  ```java
+  VertexAttribute a = attributes.findByUsage(Usage.Position);
+  if (a == null) throw new GdxRuntimeException("Cannot build mesh without position attribute");
+  ```
+
+  Here, a runtime exception is thrown if `findByUsage` returns `null`, further confirming the method is expected to sometimes return `null` when the attribute is missing.
+
+None of the supplied code constrains or proves that, for the specific call `CPU_ATTRIBUTES.findByUsage(sizeAndRotationUsage)`, the requested usage is always present in `CPU_ATTRIBUTES`. Therefore the known behavior of `findByUsage`, combined with lack of any stronger guarantees at this call site, means the result can be `null`.]]></reason>
+  <value>YES</value>
+</response>

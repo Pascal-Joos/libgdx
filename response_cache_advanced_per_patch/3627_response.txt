@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+The field `_son` is explicitly checked for null at the start of the method:
+
+    if (_son == null) {
+      return;
+    }
+    int[] son = Nullability.castToNonnull(_son);
+
+If `_son` is null when `Skip` is entered, the method returns immediately and the body containing
+
+    Nullability.castToNonnull(_son)[ptr0] = Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+
+is never executed.
+
+From that point onward in the method, there are no assignments to `_son`, and no other early returns that could bypass the initial null check. Therefore, every path that reaches the assignment line has already passed the `_son == null` guard, implying `_son` is non-null for all such paths, unless `_son` is modified concurrently by another thread.
+
+Assuming normal single-threaded usage or that `_son` is not changed to null by another thread during the execution of `Skip`, `_son` cannot be null at the assignment line. If `_son` were potentially modified concurrently (e.g., not declared `final` and mutable from other threads without synchronization), then in a data-race scenario, the JVM memory model does not guarantee that `_son` remains non-null after the check, and it could, in principle, become null before the assignment. However, such concurrent mutation is outside the shown code and would be a separate threading bug.
+
+Under the usual code-correctness and non-racy-threading assumptions, the expression `_son` at that line is guaranteed non-null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

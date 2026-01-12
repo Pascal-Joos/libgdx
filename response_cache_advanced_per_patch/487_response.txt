@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void render( ShaderProgram shader, int primitiveType, int offset, int count) {
+      render(Nullability.castToNonnull(shader), primitiveType, offset, count, autoBind);
+  }
+  ```
+    ]]>
+  </code>
+</response>

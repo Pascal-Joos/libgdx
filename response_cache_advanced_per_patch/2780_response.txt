@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private float plusMinusWidth() {
+      if (style == null || style.plus == null || style.minus == null) return 0f;
+      float width = Math.max(style.plus.getMinWidth(), style.minus.getMinWidth());
+      if (style.plusOver != null) width = Math.max(width, style.plusOver.getMinWidth());
+      if (style.minusOver != null) width = Math.max(width, style.minusOver.getMinWidth());
+      return width;
+  }
+  ```
+    ]]>
+  </code>
+</response>

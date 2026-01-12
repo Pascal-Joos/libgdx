@@ -1,0 +1,78 @@
+<response>
+  <reason><![CDATA[
+At the examined call sites, `event` is an instance of `com.badlogic.gdx.scenes.scene2d.InputEvent` created and configured by `Stage` methods such as `touchDown`, `mouseMoved`, `keyDown`, etc.
+
+Key facts:
+
+1. `Event.getStage()` just returns the field `stage`:
+   ```java
+   public Stage getStage() {
+       return stage;
+   }
+   ```
+   So nullability depends entirely on how `stage` is set on the `event` instance.
+
+2. In all Stage entry points that can produce an `InputEvent` which later reaches the shown listeners, the stage is explicitly set before `fire` is called:
+   - `Stage.touchDown(...)`:
+     ```java
+     InputEvent event = Pools.obtain(InputEvent.class);
+     event.setType(Type.touchDown);
+     event.setStage(this);
+     ...
+     target.fire(event);
+     ```
+   - `Stage.mouseMoved(...)`:
+     ```java
+     InputEvent event = Pools.obtain(InputEvent.class);
+     event.setType(Type.mouseMoved);
+     event.setStage(this);
+     ...
+     target.fire(event);
+     ```
+   - `Stage.scrolled(...)`, `keyDown(...)`, `keyUp(...)`, `keyTyped(...)`, `setKeyboardFocus(...)`, `setScrollFocus(...)`, `fireExit(...)`, `fireEnterAndExit(...)` all call `event.setStage(this)` before dispatch.
+
+   Thus, all `InputEvent`s originating from a `Stage` and dispatched via `Actor.fire(event)` already have a non-null `stage` set.
+
+3. `Actor.fire(Event event)` contains:
+   ```java
+   if (event.getStage() == null) event.setStage(getStage());
+   ```
+   For any event where `stage` wasn’t already set, it will be set from the actor’s own `getStage()`. For events coming from a `Stage`, this is a no-op since `stage` is already non-null. For programmatically created events (e.g., `ChangeEvent`) that later lead to input processing, this line ensures a non-null stage as long as the actor is attached to a stage.
+
+4. The specific call sites:
+
+   - In `InputListener.handle`:
+     ```java
+     if (handled && event.getTouchFocus()) {
+       Nullability.castToNonnull(event
+           .getStage())
+           .addTouchFocus(...);
+     }
+     ```
+     This is executed in response to a `touchDown` `InputEvent` received through the normal `Stage.touchDown(...) -> Actor.fire(...) -> InputListener.handle(...)` path. In that path, `event.setStage(this)` has been called, so `event.getStage()` is non-null here.
+
+   - In `ActorGestureListener.handle`:
+     ```java
+     if (event.getTouchFocus())
+       event
+           .getStage()
+           .addTouchFocus(...);
+     ```
+     Same reasoning: this is handling an `InputEvent` that was created and staged by `Stage` (e.g., `touchDown`, `touchDragged`, `touchUp`). Those `InputEvent`s always have `stage` set before being fired.
+
+   - In `DragAndDrop$1.drag`:
+     ```java
+     Stage stage = event.getStage();
+     ...
+     Actor hit = Nullability.castToNonnull(event.getStage()).hit(stageX, stageY, true);
+     if (hit == null) hit = Nullability.castToNonnull(event.getStage()).hit(stageX, stageY, false);
+     ```
+     This `drag(InputEvent event, ...)` is part of drag handling driven by pointer events from the `Stage` (touch/mouse input). The `InputEvent` again comes from `Stage` methods that set `event.setStage(this)` before dispatching, so `event.getStage()` is non-null here as well.
+
+5. No provided code shows any path where:
+   - an `InputEvent` is dispatched to these listeners without `stage` being set, or
+   - `stage` is explicitly cleared (set to null) between creation and these calls.
+
+Given the Stage code and the dispatch mechanism, at these specific call sites the `event` is always an `InputEvent` created by a `Stage` and has its `stage` set to that `Stage` instance before it ever reaches `InputListener`, `ActorGestureListener`, or `DragAndDrop$1.drag`. Therefore, `event.getStage()` cannot be null at these call sites.]]></reason>
+  <value>NO</value>
+</response>

@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefHeight() {
+        if (style == null) throw new IllegalStateException("style has not been set");
+        return Nullability.castToNonnull(style).background != null ? Nullability.castToNonnull(style).background.getMinHeight() : 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefWidth() {
+      float first =
+          firstWidget == null
+              ? 0
+              : (firstWidget instanceof Layout
+                  ? ((Layout) firstWidget).getPrefWidth()
+                  : firstWidget.getWidth());
+      float second =
+          secondWidget == null
+              ? 0
+              : (secondWidget instanceof Layout
+                  ? ((Layout) secondWidget).getPrefWidth()
+                  : secondWidget.getWidth());
+      if (vertical) return Math.max(first, second);
+      float handleMinWidth = style == null || style.handle == null ? 0 : style.handle.getMinWidth();
+      return first + Nullability.castToNonnull(style.handle).getMinWidth() + second;
+}
+  ```
+    ]]>
+  </code>
+</response>

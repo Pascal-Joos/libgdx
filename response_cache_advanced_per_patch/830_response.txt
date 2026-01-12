@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ParticleShader(
+      final Renderable renderable, final Config config, final ShaderProgram shaderProgram) {
+    this.config = config;
+    this.program = shaderProgram;
+    this.renderable = renderable;
+    materialMask = renderable.material.getMask() | optionalAttributes;
+    final Mesh mesh = renderable.meshPart.mesh;
+    if (mesh == null)
+      throw new GdxRuntimeException("Renderable mesh is null");
+    vertexMask = mesh.getVertexAttributes().getMask();
+
+    if (!config.ignoreUnimplemented && (implementedFlags & materialMask) != materialMask)
+      throw new GdxRuntimeException("Some attributes not implemented yet (" + materialMask + ")");
+
+    // Global uniforms
+    register(DefaultShader.Inputs.viewTrans, DefaultShader.Setters.viewTrans);
+    register(DefaultShader.Inputs.projViewTrans, DefaultShader.Setters.projViewTrans);
+    register(DefaultShader.Inputs.projTrans, DefaultShader.Setters.projTrans);
+    register(Inputs.screenWidth, Setters.screenWidth);
+    register(DefaultShader.Inputs.cameraUp, Setters.cameraUp);
+    register(Inputs.cameraRight, Setters.cameraRight);
+    register(Inputs.cameraInvDirection, Setters.cameraInvDirection);
+    register(DefaultShader.Inputs.cameraPosition, Setters.cameraPosition);
+
+    // Object uniforms
+    register(DefaultShader.Inputs.diffuseTexture, DefaultShader.Setters.diffuseTexture);
+}
+  ```
+    ]]>
+  </code>
+</response>

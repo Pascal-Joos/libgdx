@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method is named `setType`, which follows the conventional setter naming pattern `setX`. Your own criteria explicitly exclude setter methods from being considered initializer methods, even if they assign to fields. It also does not match the special-cased initializer names (e.g., `onCreate`, `init`, `initialize...`). Therefore, under the described rules, this method is a setter, not an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private int parseInt(String v, int defaultValue) {
+    try {
+      return Integer.parseInt(v);
+    } catch (NumberFormatException nfe) {
+      if (Gdx.app != null) Gdx.app.error("libGDX GL", "Error parsing number: " + v + ", assuming: " + defaultValue);
+      return defaultValue;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getTopGutterHeight() {
+      Graphics graphics = Gdx.graphics;
+      if (graphics == null) {
+          return 0;
+      }
+      return graphics.getHeight() - (screenY + screenHeight);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name allocateChannels does not match any of the known framework initializer patterns (e.g., onCreate, init, initialize) and does not start with "init" or "initialize". It is also not annotated or otherwise indicated as a special lifecycle/bootstrap method like the examples (Activity.onCreate, Servlet.init). By your criteria, merely initializing fields is not sufficient; the method’s name and role must clearly identify it as an initializer method distinct from a regular setter/configuration method. Therefore, this method should not be treated as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

@@ -1,0 +1,13 @@
+<response>
+    <reason><![CDATA[
+The method is annotated with @Initializer, its name starts with "init", and its behavior matches the semantic notion of an initializer method used by NullAway: it prepares the object for use by performing one-time setup of internal fields (program, locations, attributes, etc.), guards against multiple invocations ("Already initialized"), and is not a trivial field-by-field property setter.
+
+Unlike a typical setter, it:
+- Accepts non-primitive, non-bean-style parameters (ShaderProgram, Renderable) rather than simple property values.
+- Performs validation and complex logic (e.g., checking program.isCompiled(), fetching uniform/attribute locations, populating multiple internal collections).
+- Establishes invariants and internal state necessary before other operations can be safely called.
+
+Based on NullAway's description, such lifecycle/setup methods—especially when clearly marked via @Initializer and named init*—are exactly what should be treated as initializer methods, not as simple setters.
+    ]]></reason>
+    <value>YES</value>
+</response>

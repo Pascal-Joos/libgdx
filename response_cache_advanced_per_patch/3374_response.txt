@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void copyFields(Object from, Object to) {
+    OrderedMap<String, FieldMetadata> toFields = getFields(to.getClass());
+    for (ObjectMap.Entry<String, FieldMetadata> entry : getFields(from.getClass())) {
+      String key = entry.key;
+      if (key == null) continue;
+      FieldMetadata toField = toFields.get(key);
+      Field fromField = entry.value.field;
+      if (toField == null)
+        throw new SerializationException("To object is missing field: " + key);
+      try {
+        toField.field.set(to, fromField.get(from));
+      } catch (ReflectionException ex) {
+        throw new SerializationException("Error copying field: " + fromField.getName(), ex);
+      }
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

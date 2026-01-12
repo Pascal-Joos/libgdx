@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void end() {
+    Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+    if (fbo != null) fbo.end();
+}
+  ```
+    ]]>
+  </code>
+</response>

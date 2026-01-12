@@ -1,0 +1,38 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method body alone, we cannot determine whether `particleIndices` can be null at the line:
+
+    tmpIndex = particleIndices[j];
+
+Key points:
+
+1. **No local initialization**  
+   `particleIndices` is not declared or initialized within the `qsort` method. It must therefore be:
+   - a field of the enclosing class, or
+   - a variable captured from an outer scope (e.g., in an inner class/lambda; unlikely here since this is an instance method).
+
+2. **No null checks inside qsort**  
+   The method never checks `particleIndices` for null before using it. If `particleIndices` were null at entry, a `NullPointerException` would immediately occur whenever `particleIndices[...]` is evaluated, including at `tmpIndex = particleIndices[j];`.
+
+3. **Control flow does not affect nullness**  
+   The loops and conditionals affect only the index `j` and bounds `si`/`ei`, not whether `particleIndices` is null. If `particleIndices` is non-null at method entry, it stays non-null throughout this method (no assignments to it here). If it is null at entry, the access will throw.
+
+4. **Missing class/field context**  
+   Whether `particleIndices` can be null at runtime depends entirely on:
+   - how and where `particleIndices` is declared (e.g., `int[] particleIndices;` as a field),
+   - where it is initialized, and
+   - whether callers might invoke `qsort` before that initialization, or after setting it to null.
+
+   None of this information is present in the snippet.
+
+Thus, from this method alone, we cannot *prove* that `particleIndices` is always non-null, nor can we *prove* it can become null. It is dependent on external code not shown in the question.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how `particleIndices` is declared (field or local) and its type.]]></request>
+        <request><![CDATA[Show all code paths that assign to `particleIndices` (constructors, setters, or other methods).]]></request>
+        <request><![CDATA[Indicate whether any code can set `particleIndices` to null after initialization.]]></request>
+    </requests>
+</response>
+```

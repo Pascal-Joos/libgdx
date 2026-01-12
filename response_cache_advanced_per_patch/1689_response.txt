@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is `setTarget`, which follows the standard JavaBean setter naming convention (`setX`). By your own criteria, methods that are setters must not be treated as initializer methods, and initializer methods are typically named `init*`, `initialize*`, or are well-known lifecycle hooks (e.g., `onCreate`, `init` in certain frameworks). This method is a simple setter for a single field and does not match the naming or lifecycle semantics expected of an initializer method by NullAway.
+]]></reason>
+    <value>NO</value>
+</response>

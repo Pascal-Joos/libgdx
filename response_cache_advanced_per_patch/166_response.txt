@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private int fetchAttributeLocation(String name) {
+    if (Gdx.gl20 == null) return -1;
+    GL20 gl = Gdx.gl20;
+    // -2 == not yet cached
+    // -1 == cached but not found
+    int location;
+    if ((location = attributes.get(name, -2)) == -2) {
+      location = gl.glGetAttribLocation(program, name);
+      attributes.put(name, location);
+    }
+    return location;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public boolean zoom(float initialDistance, float distance) {
+      float newZoom = distance - initialDistance;
+      float amount = newZoom - previousZoom;
+      previousZoom = newZoom;
+      Graphics graphics = Gdx.graphics;
+      if (graphics == null) {
+        return false;
+      }
+      float w = graphics.getWidth(), h = graphics.getHeight();
+      return controller.pinchZoom(amount / ((w > h) ? h : w));
+    }
+  ```
+    ]]>
+  </code>
+</response>

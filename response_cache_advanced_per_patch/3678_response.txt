@@ -1,0 +1,23 @@
+<response>
+    <reason><![CDATA[
+Based on the criteria you gave for NullAway initializer methods:
+
+- Known framework initializers (e.g., Activity.onCreate, Servlet.init, etc.) are treated as initializers even though they are not constructors.
+- Methods whose names start with "init" or "initialize" and are not setters are also considered initializer methods.
+- You explicitly do *not* want to treat ordinary setter-like or ad-hoc initialization helpers as initializer methods unless they match the above naming or framework patterns.
+
+The given method is:
+
+    void Create() { ... }
+
+Its name:
+- Does not match any of the standard framework lifecycle/initializer patterns you listed.
+- Does not start with "init" or "initialize".
+- Is capitalized "Create", not "onCreate"; your examples specifically treat `onCreate` (Android) as a special framework lifecycle method, not any arbitrarily named `Create`.
+
+From a NullAway configuration perspective, this looks like a regular helper or factory-style setup method, not one that would automatically be recognized as an initializer under your described rules. It initializes fields, but that alone is not sufficient for classification as an "initializer method" per your definition.
+
+Therefore, under your stated criteria, this method should *not* be considered an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

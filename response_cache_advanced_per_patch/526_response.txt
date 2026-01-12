@@ -1,0 +1,17 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is literally `return null;`. In Java, the `null` literal always represents the null reference value, independent of control flow or other method contracts.
+
+Control flow:
+- The method iterates over elements using `for (int i = 0; i < len; i++)`.
+- If any element matches (`get(i).usage == usage`), it returns `get(i)`.
+- If no matching element is found, execution reaches `return null;`.
+
+Since that final statement is executed precisely in the case where no prior return has occurred, and the value being returned is the `null` literal, the returned value on that path is definitively null.
+
+No additional guarantees or contracts can change the fact that `null` is null; so along the path where this line is executed, the method's return value is necessarily null.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

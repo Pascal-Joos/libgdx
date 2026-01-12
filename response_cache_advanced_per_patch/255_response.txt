@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean touchDragged(int screenX, int screenY, int pointer) {
+    boolean result = super.touchDragged(screenX, screenY, pointer);
+    if (result || this.button < 0) return result;
+    Graphics graphics = Gdx.graphics;
+    if (graphics == null) return result;
+    final float deltaX = (screenX - startX) / graphics.getWidth();
+    final float deltaY = (startY - screenY) / graphics.getHeight();
+    startX = screenX;
+    startY = screenY;
+    return process(deltaX, deltaY, button);
+  }
+  ```
+    ]]>
+  </code>
+</response>

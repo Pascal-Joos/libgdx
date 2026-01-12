@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void setFrameBufferViewport() {
+      if (Gdx.gl20 == null) return;
+      Gdx.gl20.glViewport(0, 0, bufferBuilder.width, bufferBuilder.height);
+  }
+  ```
+    ]]>
+  </code>
+</response>

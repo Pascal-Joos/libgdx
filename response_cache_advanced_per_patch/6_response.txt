@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean update(int millis) {
+    if (Gdx.app != null && Gdx.app.getType() == Application.ApplicationType.WebGL) return update();
+    long endTime = TimeUtils.millis() + millis;
+    while (true) {
+      boolean done = update();
+      if (done || TimeUtils.millis() > endTime) return done;
+      ThreadUtils.yield();
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

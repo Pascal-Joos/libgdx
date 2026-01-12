@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void update(float percent) {
+      if (target == null) return;
+      float width, height;
+      if (percent == 0) {
+        width = startWidth;
+        height = startHeight;
+      } else if (percent == 1) {
+        width = endWidth;
+        height = endHeight;
+      } else {
+        width = startWidth + (endWidth - startWidth) * percent;
+        height = startHeight + (endHeight - startHeight) * percent;
+      }
+      target.setSize(width, height);
+  }
+  ```
+    ]]>
+  </code>
+</response>

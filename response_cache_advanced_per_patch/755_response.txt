@@ -1,0 +1,36 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+TextureAttribute attribute = (TextureAttribute) renderable.material.get(TextureAttribute.Diffuse);
+```
+
+the invoked method is `Attributes.get(long type)`, whose body is:
+
+```java
+public final Attribute get(final long type) {
+    if (has(type))
+      for (int i = 0; i < attributes.size; i++)
+        if (attributes.get(i).type == type) return attributes.get(i);
+    return null;
+}
+```
+
+From this implementation:
+
+- If `has(type)` is `false`, the method immediately reaches `return null;`.
+- If `has(type)` is `true` but the loop does not find any `Attribute` with the matching `type`, execution also reaches `return null;`.
+
+Therefore, this method *can* return `null` for a given `type` (here, `TextureAttribute.Diffuse`), unless there is an external guarantee that:
+1. `material.has(TextureAttribute.Diffuse)` is always `true`, **and**
+2. There is at least one attribute in `material` whose `type` is exactly `TextureAttribute.Diffuse`.
+
+The provided call-chain code does not establish such a guarantee for this particular call:
+
+- In `BillboardParticleBatch.setTexture` and `PointSpriteParticleBatch.setTexture`, the code assumes the diffuse `TextureAttribute` exists (it does not check for `null`), but this only applies to renderables that were created/configured by those batches, not to all possible `renderable.material` objects in general.
+- Other code paths (e.g., various shader setters) explicitly check for `null` after calling `get(...)`, which further confirms that the library itself treats `get(type)` as potentially returning `null`.
+
+Since `renderable.material` at this call site is not proven (by the given code) to always contain a `TextureAttribute` with `type == TextureAttribute.Diffuse`, the method `get(TextureAttribute.Diffuse)` can evaluate the `return null;` path. Thus, the result of this specific invocation can be `null`.]]></reason>
+  <value>YES</value>
+</response>

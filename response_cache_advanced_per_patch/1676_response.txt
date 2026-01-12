@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Socket accept(SocketHints hints) {
+    if (server == null) {
+      throw new GdxRuntimeException("Error accepting socket.", new NullPointerException("server is null"));
+    }
+    try {
+      return new NetJavaSocketImpl(server.accept(), hints);
+    } catch (Exception e) {
+      throw new GdxRuntimeException("Error accepting socket.", e);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

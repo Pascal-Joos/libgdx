@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, `scaleChannel` is obtained directly from `data.scaleChannel` and is never checked for null before being dereferenced at:
+
+    float scale = scaleChannel.data[p * scaleChannel.strideSize];
+
+There is no local initialization or null-guard in this method that guarantees `data.scaleChannel` is non-null. Whether `scaleChannel` can be null depends entirely on:
+
+1. How `renderData` is populated.
+2. The contract for `BillboardControllerRenderData` (or equivalent type) regarding `scaleChannel`:
+   - Is `scaleChannel` always set when an instance is created?
+   - Can it be omitted/disabled, or left uninitialized under some configurations?
+
+If the surrounding system (e.g., the particle/billboard framework) **guarantees** that every `BillboardControllerRenderData` in `renderData` always has a non-null `scaleChannel` with a non-null `data` array, then `scaleChannel` is effectively non-null along all code paths here, and the expression is safe.
+
+However, this guarantee is not visible from the provided snippet alone. From just this method and no additional contractual information, `data.scaleChannel` could be null (e.g., if a controller without scale data was added to `renderData`), which would cause a `NullPointerException` at the line in question.
+
+Since that guarantee is external to the shown code and not evident here, it cannot be concluded from this snippet alone that `scaleChannel` is always non-null.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the definition of BillboardControllerRenderData (or the concrete type of `data`), especially how `scaleChannel` is declared and initialized.]]></request>
+        <request><![CDATA[Show where and how `renderData` is populated, and any code that constructs or configures the particle controllers that supply `scaleChannel`.]]></request>
+        <request><![CDATA[Provide any documentation or contract that states whether `scaleChannel` is mandatory/always present for every entry in `renderData`.]]></request>
+    </requests>
+</response>
+```

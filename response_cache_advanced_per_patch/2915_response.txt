@@ -1,0 +1,8 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is literally `return null;` and is executed under the condition `if (size == 0)`. There is no additional computation or dereference involved in this branch; it always returns the null reference directly when `size == 0`. Therefore, along that control-flow path, the returned value is guaranteed to be null. The method is also annotated with `@Null`, which is consistent with allowing null as a legal return value and does not change this fact.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public BitmapFont(boolean flip) {
+    if (Gdx.files == null) throw new GdxRuntimeException("Gdx.files must not be null");
+    this(
+        Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"),
+        Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.png"),
+        flip,
+        true);
+}
+  ```
+    ]]>
+  </code>
+</response>

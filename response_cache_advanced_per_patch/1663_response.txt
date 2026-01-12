@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the target of the call:
+
+    httpRequest.setMethod(httpMethod);
+
+Within this method, `httpRequest` is actually referenced through the local variable `localHttpRequest`, which is assigned as:
+
+    HttpRequest localHttpRequest = this.httpRequest;
+
+Immediately after this assignment, there is an explicit null check:
+
+    if (localHttpRequest == null) {
+      throw new IllegalStateException(
+          "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
+    }
+
+Only if `localHttpRequest` is *not* null does execution proceed to:
+
+    localHttpRequest.setMethod(httpMethod);
+
+Therefore, at the point where `setMethod` is invoked, `localHttpRequest` (the object on which `setMethod` is called) is guaranteed to be non-null on all normal control-flow paths. If it were null, the method would have already thrown `IllegalStateException` and not reached the call.
+
+Under standard Java semantics, there is no way for `localHttpRequest` to become null between the null check and the `setMethod` call, because:
+- It is a local variable, not a field.
+- No reassignments to `localHttpRequest` occur between the check and the call.
+- Java does not allow concurrent modification of a local variable by other threads.
+
+Even if `this.httpRequest` (the field) could change concurrently, that does not affect the already-copied local variable `localHttpRequest`.
+
+Thus, the receiver expression for `setMethod` cannot be null at the call site.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,14 @@
+<response>
+    <reason><![CDATA[
+According to the criteria you described for NullAway:
+
+1. Known initializer methods are typically lifecycle/setup hooks defined by frameworks (e.g., Activity.onCreate, Servlet.init) or methods whose names start with "init" or "initialize".
+2. You explicitly do not want to treat setter methods as initializer methods, even if they initialize fields.
+3. The method in question:
+   - Is named `size`, not starting with "init" or "initialize".
+   - Has a typical "builder/setter-style" signature: it sets several size-related fields and returns `this`, which is characteristic of configuration/setter methods in fluent APIs.
+   - Does not match any of the known framework lifecycle patterns you listed.
+
+Under these rules, `size(Value width, Value height)` should be considered a regular setter/configuration method, not an initializer method for NullAway’s purposes.]]></reason>
+    <value>NO</value>
+</response>

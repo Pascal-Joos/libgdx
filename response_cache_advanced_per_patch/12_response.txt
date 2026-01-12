@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static void generateMipMap(
+      int target, Pixmap pixmap, int textureWidth, int textureHeight) {
+    if (!useHWMipMap) {
+      generateMipMapCPU(target, pixmap, textureWidth, textureHeight);
+      return;
+    }
+
+    Application app = Gdx.app;
+    if (app != null && (app.getType() == ApplicationType.Android
+        || app.getType() == ApplicationType.WebGL
+        || app.getType() == ApplicationType.iOS)) {
+      generateMipMapGLES20(target, pixmap);
+    } else {
+      generateMipMapDesktop(target, pixmap, textureWidth, textureHeight);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

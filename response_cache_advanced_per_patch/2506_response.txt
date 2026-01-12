@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setStyle(SelectBoxStyle style) {
+          if (style == null) throw new IllegalArgumentException("style cannot be null.");
+          this.style = style;
+    
+          if (scrollPane != null && style.scrollStyle != null && style.listStyle != null) {
+            scrollPane.setStyle(Nullability.castToNonnull(style.scrollStyle));
+            scrollPane.list.setStyle(Nullability.castToNonnull(style.listStyle));
+          }
+          invalidateHierarchy();
+}
+  ```
+    ]]>
+  </code>
+</response>

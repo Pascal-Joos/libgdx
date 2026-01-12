@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `addDepthRenderBuffer` does not match any of the recognized initializer patterns (it neither starts with `init`/`initialize` nor falls into the known framework lifecycle names such as `onCreate`, `init` in servlet/processor APIs). Its semantics also resemble a fluent “adder/setter” method on a builder rather than a lifecycle/setup method guaranteed to run before all other usages. Therefore, according to the described criteria for NullAway initializer methods, it should not be treated as an initializer method.]]></reason>
+    <value>NO</value>
+</response>

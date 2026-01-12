@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Encoder2 GetSubCoder(int pos, byte prevByte) {
+      if (m_Coders == null) {
+          Create(m_NumPosBits, m_NumPrevBits);
+      }
+      return m_Coders[
+          ((pos & m_PosMask) << m_NumPrevBits) + ((prevByte & 0xFF) >>> (8 - m_NumPrevBits))];
+  }
+  ```
+    ]]>
+  </code>
+</response>

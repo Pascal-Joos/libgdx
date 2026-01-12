@@ -1,0 +1,52 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially nullable entity in question is the field `_son`, and the expression is the array access/assignment using the local alias `son`:
+
+    son[ptr1] = son[cyclicPos];
+
+To decide if that can be null, we must consider whether:
+
+1. The `_son` field itself can be null at this point, or
+2. Any element of the `_son` array (here, `son[cyclicPos]`) can be null, and if the array were an object array, that would matter.
+
+From the snippet:
+
+    if (_son == null) {
+        return;
+    }
+    int[] son = Nullability.castToNonnull(_son);
+
+Here, `_son` is checked against null and we immediately return if it is null. Thus, on all paths after this check, `_son` is guaranteed not to be null.
+
+Right after that, `_son` is assigned to a local variable `son`, with type `int[]`. In Java, `int[]` is an array of primitive `int`s; its elements are primitives and cannot be null. Array elements of a primitive array are always actual integer values (default 0 if never written).
+
+Later use:
+
+    ...
+    if (len == lenLimit) {
+        son[ptr1] = son[cyclicPos];
+        son[ptr0] = son[cyclicPos + 1];
+        break;
+    }
+
+This line:
+
+    son[ptr1] = son[cyclicPos];
+
+is simply assigning one primitive `int` to another index of the same primitive array. There is no way for `son` to be null here because:
+
+- Execution would have returned earlier if `_son` were null.
+- `son` is a local alias for `_son` without any intervening assignments that could set it to null.
+- No other method is called that could reassign `_son` to null between the null check and the usage of `son`; even if `_son` changed, `son` is already bound to the original array reference.
+- The type `int[]` disallows null elements; only the array reference could be null, and that is ruled out by the initial guard.
+
+Even considering concurrency: if another thread could set `_son` to null after the null check, that does not affect `son`, which already holds the non-null reference. So there is no path on which `son` becomes null after the check.
+
+Therefore, the array reference used in `son[ptr1] = son[cyclicPos];` cannot be null, and the element read from `son[cyclicPos]` is a primitive `int`, never null by Java semantics.
+
+Conclusion: the expression in question cannot be null in the given method.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

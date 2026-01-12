@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void update() {
+        if (mesh == null) return;
+        Nullability.castToNonnull(mesh).calculateBoundingBox(bounds, offset, size);
+        bounds.getCenter(center);
+        bounds.getDimensions(halfExtents).scl(0.5f);
+        radius = halfExtents.len();
+}
+  ```
+    ]]>
+  </code>
+</response>

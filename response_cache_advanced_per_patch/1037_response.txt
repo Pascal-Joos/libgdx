@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void dispose() {
+    if (controller != null && controller.particles != null) {
+      for (int i = 0; i < controller.particles.size; ++i) {
+        ParticleController controller = particleControllerChannel.data[i];
+        if (controller != null) {
+          controller.dispose();
+          particleControllerChannel.data[i] = null;
+        }
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

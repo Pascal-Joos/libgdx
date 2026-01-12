@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean isManaged() {
+        return data != null && Nullability.castToNonnull(data).isManaged();
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void query(BoundingBox aabb, ObjectSet<T> result) {
+      if (!aabb.intersects(bounds)) {
+        return;
+      }
+
+      if (!leaf) {
+        if (children == null) return;
+        for (Octree.OctreeNode node : children) {
+          node.query(aabb, result);
+        }
+      } else {
+        for (T geometry : geometries) {
+          // Filter geometries using collider
+          if (collider.intersects(bounds, geometry)) {
+            result.add(geometry);
+          }
+        }
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

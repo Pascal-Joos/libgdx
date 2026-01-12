@@ -1,0 +1,44 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    float rotation = Nullability.castToNonnull(angularVelocityChannel).data[i] * controller.deltaTime;
+
+This line is executed only inside the block:
+
+    if (has2dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
+        for (int i = 0, offset = 0;
+             i < controller.particles.size;
+             ++i, offset += Nullability.castToNonnull(rotationChannel).strideSize) {
+            float rotation = Nullability.castToNonnull(angularVelocityChannel).data[i] * controller.deltaTime;
+            ...
+        }
+    }
+
+Before entering this `if` block, the condition explicitly checks:
+
+- `has2dAngularVelocity` is true
+- `rotationChannel != null`
+- `angularVelocityChannel != null`
+
+Therefore, at the point where `rotation` is computed, the control flow guarantees `angularVelocityChannel != null`.
+
+The earlier use:
+
+    if ((has2dAngularVelocity || has3dAngularVelocity) && angularVelocityChannel != null)
+        Arrays.fill(
+            Nullability.castToNonnull(angularVelocityChannel).data,
+            0,
+            controller.particles.size * Nullability.castToNonnull(angularVelocityChannel).strideSize,
+            0);
+
+is also guarded by `angularVelocityChannel != null`, so no earlier operation can null it out in this method. There is no assignment to `angularVelocityChannel` anywhere within `update()`, so its nullness cannot change during the execution of this method.
+
+Given standard Java semantics (no concurrent mutation of `angularVelocityChannel` from another thread is shown or assumed) and the explicit null check in the `if` condition, the reference used at the line in question cannot be null along any path that reaches that line.
+
+Thus, `angularVelocityChannel` at that expression cannot be null within the shown method. The `Nullability.castToNonnull` call is redundant for null-safety at that particular site.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

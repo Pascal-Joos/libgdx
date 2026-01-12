@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void load(AssetManager manager, ResourceData data) {
+      if (emitter != null) Nullability.castToNonnull(emitter).load(manager, data);
+      for (Influencer influencer : influencers) influencer.load(manager, data);
+      renderer.load(manager, data);
+}
+  ```
+    ]]>
+  </code>
+</response>

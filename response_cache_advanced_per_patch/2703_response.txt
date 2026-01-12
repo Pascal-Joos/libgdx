@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getCursorY() {
+      BitmapFont font = style.font;
+      if (font == null) return 0;
+      return -(cursorLine - firstLineShowing + 1) * font.getLineHeight();
+  }
+  ```
+    ]]>
+  </code>
+</response>

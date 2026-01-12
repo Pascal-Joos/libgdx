@@ -1,0 +1,32 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the loop:
+
+    for (int i = 0; i < usage.length; i++)
+        if (getVertexAttribute(usage[i]) != null) {
+            size += getVertexAttribute(usage[i]).numComponents;
+            as++;
+        }
+
+each iteration first checks:
+
+    if (getVertexAttribute(usage[i]) != null)
+
+and only if this condition is true does it execute the body, which contains:
+
+    size += getVertexAttribute(usage[i]).numComponents;
+
+In Java, the condition `getVertexAttribute(usage[i]) != null` guarantees that, for that specific call and that specific `usage[i]`, the returned reference is non-null within that `if` block. There is no code between the null check and the use of the expression that could change `usage[i]` or the state of the object in a way that would make the same `getVertexAttribute(usage[i])` call suddenly return null in the same iteration.
+
+The method `getVertexAttribute(int usage)` is called twice per relevant iteration, but both calls are with the same argument `usage[i]` and within the same thread and control flow; there is no evidence in this snippet of side effects that could invalidate the null check in between.
+
+Therefore, on all execution paths that reach:
+
+    size += getVertexAttribute(usage[i]).numComponents;
+
+the result of `getVertexAttribute(usage[i])` for that iteration is guaranteed non-null. The expression cannot be null at the point of dereference in this code as written.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

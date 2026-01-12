@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  int ReadMatchDistances() throws java.io.IOException {
+      int lenRes = 0;
+      if (_matchFinder == null) {
+        return lenRes;
+      }
+      _numDistancePairs = Nullability.castToNonnull(_matchFinder).GetMatches(_matchDistances);
+      if (_numDistancePairs > 0) {
+        lenRes = _matchDistances[_numDistancePairs - 2];
+        if (lenRes == _numFastBytes)
+          lenRes +=
+              Nullability.castToNonnull(_matchFinder).GetMatchLen(
+                  (int) lenRes - 1,
+                  _matchDistances[_numDistancePairs - 1],
+                  Base.kMatchMaxLen - lenRes);
+      }
+      _additionalOffset++;
+      return lenRes;
+  }
+  ```
+    ]]>
+  </code>
+</response>

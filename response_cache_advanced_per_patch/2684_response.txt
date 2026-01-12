@@ -1,0 +1,53 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void calculateOffsets() {
+      super.calculateOffsets();
+      if (this.text != null && !Nullability.castToNonnull(this.text).equals(lastText)) {
+        this.lastText = this.text;
+        BitmapFont font = style.font;
+        float maxWidthLine =
+            this.getWidth()
+                - (style.background != null
+                    ? style.background.getLeftWidth() + style.background.getRightWidth()
+                    : 0);
+        linesBreak.clear();
+        int lineStart = 0;
+        int lastSpace = 0;
+        char lastCharacter;
+        Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
+        GlyphLayout layout = layoutPool.obtain();
+        for (int i = 0; i < Nullability.castToNonnull(this.text).length(); i++) {
+          lastCharacter = Nullability.castToNonnull(this.text).charAt(i);
+          if (lastCharacter == CARRIAGE_RETURN || lastCharacter == NEWLINE) {
+            linesBreak.add(lineStart);
+            linesBreak.add(i);
+            lineStart = i + 1;
+          } else {
+            lastSpace = (continueCursor(i, 0) ? lastSpace : i);
+            layout.setText(font, Nullability.castToNonnull(this.text).subSequence(lineStart, i + 1));
+            if (layout.width > maxWidthLine) {
+              if (lineStart >= lastSpace) {
+                lastSpace = i - 1;
+              }
+              linesBreak.add(lineStart);
+              linesBreak.add(lastSpace + 1);
+              lineStart = lastSpace + 1;
+              lastSpace = lineStart;
+            }
+          }
+        }
+        layoutPool.free(layout);
+        // Add last line
+        if (lineStart < Nullability.castToNonnull(this.text).length()) {
+          linesBreak.add(lineStart);
+          linesBreak.add(Nullability.castToNonnull(this.text).length());
+        }
+        showCursor();
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

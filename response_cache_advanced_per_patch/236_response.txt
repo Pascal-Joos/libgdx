@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void invalidate() {
+      if (Gdx.gl30 == null)
+        throw new GdxRuntimeException(
+            "VertexBufferObjectWithVAO requires a device running with GLES 3.0 compatibilty");
+      bufferHandle = Nullability.castToNonnull(Gdx.gl30).glGenBuffer();
+      createVAO();
+      isDirty = true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

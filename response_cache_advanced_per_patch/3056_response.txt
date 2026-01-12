@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void load(ParticleValue value) {
+      super.load(value);
+      SpawnShapeValue shape = (SpawnShapeValue) value;
+      RangedNumericValue xOffsetValue = this.xOffsetValue;
+      if (xOffsetValue != null && shape.xOffsetValue != null) xOffsetValue.load(shape.xOffsetValue);
+      RangedNumericValue yOffsetValue = this.yOffsetValue;
+      if (yOffsetValue != null && shape.yOffsetValue != null) yOffsetValue.load(shape.yOffsetValue);
+      RangedNumericValue zOffsetValue = this.zOffsetValue;
+      if (zOffsetValue != null && shape.zOffsetValue != null) zOffsetValue.load(shape.zOffsetValue);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void scroll(float xAmount, float yAmount) {
+      if (texture == null) throw new IllegalStateException("texture cannot be null.");
+      if (xAmount != 0) {
+        float width = (u2 - u) * texture.getWidth();
+        u = (u + xAmount) % 1;
+        u2 = u + width / texture.getWidth();
+      }
+      if (yAmount != 0) {
+        float height = (v2 - v) * texture.getHeight();
+        v = (v + yAmount) % 1;
+        v2 = v + height / texture.getHeight();
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

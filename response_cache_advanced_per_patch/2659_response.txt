@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public String getSelection() {
+      return hasSelection && text != null
+          ? text.substring(Math.min(selectionStart, cursor), Math.max(selectionStart, cursor))
+          : "";
+  }
+  ```
+    ]]>
+  </code>
+</response>

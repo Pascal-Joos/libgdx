@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setU2(float u2) {
+        this.u2 = u2;
+        if (texture != null) {
+            regionWidth = Math.round(Math.abs(u2 - u) * Nullability.castToNonnull(texture).getWidth());
+        }
+}
+  ```
+    ]]>
+  </code>
+</response>

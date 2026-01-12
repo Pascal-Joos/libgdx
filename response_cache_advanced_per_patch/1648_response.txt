@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder formEncodedContent(Map<String, String> content) {
+      validate();
+      HttpRequest localRequest = httpRequest;
+      localRequest.setHeader(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+      String formEncodedContent = HttpParametersUtils.convertHttpParameters(content);
+      localRequest.setContent(formEncodedContent);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

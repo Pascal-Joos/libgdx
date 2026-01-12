@@ -1,0 +1,80 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all paths that reach the line `entries2.valid = false;` inside method `entries()`:
+
+Method:
+
+public Entries<K> entries() {
+      if (Collections.allocateIterators) return new Entries(this);
+      if (entries1 == null) {
+        entries1 = new Entries(this);
+        entries2 = new Entries(this);
+      }
+      if (!entries1.valid) {
+        entries1.reset();
+        entries1.valid = true;
+        entries2.valid = false;
+        return entries1;
+      }
+      Nullability.castToNonnull(entries2).reset();
+      Nullability.castToNonnull(entries2).valid = true;
+      entries1.valid = false;
+      return entries2;
+}
+
+Key observations:
+
+1. Early return:
+   - If `Collections.allocateIterators` is true, the method returns immediately:
+     `if (Collections.allocateIterators) return new Entries(this);`
+   - In this branch, the line `entries2.valid = false;` is not executed at all, so it is irrelevant for the nullability at that point.
+
+2. Initialization block:
+   - The next conditional:
+     `if (entries1 == null) {`
+         `entries1 = new Entries(this);`
+         `entries2 = new Entries(this);`
+       `}`
+   - Here, whenever `entries1` is null, both `entries1` and `entries2` are assigned new non-null `Entries` instances.
+   - After this `if` completes, there are two possible states:
+
+     a) `entries1` was null:
+        - Then both `entries1` and `entries2` are just initialized to non-null values.
+     b) `entries1` was not null:
+        - Then we skip the block entirely, but this implies `entries1` was already initialized on some prior call. For `entries2`, this method contains the *only* shown assignment (`entries2 = new Entries(this);`). Therefore:
+          - If we ever reached a state where `entries1` is non-null, it must have been set in a prior call where `entries1 == null` was true, and in that same block `entries2` was also set to a new non-null instance.
+        - No code path in this method assigns `entries2` back to null.
+
+     Thus, after the `if (entries1 == null)` block finishes, `entries2` is guaranteed to be non-null on all executions that reach subsequent lines.
+
+3. The branch containing `entries2.valid = false;`:
+   - Next condition:
+     `if (!entries1.valid) {`
+         `entries1.reset();`
+         `entries1.valid = true;`
+         `entries2.valid = false;`
+         `return entries1;`
+       `}`
+
+   - This `if` is evaluated after the potential initialization of `entries1` and `entries2`. As established above, once we are past `if (entries1 == null) { ... }`, `entries2` is non-null.
+   - Therefore, when we execute `entries2.valid = false;`, `entries2` must have been initialized to `new Entries(this)` at some point and has never been set to null since.
+   - No intervening code reassigns `entries2` or can turn it into null between its initialization and this line.
+
+4. Other branch and casts:
+   - In the `else` branch:
+     `Nullability.castToNonnull(entries2).reset();`
+     `Nullability.castToNonnull(entries2).valid = true;`
+   - These calls also assume `entries2` is non-null, but we do not rely on that assumption; the earlier control flow already guarantees `entries2` is assigned a non-null value before we could enter this part of the method in any execution.
+
+5. External factors:
+   - The analysis assumes:
+     - No other thread is mutating `entries2` concurrently to make it null.
+     - No hidden code outside this snippet assigns `entries2 = null` after initialization and before use.
+   - Under standard single-threaded, intra-method reasoning (and typical assumptions made by static analyzers unless stated otherwise), such external mutations are not assumed.
+
+Given these code paths and the apparent invariant that `entries2` is initialized alongside `entries1` and never reassigned to null, `entries2` cannot be null at the line `entries2.valid = false;` under the normal Java execution model and the provided code.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

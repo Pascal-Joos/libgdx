@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[Initializer methods, per your definition, are special lifecycle/setup methods (e.g., onCreate, init) or methods whose names start with "init"/"initialize" and are not setters. The given method is named setTable, clearly following setter naming conventions and only assigning a single field from its parameter. Therefore, it should be classified as a setter, not an initializer method for NullAway’s purposes.]]></reason>
+    <value>NO</value>
+</response>

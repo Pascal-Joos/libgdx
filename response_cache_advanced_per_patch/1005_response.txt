@@ -1,0 +1,10 @@
+<response>
+    <reason><![CDATA[
+By the criteria you described, initializer methods are:
+1) Known framework lifecycle methods (e.g., onCreate, init in specific interfaces), or
+2) Methods whose name starts with "init" or "initialize" and are not setters.
+
+The given method is named allocateChannels, does not match any of the listed framework lifecycle signatures, and its name does not start with "init" or "initialize." Although it initializes fields, it does not meet your naming or framework-based criteria for an initializer method and thus should not be treated as one by NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

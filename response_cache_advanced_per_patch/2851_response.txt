@@ -1,0 +1,23 @@
+<response>
+  <reason><![CDATA[
+From the provided code, there are exactly two possible return paths:
+
+1. The early return inside the inner `if`:
+   ```java
+   Drawable icon = node.expanded ? style.minusOver : style.plusOver;
+   if (icon != null) return icon;
+   ```
+   This path returns only when `icon != null`, so this particular return statement cannot return null.
+
+2. The final return:
+   ```java
+   return node.expanded ? style.minus : style.plus;
+   ```
+   Here, the method returns either `style.minus` or `style.plus`. These fields are not computed by any other method call; they are accessed directly. Their values are not constrained in this method’s body, so they may be null depending on how `style` is initialized elsewhere. The method contains no null checks for `style.minus` or `style.plus` and no alternative return if they are null.
+
+Because `style.minus` or `style.plus` can be null in some configurations (and there is no code in this method guaranteeing they are non-null), the method can return null via this final return statement.
+
+No additional methods’ return values influence the return value of this method; the decision is based solely on field values (`style.minusOver`, `style.plusOver`, `style.minus`, `style.plus`) and local logic. Therefore, no further method declarations are required to conclude that a null return is possible.
+  ]]></reason>
+  <value>YES</value>
+</response>

@@ -1,0 +1,10 @@
+<response>
+    <reason><![CDATA[
+NullAway’s notion of an initializer method is based on semantics (called by a framework/processor before other methods) and on recognizable naming conventions like `onCreate`, `init`, or `initialize*`. It explicitly excludes setter-style methods.
+
+The method in question is named `Create` (capital C), not `onCreate`, `init*`, or `initialize*`, and does not follow a conventional framework lifecycle signature. While it initializes internal fields and allocates a buffer, by the criteria you gave it is indistinguishable from a regular configuration/mutator method rather than a lifecycle initializer recognized by a framework or annotation processor. It also doesn’t match the “name starts with init or initialize” heuristic that you explicitly allow as a catch-all.
+
+Under the rules you described, it should therefore not be treated as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

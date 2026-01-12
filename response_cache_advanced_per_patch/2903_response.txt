@@ -1,0 +1,15 @@
+<response>
+    <reason><![CDATA[
+Within the provided call chain, every invocation of setSprite(Sprite sprite) passes a non-null Sprite:
+
+- SpriteDrawable(Sprite sprite) calls setSprite(sprite). In the shown usage (e.g., new SpriteDrawable(sprite)), the argument is a freshly constructed Sprite (new Sprite(...) or new AtlasSprite(...)), which cannot be null.
+- SpriteDrawable(SpriteDrawable drawable) calls setSprite(drawable.sprite). All shown construction paths for SpriteDrawable that lead to this constructor also initialize sprite from a non-null Sprite (again created via new Sprite(...) / new AtlasSprite(...)).
+- In Skin.getDrawable(String name), every place where new SpriteDrawable(sprite) is called, sprite is obtained from:
+  - getSprite(name), or
+  - optional(name, Sprite.class),
+  and each call site checks sprite != null before calling new SpriteDrawable(sprite). Thus null is explicitly filtered out.
+
+No other callers are shown that could pass null, and within setSprite itself the parameter is not reassigned or modified before use. Given only this code and call chain, there is no execution path where sprite is null at the point of setSprite being called, so under this context the parameter cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>

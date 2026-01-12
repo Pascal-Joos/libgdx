@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected @Null Drawable getBackgroundDrawable() {
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+    if (disabled && style.disabledBackground != null) return style.disabledBackground;
+    return style.background;
+}
+  ```
+    ]]>
+  </code>
+</response>

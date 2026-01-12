@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefHeight() {
+        Value prefHeightValue = prefHeight != null ? prefHeight : Value.prefHeight;
+        return prefHeightValue.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

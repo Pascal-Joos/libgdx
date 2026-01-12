@@ -1,0 +1,88 @@
+```xml
+<response>
+    <reason><![CDATA[
+Analyze the control flow to see under what conditions the final `return entries2;` is executed and what constraints exist on `entries2` at that point.
+
+Method:
+
+public Entries<K> entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+      entries1 = new Entries(this);
+      entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+      entries1.reset();
+      entries1.valid = true;
+      Nullability.castToNonnull(entries2).valid = false;
+      return entries1;
+    }
+    Nullability.castToNonnull(entries2).reset();
+    Nullability.castToNonnull(entries2).valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+Step-by-step:
+
+1. If `Collections.allocateIterators` is true, the method returns early and never reaches `return entries2;`. So we only care about the case when `Collections.allocateIterators` is false.
+
+2. When `Collections.allocateIterators` is false, control moves to:
+
+   if (entries1 == null) {
+     entries1 = new Entries(this);
+     entries2 = new Entries(this);
+   }
+
+   - If `entries1` is null, both `entries1` and `entries2` are initialized to `new Entries(this)`, which are non-null object creations. After this block, both are non-null.
+
+   - If `entries1` is not null, the `if` block is skipped. However, from the contract implied by this code:
+     - `entries2` is paired with `entries1` and is first initialized exactly in the same block where `entries1` is first initialized.
+     - Therefore, once `entries1` has become non-null at any earlier point in the object’s lifetime, `entries2` must also have been assigned a non-null `Entries` instance in that same block.
+     - There is no code in this method that ever assigns `null` to `entries2`, only a non-null `new Entries(this)` assignment.
+
+   Hence, when execution gets past the `if (entries1 == null)` block, we have:
+   - If `entries1` was null: we have just assigned `entries2 = new Entries(this)` (non-null).
+   - If `entries1` was not null: it was previously made non-null, and at that same time `entries2` was also set to `new Entries(this)` and never changed to null since.
+
+   So at this point, `entries2` is non-null on all feasible paths.
+
+3. Next branch:
+
+   if (!entries1.valid) {
+     entries1.reset();
+     entries1.valid = true;
+     Nullability.castToNonnull(entries2).valid = false;
+     return entries1;
+   }
+
+   - If `!entries1.valid`, we return `entries1` and never reach `return entries2;`.
+   - In this branch, we also see `Nullability.castToNonnull(entries2)` being used. The presence of this call indicates that `entries2` is *assumed* non-null by design at this point; otherwise, this cast utility would be unsafe. This is additional evidence that `entries2` is expected to be non-null wherever this code is used.
+
+4. If we do reach the final part:
+
+   Nullability.castToNonnull(entries2).reset();
+   Nullability.castToNonnull(entries2).valid = true;
+   entries1.valid = false;
+   return entries2;
+
+   - Execution reaches these lines only when:
+     - `Collections.allocateIterators` is false; and
+     - `entries1` is non-null; and
+     - `entries2` has been initialized in lockstep with `entries1` and never set to null; and
+     - `entries1.valid` is true (since we skipped the previous `if (!entries1.valid)` return).
+
+   - Before the final `return entries2;`, `entries2` is dereferenced multiple times:
+     - `Nullability.castToNonnull(entries2).reset();`
+     - `Nullability.castToNonnull(entries2).valid = true;`
+
+     If `entries2` could be null here, these dereferences would risk a `NullPointerException`. The design (and the explicit non-null cast) strongly indicates that `entries2` is guaranteed non-null by construction.
+
+5. No other assignments to `entries2`:
+   - Within this method, the only assignment is `entries2 = new Entries(this);` in the `if (entries1 == null)` block.
+   - There is no evidence in this snippet that `entries2` is ever set to null elsewhere, and the logic depends on it being a stable, reusable iterator object.
+
+Given this, under all code paths that can reach the final `return entries2;`, `entries2` has been initialized to a non-null `Entries` instance and never reset to null. Therefore, the expression `return entries2;` cannot evaluate to null.]]></reason>
+    <value>NO</value>
+</response>
+```

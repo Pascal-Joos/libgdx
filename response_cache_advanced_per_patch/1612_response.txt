@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static Vector2 polygonCentroid(float[] polygon, int offset, int count, Vector2 centroid) {
+    if (count < 6)
+      throw new IllegalArgumentException("A polygon must have 3 or more coordinate pairs.");
+
+    float area = 0, x = 0, y = 0;
+    float[] polygonNonnull = Nullability.castToNonnull(polygon);
+    int last = offset + count - 2;
+    float x1 = polygonNonnull[last], y1 = polygonNonnull[last + 1];
+    for (int i = offset; i <= last; i += 2) {
+      float x2 = polygonNonnull[i], y2 = polygonNonnull[i + 1];
+      float a = x1 * y2 - x2 * y1;
+      area += a;
+      x += (x1 + x2) * a;
+      y += (y1 + y2) * a;
+      x1 = x2;
+      y1 = y2;
+    }
+    if (area == 0) {
+      centroid.x = 0;
+      centroid.y = 0;
+    } else {
+      area *= 0.5f;
+      centroid.x = x / (6 * area);
+      centroid.y = y / (6 * area);
+    }
+    return centroid;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector2 stageToScreenCoordinates(Vector2 stageCoords) {
+      viewport.project(stageCoords);
+      Graphics graphics = Gdx.graphics;
+      if (graphics != null) {
+          stageCoords.y = graphics.getHeight() - stageCoords.y;
+      }
+      return stageCoords;
+  }
+  ```
+    ]]>
+  </code>
+</response>

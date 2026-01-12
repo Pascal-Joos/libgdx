@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void act(float delta) {
+    Array<Action> actions = this.actions;
+    if (actions.size == 0) return;
+    if (stage != null && stage.getActionsRequestRendering() && Gdx.graphics != null) Gdx.graphics.requestRendering();
+    try {
+      for (int i = 0; i < actions.size; i++) {
+        Action action = actions.get(i);
+        if (action.act(delta) && i < actions.size) {
+          Action current = actions.get(i);
+          int actionIndex = current == action ? i : actions.indexOf(action, true);
+          if (actionIndex != -1) {
+            actions.removeIndex(actionIndex);
+            action.setActor(null);
+            i--;
+          }
+        }
+      }
+    } catch (RuntimeException ex) {
+      String context = toString();
+      throw new RuntimeException(
+          "Actor: " + context.substring(0, Math.min(context.length(), 128)), ex);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

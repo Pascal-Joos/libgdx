@@ -1,0 +1,66 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+```
+
+inside `Mesh.scale(float scaleX, float scaleY, float scaleZ)`, the `Mesh` API does not enforce that a `Mesh` must contain a `Usage.Position` attribute.
+
+The implementation of `getVertexAttribute(int usage)`:
+
+```java
+public VertexAttribute getVertexAttribute(int usage) {
+    VertexAttributes attributes = vertices.getAttributes();
+    int len = attributes.size();
+    for (int i = 0; i < len; i++) 
+        if (attributes.get(i).usage == usage) 
+            return attributes.get(i);
+
+    return null;
+}
+```
+
+will explicitly return `null` if no vertex attribute with the given `usage` is present.
+
+From the surrounding code base you provided, the behavior is inconsistent:
+
+- In several places, callers *defensively* check for null before using the attribute:
+
+  ```java
+  if (mesh.getVertexAttribute(Usage.Position) != null)
+      positionOffset = mesh.getVertexAttribute(Usage.Position).offset / FLOAT_BYTES;
+  ```
+
+  and similarly for `Usage.Normal`, `Usage.Tangent`, etc.
+
+- Other callers *assume* a position attribute exists and immediately dereference it:
+
+  ```java
+  final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+  final int offset = posAttr.offset / 4;         // no null check
+  ```
+
+However, there is no guarantee, from the provided code, that all `Mesh` instances passed into `scale` are constructed with a `Usage.Position` attribute:
+
+- `Mesh` can be constructed with arbitrary arrays of `VertexAttribute` (e.g. in `ImmediateModeRenderer20`, it is created from `buildVertexAttributes` which can omit normals or texture coordinates; there is no shown requirement that `Usage.Position` must always be present).
+- Other APIs like `MeshSpawnShapeValue.setMesh` explicitly validate presence of `Usage.Position` and throw if absent:
+
+  ```java
+  if (mesh.getVertexAttribute(Usage.Position) == null)
+      throw new GdxRuntimeException("Mesh vertices must have Usage.Position");
+  ```
+
+  This validation is *not* present in `Mesh.scale`.
+
+Therefore, for a general `Mesh` instance, it is entirely possible for `getVertexAttribute(Usage.Position)` to traverse all attributes and not find one with `usage == Usage.Position`, returning `null`. Since `scale` performs no prior validation or null check, the only logical conclusion from the provided code is:
+
+- At this call site, the method **can** return `null` if the mesh has no position attribute.
+- In that case, `posAttr` would be `null` and subsequent `posAttr.offset` would throw a `NullPointerException`.
+
+No other methods affect whether `getVertexAttribute` returns `null`; it depends only on the contents of `vertices.getAttributes()`, and there is no global invariant in the shown codebase that guarantees `Usage.Position` is always present for every `Mesh` on which `scale` is called.
+
+Thus, the invocation can yield `null` at this specific call site.]]></reason>
+  <value>YES</value>
+</response>

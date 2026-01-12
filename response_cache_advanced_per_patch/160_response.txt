@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private int createBufferObject() {
+      if (Gdx.gl20 == null) return 0;
+      int result = Gdx.gl20.glGenBuffer();
+      Gdx.gl20.glBindBuffer(GL20.GL_ARRAY_BUFFER, result);
+      Gdx.gl20.glBufferData(GL20.GL_ARRAY_BUFFER, byteBuffer.capacity(), null, usage);
+      Gdx.gl20.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
+      return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

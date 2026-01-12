@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public BitmapFont() {
+    if (Gdx.files == null) throw new GdxRuntimeException("Files not initialized");
+    this(
+        Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"),
+        Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.png"),
+        false,
+        true);
+  }
+  ```
+    ]]>
+  </code>
+</response>

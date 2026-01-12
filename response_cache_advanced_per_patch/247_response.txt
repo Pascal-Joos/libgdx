@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static byte[] getFrameBufferPixels(boolean flipY) {
+    if (Gdx.graphics == null) {
+        return new byte[0];
+    }
+    final int w = Gdx.graphics.getBackBufferWidth();
+    final int h = Gdx.graphics.getBackBufferHeight();
+    return getFrameBufferPixels(0, 0, w, h, flipY);
+}
+  ```
+    ]]>
+  </code>
+</response>

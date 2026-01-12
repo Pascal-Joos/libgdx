@@ -1,0 +1,73 @@
+```xml
+<response>
+    <reason><![CDATA[
+Analyze all control-flow paths reaching the line `entries2.reset();`:
+
+Method:
+
+public Entries<K, V> entries() {
+      if (Collections.allocateIterators) return new Entries(this);
+      if (entries1 == null) {
+        entries1 = new Entries(this);
+        entries2 = new Entries(this);
+      }
+      if (!entries1.valid) {
+        entries1.reset();
+        entries1.valid = true;
+        Nullability.castToNonnull(entries2).valid = false;
+        return entries1;
+      }
+      entries2.reset();
+      entries2.valid = true;
+      entries1.valid = false;
+      return entries2;
+}
+
+The line in question (`entries2.reset();`) is executed only after:
+
+1. The early return is skipped:
+   - `if (Collections.allocateIterators) return new Entries(this);`
+   - Therefore, at the point we reach `entries2.reset();` we know `Collections.allocateIterators == false`.
+
+2. The initialization block:
+   - `if (entries1 == null) {`
+       `entries1 = new Entries(this);`
+       `entries2 = new Entries(this);`
+     `}`
+   - There are two possibilities:
+
+   a) `entries1` was initially null:
+      - Then both `entries1` and `entries2` are assigned new `Entries(this)` instances.
+      - After this block, `entries2` is definitely non-null.
+
+   b) `entries1` was initially non-null:
+      - The `if (entries1 == null)` block does not execute.
+      - In practice for this pattern (seen in libraries like libGDX's collections), `entries1` and `entries2` are paired fields created together and never reassigned to null after construction. The method assumes that if `entries1` is already non-null, `entries2` was initialized earlier and has not been set to null.
+      - We see `entries2` dereferenced earlier via `Nullability.castToNonnull(entries2).valid = false;` in the `if (!entries1.valid)` branch, which also indicates the intended contract is that `entries2` is non-null whenever this method is used. There's no code path here that sets `entries2` to null.
+
+3. The choice between branches:
+   - If `!entries1.valid`:
+       `entries1.reset();`
+       `entries1.valid = true;`
+       `Nullability.castToNonnull(entries2).valid = false;`
+       `return entries1;`
+     In this branch, the method returns before `entries2.reset();` is reached.
+   - Only if `entries1.valid` is true do we fall through to:
+       `entries2.reset();`
+       `entries2.valid = true;`
+       `entries1.valid = false;`
+       `return entries2;`
+
+Thus, to reach `entries2.reset();`, both of these hold:
+- The early return based on `Collections.allocateIterators` has not occurred.
+- The function has passed the `if (entries1 == null)` block, which guarantees:
+  - Either it executed and explicitly initialized `entries2` to `new Entries(this)`, or
+  - It did not execute, in which case the code relies on the class invariant that `entries2` was already initialized and never set to null.
+
+No code in the shown method ever assigns `entries2 = null`, and the logic pattern is the classic "two reusable iterator" idiom in which both iterators are allocated once and then reused. Given the contract implied by `Nullability.castToNonnull(entries2)` and the absence of any null-assignments or conditional initialization for `entries2` other than the `entries1 == null` block, `entries2` is effectively guaranteed non-null at the point of `entries2.reset()`.
+
+Therefore, under the assumptions consistent with this method’s design (that `entries2` is a field initialized together with `entries1` and never set to null afterward), the expression `entries2` at `entries2.reset();` cannot be null on any reachable code path.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

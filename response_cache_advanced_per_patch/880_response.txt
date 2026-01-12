@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void render() {
+        if (groupStrategy == null) {
+            return;
+        }
+        Nullability.castToNonnull(groupStrategy).beforeGroups();
+        for (SortedIntList.Node<Array<Decal>> group : groupList) {
+          Nullability.castToNonnull(groupStrategy).beforeGroup(group.index, group.value);
+          ShaderProgram shader = Nullability.castToNonnull(groupStrategy).getGroupShader(group.index);
+          render(shader, group.value);
+          Nullability.castToNonnull(groupStrategy).afterGroup(group.index);
+        }
+        Nullability.castToNonnull(groupStrategy).afterGroups();
+  }
+  ```
+    ]]>
+  </code>
+</response>

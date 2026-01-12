@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean keyDown( InputEvent event, int keycode) {
+              switch (keycode) {
+                case Keys.NUMPAD_ENTER:
+                case Keys.ENTER:
+                  selectBox.selection.choose(list.getSelected());
+                  // Fall thru.
+                case Keys.ESCAPE:
+                  hide();
+                  Nullability.castToNonnull(event).stop();
+                  return true;
+              }
+              return false;
+}
+  ```
+    ]]>
+  </code>
+</response>

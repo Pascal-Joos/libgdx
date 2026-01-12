@@ -1,0 +1,49 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void consumeCustomData(int target) {
+        if (!isPrepared)
+          throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
+    
+        if (data == null)
+          throw new GdxRuntimeException("ETC1Data must not be null before calling consumeCustomData()");
+    
+        if (!Gdx.graphics.supportsExtension("GL_OES_compressed_ETC1_RGB8_texture")) {
+          Pixmap pixmap = ETC1.decodeImage(data, Format.RGB565);
+          Gdx.gl.glTexImage2D(
+              target,
+              0,
+              pixmap.getGLInternalFormat(),
+              pixmap.getWidth(),
+              pixmap.getHeight(),
+              0,
+              pixmap.getGLFormat(),
+              pixmap.getGLType(),
+              pixmap.getPixels());
+          if (useMipMaps)
+            MipMapGenerator.generateMipMap(target, pixmap, pixmap.getWidth(), pixmap.getHeight());
+          pixmap.dispose();
+          useMipMaps = false;
+        } else {
+          final ETC1Data localData = data;
+          Gdx.gl.glCompressedTexImage2D(
+              target,
+              0,
+              ETC1.ETC1_RGB8_OES,
+              width,
+              height,
+              0,
+              localData.compressedData.capacity() - localData.dataOffset,
+              localData.compressedData);
+          if (useMipMaps()) Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_2D);
+        }
+        if (data != null) data.dispose();
+        data = null;
+        isPrepared = false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static int getNumManagedTextureArrays() {
+    return Nullability.castToNonnull(managedTextureArrays.get(Gdx.app)).size;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,23 @@
+<response>
+    <reason><![CDATA[
+Within this method, the only relevant control-flow guard is:
+
+    if (style == null || style.handle == null) return;
+
+If execution reaches the line:
+
+    float availableHeight = getHeight() - Nullability.castToNonnull(style).handle.getMinHeight();
+
+then the method has not returned, which implies that the condition `(style == null || style.handle == null)` was false. Therefore:
+
+- `style != null`
+- `style.handle != null`
+
+The use of `Nullability.castToNonnull(style)` is consistent with that control flow: it is invoked only after `style` has been checked for null and found non-null. No other assignments to `style` occur in the method, and no intervening calls can modify `style` in a way that would make it null (it’s just being read).
+
+Under the standard assumptions for Java code (no data races or external mutation of `style` to null between the check and the use, and no use of `sun.misc.Unsafe`-like tricks), `style` cannot be null at that expression.
+
+Thus, on all normal code paths that reach the line in question, `style` is guaranteed non-null.
+    ]]></reason>
+    <value>NO</value>
+</response>

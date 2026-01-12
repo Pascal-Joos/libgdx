@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void checkValidBuilder() {
+        if (bufferBuilder == null) return;
+    
+        boolean runningGL30 = Gdx.graphics.isGL30Available();
+    
+        if (!runningGL30) {
+          if (Nullability.castToNonnull(bufferBuilder).hasPackedStencilDepthRenderBuffer) {
+            throw new GdxRuntimeException(
+                "Packed Stencil/Render render buffers are not available on GLES 2.0");
+          }
+          if (Nullability.castToNonnull(bufferBuilder).textureAttachmentSpecs.size > 1) {
+            throw new GdxRuntimeException("Multiple render targets not available on GLES 2.0");
+          }
+          for (FrameBufferTextureAttachmentSpec spec : Nullability.castToNonnull(bufferBuilder).textureAttachmentSpecs) {
+            if (spec.isDepth)
+              throw new GdxRuntimeException(
+                  "Depth texture FrameBuffer Attachment not available on GLES 2.0");
+            if (spec.isStencil)
+              throw new GdxRuntimeException(
+                  "Stencil texture FrameBuffer Attachment not available on GLES 2.0");
+            if (spec.isFloat) {
+              if (!Gdx.graphics.supportsExtension("OES_texture_float")) {
+                throw new GdxRuntimeException(
+                    "Float texture FrameBuffer Attachment not available on GLES 2.0");
+              }
+            }
+          }
+        }
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getHeight() {
+      return bufferBuilder != null ? bufferBuilder.height : 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

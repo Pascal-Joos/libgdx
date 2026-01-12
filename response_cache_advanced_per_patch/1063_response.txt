@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+    @Override
+    public void allocateChannels() {
+      super.allocateChannels();
+      // Hack this allows to share the channel descriptor structure but using a different id
+      // temporary
+      if (controller != null) {
+        ParticleChannels.Interpolation.id = controller.particleChannels.newId();
+        alphaInterpolationChannel = controller.particles.addChannel(ParticleChannels.Interpolation);
+        lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
+      }
+    }
+  ```
+    ]]>
+  </code>
+</response>

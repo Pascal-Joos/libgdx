@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void getBoundingBox(ObjectSet<BoundingBox> bounds) {
+          if (!leaf && children != null) {
+            for (Octree.OctreeNode node : Nullability.castToNonnull(children)) {
+              node.getBoundingBox(bounds);
+            }
+          }
+          bounds.add(this.bounds);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,44 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean touchDown(float x, float y, int pointer, int button) {
+    if (pointer > 1) return false;
+
+    if (pointer == 0) {
+      pointer1.set(x, y);
+      Input input = Gdx.input;
+      if (input == null) return false;
+      touchDownTime = input.getCurrentEventTime();
+      tracker.start(x, y, touchDownTime);
+      if (input.isTouched(1)) {
+        // Start pinch.
+        inTapRectangle = false;
+        pinching = true;
+        initialPointer1.set(pointer1);
+        initialPointer2.set(pointer2);
+        longPressTask.cancel();
+      } else {
+        // Normal touch down.
+        inTapRectangle = true;
+        pinching = false;
+        longPressFired = false;
+        tapRectangleCenterX = x;
+        tapRectangleCenterY = y;
+        if (!longPressTask.isScheduled()) Timer.schedule(longPressTask, longPressSeconds);
+      }
+    } else {
+      // Start pinch.
+      pointer2.set(x, y);
+      inTapRectangle = false;
+      pinching = true;
+      initialPointer1.set(pointer1);
+      initialPointer2.set(pointer2);
+      longPressTask.cancel();
+    }
+    return listener.touchDown(x, y, pointer, button);
+}
+  ```
+    ]]>
+  </code>
+</response>

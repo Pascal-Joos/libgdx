@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Inside the inner loop, the expression `data.controller` is evaluated only for `data` elements that have already passed the preceding null check:
+
+    for (ModelInstanceControllerRenderData data : controllersRenderData) {
+        if (data.controller == null) continue;
+        for (int i = 0, count = data.controller.particles.size; i < count; ++i) {
+            ...
+        }
+    }
+
+The `continue` statement ensures that, for any iteration where `data.controller` is null, control flow skips the inner loop entirely. Therefore, on every execution of:
+
+    data.controller.particles.size
+
+the `data.controller` reference is guaranteed to be non-null along that control path.
+
+Barring external interference (such as reflection or concurrent mutation that sets `data.controller` to null between the `if` check and the inner loop, which is not indicated here), `data.controller` cannot be null when accessed in the inner loop.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

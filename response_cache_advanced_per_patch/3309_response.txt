@@ -1,0 +1,56 @@
+<response>
+  <reason><![CDATA[
+Analyze each return path:
+
+1. First branch:
+   ```java
+   if (Collections.allocateIterators) return new Entries(this);
+   ```
+   `new Entries(this)` creates a new object; the `new` operator in Java never yields `null`. This path is guaranteed non-null.
+
+2. Initialization branch:
+   ```java
+   if (entries1 == null) {
+     entries1 = new Entries(this);
+     entries2 = new Entries(this);
+   }
+   ```
+   If `entries1` was `null`, it is initialized here, and so is `entries2`. After this block executes:
+   - `entries1 != null`
+   - `entries2 != null`
+   If `entries1` was not `null`, this block is skipped, but that implies `entries1` was already non-null from previous initialization code (there is no assignment of `null` to `entries1` in this method). `entries2` is assigned at the same time as `entries1` in the only initialization block; thus once `entries1` is non-null, `entries2` must also be non-null.
+
+3. Second conditional and return:
+   ```java
+   if (!entries1.valid) {
+     entries1.reset();
+     entries1.valid = true;
+     Nullability.castToNonnull(entries2).valid = false;
+     return entries1;
+   }
+   ```
+   At this point in control flow, `entries1` is guaranteed non-null:
+   - Either just assigned via `entries1 = new Entries(this);`, or
+   - Previously initialized and never set to `null` here.
+   Therefore, `return entries1;` cannot return `null`.
+
+   The call `Nullability.castToNonnull(entries2)` does not affect the returned value. Even if `entries2` were `null` and `castToNonnull` misbehaved, that would cause an exception, not a `null` return. Also, as argued above, under normal flow `entries2` is non-null once `entries1` is non-null.
+
+4. Final return path:
+   ```java
+   Nullability.castToNonnull(entries2).reset();
+   Nullability.castToNonnull(entries2).valid = true;
+   entries1.valid = false;
+   return entries2;
+   ```
+   This executes only if the previous `if (!entries1.valid)` condition is false, meaning we still have:
+   - `entries1 != null` (same reasoning as above),
+   - `entries2 != null` for the same coupled-initialization reason.
+
+   Here too, the `Nullability.castToNonnull(entries2)` calls operate on an already non-null `entries2`. The returned value is the field `entries2`, which cannot be `null` under the method’s logic.
+
+There are no other paths (no loops, no early `return null`, and no assignments of `null` to `entries1` or `entries2`). Any misuse of `Nullability.castToNonnull` or `entriesX` fields would result in an exception (e.g., `NullPointerException`), not a `null` return value.
+
+Therefore, based solely on this method body and standard Java semantics of `new`, this method cannot return `null` on any execution path.]]></reason>
+  <value>NO</value>
+</response>

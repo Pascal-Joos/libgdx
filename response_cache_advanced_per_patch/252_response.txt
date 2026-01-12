@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static int toLogicalX(int backBufferX) {
+    Graphics graphics = Gdx.graphics;
+    if (graphics == null) {
+        return backBufferX;
+    }
+    return (int)
+        (backBufferX * graphics.getWidth() / (float) graphics.getBackBufferWidth());
+}
+  ```
+    ]]>
+  </code>
+</response>

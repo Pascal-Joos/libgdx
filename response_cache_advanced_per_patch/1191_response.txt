@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name follows the JavaBeans setter convention (`setX`), and its behavior is to assign a passed-in value to a single field (and forward it), which is characteristic of a setter. Your criteria explicitly exclude setter methods from being treated as initializer methods, and the name does not match the allowed initializer patterns (`onCreate`, names starting with `init` or `initialize`). Therefore, it should not be considered an initializer method for NullAway purposes.]]></reason>
+    <value>NO</value>
+</response>

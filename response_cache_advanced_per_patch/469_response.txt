@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void transformUV(final Matrix3 matrix, final int start, final int count) {
+    final VertexAttribute posAttr = getVertexAttribute(Usage.TextureCoordinates);
+    if (posAttr == null)
+      return;
+    final int offset = posAttr.offset / 4;
+    final int vertexSize = getVertexSize() / 4;
+    final int numVertices = getNumVertices();
+
+    final float[] vertices = new float[numVertices * vertexSize];
+    // TODO: getVertices(vertices, start * vertexSize, count * vertexSize);
+    getVertices(0, vertices.length, vertices);
+    transformUV(matrix, vertices, vertexSize, offset, start, count);
+    setVertices(vertices, 0, vertices.length);
+    // TODO: setVertices(start * vertexSize, vertices, 0, vertices.length);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void begin() {
+        if (target == null) return;
+        startX = Nullability.castToNonnull(target).getScaleX();
+        startY = Nullability.castToNonnull(target).getScaleY();
+}
+  ```
+    ]]>
+  </code>
+</response>

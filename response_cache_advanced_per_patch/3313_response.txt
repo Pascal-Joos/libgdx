@@ -1,0 +1,61 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are analyzing the expression:
+
+    ((ObjectMap<?, ?>) value).entries()
+
+used in:
+
+    if (value instanceof ObjectMap) {
+        if (knownType == null) knownType = ObjectMap.class;
+        writeObjectStart(actualType, knownType);
+        for (Entry entry : ((ObjectMap<?, ?>) value).entries()) {
+          writer.name(convertToString(entry.key));
+          writeValue(entry.value, elementType, null);
+        }
+        writeObjectEnd();
+        return;
+    }
+
+To determine if `((ObjectMap<?, ?>) value).entries()` can be null, we must consider:
+
+1. **Control flow and nullability of `value`**  
+   - At the top of the method:
+     ```java
+     if (value == null) {
+       writer.value(null);
+       return;
+     }
+     ```
+     After this point, `value` is guaranteed non-null.
+   - The `ObjectMap` block is guarded by:
+     ```java
+     if (value instanceof ObjectMap) {
+     ```
+     Therefore inside that block, `value` is a non-null `ObjectMap<?, ?>`.
+
+   So the cast `((ObjectMap<?, ?>) value)` itself is never null.
+
+2. **Whether `ObjectMap.entries()` can return null**  
+   This depends entirely on the contract and implementation of `ObjectMap.entries()`.
+
+   In the context of libGDX (which this code strongly resembles: `ObjectMap`, `ObjectIntMap`, `IntMap`, `ArrayMap`, etc.), `ObjectMap` is `com.badlogic.gdx.utils.ObjectMap`. In that implementation:
+   - `public Entries<K, V> entries()` returns an `Entries<K, V>` iterator object, not `null`.
+   - It internally reuses a single `Entries` instance (for performance), resets it, and returns it. The method never returns `null`; even for an empty map, you get a non-null `Entries` whose iterator simply has no elements.
+
+   The surrounding code is consistent with this design: the same pattern is used for `ObjectIntMap.entries()`, `ObjectFloatMap.entries()`, `IntMap.entries()`, and `LongMap.entries()`. In libGDX these `entries()` methods likewise always return non-null iterables.
+
+3. **Other code paths**  
+   - There is no reassignment to `value` between the `instanceof ObjectMap` check and the `entries()` call.
+   - There is no intermediate variable that could inject null.
+   - The only way for `((ObjectMap<?, ?>) value).entries()` to be null would be if `entries()` itself sometimes returns null. That would contradict the documented and observed behavior of libGDX collections, where `entries()` always returns an iterable object (often reusing an internal instance) and is not documented as nullable.
+
+Given the established behavior of libGDX’s `ObjectMap` and the method’s own null checks, there is no feasible code path under which `((ObjectMap<?, ?>) value).entries()` is null.
+
+Therefore, the expression cannot be null under the assumed `ObjectMap` implementation (libGDX-style) and standard usage.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void afterGroup(int group) {
+    if (group == GROUP_BLEND && Gdx.gl != null) {
+      Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

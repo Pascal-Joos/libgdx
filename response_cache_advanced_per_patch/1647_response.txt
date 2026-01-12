@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder content(String content) {
+      validate();
+      httpRequest.setContent(content);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

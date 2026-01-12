@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder basicAuthentication(String username, String password) {
+      validate();
+      HttpRequest localHttpRequest = httpRequest;
+      localHttpRequest.setHeader(
+          HttpRequestHeader.Authorization,
+          "Basic " + Base64Coder.encodeString(username + ":" + password));
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SaveData getSaveData() {
+      if (data == null) {
+          data = new Array<SaveData>(true, 3, SaveData.class);
+      }
+      return data.get(currentLoadIndex++);
+  }
+  ```
+    ]]>
+  </code>
+</response>

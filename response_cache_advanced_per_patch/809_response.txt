@@ -1,0 +1,23 @@
+<response>
+    <reason><![CDATA[
+Based on the criteria you described, initializer methods are typically:
+
+1. Known lifecycle/setup methods (e.g., onCreate, init) that frameworks/annotation processors guarantee are called before other methods, **or**
+2. Methods whose names start with "init" or "initialize" and are not setters.
+
+Your method:
+
+```java
+@Initializer
+public MeshPart set(final MeshPart other) { ... }
+```
+
+- Is named `set`, which is conventionally a setter-style name.
+- Does not start with "init" or "initialize".
+- Is not a well-known framework lifecycle method like `onCreate` or `init`.
+- Semantically behaves like a bulk setter/copy method.
+
+Given your explicit desire to *not* treat setter-like methods as initializer methods, this method should **not** be considered an initializer method for NullAway’s purposes, even though it initializes fields and is annotated `@Initializer`.
+    ]]></reason>
+    <value>NO</value>
+</response>

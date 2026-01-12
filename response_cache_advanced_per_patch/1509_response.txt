@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name (getDependencies) does not start with "init" or "initialize", is not one of the known framework lifecycle/initializer methods listed (e.g., Activity.onCreate, Processor.init, Servlet.init), and is semantically a query-like method returning dependencies rather than a dedicated setup/lifecycle initializer. Even though it assigns to a field (this.root), it is conceptually a normal business-logic method and would not be treated by NullAway as an initializer method under the described conventions.]]></reason>
+    <value>NO</value>
+</response>

@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void draw(Batch batch, float parentAlpha) {
+    validate();
+
+    Drawable background = getBackgroundDrawable();
+    Color fontColor = getFontColor();
+    BitmapFont font = style.font;
+    if (font == null) return;
+
+    Color color = getColor();
+    float x = getX(), y = getY();
+    float width = getWidth(), height = getHeight();
+
+    batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+    if (background != null) background.draw(batch, x, y, width, height);
+
+    T selected = selection.first();
+    if (selected != null) {
+      if (background != null) {
+        width -= background.getLeftWidth() + background.getRightWidth();
+        height -= background.getBottomHeight() + background.getTopHeight();
+        x += background.getLeftWidth();
+        y += (int) (height / 2 + background.getBottomHeight() + font.getData().capHeight / 2);
+      } else {
+        y += (int) (height / 2 + font.getData().capHeight / 2);
+      }
+      font.setColor(fontColor.r, fontColor.g, fontColor.b, fontColor.a * parentAlpha);
+      drawItem(batch, font, selected, x, y, width);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

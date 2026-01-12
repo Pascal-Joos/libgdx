@@ -1,0 +1,33 @@
+<response>
+  <reason><![CDATA[
+The implementation of `findByUsage(int usage)` clearly allows returning `null` when no `VertexAttribute` with the matching `usage` is found:
+
+```java
+public VertexAttribute findByUsage(int usage) {
+    int len = size();
+    for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
+    return null;
+}
+```
+
+At the specific call site in `MeshBuilder.begin(VertexAttributes attributes, int primitiveType)`:
+
+```java
+a = attributes.findByUsage(Usage.ColorUnpacked);
+colOffset = a == null ? -1 : a.offset / 4;
+colSize = a == null ? 0 : a.numComponents;
+```
+
+the code explicitly checks `a == null` and assigns `-1`/`0` if it is null. This confirms that:
+- The library author expects `findByUsage(Usage.ColorUnpacked)` to sometimes return `null`.
+- There is no preceding check or guarantee in `begin(...)` that the passed `VertexAttributes` must contain a `ColorUnpacked` attribute. The only hard requirement enforced by exception is the presence of `Usage.Position`; all other usages (`Normal`, `BiNormal`, `Tangent`, `ColorUnpacked`, `ColorPacked`, `TextureCoordinates`) are treated as optional and are null-checked accordingly.
+
+Since we have no additional constraints on `CPU_ATTRIBUTES` indicating that it must always include a `ColorUnpacked` attribute, and the method’s logic itself returns `null` when there is no such attribute, the specific invocation
+
+```java
+CPU_ATTRIBUTES.findByUsage(Usage.ColorUnpacked)
+```
+
+can evaluate to `null` whenever `CPU_ATTRIBUTES` does not contain a vertex attribute whose `usage` field equals `Usage.ColorUnpacked`. The provided code explicitly handles and relies on that possibility.]]></reason>
+  <value>YES</value>
+</response>

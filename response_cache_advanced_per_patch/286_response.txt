@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static void calculateScissors(
+      Camera camera, Matrix4 batchTransform, Rectangle area, Rectangle scissor) {
+    Graphics graphics = Gdx.graphics;
+    if (graphics == null) {
+      return;
+    }
+    calculateScissors(
+        camera,
+        0,
+        0,
+        graphics.getWidth(),
+        graphics.getHeight(),
+        batchTransform,
+        area,
+        scissor);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void changed(ChangeEvent event, Actor actor) {
+            if (!values.containsKey(actor)) return;
+            while (Nullability.castToNonnull(actor).getParent() != buttonTable) actor = Nullability.castToNonnull(actor).getParent();
+            result(values.get(actor));
+            if (!cancelHide) hide();
+            cancelHide = false;
+}
+  ```
+    ]]>
+  </code>
+</response>

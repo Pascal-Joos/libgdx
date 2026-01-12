@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  protected void reload() {
+    if (!isManaged()) throw new GdxRuntimeException("Tried to reload unmanaged Texture");
+    if (data == null) throw new GdxRuntimeException("Tried to reload Texture with null data");
+    glHandle = Gdx.gl.glGenTexture();
+    load(data);
+  }
+  ```
+    ]]>
+  </code>
+</response>

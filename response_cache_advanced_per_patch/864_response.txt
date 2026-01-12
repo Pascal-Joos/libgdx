@@ -1,0 +1,35 @@
+<response>
+  <reason><![CDATA[
+The call site is:
+
+```java
+Node copy, node = model.getNode(nodeId, recursive);
+```
+
+This invokes:
+
+```java
+public Node getNode(final String id, boolean recursive) {
+    return getNode(id, recursive, false);
+}
+```
+
+The return value entirely depends on the (overloaded) method:
+
+```java
+getNode(id, recursive, false)
+```
+
+However, the declaration/implementation of `getNode(String, boolean, boolean)` is not provided in the supplied code. That implementation determines whether a `Node` is found for the given `id` and whether `null` is returned when no matching node exists.
+
+Because:
+- We are instructed not to assume behavior of other methods without their declarations, and
+- The nullability of this call is wholly dependent on `getNode(String, boolean, boolean)`,
+
+we cannot confidently conclude whether `model.getNode(nodeId, recursive)` can or cannot return null at this call site without seeing that method’s implementation.
+  ]]></reason>
+  <success>false</success>
+  <methods>
+    <method>getNode</method>
+  </methods>
+</response>

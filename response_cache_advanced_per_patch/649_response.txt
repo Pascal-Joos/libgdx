@@ -1,0 +1,128 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the receiver of the call:
+
+    values.add(entryValues);
+
+Specifically, we are asking whether `values` can be null at that point.
+
+1. Declaration and initialization:
+   At the start of the "Page and region entries" section, we have:
+   
+       Page page = null;
+       Array<Object> names = null, values = null;
+
+   So initially, `values` is indeed null.
+
+2. Control flow to the `values.add(...)` call:
+   The relevant part of the loop is:
+
+       } else {
+         Region region = new Region();
+         region.page = page;
+         region.name = line.trim();
+         if (flip) region.flip = true;
+         while (true) {
+           int count = readEntry(entry, line = reader.readLine());
+           if (count == 0) break;
+           Field field = regionFields.get(entry[0]);
+           if (field != null) field.parse(region);
+           else {
+             if (names == null) {
+               names = new Array(8);
+               values = new Array(8);
+             }
+             names.add(entry[0]);
+             int[] entryValues = new int[count];
+             for (int i = 0; i < count; i++) {
+               try {
+                 entryValues[i] = Integer.parseInt(entry[i + 1]);
+               } catch (NumberFormatException ignored) {
+               }
+             }
+             values.add(entryValues);
+           }
+         }
+
+   The only place `values` is assigned a non-null value is inside:
+
+       if (names == null) {
+         names = new Array(8);
+         values = new Array(8);
+       }
+
+3. Necessity of passing that `if`:
+   The `values.add(entryValues);` call is executed only in the same `else` block where the `if (names == null)` check appears:
+
+       else {
+         if (names == null) {
+           names = new Array(8);
+           values = new Array(8);
+         }
+         ...
+         values.add(entryValues);
+       }
+
+   Execution inside this `else` implies we are in the body of the same `else` block for this iteration. There are two possibilities:
+
+   - Case A: `names` is null entering this block.
+     Then the `if (names == null)` condition is true. Both `names` and `values` are initialized to new `Array(8)` instances before any use, so `values` is guaranteed non-null when `values.add(entryValues)` is executed.
+
+   - Case B: `names` is non-null entering this block.
+     In prior iterations of this same `else` block, we must already have executed `if (names == null) { ... }` once (because `names` starts as null when a new `Region` begins). That first time would have initialized both `names` and `values`. Since there is no code that ever assigns `values = null` afterward, `values` remains non-null for all subsequent iterations. Thus in this case, `values` is also guaranteed non-null when `values.add(entryValues)` is reached.
+
+4. No other assignments to `values`:
+   Outside that `if (names == null)` block, `values` is never reassigned, only used:
+
+       values.add(entryValues);
+       ...
+       if (names != null && names.size > 0) {
+         region.names = names.toArray(String.class);
+         region.values = values.toArray(int[].class);
+         names.clear();
+         values.clear();
+       }
+
+   `values.clear()` does not set the reference to null; it only empties the underlying collection. The `Array` instance itself remains non-null.
+
+5. Interaction across regions:
+   `names` and `values` are declared outside the region-processing `else` but inside the outer `while(true)` that processes pages/regions:
+
+       Array<Object> names = null, values = null;
+       while (true) {
+         ...
+         } else { // Region block
+             Region region = new Region();
+             ...
+             while (true) {
+                 ...
+             }
+             if (names != null && names.size > 0) {
+               region.names = names.toArray(String.class);
+               region.values = values.toArray(int[].class);
+               names.clear();
+               values.clear();
+             }
+             regions.add(region);
+         }
+       }
+
+   For the very first region that hits the custom-field `else`:
+
+   - `names` and `values` are initially null.
+   - `if (names == null)` will run, initializing both.
+   - Then `values.add(entryValues)` runs safely.
+
+   For subsequent regions:
+
+   - `names` and `values` remain non-null (only cleared, not reset to null).
+   - So even the first custom field for each new region sees `names != null`, and hence `values` is guaranteed to be already initialized.
+
+   There is no code that resets `names` or `values` to null between regions or pages.
+
+Conclusion: On all control-flow paths that reach `values.add(entryValues);`, `values` has been initialized to a non-null `new Array(8)`, and there are no subsequent assignments that could make it null again. Therefore, at that line, `values` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

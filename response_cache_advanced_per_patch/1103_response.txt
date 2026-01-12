@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean isComplete() {
+    if (delayTimer < delay) return false;
+    return controller != null && durationTimer >= duration && controller.particles.size == 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

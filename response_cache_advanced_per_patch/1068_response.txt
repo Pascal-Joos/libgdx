@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void init() {
+      if (controller != null) {
+        Model first = models.first();
+        for (int i = 0, c = controller.emitter.maxParticleCount; i < c; ++i) {
+          modelChannel.data[i] = new ModelInstance(first);
+        }
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

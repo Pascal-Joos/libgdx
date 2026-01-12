@@ -1,0 +1,39 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void flush() {
+      if (vertexIndex == 0) return;
+  
+      renderCalls++;
+      totalRenderCalls++;
+      int trianglesInBatch = triangleIndex;
+      if (trianglesInBatch > maxTrianglesInBatch) maxTrianglesInBatch = trianglesInBatch;
+  
+      lastTexture.bind();
+      Mesh mesh = this.mesh;
+      mesh.setVertices(vertices, 0, vertexIndex);
+      mesh.setIndices(triangles, 0, trianglesInBatch);
+      GL20 gl = Gdx.gl;
+      if (blendingDisabled) {
+        if (gl != null) gl.glDisable(GL20.GL_BLEND);
+      } else {
+        if (gl != null) {
+          gl.glEnable(GL20.GL_BLEND);
+          if (blendSrcFunc != -1)
+            gl.glBlendFuncSeparate(
+                blendSrcFunc, blendDstFunc, blendSrcFuncAlpha, blendDstFuncAlpha);
+        }
+      }
+  
+      mesh.render(
+          customShader != null ? customShader : shader, GL20.GL_TRIANGLES, 0, trianglesInBatch);
+  
+      vertexIndex = 0;
+      triangleIndex = 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

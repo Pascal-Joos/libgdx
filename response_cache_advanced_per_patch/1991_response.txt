@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMaxWidth() {
+      if (maxWidth == null) return 0f;
+      return maxWidth.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

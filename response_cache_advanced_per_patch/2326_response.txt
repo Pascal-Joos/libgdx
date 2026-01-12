@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMinHeight() {
+      return minHeight.get(Nullability.castToNonnull(actor)) + padTop.get(this) + padBottom.get(this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

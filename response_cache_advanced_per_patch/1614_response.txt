@@ -1,0 +1,46 @@
+<response>
+  <reason><![CDATA[
+Within Polygon.getTransformedVertices():
+
+1. There are only two return points:
+   - `if (!dirty) return worldVertices;`
+   - `return worldVertices;` at the end of the method.
+
+2. In the "dirty" branch (the one that executes when `dirty == true`):
+   - `localVertices` is obtained from `this.localVertices`.
+   - If `worldVertices` is `null` or has the wrong length, it is *always* reassigned to a new array:
+     ```java
+     if (worldVertices == null || worldVertices.length != localVertices.length)
+       worldVertices = new float[localVertices.length];
+     ```
+   - Immediately after this, a final reference is taken:
+     ```java
+     final float[] worldVertices = this.worldVertices;
+     ```
+     At this point, `this.worldVertices` is guaranteed non‑null because:
+       - if it was null, it was just set to `new float[localVertices.length]`;
+       - if it was non‑null and same length, it stays that way.
+   - The for-loop writes into this array, but never sets it to null.
+   - The method returns this non‑null `worldVertices`.
+
+3. In the "!dirty" branch (the early return `if (!dirty) return worldVertices;`):
+   - This can only be taken after some previous call has executed the "dirty" branch at least once or `worldVertices` was initialized elsewhere in the constructor or setters.
+   - However, even if you consider the worst case (no constructor guarantees), the *first* time `getTransformedVertices()` is called in practice for a Polygon that can be meaningfully used (e.g., in the shown call sites) it will need to transform vertices. That implies:
+       - The polygon must have been constructed with a vertices array, which sets `localVertices` and typically sets `dirty = true`.
+       - The first call sees `dirty == true`, goes through the branch that allocates `worldVertices`, and returns a non‑null array.
+     After that, future calls with `dirty == false` return the same non‑null array.
+
+4. For this specific call site:
+   ```java
+   final float[] vertices = getTransformedVertices();
+   ```
+   appearing in the Polygon class and in Intersector methods:
+   - These are normal uses on a Polygon that has been created with vertices and used in geometry operations (intersection, containment, etc.).
+   - Those operations require a valid vertex array; a Polygon without vertices is still handled by having `localVertices.length == 0`, in which case:
+       - `worldVertices = new float[0];` is allocated.
+       - The method still returns a non‑null (though possibly zero‑length) array.
+   - No code path in this method sets `worldVertices` to null, and every path returning after a transformation guarantees an allocated array (including the zero‑length case).
+
+Therefore, at this call site, `getTransformedVertices()` will always return a non‑null float array (possibly length 0), and cannot return null.]]></reason>
+  <value>NO</value>
+</response>

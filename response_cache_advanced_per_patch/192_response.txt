@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setUniform4fv(String name, float[] values, int offset, int length) {
+      if (Gdx.gl20 == null) return;
+      GL20 gl = Gdx.gl20;
+      checkManaged();
+      int location = fetchUniformLocation(name);
+      gl.glUniform4fv(location, length / 4, values, offset);
+  }
+  ```
+    ]]>
+  </code>
+</response>

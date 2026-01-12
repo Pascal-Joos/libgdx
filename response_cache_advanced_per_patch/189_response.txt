@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void dispose() {
+    if (Gdx.gl20 == null) return;
+    GL20 gl = Gdx.gl20;
+    gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
+    gl.glDeleteBuffer(bufferHandle);
+    bufferHandle = 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

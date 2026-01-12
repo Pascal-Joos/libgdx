@@ -1,0 +1,43 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void clampSplitAmount() {
+      float effectiveMinAmount = minAmount, effectiveMaxAmount = maxAmount;
+  
+      if (vertical) {
+        Drawable handle = style.handle;
+        float availableHeight = getHeight() - handle.getMinHeight();
+        if (firstWidget instanceof Layout)
+          effectiveMinAmount =
+              Math.max(
+                  effectiveMinAmount,
+                  Math.min(((Layout) firstWidget).getMinHeight() / availableHeight, 1));
+        if (secondWidget instanceof Layout)
+          effectiveMaxAmount =
+              Math.min(
+                  effectiveMaxAmount,
+                  1 - Math.min(((Layout) secondWidget).getMinHeight() / availableHeight, 1));
+      } else {
+        Drawable handle = style.handle;
+        float availableWidth = getWidth() - handle.getMinWidth();
+        if (firstWidget instanceof Layout)
+          effectiveMinAmount =
+              Math.max(
+                  effectiveMinAmount,
+                  Math.min(((Layout) firstWidget).getMinWidth() / availableWidth, 1));
+        if (secondWidget instanceof Layout)
+          effectiveMaxAmount =
+              Math.min(
+                  effectiveMaxAmount,
+                  1 - Math.min(((Layout) secondWidget).getMinWidth() / availableWidth, 1));
+      }
+  
+      if (effectiveMinAmount > effectiveMaxAmount) // Locked handle. Average the position.
+      splitAmount = 0.5f * (effectiveMinAmount + effectiveMaxAmount);
+      else splitAmount = Math.max(Math.min(splitAmount, effectiveMaxAmount), effectiveMinAmount);
+}
+  ```
+    ]]>
+  </code>
+</response>

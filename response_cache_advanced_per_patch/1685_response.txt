@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public OutputStream getOutputStream() {
+        if (socket == null) {
+          throw new GdxRuntimeException("Socket is not connected.");
+        }
+        try {
+          return Nullability.castToNonnull(socket).getOutputStream();
+        } catch (Exception e) {
+          throw new GdxRuntimeException("Error getting output stream from socket.", e);
+        }
+  }
+  ```
+    ]]>
+  </code>
+</response>

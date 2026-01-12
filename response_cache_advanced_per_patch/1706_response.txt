@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean act(float delta) {
+      if (!removed) {
+        removed = true;
+        if (target != null) target.remove();
+      }
+      return true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

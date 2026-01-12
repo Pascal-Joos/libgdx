@@ -1,0 +1,31 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone:
+
+public HttpRequestBuilder content(InputStream contentStream, long contentLength) {
+    validate();
+    httpRequest.setContent(contentStream, contentLength);
+    return this;
+}
+
+we cannot determine how `httpRequest` is initialized or whether `validate()` guarantees that `httpRequest` is non-null (e.g., by assigning it, checking it, or throwing if it is null).
+
+Key missing information:
+- Where and how `httpRequest` is declared and initialized (constructor, field initializer, setter, etc.).
+- The implementation/contract of `validate()` (does it ensure that `httpRequest` is non-null or throw otherwise?).
+- Any class invariants or external guarantees that `httpRequest` is always set before `content()` is called.
+
+Without this, both scenarios are possible:
+- If `httpRequest` is always initialized (e.g., in the constructor) and never set to null afterward, then it cannot be null here.
+- If `httpRequest` can be left uninitialized or set to null, and `validate()` does not prevent that, then it can be null here.
+
+Because the necessary surrounding context is not provided, it is not possible to soundly conclude whether `httpRequest` can or cannot be null at this line.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how the field `httpRequest` is declared and initialized in this class (including constructors and any setters).]]></request>
+        <request><![CDATA[Provide the implementation or contract of the `validate()` method that is called before `httpRequest.setContent(...)`.]]></request>
+    </requests>
+</response>
+```

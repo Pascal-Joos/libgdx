@@ -1,0 +1,51 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the line
+
+    int curMatch = Nullability.castToNonnull(_hash)[kFixHashSize + hashValue];
+
+the expression being asked about is `_hash`. The question is whether `_hash` can be null at that point in the method `Skip`.
+
+1. **Direct null checks in this method**
+
+   At the very start of `Skip`:
+
+   ```java
+   public void Skip(int num) throws IOException {
+     if (_hash == null) return;
+     if (_hashSizeSum == 0) return;
+     ...
+   ```
+
+   The method returns immediately if `_hash == null`. Therefore, along any execution path that reaches the line using `_hash`, we know:
+
+   - `_hash != null` at the time of the check, and
+   - there is no assignment to `_hash` anywhere inside this method that could set it back to null.
+
+   So within this method’s own control flow, `_hash` is guaranteed non-null after the initial guard.
+
+2. **Effect of external methods / concurrency**
+
+   The only method invoked in the loop that might conceivably mutate object state is:
+
+   ```java
+   MovePos();
+   ```
+
+   However, based solely on the provided code, we cannot see any reassignment of `_hash`. There is no evidence in this snippet that `MovePos()` or any other called code updates `_hash` or can race with another thread that sets `_hash` to null.
+
+   In single-threaded usage (which is the standard assumption for this kind of LZ / hash‑chain code), once `_hash` is checked for null and the method continues, `_hash` will remain non‑null for the remainder of the method.
+
+   If there were concurrent threads mutating `_hash` without synchronization, then *any* field read could see null spuriously; but that would be a broader data-race issue not indicated in the snippet. Under normal Java semantics with no data races, the method’s guard ensures `_hash` is non-null.
+
+3. **`Nullability.castToNonnull(_hash)`**
+
+   The presence of `Nullability.castToNonnull(_hash)` does not change the runtime semantics: it is just a helper to tell a static analyzer that `_hash` is supposed to be non-null. The real guarantee comes from the earlier `if (_hash == null) return;`.
+
+Conclusion: Given the code shown and assuming normal (non-racy) use, `_hash` cannot be null at the point of the expression in question.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

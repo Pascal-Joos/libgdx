@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void read(Json json, JsonValue jsonData) {
+    uniqueData = json.readValue("unique", ObjectMap.class, jsonData);
+    for (Entry<String, SaveData> entry : uniqueData.entries()) {
+      entry.value.resources = this;
+    }
+
+    data = json.readValue("data", Array.class, SaveData.class, jsonData);
+    for (SaveData saveData : data) {
+      saveData.resources = this;
+    }
+
+    Array<AssetData> assets = json.readValue("assets", Array.class, AssetData.class, jsonData);
+    if (assets == null) {
+      assets = new Array<AssetData>();
+    }
+    sharedAssets.addAll(assets);
+    resource = json.readValue("resource", null, jsonData);
+  }
+  ```
+    ]]>
+  </code>
+</response>

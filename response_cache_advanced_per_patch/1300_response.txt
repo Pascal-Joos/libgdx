@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[NullAway-style initializer methods are either (1) framework‑recognized lifecycle methods like onCreate/init, or (2) methods whose names start with "init" or "initialize" and are not simple setters. The method in question is named allocateChannels(), does not start with "init"/"initialize", and is not listed among the recognized framework lifecycle methods. Therefore, under the given criteria, it should not be treated as an initializer method even though it initializes a field.]]></reason>
+    <value>NO</value>
+</response>

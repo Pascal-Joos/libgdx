@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void act(float delta) {
+    // Update over actors. Done in act() because actors may change position, which can fire
+    // enter/exit without an input event.
+    for (int pointer = 0, n = pointerOverActors.length; pointer < n; pointer++) {
+      Actor overLast = pointerOverActors[pointer];
+      if (pointerTouched[pointer]) {
+        // Update the over actor for the pointer.
+        pointerOverActors[pointer] =
+            fireEnterAndExit(overLast, pointerScreenX[pointer], pointerScreenY[pointer], pointer);
+      } else if (overLast != null) {
+        // The pointer is gone, exit the over actor for the pointer, if any.
+        pointerOverActors[pointer] = null;
+        fireExit(overLast, pointerScreenX[pointer], pointerScreenY[pointer], pointer);
+      }
+    }
+
+    // Update over actor for the mouse on the desktop.
+    if (Gdx.app != null) {
+      ApplicationType type = Gdx.app.getType();
+      if (type == ApplicationType.Desktop
+          || type == ApplicationType.Applet
+          || type == ApplicationType.WebGL)
+        mouseOverActor = fireEnterAndExit(mouseOverActor, mouseScreenX, mouseScreenY, -1);
+    }
+
+    root.act(delta);
+}
+  ```
+    ]]>
+  </code>
+</response>

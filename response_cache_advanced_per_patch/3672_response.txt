@@ -1,0 +1,17 @@
+<response>
+    <reason><![CDATA[
+Based on the criteria you described for NullAway initializer methods:
+
+1. **Name pattern**: You stated that any method whose name starts with "init" or "initialize" (and is not a setter) is considered an initializer. The given method is named `Create`, which does not start with "init" or "initialize", so it does not match this naming-based heuristic.
+
+2. **Framework / lifecycle semantics**: You also listed examples like `android.app.Activity.onCreate` and various `init` methods that are known lifecycle or framework-invoked setup methods, typically guaranteed to run before normal usage of the object. The method `Create` here:
+   - Is not a standard framework lifecycle method.
+   - Has no annotation or naming convention tying it to a framework that guarantees it runs before other methods.
+   - Looks like a regular, explicitly-invoked configuration/helper method that sets internal state, possibly callable multiple times.
+
+3. **Setter vs. initializer**: Although the method clearly initializes several fields (`m_NumPosBits`, `m_PosMask`, `m_NumPrevBits`, `m_Coders`), you explicitly do not want to treat ordinary setters (or general state-mutating methods) as initializer methods unless they fall into the special categories above. This `Create` method functions as a configuration/setter-like method (it can early-return if the parameters match the current state, and otherwise reconfigures the object), so it aligns more with a non-initializer mutator than with a dedicated, framework-guaranteed initialization entry point.
+
+Because it does not follow the specified naming convention, is not a known framework lifecycle method, and behaves like a general state configuration method rather than a designated initialization hook, it should not be treated as a NullAway initializer method under your criteria.
+    ]]></reason>
+    <value>NO</value>
+</response>

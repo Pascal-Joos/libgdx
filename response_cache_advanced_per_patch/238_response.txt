@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void unbind(final ShaderProgram shader,  final int[] locations) {
+      GL30 gl = Gdx.gl30;
+      if (gl != null) {
+        Nullability.castToNonnull(gl).glBindVertexArray(0);
+      }
+      isBound = false;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPadY() {
+          Value padTop = this.padTop;
+          Value padBottom = this.padBottom;
+          if (padTop == null) throw new IllegalArgumentException("padTop cannot be null.");
+          if (padBottom == null) throw new IllegalArgumentException("padBottom cannot be null.");
+          return padTop.get(Nullability.castToNonnull(actor)) + padBottom.get(Nullability.castToNonnull(actor));
+  }
+  ```
+    ]]>
+  </code>
+</response>

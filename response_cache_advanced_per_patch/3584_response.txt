@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void remove() {
+      Element parent = getParent();
+      if (parent != null) {
+          parent.removeChild(this);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name is `setPatch`, which follows the conventional JavaBeans setter pattern (`setXyz`). By your own criteria, “any method that has a name that starts with `init` or `initialize` and is not a setter method” (and specific framework lifecycle methods) is considered an initializer. This method does not start with `init` or `initialize` and is clearly a setter, even though it updates multiple related fields. Therefore, it should not be treated as an initializer method for NullAway’s purposes.]]></reason>
+    <value>NO</value>
+</response>

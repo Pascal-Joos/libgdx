@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Vector3 unproject(Vector3 screenCoords) {
+    Graphics graphics = Gdx.graphics;
+    if (graphics != null) {
+        unproject(screenCoords, 0, 0, graphics.getWidth(), graphics.getHeight());
+    }
+    return screenCoords;
+}
+  ```
+    ]]>
+  </code>
+</response>

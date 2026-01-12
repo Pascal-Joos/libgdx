@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void allocateChannels() {
+      super.allocateChannels();
+      if (controller.particles != null) {
+        rotationalVelocity2dChannel =
+            controller.particles.addChannel(ParticleChannels.AngularVelocity2D);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

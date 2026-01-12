@@ -1,0 +1,39 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public BitmapFont(
+            BitmapFontData data,     Array<TextureRegion> pageRegions, boolean integer) {
+          this.flipped = data.flipped;
+          this.data = data;
+          this.integer = integer;
+      
+          if (pageRegions == null || pageRegions.size == 0) {
+            if (data.imagePaths == null)
+              throw new IllegalArgumentException(
+                  "If no regions are specified, the font data must have an images path.");
+      
+            // Load each path.
+            int n = data.imagePaths.length;
+            regions = new Array(n);
+            for (int i = 0; i < n; i++) {
+              FileHandle file;
+              if (Gdx.files == null) throw new IllegalStateException("Gdx.files must not be null.");
+              if (data.fontFile == null) file = Nullability.castToNonnull(Gdx.files).internal(data.imagePaths[i]);
+              else file = Nullability.castToNonnull(Gdx.files).getFileHandle(data.imagePaths[i], data.fontFile.type());
+              regions.add(new TextureRegion(new Texture(file, false)));
+            }
+            ownsTexture = true;
+          } else {
+            regions = pageRegions;
+            ownsTexture = false;
+          }
+      
+          cache = newFontCache();
+      
+          load(data);
+}
+  ```
+    ]]>
+  </code>
+</response>

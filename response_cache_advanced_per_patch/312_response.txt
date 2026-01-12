@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static boolean right() {
+      return Gdx.input != null && Gdx.input.isButtonPressed(Buttons.RIGHT);
+  }
+  ```
+    ]]>
+  </code>
+</response>

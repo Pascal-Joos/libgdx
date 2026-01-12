@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public TextureDescriptor getDepthMap() {
+    if (fbo != null) textureDesc.texture = fbo.getColorBufferTexture();
+    return textureDesc;
+  }
+  ```
+    ]]>
+  </code>
+</response>

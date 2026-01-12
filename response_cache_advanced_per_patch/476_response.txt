@@ -1,0 +1,34 @@
+<response>
+  <reason><![CDATA[
+Within Mesh.scale(float scaleX, float scaleY, float scaleZ), the call site is:
+
+  final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+
+The implementation of getVertexAttribute is:
+
+  public VertexAttribute getVertexAttribute(int usage) {
+    VertexAttributes attributes = vertices.getAttributes();
+    int len = attributes.size();
+    for (int i = 0; i < len; i++) if (attributes.get(i).usage == usage) return attributes.get(i);
+    return null;
+  }
+
+So, if no VertexAttribute in vertices.getAttributes() has usage == Usage.Position, the method returns null.
+
+The surrounding code in scale() explicitly checks for this:
+
+  final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+  if (posAttr == null)
+    return;
+
+This demonstrates that the library author expects and allows this call to return null and safely handles that case by early return.
+
+Unlike other methods in the provided code (e.g., transform(Matrix4, int, int), calculateRadiusSquared, calculateBoundingBox, extendBoundingBox, MeshSpawnShapeValue.setMesh, UnweightedMeshSpawnShapeValue.setMesh) that either:
+- throw a GdxRuntimeException immediately if getVertexAttribute(Usage.Position) is null, or
+- are only invoked after such a check,
+
+the scale() method does not enforce any precondition that the mesh must have a position attribute. Instead, it guards against null directly at this call site.
+
+No additional methods influence the nullability of this particular call; getVertexAttribute’s behavior is fully determined by the presence or absence of a Usage.Position attribute in vertices.getAttributes(), which is not guaranteed by any precondition here. Therefore, at this specific call site, the method can indeed return null, and the caller is written to handle that possibility.]]></reason>
+  <value>YES</value>
+</response>

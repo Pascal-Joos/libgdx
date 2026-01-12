@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder includeCredentials(boolean includeCredentials) {
+      validate();
+      HttpRequest localRequest = httpRequest;
+      localRequest.setIncludeCredentials(includeCredentials);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

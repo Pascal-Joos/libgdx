@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the beginning of the method, there is an explicit null check:
+
+    if (text == null) return;
+
+This immediately exits the method if `text` is null. The line in question:
+
+    selectionStart = Math.min(text.length(), selectionStart);
+
+is executed only after passing that null check. There are no assignments to `text` within the method that could change it back to null between the null check and this line, and no other control flow paths bypass the check.
+
+Therefore, on all code paths that reach `selectionStart = Math.min(text.length(), selectionStart);`, the field/variable `text` is guaranteed to be non-null, so `text` cannot be null at that expression.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

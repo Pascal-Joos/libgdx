@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setCursorPosition(int cursorPosition) {
+      if (cursorPosition < 0) throw new IllegalArgumentException("cursorPosition must be >= 0");
+      clearSelection();
+      cursor = Math.min(cursorPosition, text == null ? 0 : text.length());
+  }
+  ```
+    ]]>
+  </code>
+</response>

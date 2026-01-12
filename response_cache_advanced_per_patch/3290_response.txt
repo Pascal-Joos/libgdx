@@ -1,0 +1,73 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all control paths leading to the line `keys2.valid = false;`:
+
+1. The line occurs inside this block:
+   ```java
+   if (!keys1.valid) {
+     keys1.reset();
+     keys1.valid = true;
+     keys2.valid = false;
+     return keys1;
+   }
+   ```
+   So we consider the state of `keys2` at the point where `if (!keys1.valid)` is evaluated and true.
+
+2. There are two main top-level branches in the method:
+   ```java
+   if (Collections.allocateIterators) return new Keys(this);
+   if (keys1 == null) {
+     keys1 = new Keys(this);
+     keys2 = new Keys(this);
+   }
+   ```
+   - If `Collections.allocateIterators` is `true`, the method returns immediately. The body that contains `keys2.valid = false;` is never executed.
+   - If `Collections.allocateIterators` is `false`, we proceed to the next `if`.
+
+3. Consider the second `if`:
+   ```java
+   if (keys1 == null) {
+     keys1 = new Keys(this);
+     keys2 = new Keys(this);
+   }
+   ```
+   - If `keys1` is `null`, then in this branch `keys2` is explicitly assigned a new `Keys(this)` instance. After this block, both `keys1` and `keys2` are non-null.
+   - If `keys1` is not `null`, nothing is assigned here. We must rely on the class invariant established when `keys1` was first made non-null.
+
+4. Initial non-null establishment:
+   - The *only* place in this method where `keys1` changes from `null` to non-null is this block:
+     ```java
+     if (keys1 == null) {
+       keys1 = new Keys(this);
+       keys2 = new Keys(this);
+     }
+     ```
+   - At that moment, `keys2` is also set to a non-null `new Keys(this)`.
+   - There is no assignment to `keys2` anywhere else in the method. So, within this method, once `keys1` has been initialized, `keys2` has been initialized as well.
+
+5. Subsequent calls / later executions:
+   - On a later call, `keys1` may already be non-null at method entry. That implies the `if (keys1 == null)` block is skipped.
+   - However, the only prior way for `keys1` to have become non-null (in this method) was in the same block that also initialized `keys2` to a non-null value.
+   - Provided no other code (elsewhere in the class) ever assigns `null` to `keys2`, `keys2` remains non-null for all subsequent calls.
+
+6. Use of `Nullability.castToNonnull(keys2)`:
+   ```java
+   Nullability.castToNonnull(keys2).reset();
+   Nullability.castToNonnull(keys2).valid = true;
+   ```
+   This indicates a design intent that `keys2` is treated as non-null on that code path. Crucially, that path is only reachable if the earlier `if (!keys1.valid)` is false, i.e., we are in the “else” branch of the `if (!keys1.valid)` condition. By then, the same initialization logic (`if (keys1 == null)`) has already run if needed, guaranteeing `keys2` was set along with `keys1`.
+
+7. Focusing specifically on the line in question:
+   - Before executing `keys2.valid = false;`, the only way to reach that line is:
+     - `Collections.allocateIterators` must be false (otherwise we return earlier).
+     - If this is the first time `keys()` is called and `keys1` was null at entry, `keys2` is just assigned `new Keys(this)` immediately before.
+     - If this is a later call, `keys1` is non-null, and based on the prior initialization path, `keys2` must also have been initialized to non-null and has not been reassigned in this method.
+
+   Under these assumptions (no external assignment of `null` to `keys2` somewhere else), `keys2` cannot be null at `keys2.valid = false;`.
+
+Therefore, given only this method and the usual class-invariant interpretation (that nothing else sets `keys2` to null), the expression `keys2` at `keys2.valid = false;` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

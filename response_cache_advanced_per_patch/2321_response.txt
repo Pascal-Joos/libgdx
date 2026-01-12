@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setStyle(TextTooltipStyle style) {
+    if (style == null) throw new NullPointerException("style cannot be null");
+    container.setBackground(style.background);
+    container.maxWidth(style.wrapWidth);
+
+    boolean wrap = style.wrapWidth != 0;
+    container.fill(wrap);
+
+    Label label = container.getActor();
+    Nullability.castToNonnull(label).setStyle(style.label);
+    Nullability.castToNonnull(label).setWrap(wrap);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void getTextInput(TextInputListener listener, String title, String text, String hint) {
+    if (Gdx.app == null) return;
+    Gdx.app.getInput().getTextInput(listener, title, text, hint);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public FileHandle resolve(String fileName) {
+      if (resolver == null) {
+          throw new IllegalStateException("resolver cannot be null");
+      }
+      return resolver.resolve(fileName);
+  }
+  ```
+    ]]>
+  </code>
+</response>

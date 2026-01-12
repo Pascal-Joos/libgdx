@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void Flush() throws IOException {
+    if (_stream == null) return;
+    int size = _pos - _streamPos;
+    if (size == 0) return;
+    _stream.write(_buffer, _streamPos, size);
+    if (_pos >= _windowSize) _pos = 0;
+    _streamPos = _pos;
+}
+  ```
+    ]]>
+  </code>
+</response>

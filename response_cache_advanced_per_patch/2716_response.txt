@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void sizeChanged() {
+    lastText = null; // Cause calculateOffsets to recalculate the line breaks.
+
+    // The number of lines showed must be updated whenever the height is updated
+    BitmapFont font = style.font;
+    Drawable background = style.background;
+    float availableHeight =
+        getHeight()
+            - (background == null ? 0 : background.getBottomHeight() + background.getTopHeight());
+    if (font != null) linesShowing = (int) Math.floor(availableHeight / font.getLineHeight());
+}
+  ```
+    ]]>
+  </code>
+</response>

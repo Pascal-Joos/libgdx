@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void enter(
+      InputEvent event, float x, float y, int pointer,  @Null Actor fromActor) {
+    if (pointer != -1) return;
+    if (touchIndependent && Gdx.input.isTouched()) return;
+    Actor actor = event.getListenerActor();
+    if (fromActor != null && fromActor.isDescendantOf(actor)) return;
+    setContainerPosition(Nullability.castToNonnull(actor), x, y);
+    manager.enter(this);
+}
+  ```
+    ]]>
+  </code>
+</response>

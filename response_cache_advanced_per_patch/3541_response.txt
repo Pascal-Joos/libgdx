@@ -1,0 +1,87 @@
+<response>
+  <reason><![CDATA[
+Within XmlReader.Element.getChildByName(String name), the return value is null in two situations:
+
+1. children == null:
+   ```java
+   if (children == null) return null;
+   ```
+2. No child element has element.name.equals(name):
+   ```java
+   for (...) {
+     Element element = children.get(i);
+     if (element.name.equals(name)) return element;
+   }
+   return null;
+   ```
+
+So, for tile.getChildByName("image") specifically, the result is null if:
+- the Element referenced by tile has no children (children == null), or
+- it has children, but none whose name is exactly "image".
+
+Looking at all provided usages in the Tmx/Tide loaders, every call site that uses getChildByName("image") treats the result as nullable and explicitly checks for null before dereferencing:
+
+- In TmxMapLoader.addStaticTiles (per-tile images):
+  ```java
+  Element imageElement = tileElement.getChildByName("image");
+  if (imageElement != null) {
+    imageSource = imageElement.getAttribute("source");
+    ...
+  }
+  TextureRegion texture = imageResolver.getImage(image.path());
+  ```
+- In TmxMapLoader.getDependencyFileHandles (tileset and tile image elements):
+  ```java
+  Element tileImageElement = tile.getChildByName("image");
+  if (tileImageElement != null) {
+    String imageSource = tileImageElement.getAttribute("source");
+    ...
+  }
+  ```
+  and
+  ```java
+  Element image = imageLayer.getChildByName("image");
+  if (image != null) {
+    String source = image.getAttribute("source", null);
+    ...
+  }
+  ```
+- In BaseTmxMapLoader.loadTileSet:
+  ```java
+  Element imageElement = element.getChildByName("image");
+  if (imageElement != null) {
+    imageSource = imageElement.getAttribute("source");
+    ...
+  }
+  ```
+- In AtlasTmxMapLoader.addStaticTiles:
+  ```java
+  Element imageElement = tileElement.getChildByName("image");
+  if (imageElement != null) {
+    String regionName = imageElement.getAttribute("source");
+    ...
+  }
+  ```
+- In many other places, the pattern for other names (e.g., "properties", "objectgroup", "animation", "polygon", "polyline", "ellipse", "data", etc.) is always:
+  ```java
+  Element e = element.getChildByName("something");
+  if (e != null) { ... }
+  ```
+
+These usages do not impose any invariant that tile.getChildByName("image") must be non-null; they are explicitly written to handle the case where the "image" child does not exist.
+
+Furthermore, the XML loading logic does not guarantee that every tile element has an "image" child. Tiled maps can define tiles that either:
+- use a single tileset image (no per-tile <image> elements), or
+- have individual images for only some tiles.
+
+Thus, for a general Element tile representing a <tile> element, it is completely valid for it to lack an "image" child, and in that case getChildByName("image") will reach the final return null; path. The field children can also be null if the element actually has no children at all.
+
+Therefore, at this specific call site:
+
+```java
+Element imageElement = tileElement.getChildByName("image");
+```
+
+the method can indeed return null, and the existing code already defends against that with a null check. There is no stronger contract in the provided code that would prevent a null result for this invocation.]]></reason>
+  <value>YES</value>
+</response>

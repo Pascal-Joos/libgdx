@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static boolean shift() {
+        return Gdx.input != null && (Nullability.castToNonnull(Gdx.input).isKeyPressed(Keys.SHIFT_LEFT) || Nullability.castToNonnull(Gdx.input).isKeyPressed(Keys.SHIFT_RIGHT));
+}
+  ```
+    ]]>
+  </code>
+</response>

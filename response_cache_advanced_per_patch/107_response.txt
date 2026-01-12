@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setBlending(final boolean enabled, final int sFactor, final int dFactor) {
+      final GL20 gl = Gdx.gl;
+      if (gl == null) return;
+      if (enabled != blending) {
+        blending = enabled;
+        if (enabled) gl.glEnable(GL20.GL_BLEND);
+        else gl.glDisable(GL20.GL_BLEND);
+      }
+      if (enabled && (blendSFactor != sFactor || blendDFactor != dFactor)) {
+        gl.glBlendFunc(sFactor, dFactor);
+        blendSFactor = sFactor;
+        blendDFactor = dFactor;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

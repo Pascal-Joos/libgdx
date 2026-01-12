@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean act(float delta) {
+      if (target != null) target.removeAction(action);
+      return true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

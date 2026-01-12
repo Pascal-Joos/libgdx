@@ -1,0 +1,41 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void set(
+          BaseShader shader, int inputID, Renderable renderable, Attributes combinedAttributes) {
+        if (renderable.environment == null)
+          shader.program.setUniform3fv(shader.loc(inputID), ones, 0, ones.length);
+        else {
+          renderable.worldTransform.getTranslation(tmpV1);
+          if (combinedAttributes.has(ColorAttribute.AmbientLight))
+            cacheAmbientCubemap.set(
+                Nullability.castToNonnull(((ColorAttribute) combinedAttributes.get(ColorAttribute.AmbientLight))).color);
+
+          if (combinedAttributes.has(DirectionalLightsAttribute.Type)) {
+            Array<DirectionalLight> lights =
+                ((DirectionalLightsAttribute)
+                        combinedAttributes.get(DirectionalLightsAttribute.Type))
+                    .lights;
+            for (int i = dirLightsOffset; i < lights.size; i++)
+              cacheAmbientCubemap.add(lights.get(i).color, lights.get(i).direction);
+          }
+
+          if (combinedAttributes.has(PointLightsAttribute.Type)) {
+            Array<PointLight> lights =
+                ((PointLightsAttribute) combinedAttributes.get(PointLightsAttribute.Type)).lights;
+            for (int i = pointLightsOffset; i < lights.size; i++)
+              cacheAmbientCubemap.add(
+                  lights.get(i).color, lights.get(i).position, tmpV1, lights.get(i).intensity);
+          }
+
+          cacheAmbientCubemap.clamp();
+          shader.program.setUniform3fv(
+              shader.loc(inputID), cacheAmbientCubemap.data, 0, cacheAmbientCubemap.data.length);
+        }
+}
+  ```
+    ]]>
+  </code>
+</response>

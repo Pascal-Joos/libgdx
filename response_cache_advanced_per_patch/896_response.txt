@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void afterGroup(int group) {
+    if (plugs.get(group) != null) plugs.get(group).afterGroup();
+  }
+  ```
+    ]]>
+  </code>
+</response>

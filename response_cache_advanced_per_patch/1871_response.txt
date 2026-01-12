@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getBackgroundDrawable() {
+                      ButtonStyle style = this.style;
+                      if (style == null && getStyle() instanceof ButtonStyle) style = (ButtonStyle)getStyle();
+                      if (style == null) return null;
+                      this.style = style;
+                      if (isDisabled() && style.disabled != null) return style.disabled;
+                      if (isPressed()) {
+                        if (isChecked() && style.checkedDown != null) return style.checkedDown;
+                        if (style.down != null) return style.down;
+                      }
+                      if (isOver()) {
+                        if (isChecked()) {
+                          if (style.checkedOver != null) return style.checkedOver;
+                        } else {
+                          if (style.over != null) return style.over;
+                        }
+                      }
+                      boolean focused = hasKeyboardFocus();
+                      if (isChecked()) {
+                        if (focused && style.checkedFocused != null) return style.checkedFocused;
+                        if (style.checked != null) return style.checked;
+                        if (isOver() && style.over != null) return style.over;
+                      }
+                      if (focused && style.focused != null) return style.focused;
+                      if (style.up == null) return null;
+                      return style.up;
+  }
+  ```
+    ]]>
+  </code>
+</response>

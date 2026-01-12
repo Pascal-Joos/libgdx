@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void killParticles(int startIndex, int count) {
+      if (particleControllerChannel == null) {
+        return;
+      }
+      for (int i = startIndex, c = startIndex + count; i < c; ++i) {
+        ParticleController controller = particleControllerChannel.data[i];
+        controller.end();
+        pool.free(controller);
+        particleControllerChannel.data[i] = null;
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

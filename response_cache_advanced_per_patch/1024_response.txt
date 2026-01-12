@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  @Override
+  public void allocateChannels() {
+    if (controller.particles != null) {
+      valueChannel = controller.particles.addChannel(valueChannelDescriptor);
+      ParticleChannels.Interpolation.id = controller.particleChannels.newId();
+      interpolationChannel = controller.particles.addChannel(ParticleChannels.Interpolation);
+      lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

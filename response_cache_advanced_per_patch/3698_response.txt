@@ -1,0 +1,35 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone, we can see:
+
+public Encoder2 GetSubCoder(int pos, byte prevByte) {
+    if (m_Coders == null) {
+        Create(m_NumPosBits, m_NumPrevBits);
+    }
+    return m_Coders[
+        ((pos & m_PosMask) << m_NumPrevBits) + ((prevByte & 0xFF) >>> (8 - m_NumPrevBits))];
+}
+
+The only protection against m_Coders being null is the if (m_Coders == null) check followed by a call to Create(m_NumPosBits, m_NumPrevBits). For m_Coders to be guaranteed non-null at the return statement, the following must be true:
+
+1. Create(...) must always assign a non-null value to m_Coders before it returns.
+2. Create(...) must not throw an exception before assigning m_Coders.
+3. No other thread (if multithreading is possible) can set m_Coders back to null between the if check and the return (or otherwise mutate it in a way that makes m_Coders null).
+
+From the snippet, we have no visibility into the implementation or contract of Create(...). We therefore cannot safely infer:
+- That Create(...) always initializes m_Coders;
+- Nor that Create(...) cannot leave m_Coders null under some error or edge condition;
+- Nor that there are no concurrent modifications to m_Coders.
+
+Because the null-check is followed only by a call to a method whose behavior is not shown, there is no strict guarantee in the given code alone that m_Coders cannot still be null at the array access. Thus, based solely on the visible code, we cannot conclusively say that m_Coders is never null at the return statement.
+
+Additional information about Create(...) and the threading model is required to make a definitive determination.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation (or contract/guarantees) of the Create(int numPosBits, int numPrevBits) method, especially with respect to how it initializes m_Coders.]]></request>
+        <request><![CDATA[Clarify whether m_Coders can be modified (including set to null) from other methods or threads while GetSubCoder is executing.]]></request>
+    </requests>
+</response>
+```

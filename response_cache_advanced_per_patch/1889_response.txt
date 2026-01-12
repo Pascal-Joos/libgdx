@@ -1,0 +1,22 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the beginning of the method, there is an explicit null check:
+
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+
+This guarantees that if execution continues past this line, `style` is non-null for the remainder of the method.
+
+The line in question:
+
+    if (style.up != null) height = Math.max(height, style.up.getMinHeight());
+
+is executed only after the `style == null` check has passed. Therefore, at this line:
+- `style` itself cannot be null (otherwise the method would have thrown an IllegalStateException and not reached this code).
+- Only `style.up` might be null, but that is already protected by the `if (style.up != null)` guard.
+
+Given this control flow, the `style` reference in the expression `style.up` cannot be null at that point in the method.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,22 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, each iteration over `renderData` starts with:
+
+    if (data.controller == null) continue;
+
+This is the only way `data.controller` is used afterward in that iteration. The inner loop in question:
+
+    for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
+
+is executed only if the `continue` is *not* taken, i.e., only when `data.controller != null` for that `data` object.
+
+There is no assignment to `data.controller` inside the loop body, and `data` itself is the loop variable of the enhanced-for over `renderData` and does not change within the body. Therefore, once we have passed the `if (data.controller == null) continue;` check for the current `data`, `data.controller` is guaranteed to be non-null for the rest of that iteration.
+
+Under normal Java memory model and assuming no external concurrent mutation of `data.controller` (e.g., another thread setting it to null without proper synchronization) during the execution of this loop body, `data.controller` cannot become null between the null check and its use in `data.controller.particles.size`.
+
+Given typical single-threaded or properly synchronized usage, there is no control flow path inside this method that allows `data.controller` to be null at the point of `data.controller.particles.size`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

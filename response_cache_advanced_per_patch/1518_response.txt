@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void addTileObjectGroup(TiledMapTile tile, Element tileElement) {
+    Element objectgroupElement = tileElement.getChildByName("objectgroup");
+    if (objectgroupElement != null) {
+      for (Element objectElement : objectgroupElement.getChildrenByName("object")) {
+        loadObject(Nullability.castToNonnull(map), tile, objectElement);
+      }
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

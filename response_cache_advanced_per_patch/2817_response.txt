@@ -1,0 +1,72 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected float drawIcons(
+      Batch batch,
+      float r,
+      float g,
+      float b,
+      float a,
+       @Null N parent,
+      Array<N> nodes,
+      float indent,
+      float plusMinusWidth) {
+
+    Rectangle cullingArea = getCullingArea();
+    float cullBottom = 0, cullTop = 0;
+    if (cullingArea != null) {
+      cullBottom = cullingArea.y;
+      cullTop = cullBottom + cullingArea.height;
+    }
+    TreeStyle style = this.style;
+    float x = getX(),
+        y = getY(),
+        expandX = x + indent,
+        iconX = expandX + plusMinusWidth + iconSpacingLeft,
+        actorY = 0;
+    for (int i = 0, n = nodes.size; i < n; i++) {
+      N node = nodes.get(i);
+      Actor actor = node.actor;
+      if (actor == null) throw new IllegalStateException("node.actor cannot be null.");
+      actorY = actor.getY();
+      float height = node.height;
+      if (cullingArea == null || (actorY + height >= cullBottom && actorY <= cullTop)) {
+        if (selection.contains(node) && style.selection != null) {
+          drawSelection(
+              node,
+              style.selection,
+              batch,
+              x,
+              y + actorY - ySpacing / 2,
+              getWidth(),
+              height + ySpacing);
+        } else if (node == overNode && style.over != null) {
+          drawOver(
+              node, style.over, batch, x, y + actorY - ySpacing / 2, getWidth(), height + ySpacing);
+        }
+
+        if (node.icon != null) {
+          float iconY = y + actorY + Math.round((height - node.icon.getMinHeight()) / 2);
+          Color actorColor = actor.getColor();
+          batch.setColor(actorColor.r, actorColor.g, actorColor.b, actorColor.a * a);
+          drawIcon(node, node.icon, batch, iconX, iconY);
+          batch.setColor(r, g, b, a);
+        }
+
+        if (node.children.size > 0) {
+          Drawable expandIcon = getExpandIcon(node, iconX);
+          float iconY = y + actorY + Math.round((height - expandIcon.getMinHeight()) / 2);
+          drawExpandIcon(node, expandIcon, batch, expandX, iconY);
+        }
+      } else if (actorY < cullBottom) //
+      break;
+      if (node.expanded && node.children.size > 0)
+        drawIcons(batch, r, g, b, a, node, node.children, indent + indentSpacing, plusMinusWidth);
+    }
+    return actorY;
+}
+  ```
+    ]]>
+  </code>
+</response>

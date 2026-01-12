@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Vector3 unproject(
+      Vector3 screenCoords,
+      float viewportX,
+      float viewportY,
+      float viewportWidth,
+      float viewportHeight) {
+    Graphics graphics = Gdx.graphics;
+    float x = screenCoords.x - viewportX, y = graphics.getHeight() - screenCoords.y - viewportY;
+    screenCoords.x = (2 * x) / viewportWidth - 1;
+    screenCoords.y = (2 * y) / viewportHeight - 1;
+    screenCoords.z = 2 * screenCoords.z - 1;
+    screenCoords.prj(invProjectionView);
+    return screenCoords;
+}
+  ```
+    ]]>
+  </code>
+</response>

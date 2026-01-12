@@ -1,0 +1,17 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method body, the only direct access to `entry.value` at the line in question (`entry.value.toMatrix4(...)`) is *immediately* preceded by an explicit null check:
+
+    if (entry.value == null) continue;
+    entry.value.toMatrix4(entry.key.localTransform);
+
+The control flow guarantees that if `entry.value` is null for a given loop iteration, the `continue;` statement is executed and the call to `toMatrix4` is skipped. Therefore, in this method’s logic, `entry.value` cannot be null at the point where `toMatrix4` is invoked.
+
+This conclusion depends only on the control flow in `end()` itself; even if other parts of the program can insert null values into `transforms`, they are filtered out by the `if (entry.value == null) continue;` guard before the dereference occurs. No intervening reassignment of `entry.value` happens between the null check and the call, so there is no path in which `entry.value` can become null between those two statements.
+
+Under normal Java semantics (no concurrency races that mutate `transforms` or `entry` from another thread during iteration and no use of reflection/unsafe), the expression `entry.value` at the line `entry.value.toMatrix4(entry.key.localTransform);` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

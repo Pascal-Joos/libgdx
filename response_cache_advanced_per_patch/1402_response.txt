@@ -1,0 +1,8 @@
+<response>
+  <success>false</success>
+  <methods>
+    <method>animate</method>
+    <method>obtain</method>
+    <method>queue</method>
+  </methods>
+</response>

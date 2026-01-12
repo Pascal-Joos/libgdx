@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void activateParticles(int startIndex, int count) {
+      if (particleControllerChannel == null) {
+        allocateChannels();
+      }
+      for (int i = startIndex, c = startIndex + count; i < c; ++i) {
+        ParticleController controller = pool.obtain();
+        controller.start();
+        particleControllerChannel.data[i] = controller;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

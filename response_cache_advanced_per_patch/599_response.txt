@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void draw(PolygonSpriteBatch batch) {
+    if (dirty) {
+      buildVertices();
+    }
+    if (region == null) {
+      return;
+    }
+    for (int i = 0; i < vertices.size; i++) {
+      batch.draw(
+          region.getTexture(),
+          vertices.get(i),
+          0,
+          vertices.get(i).length,
+          indices.get(i),
+          0,
+          indices.get(i).length);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

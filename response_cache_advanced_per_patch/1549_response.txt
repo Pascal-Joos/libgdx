@@ -1,0 +1,7 @@
+<response>
+  <success>false</success>
+  <methods>
+    <method>getRelativeFileHandle</method>
+    <method>getImage</method>
+  </methods>
+</response>

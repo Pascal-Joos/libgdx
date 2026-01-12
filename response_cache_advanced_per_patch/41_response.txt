@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void debug(String message) {
+    if (level >= DEBUG && Gdx.app != null) Gdx.app.debug(tag, message);
+}
+  ```
+    ]]>
+  </code>
+</response>

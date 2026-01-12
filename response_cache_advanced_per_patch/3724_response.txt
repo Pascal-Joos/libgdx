@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector2 unproject(Vector2 screenCoords) {
+      if (camera == null) return screenCoords;
+      tmp.set(screenCoords.x, screenCoords.y, 1);
+      camera.unproject(tmp, screenX, screenY, screenWidth, screenHeight);
+      screenCoords.set(tmp.x, tmp.y);
+      return screenCoords;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,5 @@
+<response>
+    <reason><![CDATA[
+The method name is load, which does not match any of the known framework lifecycle/initializer patterns (e.g., onCreate, init) and does not start with "init" or "initialize". Based on your definition, initializer methods are either well-known framework lifecycle methods or methods whose names begin with "init"/"initialize" and are not simple setters. Even though this method assigns to fields and performs setup work, it would typically be considered part of runtime behavior (loading data into an already-constructed object) rather than a dedicated initializer method that NullAway should treat as establishing non-null field invariants before other usage. Therefore, under your stated criteria, this should not be treated as an initializer method.]]></reason>
+    <value>NO</value>
+</response>

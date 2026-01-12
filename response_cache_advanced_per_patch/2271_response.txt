@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void endRow() {
+      Object[] cells = this.cells.items;
+      int rowColumns = 0;
+      for (int i = this.cells.size - 1; i >= 0; i--) {
+        Cell cell = (Cell) cells[i];
+        if (cell.endRow) break;
+        rowColumns += Nullability.castToNonnull(cell.colspan);
+      }
+      columns = Math.max(columns, rowColumns);
+      rows++;
+      this.cells.peek().endRow = true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

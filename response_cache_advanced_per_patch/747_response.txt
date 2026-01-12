@@ -1,0 +1,61 @@
+<response>
+  <reason><![CDATA[
+At this call site, the expression is:
+
+```java
+((TextureAttribute) (combinedAttributes.get(TextureAttribute.Specular)))
+```
+
+You are asking whether `combinedAttributes.get(TextureAttribute.Specular)` can evaluate to `null`.
+
+The implementation of `get(long type)` is:
+
+```java
+public final Attribute get(final long type) {
+    if (has(type))
+      for (int i = 0; i < attributes.size; i++)
+        if (attributes.get(i).type == type) return attributes.get(i);
+    return null;
+}
+```
+
+From this alone, `get(type)` clearly *can* return `null` whenever either:
+- `has(type)` is `false`, or
+- `has(type)` is `true` but the loop does not find a matching `type` (e.g., inconsistency between `has` and the internal list).
+
+To prove that `null` is impossible at this *specific* call site, we would need a guarantee that, whenever this setter is executed, `combinedAttributes` always contains a `TextureAttribute` with `type == TextureAttribute.Specular`.
+
+Looking at all the provided usages around `Specular`:
+
+- `DefaultShader$Setters$16` (specular color) explicitly does:
+
+  ```java
+  ColorAttribute specular = (ColorAttribute) combinedAttributes.get(ColorAttribute.Specular);
+  if (specular == null) return;
+  ```
+
+  which shows the library authors themselves consider `get(ColorAttribute.Specular)` nullable.
+
+- `DefaultShader$Setters$17` and `$18` use:
+
+  ```java
+  (TextureAttribute) (combinedAttributes.get(TextureAttribute.Specular))
+  ```
+
+  without a null check, but nothing in the given code ensures that `combinedAttributes.has(TextureAttribute.Specular)` is true before those setters run.
+
+- The generic `Attributes.get(Class<T>, long type)` just delegates to `get(type)` and returns the cast result:
+
+  ```java
+  public final <T extends Attribute> T get(Class<T> clazz, final long type) {
+      return (T) get(type);
+  }
+  ```
+
+No provided method or call chain establishes an invariant that `combinedAttributes` must always have a specular texture attribute at the time `DefaultShader$Setters$17` or `$18` are invoked. The behavior of `combinedAttributes.has(...)` and how attributes are assembled is not shown in a way that would rule out the absence of `TextureAttribute.Specular`.
+
+Because `get(long type)` has an explicit `return null;` path and there is no accompanying guarantee that `TextureAttribute.Specular` is always present in `combinedAttributes` at this call site, the result of `combinedAttributes.get(TextureAttribute.Specular)` is potentially `null` here. The subsequent cast to `TextureAttribute` does not change that; it only affects what happens if non-null is returned or if a wrong type is returned (ClassCastException), not whether `null` is possible.
+
+Therefore, at this specific call site, the method can return `null`.]]></reason>
+  <value>YES</value>
+</response>

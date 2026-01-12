@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name allocateChannels does not match any of the patterns considered initializer methods by NullAway (e.g., onCreate, init, initialize, or names starting with "init"/"initialize"). It also appears to be a domain-specific setup or allocation method rather than a canonical framework lifecycle or init-style method. Therefore, under the described rules, it should not be treated as an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

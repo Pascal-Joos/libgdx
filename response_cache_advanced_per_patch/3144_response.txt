@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Color read(Json json, JsonValue jsonData,     Class type) {
+                                          if (jsonData.isString()) return get(jsonData.asString(), Color.class);
+                                          String hex = json.readValue("hex", String.class, (String) null, jsonData);
+                                          if (hex != null) return Color.valueOf(hex);
+                                          float r = Nullability.castToNonnull(json.readValue("r", float.class, 0f, jsonData));
+                                          float g = Nullability.castToNonnull(json.readValue("g", float.class, 0f, jsonData));
+                                          float b = Nullability.castToNonnull(json.readValue("b", float.class, 0f, jsonData));
+                                          float a = Nullability.castToNonnull(json.readValue("a", float.class, 1f, jsonData));
+                                          return new Color(r, g, b, a);
+}
+  ```
+    ]]>
+  </code>
+</response>

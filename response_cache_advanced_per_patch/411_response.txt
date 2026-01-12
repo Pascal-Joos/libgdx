@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public File file() {
+      if (type == FileType.External && file != null)
+        return new File(Gdx.files.getExternalStoragePath(), file.getPath());
+      return file;
+  }
+  ```
+    ]]>
+  </code>
+</response>

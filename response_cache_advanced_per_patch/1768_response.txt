@@ -1,0 +1,22 @@
+<response>
+    <reason><![CDATA[
+Within the provided context, the parameter `actor` of `toCoordinates(Actor actor, Vector2 actorCoords)` is used directly:
+
+```java
+actor.stageToLocalCoordinates(actorCoords);
+```
+
+There is no null-check or reassignment of `actor` before this call, so if `actor` is null the method will crash with a `NullPointerException`.
+
+From the call site shown:
+
+```java
+event.toCoordinates(event.getListenerActor(), tmpCoords);
+```
+
+`actor` corresponds to `event.getListenerActor()`. Since we do not have the implementation of `getListenerActor()`, we cannot determine whether it can return null. A caller *might* supply an `InputEvent` whose `getListenerActor()` returns null, and there is nothing in `toCoordinates` itself that prevents this.
+
+Because `actor`’s nullability depends directly on the behavior of `getListenerActor()`, and that method’s implementation is not provided, we cannot conclusively say whether `actor` can or cannot be null without seeing that declaration.
+    ]]></reason>
+    <value>YES</value>
+</response>

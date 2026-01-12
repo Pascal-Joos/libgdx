@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable
+    protected Color getFontColor() {
+                if (isDisabled() && style != null && style.disabledFontColor != null) return style.disabledFontColor;
+                if (isPressed()) {
+                  if (isChecked() && style != null && style.checkedDownFontColor != null) return style.checkedDownFontColor;
+                  if (style == null || style.downFontColor == null) return null;
+                  if (style.downFontColor != null) return style.downFontColor;
+                }
+                if (isOver()) {
+                  if (isChecked()) {
+                    if (style != null && style.checkedOverFontColor != null) return style.checkedOverFontColor;
+                  } else {
+                    if (style != null && style.overFontColor != null) return style.overFontColor;
+                  }
+                }
+                boolean focused = hasKeyboardFocus();
+                if (isChecked()) {
+                  if (focused && style != null && style.checkedFocusedFontColor != null) return style.checkedFocusedFontColor;
+                  if (style != null && style.checkedFontColor != null) return style.checkedFontColor;
+                  if (isOver() && style != null && style.overFontColor != null) return style.overFontColor;
+                }
+                if (focused && style != null && style.focusedFontColor != null) return style.focusedFontColor;
+                if (style == null) return null;
+                return style.fontColor;
+}
+  ```
+    ]]>
+  </code>
+</response>

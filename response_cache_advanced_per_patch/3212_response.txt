@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public char[] asCharArray() {
+      if (type != ValueType.array) throw new IllegalStateException("Value is not an array: " + type);
+      char[] array = new char[size];
+      int i = 0;
+      for (JsonValue value = child; value != null; value = value.next, i++) {
+        char v;
+        switch (value.type) {
+          case stringValue:
+            String s = value.stringValue;
+            v = s == null || s.length() == 0 ? 0 : s.charAt(0);
+            break;
+          case doubleValue:
+            v = (char) value.doubleValue;
+            break;
+          case longValue:
+            v = (char) value.longValue;
+            break;
+          case booleanValue:
+            v = value.longValue != 0 ? (char) 1 : 0;
+            break;
+          default:
+            throw new IllegalStateException("Value cannot be converted to char: " + value.type);
+        }
+        array[i] = v;
+      }
+      return array;
+  }
+  ```
+    ]]>
+  </code>
+</response>

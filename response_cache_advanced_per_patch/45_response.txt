@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Mesh(VertexData vertices, IndexData indices, boolean isVertexArray) {
+      this.vertices = vertices;
+      this.indices = indices;
+      this.isVertexArray = isVertexArray;
+  
+      if (meshes.get(Gdx.app) != null) addManagedMesh(Nullability.castToNonnull(Gdx.app), this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

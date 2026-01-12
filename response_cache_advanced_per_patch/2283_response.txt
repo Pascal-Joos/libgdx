@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPadTop() {
+      return padTop.get(Nullability.castToNonnull(actor));
+  }
+  ```
+    ]]>
+  </code>
+</response>

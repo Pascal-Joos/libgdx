@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Ray getPickRay(float screenX, float screenY) {
+      Graphics graphics = Nullability.castToNonnull(Gdx.graphics);
+      return getPickRay(screenX, screenY, 0, 0, graphics.getWidth(), graphics.getHeight());
+}
+  ```
+    ]]>
+  </code>
+</response>

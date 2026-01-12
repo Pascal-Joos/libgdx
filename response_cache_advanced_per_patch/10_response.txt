@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private void extractVersion(String patternString, String versionString) {
+    Pattern pattern = Pattern.compile(patternString);
+    Matcher matcher = pattern.matcher(versionString);
+    boolean found = matcher.find();
+    if (found) {
+      String result = matcher.group(1);
+      String[] resultSplit = result.split("\\.");
+      majorVersion = parseInt(resultSplit[0], 2);
+      minorVersion = resultSplit.length < 2 ? 0 : parseInt(resultSplit[1], 0);
+      releaseVersion = resultSplit.length < 3 ? 0 : parseInt(resultSplit[2], 0);
+    } else {
+      if (Gdx.app != null) Gdx.app.log(TAG, "Invalid version string: " + versionString);
+      majorVersion = 2;
+      minorVersion = 0;
+      releaseVersion = 0;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

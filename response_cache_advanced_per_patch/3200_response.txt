@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void start() {
+      if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+      if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+      if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+  
+      spawnWidth = spawnWidthValue.newLowValue();
+      spawnWidthDiff = spawnWidthValue.newHighValue();
+      if (!spawnWidthValue.isRelative()) spawnWidthDiff -= spawnWidth;
+  
+      spawnHeight = spawnHeightValue.newLowValue();
+      spawnHeightDiff = spawnHeightValue.newHighValue();
+      if (!spawnHeightValue.isRelative()) spawnHeightDiff -= spawnHeight;
+  
+      spawnDepth = spawnDepthValue.newLowValue();
+      spawnDepthDiff = spawnDepthValue.newHighValue();
+      if (!spawnDepthValue.isRelative()) spawnDepthDiff -= spawnDepth;
+  }
+  ```
+    ]]>
+  </code>
+</response>

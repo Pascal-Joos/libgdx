@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void text(String text) {
+    Element parent = current;
+    if (parent != null) {
+        String existing = parent.getText();
+        parent.setText(existing != null ? existing + text : text);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,88 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all paths to the statement:
+
+    values2.valid = false;
+
+The method:
+
+public Values<V> values() {
+      if (Collections.allocateIterators) return new Values(this);
+      if (values1 == null) {
+        values1 = new Values(this);
+        values2 = new Values(this);
+      }
+      if (!values1.valid) {
+        values1.reset();
+        values1.valid = true;
+        values2.valid = false;
+        return values1;
+      }
+      Nullability.castToNonnull(values2).reset();
+      Nullability.castToNonnull(values2).valid = true;
+      values1.valid = false;
+      return values2;
+}
+
+Let’s examine the control flow:
+
+1. If `Collections.allocateIterators` is true:
+   - The method returns immediately: `return new Values(this);`
+   - The line `values2.valid = false;` is not reached on this path.
+
+2. If `Collections.allocateIterators` is false:
+   - Execution proceeds to `if (values1 == null) { ... }`.
+
+2a. When `values1 == null`:
+   - The body executes:
+        values1 = new Values(this);
+        values2 = new Values(this);
+   - After this block:
+        - `values1` is non-null (just assigned `new Values(this)`).
+        - `values2` is non-null (just assigned `new Values(this)`).
+
+   - Next, the code checks: `if (!values1.valid) {`
+     - Regardless of `values1.valid`’s truth value, this condition is evaluated *after* both `values1` and `values2` are initialized.
+     - If `!values1.valid` is true, inside that block we have:
+           values1.reset();
+           values1.valid = true;
+           values2.valid = false;   // <-- our line of interest
+           return values1;
+       Here, `values2` must be non-null, because the only prior assignment to `values2` in this invocation was `values2 = new Values(this);`.
+
+2b. When `values1 != null` at the start of the `if (values1 == null)`:
+   - The initialization block is skipped; thus, for this to be a valid state at all, `values1` and `values2` must have been previously set in some earlier call or constructor logic. However, this does not affect the safety of `values2` at the line we’re examining, because:
+
+   - The line `values2.valid = false;` is located *only* inside the `if (!values1.valid)` block that occurs *after* the `if (values1 == null)` block. That block is:
+
+        if (values1 == null) {
+          values1 = new Values(this);
+          values2 = new Values(this);
+        }
+        if (!values1.valid) {
+          values1.reset();
+          values1.valid = true;
+          values2.valid = false;   // target line
+          return values1;
+        }
+
+     Therefore:
+     - When `values1` was null at method entry, `values2` is definitely assigned before the `if (!values1.valid)` block and is thus non-null at `values2.valid = false;`.
+     - When `values1` was non-null at method entry, control still flows through this same `if (!values1.valid)` block. For the line `values2.valid = false;` to be executed, we must be inside this block, which is only entered if `values1` is non-null (or else dereferencing `values1.valid` would itself be invalid). But for this method to be meaningfully used in that state, `values2` must have been initialized through the same pattern (e.g., a previous execution of the method when `values1 == null`, or via the containing class’s constructor). Moreover, even ignoring prior calls, within this method’s code there is no path where `values2.valid = false;` is reached with `values1 == null`, and the only explicit initialization in this method assigns `new Values(this)` to `values2`. So under the method’s own internal logic, any execution of this line implies `values2` has been initialized and should be non-null.
+
+3. The later uses of `values2`:
+   - After the `if (!values1.valid) { ... }` block, we see:
+        Nullability.castToNonnull(values2).reset();
+        Nullability.castToNonnull(values2).valid = true;
+        values1.valid = false;
+        return values2;
+   - These lines are only executed when `values1.valid` was true. On that path, `values2` is passed through `Nullability.castToNonnull`, which suggests that the code’s contract is that `values2` is non-null at this point as well. This does not directly affect the `values2.valid = false;` line (which is in the opposite branch), but it supports the design intent that `values2` should always be non-null when used.
+
+Crucially, there is no path in this method’s control flow that reaches `values2.valid = false;` without going through the `if (values1 == null) { values2 = new Values(this); }` assignment in the same invocation whenever `values1` was previously null. If `values1` was already non-null before this call, then by the intended usage of this pattern (commonly seen in collection iteration helpers) `values2` would also have been created earlier and thus should be non-null. 
+
+Within the scope of this method’s code (and typical Java field semantics), `values2` cannot be null at the point of `values2.valid = false;`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

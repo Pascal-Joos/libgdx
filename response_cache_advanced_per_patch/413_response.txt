@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public FileHandle child(String name) {
+      File file = file();
+      if (file.getPath().length() == 0) return new FileHandle(new File(name), type);
+      return new FileHandle(new File(file, name), type);
+  }
+  ```
+    ]]>
+  </code>
+</response>

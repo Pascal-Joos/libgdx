@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private static void enablePointSprites() {
+    Gdx.gl.glEnable(GL20.GL_VERTEX_PROGRAM_POINT_SIZE);
+    if (Gdx.app != null && Gdx.app.getType() == ApplicationType.Desktop) {
+      Gdx.gl.glEnable(0x8861); // GL_POINT_OES
+    }
+    pointSpritesEnabled = true;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void save(ParticleEffect effect, ParticleEffectSaveParameter parameter)
+      throws IOException {
+    ResourceData<ParticleEffect> data = new ResourceData<ParticleEffect>(effect);
+
+    // effect assets
+    effect.save(parameter.manager, data);
+
+    // Batches configurations
+    if (parameter.batches != null) {
+      for (ParticleBatch<?> batch : parameter.batches) {
+        boolean save = false;
+        for (ParticleController controller : effect.getControllers()) {
+          if (controller.renderer != null && controller.renderer.isCompatible(batch)) {
+            save = true;
+            break;
+          }
+        }
+
+        if (save) batch.save(parameter.manager, data);
+      }
+    }
+
+    // save
+    Json json = new Json();
+    json.toJson(data, parameter.file);
+}
+  ```
+    ]]>
+  </code>
+</response>

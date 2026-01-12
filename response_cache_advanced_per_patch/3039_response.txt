@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void writeArrayStart(Writer writer) {
+    setWriter(writer);
+    try {
+      this.writer.array();
+    } catch (IOException ex) {
+      throw new SerializationException(ex);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

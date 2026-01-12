@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void end() {
+    if (!drawing) throw new IllegalStateException("SpriteBatch.begin must be called before end.");
+    if (idx > 0) flush();
+    lastTexture = null;
+    drawing = false;
+
+    GL20 gl = Gdx.gl;
+    if (gl != null) {
+      gl.glDepthMask(true);
+      if (isBlendingEnabled()) gl.glDisable(GL20.GL_BLEND);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

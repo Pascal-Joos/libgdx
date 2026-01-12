@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean longPress(float stageX, float stageY) {
+                              if (actor == null) return false;
+                              Nullability.castToNonnull(actor).stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                              return ActorGestureListener.this.longPress(Nullability.castToNonnull(actor), tmpCoords.x, tmpCoords.y);
+}
+  ```
+    ]]>
+  </code>
+</response>

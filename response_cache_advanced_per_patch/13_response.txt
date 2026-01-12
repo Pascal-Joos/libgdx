@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Cubemap(CubemapData data) {
+    super(GL20.GL_TEXTURE_CUBE_MAP);
+    this.data = data;
+    load(data);
+    if (data.isManaged() && managedCubemaps.get(Gdx.app) != null) addManagedCubemap(Gdx.app, this);
+}
+  ```
+    ]]>
+  </code>
+</response>

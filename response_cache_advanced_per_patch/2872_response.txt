@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially-null value is the local variable `stage`, used as `stage.getHeight()` in the condition:
+
+    if (clampPosition && windowY + height + amountY > stage.getHeight())
+
+`stage` is assigned once:
+
+    Stage stage = getStage();
+
+and then used only via `clampPosition`:
+
+    boolean clampPosition =
+        keepWithinStage && stage != null && getParent() == stage.getRoot();
+
+Thus, `clampPosition` is `true` only if:
+1. `keepWithinStage` is `true`, AND
+2. `stage != null`, AND
+3. `getParent() == stage.getRoot()`.
+
+The conditional that dereferences `stage` is guarded by `clampPosition`:
+
+    if (clampPosition && windowY + height + amountY > stage.getHeight())
+
+In Java, `&&` is short‑circuiting and evaluated left to right. Therefore:
+- If `clampPosition` is `false`, the right-hand side `stage.getHeight()` is never evaluated.
+- If the right-hand side is evaluated, then `clampPosition` must be `true`, which implies `stage != null`.
+
+There is no assignment to `stage` after it is initialized, so its value cannot change between the null-check in the `clampPosition` initialization and the use in the `if` condition.
+
+Under standard Java semantics and assuming `getStage()` is a normal method (no out-of-band behavior like changing `stage` via some concurrency trick not shown here), the dereferenced expression `stage` at `stage.getHeight()` in that condition cannot be null along any reachable execution path.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

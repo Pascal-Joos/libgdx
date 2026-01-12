@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public synchronized <T> String getAssetFileName(T asset) {
+      for (Class assetType : assets.keys()) {
+        ObjectMap<String, RefCountedContainer> assetsByType = assets.get(assetType);
+        for (Entry<String, RefCountedContainer> entry : assetsByType) {
+          RefCountedContainer container = entry.value;
+          if (container == null || container.object == null) continue;
+          Object object = Nullability.castToNonnull(entry.value).object;
+          if (object == asset || asset.equals(object)) return entry.key;
+        }
+      }
+      return null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

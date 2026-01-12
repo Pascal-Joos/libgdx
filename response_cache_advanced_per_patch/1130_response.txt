@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+The nullability of the expression `distances` at the line `float pivot = distances[si];` depends entirely on how the field/variable `distances` is initialized outside this method.
+
+Within `qsort(int si, int ei)`:
+
+- `distances` is used as an array (`distances[...]`) in multiple places (insertion sort part and quicksort part).
+- There are no null checks on `distances`.
+- There is no assignment to `distances` inside this method.
+- The control flow does not change whether `distances` is null or not; if it is null at method entry, the first access `distances[j - 1]` or `distances[j]` in the insertion loop (or `distances[si]` in the quicksort branch) would cause a `NullPointerException`.
+
+Java allows array references to be null. Unless there is a guarantee elsewhere in the class (e.g., in a constructor or setter) that `distances` is always initialized to a non-null array before calling `qsort`, the reference can be null at runtime.
+
+Because that external initialization/contract is not shown, from this method alone we cannot prove that `distances` is always non-null. So we cannot rule out the possibility that `distances` is null at `float pivot = distances[si];`.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show where and how the `distances` array is declared and initialized (e.g., field declaration, constructors, setters).]]></request>
+        <request><![CDATA[Clarify any class-level or API contract stating that `distances` is guaranteed to be non-null before `qsort` is called.]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,52 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
+
+as it appears logically, but in the actual code you provided it is wrapped with explicit null‑handling and a nonnull cast:
+
+    c.computedPadLeft =
+        Nullability.castToNonnull(c.padLeft == null ? Value.zero : c.padLeft).get(a)
+            + (column == 0
+                ? 0
+                : Math.max(
+                    0,
+                    Nullability.castToNonnull(c.spaceLeft == null ? Value.zero : c.spaceLeft).get(a)
+                        - spaceRightLast));
+
+Key points:
+
+1. **Direct use of `c.spaceLeft` is not what is executed.**  
+   The executed code does *not* call `c.spaceLeft.get(a)` directly. Instead it uses:
+   - `(c.spaceLeft == null ? Value.zero : c.spaceLeft)`  
+   and then
+   - `Nullability.castToNonnull(...)`  
+   before `.get(a)` is invoked.
+
+2. **Null guarding of `c.spaceLeft`.**  
+   - If `c.spaceLeft` is `null`, the ternary expression selects `Value.zero` (a non-null default `Value` object by convention in libGDX’s `Value` API).
+   - If `c.spaceLeft` is non-null, that non-null value is passed along.
+   In both branches, the result of the ternary is expected to be non-null.
+
+3. **`Nullability.castToNonnull` contract.**  
+   This helper is explicitly intended to enforce/assume non-nullness. The code relies on the guarantee that the argument to `.get(a)` is non-null; if it were null, this utility would itself fail (e.g., via assertion or NPE), but that would be a bug in the library, not a reachable state under the intended contract.
+
+4. **No intervening control flow alters `c.spaceLeft`** in the loop before its use in `computedPadLeft`, and `c` is a stable reference to a `Cell` taken from `cells[i]`.
+
+5. **About the actor `a`:**
+   `a` is obtained via `Nullability.castToNonnull(c.actor);`. This likewise assumes `c.actor` is non-null when computing layout; if that assumption were violated, the failure would be at `castToNonnull`, not at `c.spaceLeft.get(a)`.
+
+Given the actual code as written, the expression that is *actually* evaluated is:
+
+    Nullability.castToNonnull(c.spaceLeft == null ? Value.zero : c.spaceLeft).get(a)
+
+and not raw `c.spaceLeft.get(a)`. With the explicit null fallback `Value.zero` and the nonnull cast, the `Value` object on which `.get(a)` is called is not allowed to be null under the method’s design and contracts.
+
+Therefore, within this method as provided and under the normal libGDX `Value`/`Cell` contracts, the `c.spaceLeft` access *as used there* cannot evaluate to null in a way that would allow `.get(a)` to be called on a null reference. Any null would be intercepted either by the ternary choosing `Value.zero` or by `castToNonnull` failing earlier.
+
+]]></reason>
+    <value>NO</value>
+</response>
+```

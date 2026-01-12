@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method:
+
+    RangedNumericValue xOffsetValue = this.xOffsetValue;
+    if (xOffsetValue != null && shape.xOffsetValue != null) xOffsetValue.load(shape.xOffsetValue);
+
+The expression in question is the receiver `xOffsetValue` in the call:
+
+    xOffsetValue.load(shape.xOffsetValue);
+
+Control flow guarantees that this line is executed only when:
+
+    xOffsetValue != null && shape.xOffsetValue != null
+
+That first conjunct (`xOffsetValue != null`) is a direct null check on the local variable `xOffsetValue`, which is exactly the expression used as the receiver in the method call. There is no code between the null check and the call that could reassign `xOffsetValue` or otherwise change its value. Therefore, on any path where the call is reached, `xOffsetValue` is definitively non-null.
+
+External factors such as the implementation of `load`, the superclass, or other fields do not affect the local variable `xOffsetValue` between the null check and the call. Thus, under standard Java semantics, `xOffsetValue` at the call site cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

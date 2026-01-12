@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static final String getDefaultFragmentShader() {
+      if (defaultFragmentShader == null && Gdx.files != null)
+        defaultFragmentShader =
+            Nullability.castToNonnull(Gdx.files)
+                .classpath("com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl")
+                .readString();
+      return defaultFragmentShader;
+}
+  ```
+    ]]>
+  </code>
+</response>

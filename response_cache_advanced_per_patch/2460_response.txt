@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getBackgroundDrawable() {
+            SelectBoxStyle style = this.style;
+            if (style == null) throw new IllegalStateException("style cannot be null.");
+            if (isDisabled() && style.backgroundDisabled != null) return style.backgroundDisabled;
+            if (scrollPane != null && scrollPane.hasParent() && Nullability.castToNonnull(style).backgroundOpen != null) return Nullability.castToNonnull(style).backgroundOpen;
+            if (isOver() && style.backgroundOver != null) return style.backgroundOver;
+            return style.background;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,50 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, every usage of `angularVelocityChannel.data` is guarded by a null-check on `angularVelocityChannel` itself, but not on `angularVelocityChannel.data`.
+
+Relevant occurrences:
+
+1) Zeroing the channel:
+   if ((has2dAngularVelocity || has3dAngularVelocity) && angularVelocityChannel != null)
+     Arrays.fill(
+         Nullability.castToNonnull(angularVelocityChannel).data,
+         0,
+         controller.particles.size * Nullability.castToNonnull(angularVelocityChannel).strideSize,
+         0);
+
+2) 2D angular velocity branch:
+   if (has2dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
+     ...
+     float rotation = Nullability.castToNonnull(angularVelocityChannel).data[i] * controller.deltaTime;
+     ...
+   }
+
+3) 3D angular velocity branch:
+   else if (has3dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
+     ...
+     float wx = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.XOffset],
+           wy = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.YOffset],
+           wz = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.ZOffset],
+     ...
+   }
+
+In all these places, the only explicit check is `angularVelocityChannel != null`. There is no explicit check that `angularVelocityChannel.data` itself is non-null, and `Nullability.castToNonnull(angularVelocityChannel)` only asserts non-nullness of the channel object, not of its `data` field.
+
+Therefore:
+
+- If the type of `angularVelocityChannel` (presumably some particle channel class) guarantees by construction/contract that `data` is always non-null whenever the channel object is non-null (e.g., `data` is initialized in the constructor and never assigned null), then `angularVelocityChannel.data` cannot be null in this method.
+
+- If such a guarantee is not provided by the class or by the surrounding framework, then from this method alone there is no protection against `angularVelocityChannel.data` being null. The method assumes that a non-null channel implies a non-null `data` array.
+
+Because that guarantee (or lack thereof) is not visible in the supplied snippet, we cannot definitively conclude whether `data` can be null overall; the answer depends on the external contract of the `angularVelocityChannel` type and how instances are created.
+
+Within the local control flow of `update()`, there is no code that sets `angularVelocityChannel.data`, no additional null checks on `data`, and no other defensive logic. So the method itself does not rule out `angularVelocityChannel.data` being null; it only rules out `angularVelocityChannel` itself being null.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the definition (class) of the type of `angularVelocityChannel`, including its constructor and the declaration of the `data` field.]]></request>
+        <request><![CDATA[Provide any framework or library documentation/contract that describes whether `data` can ever be null for a non-null `angularVelocityChannel`.]]></request>
+    </requests>
+</response>
+```

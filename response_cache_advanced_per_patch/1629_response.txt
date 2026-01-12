@@ -1,0 +1,37 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+    float[] vertices = getTransformedVertices()
+
+we are invoking `Polygon.getTransformedVertices()` on a `Polygon` instance. The implementation you provided is complete and self-contained; it does not depend on any other method’s return value for deciding what to return.
+
+Consider the two return paths inside `getTransformedVertices()`:
+
+1. `if (!dirty) return worldVertices;`
+
+   Here, the method returns the field `worldVertices` *as is*. This field is of type `float[]` and is initialized/assigned only in this class. There is no guarantee in this method that `worldVertices` is non-null at the moment `dirty` is `false`. In particular, there is a plausible object state where:
+   - The `Polygon` has been constructed or manipulated such that `worldVertices` has not yet been allocated (is still `null`),
+   - and `dirty` is `false`.
+
+   In that state, this first return path will return `null`.
+
+   The rest of the Polygon and Intersector code you showed treats `getTransformedVertices()` as potentially returning `null` (e.g., `if (vertices == null || vertices.length == 0)` in `getBoundingRectangle()`, and frequent use of `Nullability.castToNonnull(...)`), which is consistent with this possibility.
+
+2. The path when `dirty` is `true`:
+
+   - If `worldVertices == null || worldVertices.length != localVertices.length`, then `worldVertices = new float[localVertices.length];`
+   - Then a local `final float[] worldVertices = this.worldVertices;` is created and populated in the loop.
+   - Finally, `return worldVertices;` returns that non-null array.
+
+   On this path, the method always returns a non-null `float[]` (barring an exception such as OOME, which we are not treating as a null return).
+
+Crucially, the call site:
+
+    float[] vertices = getTransformedVertices();
+
+does not impose any precondition on `dirty` or `worldVertices`. No prior call/assignment sequence is specified that would ensure `dirty == true` when this call occurs, nor that `worldVertices` has already been initialized if `dirty == false`. Therefore, under the method’s own logic, `getTransformedVertices()` can return `null` at this call site via the `if (!dirty) return worldVertices;` branch when `dirty` is `false` and `worldVertices` is `null`.
+
+Because this is a possible object state at the time of the call, the method’s result at this specific call site *can* be null.]]></reason>
+  <value>YES</value>
+</response>

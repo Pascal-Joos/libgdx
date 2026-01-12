@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void killParticles(int startIndex, int count) {
+      if (emitter != null) emitter.killParticles(startIndex, count);
+      for (Influencer influencer : influencers) influencer.killParticles(startIndex, count);
+  }
+  ```
+    ]]>
+  </code>
+</response>

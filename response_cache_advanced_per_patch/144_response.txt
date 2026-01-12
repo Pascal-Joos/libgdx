@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setDepthMask(final boolean depthMask) {
+      if (this.depthMask != depthMask && Gdx.gl != null) Gdx.gl.glDepthMask(this.depthMask = depthMask);
+  }
+  ```
+    ]]>
+  </code>
+</response>

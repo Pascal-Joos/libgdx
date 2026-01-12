@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setAttributef(String name, float value1, float value2, float value3, float value4) {
+      GL20 gl = Gdx.gl20;
+      if (gl == null) return;
+      int location = fetchAttributeLocation(name);
+      gl.glVertexAttrib4f(location, value1, value2, value3, value4);
+  }
+  ```
+    ]]>
+  </code>
+</response>

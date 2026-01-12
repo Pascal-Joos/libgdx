@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable
+  public <T> AssetLoader getLoader(final Class<T> type,  final String fileName) {
+    ObjectMap<String, AssetLoader> loaders = this.loaders.get(type);
+    if (loaders == null || loaders.size < 1) return null;
+    if (fileName == null) return loaders.get("");
+    AssetLoader result = null;
+    int length = -1;
+    ObjectMap.Entries<String, AssetLoader> entries = loaders.entries();
+    if (entries == null) return null;
+    for (Entry<String, AssetLoader> entry : entries) {
+      if (entry.key.length() > length && fileName.endsWith(entry.key)) {
+        result = entry.value;
+        length = entry.key.length();
+      }
+    }
+    return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

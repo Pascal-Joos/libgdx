@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the only explicit null check related to `style` is:
+
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+
+This guarantees that from that point onward in the `draw` method, the variable `style` itself is non-null, because:
+
+1. If `style` were null, the method would throw and exit immediately.
+2. All subsequent code (including the line `if (style.stageBackground != null) {`) is executed only if `style` is not null.
+
+The condition in question is:
+
+    if (style.stageBackground != null) {
+
+This line dereferences `style` to access its `stageBackground` field. Since the previous check ensures `style` is never null along any path reaching this line, the expression `style` at this point cannot be null.
+
+Whether `style.stageBackground` can be null is a separate question (it can, as the `if` condition is explicitly checking for that), but the *expression* `style` itself is guaranteed non-null in all code paths that reach this line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

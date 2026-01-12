@@ -1,0 +1,43 @@
+<response>
+  <reason><![CDATA[
+The getter itself simply returns the field `listenerActor` with no checks or initialization:
+
+```java
+public Actor getListenerActor() {
+    return listenerActor;
+}
+```
+
+Nothing in the provided call chain guarantees that `listenerActor` is non-null at the time `event.getListenerActor()` is used.
+
+In libGDX’s `scene2d` API, `Event.listenerActor` is the actor that had the listener attached when the event was fired; by design it may be null (e.g., for events created or fired in ways that do not associate a listener actor, or before the field is set). The library code itself reflects this: some usages explicitly check for null before using the value:
+
+```java
+actor = event.getListenerActor();
+if (actor == null) return false;
+...
+event.getStage().addTouchFocus(
+    this,
+    Nullability.castToNonnull(event.getListenerActor()),
+    ...
+);
+```
+
+These null checks and the use of `Nullability.castToNonnull` (which exists specifically to silence nullability warnings where the author believes it is non-null *at that point*) show that `getListenerActor()` has a nullable contract in general.
+
+At the specific call sites you’ve shown (for example, in `InputListener`, `ClickListener`, `DragScrollListener`, `Tooltip`, etc.), there is no preceding guarantee that:
+
+- the event is always created/fired with a non-null `listenerActor`, and
+- the listener actor has not been cleared before these methods execute.
+
+Because:
+
+1. The value returned is exactly the field `listenerActor`.
+2. No invariant or check in the displayed code forces that field to be non-null at these uses.
+3. Other parts of the same API explicitly guard against it being null.
+
+`event.getListenerActor()` must be considered capable of returning null at these call sites. The correctness of many of these call sites actually relies on runtime behavior of the framework (how it constructs and dispatches `InputEvent`s), not on any static guarantee visible in the snippets.
+
+Therefore, from the perspective of static analysis of the shown code and method definition, `event.getListenerActor()` can be null at these call sites.]]></reason>
+  <value>YES</value>
+</response>

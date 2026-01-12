@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name is `setStyle`, which clearly follows the standard setter naming convention (`setX`). Your own criteria explicitly exclude setter methods from being considered initializer methods, even if they assign or adjust multiple fields. While the method does set fields and apply a default, its primary role is still that of a setter, not a lifecycle/initialization hook like `onCreate`, `init`, or methods whose names start with `init`/`initialize`. Therefore, it should not be treated as an initializer method for NullAway.]]></reason>
+    <value>NO</value>
+</response>

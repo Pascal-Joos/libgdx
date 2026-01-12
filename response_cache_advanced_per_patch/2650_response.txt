@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+void updateCurrentLine() {
+    int index = calculateCurrentLineIndex(cursor);
+    int line = index / 2;
+    // Special case when cursor moves to the beginning of the line from the end of another and a
+    // word
+    // wider than the box
+    if (index % 2 == 0
+        || index + 1 >= linesBreak.size
+        || cursor != linesBreak.items[index]
+        || linesBreak.items[index + 1] != linesBreak.items[index]) {
+      if (line < linesBreak.size / 2
+          || text == null
+          || text.length() == 0
+          || text.charAt(text.length() - 1) == NEWLINE
+          || text.charAt(text.length() - 1) == CARRIAGE_RETURN) {
+        cursorLine = line;
+      }
+    }
+    updateFirstLineShowing(); // fix for drag-selecting text out of the TextArea's bounds
+}
+  ```
+    ]]>
+  </code>
+</response>

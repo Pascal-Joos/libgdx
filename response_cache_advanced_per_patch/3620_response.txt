@@ -1,0 +1,40 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially-null field is `_son`. The expression in question is:
+
+    _son[ptr0] = _son[ptr1] = kEmptyHashValue;
+
+Inside the method, all assignments use the local variable `son` instead:
+
+    int[] son = Nullability.castToNonnull(_son);
+    ...
+    son[ptr0] = son[ptr1] = kEmptyHashValue;
+
+The use of `_son[...]` in the problem statement appears to be a simplification or a different version of the code; in the provided method body, the actual write is done through `son`, not `_son`.
+
+Now consider nullability:
+
+1. The method begins with a direct null check on `_son`:
+   
+       if (_son == null) {
+           return;
+       }
+
+   So if `_son` is null, the method returns immediately and does not reach the assignment.
+
+2. Immediately after this return guard, we have:
+
+       int[] son = Nullability.castToNonnull(_son);
+
+   Given the name, `castToNonnull` is intended to represent to static or nullability analyzers that `_son` is non-null at this point. There is no control-flow path from the null check to `son[ptr0] = son[ptr1] = ...` in which `_son` could be null at runtime, unless some external concurrency race modifies `_son` from another thread between the check and the use. The method itself does not reassign `_son`.
+
+3. All subsequent references in the method body use `son`, which is non-null by construction (assuming no data race that changes `_son` to null and `castToNonnull` simply returns the reference as-is).
+
+Given only the code shown and assuming standard single-threaded or properly synchronized access (i.e., no unsynchronized concurrent writes to `_son`), there is no execution path where `_son` (or the effective array reference used as `son`) can be null at the point of assignment.
+
+Thus, under normal Java semantics without data races, `_son` / `son` cannot be null at the line assigning `kEmptyHashValue`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

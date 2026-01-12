@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getMinHeight() {
+    float first = firstWidget instanceof Layout ? ((Layout) firstWidget).getMinHeight() : 0;
+    float second = secondWidget instanceof Layout ? ((Layout) secondWidget).getMinHeight() : 0;
+    if (!vertical) return Math.max(first, second);
+    return first + (style != null ? style.handle.getMinHeight() : 0) + second;
+}
+  ```
+    ]]>
+  </code>
+</response>

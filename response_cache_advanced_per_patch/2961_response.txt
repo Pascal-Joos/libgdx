@@ -1,0 +1,107 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @SuppressWarnings("unchecked")
+      private void mergeLo(int base1, int len1, int base2, int len2) {
+        if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
+    
+        // Copy first run into temp array
+        Object[] a = Nullability.castToNonnull(this.a); // For performance
+        if (a == null) {
+          throw new NullPointerException();
+        }
+        Object[] tmp = ensureCapacity(len1);
+        System.arraycopy(a, base1, tmp, 0, len1);
+    
+        int cursor1 = 0; // Indexes into tmp array
+        int cursor2 = base2; // Indexes int a
+        int dest = base1; // Indexes int a
+    
+        // Move first element of second run and deal with degenerate cases
+        a[dest++] = a[cursor2++];
+        if (--len2 == 0) {
+          System.arraycopy(tmp, cursor1, a, dest, len1);
+          return;
+        }
+        if (len1 == 1) {
+          System.arraycopy(a, cursor2, a, dest, len2);
+          a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+          return;
+        }
+    
+        int minGallop = this.minGallop; // Use local variable for performance
+        outer:
+        while (true) {
+          int count1 = 0; // Number of times in a row that first run won
+          int count2 = 0; // Number of times in a row that second run won
+    
+          /*
+           * Do the straightforward thing until (if ever) one run starts winning consistently.
+           */
+          do {
+            if (DEBUG) assert len1 > 1 && len2 > 0;
+            if (((Comparable) a[cursor2]).compareTo(tmp[cursor1]) < 0) {
+              a[dest++] = a[cursor2++];
+              count2++;
+              count1 = 0;
+              if (--len2 == 0) break outer;
+            } else {
+              a[dest++] = tmp[cursor1++];
+              count1++;
+              count2 = 0;
+              if (--len1 == 1) break outer;
+            }
+          } while ((count1 | count2) < minGallop);
+    
+          /*
+           * One run is winning so consistently that galloping may be a huge win. So try that, and continue galloping until (if
+           * ever) neither run appears to be winning consistently anymore.
+           */
+          do {
+            if (DEBUG) assert len1 > 1 && len2 > 0;
+            count1 = gallopRight((Comparable) a[cursor2], tmp, cursor1, len1, 0);
+            if (count1 != 0) {
+              System.arraycopy(tmp, cursor1, a, dest, count1);
+              dest += count1;
+              cursor1 += count1;
+              len1 -= count1;
+              if (len1 <= 1) // len1 == 1 || len1 == 0
+              break outer;
+            }
+            a[dest++] = a[cursor2++];
+            if (--len2 == 0) break outer;
+    
+            count2 = gallopLeft((Comparable) tmp[cursor1], a, cursor2, len2, 0);
+            if (count2 != 0) {
+              System.arraycopy(a, cursor2, a, dest, count2);
+              dest += count2;
+              cursor2 += count2;
+              len2 -= count2;
+              if (len2 == 0) break outer;
+            }
+            a[dest++] = tmp[cursor1++];
+            if (--len1 == 1) break outer;
+            minGallop--;
+          } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+          if (minGallop < 0) minGallop = 0;
+          minGallop += 2; // Penalize for leaving gallop mode
+        } // End of "outer" loop
+        this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
+    
+        if (len1 == 1) {
+          if (DEBUG) assert len2 > 0;
+          System.arraycopy(a, cursor2, a, dest, len2);
+          a[dest + len2] = tmp[cursor1]; // Last elt of run 1 to end of merge
+        } else if (len1 == 0) {
+          throw new IllegalArgumentException("Comparison method violates its general contract!");
+        } else {
+          if (DEBUG) assert len2 == 0;
+          if (DEBUG) assert len1 > 1;
+          System.arraycopy(tmp, cursor1, a, dest, len1);
+        }
+  }
+  ```
+    ]]>
+  </code>
+</response>

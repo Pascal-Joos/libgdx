@@ -1,0 +1,37 @@
+<response>
+  <reason><![CDATA[
+At this call site we are in `Skin.get(String name, Class<T> type)`:
+
+```java
+ObjectMap<String, Object> typeResources = resources.get(type);
+if (typeResources == null)
+  throw new GdxRuntimeException("No " + type.getName() + " registered with name: " + name);
+Object resource = typeResources.get(name);
+...
+```
+
+Here, `resources` is an `ObjectMap<Class, ObjectMap<String,Object>>`, and the call in question is:
+
+```java
+ObjectMap<String, Object> typeResources = resources.get(type);
+```
+
+The `ObjectMap.get` method is:
+
+```java
+public @Null <T extends K> V get(T key) {
+    int i = locateKey(key);
+    return i < 0 ? null : valueTable[i];
+}
+```
+
+So in general it returns `null` when the key is not present.
+
+Within `Skin.get(name, type)`, there is no prior check or guarantee that `resources` must contain an entry for the given `type`; indeed, the code explicitly handles the case where `resources.get(type)` returns `null` by throwing a `GdxRuntimeException`. That is, the possibility of a `null` return from this `get` call is part of the normal control flow:
+
+- If `resources` does not contain the key `type`, then `locateKey(type)` will be `< 0`, and `resources.get(type)` will return `null`.
+- The very next line checks for `null` and throws an exception if so.
+
+Therefore, at this specific call site, `resources.get(type)` can evaluate to `null`. The later throw does not change the fact that the `get` invocation itself may return `null;` it just ensures that the method `Skin.get(...)` does not continue normally when that happens.]]></reason>
+  <value>YES</value>
+</response>

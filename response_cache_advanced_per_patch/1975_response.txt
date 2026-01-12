@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefHeight() {
+          if (prefHeight == null) throw new IllegalStateException("prefHeight cannot be null.");
+          if (actor == null) return 0f;
+          Value prefHeight = this.prefHeight;
+          return prefHeight.get(actor);
+}
+  ```
+    ]]>
+  </code>
+</response>

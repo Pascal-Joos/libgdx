@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setStyle(TextFieldStyle style) {
+      if (style == null) throw new IllegalArgumentException("style cannot be null.");
+      this.style = style;
+  
+      if (style.font != null) textHeight = Nullability.castToNonnull(style.font).getCapHeight() - Nullability.castToNonnull(style.font).getDescent() * 2;
+      if (text != null) updateDisplayText();
+      invalidateHierarchy();
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public String getRemoteAddress() {
+      if (socket != null) {
+        return Nullability.castToNonnull(socket).getRemoteSocketAddress().toString();
+      } else {
+        return null;
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

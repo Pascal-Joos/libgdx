@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void begin() {
+      if (color == null && target != null) color = target.getColor();
+      start = color.a;
+  }
+  ```
+    ]]>
+  </code>
+</response>

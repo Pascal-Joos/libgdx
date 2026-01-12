@@ -1,0 +1,33 @@
+<response>
+  <reason><![CDATA[
+The method `VertexAttributes.findByUsage(int usage)` can only return a non-null `VertexAttribute` if, within the `VertexAttributes` instance, there exists at least one element whose `usage` field equals the argument value.
+
+At the call site in question:
+```java
+a = attributes.findByUsage(Usage.TextureCoordinates);
+uvOffset = a == null ? -1 : a.offset / 4;
+```
+we know:
+
+- `attributes` is a `VertexAttributes` instance passed into `MeshBuilder.begin(...)`.
+- The implementation of `findByUsage` is:
+  ```java
+  public VertexAttribute findByUsage(int usage) {
+      int len = size();
+      for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
+      return null;
+  }
+  ```
+- If none of the `VertexAttribute` elements in `attributes` have `usage == Usage.TextureCoordinates`, the loop completes without returning, and the method returns `null`.
+
+Nothing in the provided code or call chain guarantees that every `VertexAttributes` instance used with `MeshBuilder.begin(...)` must contain a `VertexAttribute` with `usage == Usage.TextureCoordinates`. In fact, the surrounding code explicitly handles the case where `findByUsage` returns `null` for several usages (Normal, BiNormal, Tangent, ColorUnpacked, ColorPacked, TextureCoordinates) by setting offsets to `-1` when `a == null`. The code only *throws* for a missing `Usage.Position` attribute, not for missing texture coordinates, so a missing `Usage.TextureCoordinates` attribute is an expected, handled scenario.
+
+Therefore, for the specific invocation:
+
+```java
+GPU_ATTRIBUTES.findByUsage(Usage.TextureCoordinates)
+```
+
+there is no guarantee that `GPU_ATTRIBUTES` contains a texture-coordinate attribute, and `findByUsage` can legitimately reach its `return null;` path. Hence, this call site can receive `null` as the result.]]></reason>
+  <value>YES</value>
+</response>

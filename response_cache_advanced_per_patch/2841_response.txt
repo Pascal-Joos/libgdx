@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+ public @Null Tree<N, V> getTree() {
+          if (actor == null) return null;
+          Group parent = Nullability.castToNonnull(actor).getParent();
+          if (parent instanceof Tree) return (Tree) parent;
+          return null;
+}
+  ```
+    ]]>
+  </code>
+</response>

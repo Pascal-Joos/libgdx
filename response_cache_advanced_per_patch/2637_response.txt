@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ImageTextButton(@Null String text, ImageTextButtonStyle style) {
+    super(style);
+    this.style = style;
+
+    defaults().space(3);
+
+    image = newImage();
+
+    label = newLabel(text, new LabelStyle(Nullability.castToNonnull(style.font), style.fontColor));
+    label.setAlignment(Align.center);
+
+    add(image);
+    add(label);
+
+    setStyle(style);
+
+    setSize(getPrefWidth(), getPrefHeight());
+}
+  ```
+    ]]>
+  </code>
+</response>

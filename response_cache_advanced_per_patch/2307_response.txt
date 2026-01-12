@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    protected Drawable getImageDrawable() {
+      if (isDisabled()) {
+        if (isChecked && style != null && style.checkboxOnDisabled != null) return style.checkboxOnDisabled;
+        return style == null ? null : style.checkboxOffDisabled;
+      }
+      boolean over = isOver() && !isDisabled();
+      if (style == null) return null;
+      if (isChecked && style.checkboxOn != null)
+        return over && style.checkboxOnOver != null ? style.checkboxOnOver : style.checkboxOn;
+      if (over && style.checkboxOver != null) return style.checkboxOver;
+      return Nullability.castToNonnull(style).checkboxOff;
+    }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+    <reason><![CDATA[
+Within the provided call chain, every invocation of Matrix3.set(Matrix4 mat) passes a non-null Matrix4:
+
+- In SphereShapeBuilder.build(...), the call is:
+  normalTransform.set(transform);
+  Here, transform is a method parameter of type Matrix4. In the shown usages:
+  - CapsuleShapeBuilder.build(...) calls SphereShapeBuilder.build(...) with matTmp1.setToTranslation(...). The result of setToTranslation(...) is a Matrix4 instance, not null.
+  - The other SphereShapeBuilder.build(...) overload calls the deprecated build(...) with matTmp1.idt(), again returning a Matrix4 instance, not null.
+- No reassignment or modification of the parameter `mat` occurs inside Matrix3.set; it is only read (mat.val[...]).
+
+Other call sites shown (e.g., MeshBuilder.setVertexTransform, ModelCache.end, DefaultShader$Setters$11.set) involve Matrix4 usage but do not call Matrix3.set(Matrix4). Thus they do not affect the nullability of `mat` in this method.
+
+There are no intermediate methods in this chain that could change `mat` to null before it is used in Matrix3.set, and the actual arguments at all visible call sites are produced by Matrix4 instance methods returning non-null `this`. Therefore, based strictly on the given code and call chain, `mat` cannot be null at runtime in these contexts.
+    ]]></reason>
+    <value>NO</value>
+</response>

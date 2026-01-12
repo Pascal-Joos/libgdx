@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setToOrtho(boolean yDown) {
+      Graphics graphics = Gdx.graphics;
+      if (graphics == null) {
+          return;
+      }
+      setToOrtho(yDown, graphics.getWidth(), graphics.getHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

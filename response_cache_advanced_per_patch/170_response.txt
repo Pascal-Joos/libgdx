@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void invalidate() {
+    if (Gdx.gl20 == null) return;
+    bufferHandle = Gdx.gl20.glGenBuffer();
+    isDirty = true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

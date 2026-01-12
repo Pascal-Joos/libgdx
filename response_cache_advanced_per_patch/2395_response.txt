@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getKnobDrawable() {
+    SliderStyle style = (SliderStyle) super.getStyle();
+    if (style == null) return null;
+    if (disabled && style.disabledKnob != null) return style.disabledKnob;
+    if (isDragging() && style.knobDown != null) return style.knobDown;
+    if (mouseOver && style.knobOver != null) return style.knobOver;
+    return style.knob;
+  }
+  ```
+    ]]>
+  </code>
+</response>

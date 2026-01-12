@@ -1,0 +1,51 @@
+<response>
+  <reason><![CDATA[
+The implementation of `VertexAttributes.findByUsage(int usage)` is:
+
+```java
+public VertexAttribute findByUsage(int usage) {
+    int len = size();
+    for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
+    return null;
+}
+```
+
+At the call site in question the method is invoked as:
+
+```java
+GPU_ATTRIBUTES.findByUsage(Usage.Position)
+```
+
+From the provided code, we do not have any guarantees about the contents of `GPU_ATTRIBUTES` at this point. The method scans through all attributes and returns the first one whose `usage` field equals the given `usage` argument. If none of the attributes in `GPU_ATTRIBUTES` has `usage == Usage.Position`, then the loop completes without hitting `return get(i)` and the method will execute the final `return null;`.
+
+Other usages in the codebase confirm that `findByUsage(Usage.Position)` is *expected* to sometimes be `null`:
+
+- In `WeightMeshSpawnShapeValue.calculateWeights()`:
+
+  ```java
+  VertexAttribute positionAttribute = attributes.findByUsage(Usage.Position);
+  if (positionAttribute == null) return;
+  ```
+
+  This explicitly checks for `null` and returns early if there is no position attribute.
+
+- In `MeshBuilder.begin(VertexAttributes attributes)`:
+
+  ```java
+  VertexAttribute a = attributes.findByUsage(Usage.Position);
+  if (a == null) throw new GdxRuntimeException("Cannot build mesh without position attribute");
+  ```
+
+  Here they also admit that the call can be `null` and convert that case into an exception.
+
+These callers defensively handle the possibility of `null`, showing that the library itself does not assume that `findByUsage(Usage.Position)` will always succeed.
+
+Because no information is provided that would *guarantee* that `GPU_ATTRIBUTES` must contain a `VertexAttribute` with `usage == Usage.Position` at this particular call site, and because the method’s own logic explicitly returns `null` when no such attribute is found, the invocation
+
+```java
+GPU_ATTRIBUTES.findByUsage(Usage.Position)
+```
+
+**can** evaluate to `null` at this call site.]]></reason>
+  <value>YES</value>
+</response>

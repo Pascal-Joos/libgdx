@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void run() {
+    Runnable runnable = getRunnable();
+    if (runnable == null) {
+      return;
+    }
+    Pool pool = getPool();
+    setPool(null); // Ensure this action can't be returned to the pool inside the runnable.
+    try {
+      runnable.run();
+    } finally {
+      setPool(pool);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

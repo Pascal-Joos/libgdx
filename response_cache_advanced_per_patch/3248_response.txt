@@ -1,0 +1,49 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void readFields(Object object, JsonValue jsonMap) {
+    Class type = object.getClass();
+    OrderedMap<String, FieldMetadata> fields = getFields(type);
+    for (JsonValue child = jsonMap.child; child != null; child = child.next) {
+      String childName = child.name;
+      if (childName == null) continue;
+      FieldMetadata metadata = fields.get(childName.replace(" ", "_"));
+      if (metadata == null) {
+        if (childName.equals(typeName)) continue;
+        if (ignoreUnknownFields || ignoreUnknownField(type, childName)) {
+          if (debug)
+            System.out.println(
+                "Ignoring unknown field: " + childName + " (" + type.getName() + ")");
+          continue;
+        } else {
+          SerializationException ex =
+              new SerializationException(
+                  "Field not found: " + childName + " (" + type.getName() + ")");
+          ex.addTrace(child.trace());
+          throw ex;
+        }
+      } else {
+        if (ignoreDeprecated && !readDeprecated && metadata.deprecated) continue;
+      }
+      Field field = metadata.field;
+      try {
+        field.set(object, readValue(field.getType(), metadata.elementType, child));
+      } catch (ReflectionException ex) {
+        throw new SerializationException(
+            "Error accessing field: " + field.getName() + " (" + type.getName() + ")", ex);
+      } catch (SerializationException ex) {
+        ex.addTrace(field.getName() + " (" + type.getName() + ")");
+        throw ex;
+      } catch (RuntimeException runtimeEx) {
+        SerializationException ex = new SerializationException(runtimeEx);
+        ex.addTrace(child.trace());
+        ex.addTrace(field.getName() + " (" + type.getName() + ")");
+        throw ex;
+      }
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

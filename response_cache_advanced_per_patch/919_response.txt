@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void removeAnimation(final Animation animation) {
+      for (final NodeAnimation nodeAnim : animation.nodeAnimations) {
+        if (nodeAnim.node == null) continue;
+        nodeAnim.node.isAnimated = false;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

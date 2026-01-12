@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public GLTexture(int glTarget) {
+      this(glTarget, Gdx.gl20.glGenTexture());
+  }
+  ```
+    ]]>
+  </code>
+</response>

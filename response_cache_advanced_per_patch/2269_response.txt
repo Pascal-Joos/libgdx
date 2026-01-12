@@ -1,0 +1,58 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public <T extends Actor> Cell<T> add( @Null T actor) {
+      Cell<T> cell = obtainCell();
+      cell.actor = actor;
+
+      // The row was ended for layout, not by the user, so revert it.
+      if (implicitEndRow) {
+        implicitEndRow = false;
+        rows--;
+        cells.peek().endRow = false;
+      }
+
+      int cellCount = cells.size;
+      if (cellCount > 0) {
+        // Set cell column and row.
+        Cell lastCell = cells.peek();
+        if (!lastCell.endRow) {
+          cell.column = lastCell.column + lastCell.colspan;
+          cell.row = lastCell.row;
+        } else {
+          cell.column = 0;
+          cell.row = lastCell.row + 1;
+        }
+        // Set the index of the cell above.
+        if (cell.row > 0) {
+          Object[] cells = this.cells.items;
+          outer:
+          for (int i = cellCount - 1; i >= 0; i--) {
+            Cell other = (Cell) cells[i];
+            for (int column = other.column, nn = column + Nullability.castToNonnull(other.colspan); column < nn; column++) {
+              if (column == cell.column) {
+                cell.cellAboveIndex = i;
+                break outer;
+              }
+            }
+          }
+        }
+      } else {
+        cell.column = 0;
+        cell.row = 0;
+      }
+      cells.add(cell);
+
+      cell.set(cellDefaults);
+      if (cell.column < columnDefaults.size) cell.merge(columnDefaults.get(cell.column));
+      cell.merge(rowDefaults);
+
+      if (actor != null) addActor(actor);
+
+      return cell;
+  }
+  ```
+    ]]>
+  </code>
+</response>

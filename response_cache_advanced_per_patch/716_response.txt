@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void set(
+      BaseShader shader,
+      int inputID,
+      Renderable renderable,
+      Attributes combinedAttributes) {
+    TextureAttribute emissive =
+        ((TextureAttribute) (combinedAttributes.get(TextureAttribute.Emissive)));
+    if (emissive == null) return;
+    final int unit =
+        shader.context.textureBinder.bind(
+            emissive.textureDescription);
+    shader.set(inputID, unit);
+  }
+  ```
+    ]]>
+  </code>
+</response>

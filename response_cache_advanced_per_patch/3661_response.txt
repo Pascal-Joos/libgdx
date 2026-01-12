@@ -1,0 +1,25 @@
+<response>
+    <reason><![CDATA[
+NullAway's notion of an initializer method is not about whether a method happens to assign fields, but whether it is *designated* (by framework contract or naming convention) as the special method that is always invoked before any other non-constructor methods.
+
+From your description and examples, initializer methods are typically:
+- Framework lifecycle methods (e.g., Activity.onCreate, Servlet.init), or
+- Methods whose names start with "init" or "initialize" and are not simple setters.
+
+The given method is:
+
+public void Create(int windowSize) {
+    if (_buffer == null || _windowSize != windowSize) _buffer = new byte[windowSize];
+    _windowSize = windowSize;
+    _pos = 0;
+    _streamPos = 0;
+}
+
+Its name:
+- Does not start with "init" or "initialize".
+- Is not among the listed framework lifecycle methods.
+- Looks like a regular API method that configures internal state, conceptually similar to a specialized setter, even though it initializes several fields at once.
+
+Therefore, according to the rules you described, this method should *not* be treated as a NullAway initializer method.]]></reason>
+    <value>NO</value>
+</response>

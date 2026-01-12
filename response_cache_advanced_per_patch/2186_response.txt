@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPadY() {
+      if (actor == null) return 0;
+      if (padTop == null) padTop = Value.zero;
+      if (padBottom == null) padBottom = Value.zero;
+      float padTopValue = Nullability.castToNonnull(padTop).get(actor);
+      float padBottomValue = padBottom.get(actor);
+      return padTopValue + padBottomValue;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the indexed access `_hash[i]` inside:
+
+    if (_hash != null) {
+        for (int i = 0; i < _hashSizeSum; i++) _hash[i] = kEmptyHashValue;
+    }
+
+The only potentially null value here is the array reference `_hash`, not `_hash[i]` itself. However, the array access `_hash[i]` is guarded by an explicit null check:
+
+    if (_hash != null) { ... }
+
+Within the body of that `if` block, Java guarantees that `_hash` is non-null for the duration of the block, provided `_hash` is not modified concurrently by another thread in a way that bypasses this check (and no such information is given).
+
+Given only this method:
+
+- All code paths that reach `_hash[i]` pass through the `if (_hash != null)` condition.
+- There is no reassignment to `_hash` inside the `if` block.
+- Under ordinary single-threaded or properly synchronized usage, `_hash` cannot be null at the point `_hash[i]` is evaluated.
+
+In the absence of additional information about concurrent modification of `_hash` or unusual memory-model violations, we must treat the code as standard Java and conclude that the expression `_hash` at the point of `_hash[i]` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

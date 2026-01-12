@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name allocateChannels does not match any of the known framework-style lifecycle initializer patterns (e.g., onCreate, init) and does not start with "init" or "initialize". It also lacks any established convention indicating it is always called before other methods, and from the signature alone it could be invoked multiple times, similar to a regular configuration or setup helper. Under the stated NullAway rules, this is not sufficient to treat it as a designated initializer method rather than an ordinary method that happens to assign a field.
+    ]]></reason>
+    <value>NO</value>
+</response>

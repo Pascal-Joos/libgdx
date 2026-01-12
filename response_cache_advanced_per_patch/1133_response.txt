@@ -1,0 +1,51 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void qsort(int si, int ei) {
+          if (distances == null || particleIndices == null || currentSize < ei + 1) {
+            ensureCapacity(ei + 1);
+          }
+          if (si < ei) {
+            float tmp;
+            int tmpIndex, particlesPivotIndex;
+            if (ei - si <= 8) {
+              for (int i = si; i <= ei; i++)
+                for (int j = i; j > si && distances[j - 1] > distances[j]; j--) {
+                  tmp = distances[j];
+                  distances[j] = distances[j - 1];
+                  distances[j - 1] = tmp;
+                  tmpIndex = particleIndices[j];
+                  particleIndices[j] = particleIndices[j - 1];
+                  particleIndices[j - 1] = tmpIndex;
+                }
+              return;
+            }
+            float pivot = distances[si];
+            int i = si + 1;
+            particlesPivotIndex = particleIndices[si];
+            for (int j = si + 1; j <= ei; j++) {
+              if (pivot > distances[j]) {
+                if (j > i) {
+                  tmp = distances[j];
+                  distances[j] = distances[i];
+                  distances[i] = tmp;
+                  tmpIndex = particleIndices[j];
+                  particleIndices[j] = particleIndices[i];
+                  particleIndices[i] = tmpIndex;
+                }
+                i++;
+              }
+            }
+            distances[si] = distances[i - 1];
+            distances[i - 1] = pivot;
+            particleIndices[si] = particleIndices[i - 1];
+            particleIndices[i - 1] = particlesPivotIndex;
+            qsort(si, i - 2);
+            qsort(i, ei);
+          }
+  }
+  ```
+    ]]>
+  </code>
+</response>

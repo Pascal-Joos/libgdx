@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Mesh(boolean isStatic, int maxVertices, int maxIndices, VertexAttribute... attributes) {
+      vertices = makeVertexBuffer(isStatic, maxVertices, new VertexAttributes(attributes));
+      indices = new IndexBufferObject(isStatic, maxIndices);
+      isVertexArray = false;
+
+      if (Gdx.app != null) addManagedMesh(Gdx.app, this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

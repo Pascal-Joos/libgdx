@@ -1,0 +1,10 @@
+<response>
+    <reason><![CDATA[
+By your own criteria, an initializer method for NullAway is typically:
+- Known framework lifecycle methods (e.g., onCreate, init), or
+- Any method whose name starts with "init" or "initialize" and is not a setter.
+
+The given method is named `set`, which is a conventional setter-style name and does not start with "init" or "initialize". Although it assigns many fields and is annotated with `@Initializer`, it is still a generic setter by name and does not match the naming-based heuristic you explicitly described for user-defined initializer methods. Therefore, it should not be considered an initializer method under those rules.
+    ]]></reason>
+    <value>NO</value>
+</response>

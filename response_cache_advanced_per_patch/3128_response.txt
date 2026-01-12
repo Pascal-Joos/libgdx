@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the line in question:
+
+    if (emitter != null) emitter.save(manager, data);
+
+the dereferenced expression is `emitter` (i.e., the receiver of the `save` call in `emitter.save(manager, data)`).
+
+Immediately before the call, there is an explicit null check: `if (emitter != null)`. In Java, the body of that `if` (including `emitter.save(...)`) is only executed when `emitter` is guaranteed to be non-null at that point in control flow. If `emitter` were null, the condition would evaluate to false and the call would not be executed.
+
+There is no indication in the provided snippet of any concurrent modification (e.g., another thread setting `emitter` to null between the check and the call), and the snippet is standard single-threaded Java semantics. Under those normal assumptions, the `emitter` expression at the invocation site cannot be null when it is dereferenced.
+
+Therefore, `emitter` can be null in general, but *cannot* be null at the moment it is used in `emitter.save(manager, data)` due to the guarding `if (emitter != null)` check.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

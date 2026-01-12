@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean act(float delta) {
+      if (target != null) {
+        if (capture) target.addCaptureListener(listener);
+        else target.addListener(listener);
+        return true;
+      }
+      return false;
+}
+  ```
+    ]]>
+  </code>
+</response>

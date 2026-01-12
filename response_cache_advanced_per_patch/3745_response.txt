@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Ray getPickRay(float screenX, float screenY) {
+        if (camera == null) {
+            return null;
+        }
+        return Nullability.castToNonnull(camera).getPickRay(
+            screenX, screenY, this.screenX, this.screenY, screenWidth, screenHeight);
+}
+  ```
+    ]]>
+  </code>
+</response>

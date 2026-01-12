@@ -1,0 +1,41 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, `font` is declared as:
+
+    final BitmapFont font = style.font;
+
+There are two explicit null checks before the line in question:
+
+1. Immediately after obtaining `style.font`:
+
+    if (style.font == null) return;
+    final BitmapFont font = style.font;
+
+   If `style.font` were null, the method returns and never reaches any later use of `font`.
+
+2. Later, before using `font`:
+
+    if (font == null) return;
+
+   This is a redundant check given the first one, but it again ensures that if `font` were null, the method would return at that point.
+
+The line under scrutiny is:
+
+    float yOffset = Nullability.castToNonnull(font).isFlipped() ? -textHeight : 0;
+
+Control flow guarantees:
+
+- The method exits early if `style.font == null`.
+- `font` is assigned directly from `style.font` and never reassigned.
+- The method exits again if `font == null`.
+
+Thus, when execution reaches the `yOffset` calculation, both checks have already passed, so `font` cannot be null via any intra-method control flow.
+
+The only remaining theoretical risk would be if `style.font` were mutated to null concurrently between the checks and this line by another thread. In typical single-threaded UI frameworks like LibGDX Scene2D (which this code strongly resembles), scene graph mutation is assumed to occur on the rendering thread, so concurrent mutation of `style.font` is not part of the usual contract. Under that standard assumption, `font` is non-null at the point of use.
+
+Therefore, given the control flow and typical API contracts, the `font` expression at `font.isFlipped()` cannot be null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

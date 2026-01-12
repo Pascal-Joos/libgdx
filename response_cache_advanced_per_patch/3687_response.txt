@@ -1,0 +1,38 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the line in question:
+
+    if (_inStream != null && _matchFinder != null) {
+      Nullability.castToNonnull(_matchFinder).SetStream(_inStream);
+      ...
+
+the call is:
+
+    Nullability.castToNonnull(_matchFinder).SetStream(_inStream);
+
+Immediately before this call, the control flow is guarded by the condition:
+
+    _inStream != null && _matchFinder != null
+
+This is a short‑circuiting logical AND. For the body of the if-statement to execute, both conjuncts must evaluate to true:
+
+1. `_inStream != null` must be true.
+2. `_matchFinder != null` must be true.
+
+Therefore, at every entry into this block, `_matchFinder` is guaranteed to be non-null.
+
+Inside the block, `_matchFinder` is not reassigned or modified in a way that could make it null before the expression is evaluated. The only operation on `_matchFinder` there is:
+
+- `Nullability.castToNonnull(_matchFinder).SetStream(_inStream);`
+- `Nullability.castToNonnull(_matchFinder).Init();`
+
+No assignment to `_matchFinder` occurs in that block, so its value remains the same non-null reference that satisfied the `if (_matchFinder != null)` test.
+
+The `Nullability.castToNonnull` helper does not change the runtime value; it merely performs a cast (likely for static analysis or annotations). If `_matchFinder` were null at runtime, the `if` condition would prevent entering the block at all.
+
+Hence, along all code paths that reach the expression `_matchFinder.SetStream(_inStream)` (via `Nullability.castToNonnull(_matchFinder)`), `_matchFinder` cannot be null at that point.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

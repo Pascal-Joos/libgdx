@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void loadAsync(
+      AssetManager manager, String fileName, FileHandle file, MusicParameter parameter) {
+    if (Gdx.audio == null) {
+      music = null;
+      return;
+    }
+    music = Gdx.audio.newMusic(file);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void init() {
+      if (controller != null) {
+        ParticleController first = templates.first();
+        for (int i = 0, c = controller.particles.capacity; i < c; ++i) {
+          ParticleController copy = first.copy();
+          copy.init();
+          particleControllerChannel.data[i] = copy;
+        }
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

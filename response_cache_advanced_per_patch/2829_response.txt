@@ -1,0 +1,36 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void insert(int index, N node) {
+          if (node.parent != null) {
+            node.parent.remove(node);
+            node.parent = null;
+          } else {
+            int existingIndex = rootNodes.indexOf(node, true);
+            if (existingIndex != -1) {
+              if (existingIndex == index) return;
+              if (existingIndex < index) index--;
+              rootNodes.removeIndex(existingIndex);
+              if (node.actor == null) throw new IllegalArgumentException("actor cannot be null.");
+              int actorIndex = node.actor.getZIndex();
+              if (actorIndex != -1) node.removeFromTree(this, actorIndex);
+            }
+          }
+      
+          rootNodes.insert(index, node);
+      
+          int actorIndex;
+          if (index == 0) actorIndex = 0;
+          else if (index < rootNodes.size - 1) actorIndex = Nullability.castToNonnull(rootNodes.get(index + 1).actor).getZIndex();
+          else {
+            N before = rootNodes.get(index - 1);
+            if (before.actor == null) throw new IllegalArgumentException("actor cannot be null.");
+            actorIndex = before.actor.getZIndex() + before.countActors();
+          }
+          node.addToTree(this, actorIndex);
+}
+  ```
+    ]]>
+  </code>
+</response>

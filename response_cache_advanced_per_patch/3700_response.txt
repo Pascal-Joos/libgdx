@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `SetStream` does not match any known framework lifecycle/initializer pattern (e.g., `onCreate`, `init`) and does not start with "init" or "initialize". Its sole purpose is to assign a single field from a parameter, which matches the conventional behavior of a setter. You explicitly do not want to consider setter methods as initializer methods. Therefore, under the provided criteria, this method should be treated as a setter, not as an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

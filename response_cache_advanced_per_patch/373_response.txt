@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Skin newSkin(TextureAtlas atlas) {
+      return new Skin(Nullability.castToNonnull(atlas));
+  }
+  ```
+    ]]>
+  </code>
+</response>

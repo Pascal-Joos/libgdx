@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void afterGroups() {
+    if (Gdx.gl != null) {
+      Gdx.gl.glDisable(GL20.GL_TEXTURE_2D);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

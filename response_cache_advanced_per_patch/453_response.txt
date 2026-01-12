@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Color set( Color color) {
+    Color nonNullColor = Nullability.castToNonnull(color);
+    this.r = nonNullColor.r;
+    this.g = nonNullColor.g;
+    this.b = nonNullColor.b;
+    this.a = nonNullColor.a;
+    return this;
+}
+  ```
+    ]]>
+  </code>
+</response>

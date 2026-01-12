@@ -1,0 +1,45 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+        public void start() {
+          if (durationValue == null) {
+            durationValue = new RangedNumericValue();
+          }
+          if (delayValue == null) {
+            delayValue = new RangedNumericValue();
+          }
+          if (emissionValue == null) {
+            emissionValue = new ScaledNumericValue();
+          }
+          if (lifeValue == null) {
+            lifeValue = new ScaledNumericValue();
+          }
+          if (lifeOffsetValue == null) {
+            lifeOffsetValue = new ScaledNumericValue();
+          }
+      
+          delay = Nullability.castToNonnull(delayValue).active ? Nullability.castToNonnull(delayValue).newLowValue() : 0;
+          delayTimer = 0;
+          durationTimer = 0f;
+      
+          duration = Nullability.castToNonnull(durationValue).newLowValue();
+          percent = durationTimer / (float) duration;
+      
+          emission = (int) emissionValue.newLowValue();
+          emissionDiff = (int) emissionValue.newHighValue();
+          if (!emissionValue.isRelative()) emissionDiff -= emission;
+      
+          life = (int) lifeValue.newLowValue();
+          lifeDiff = (int) lifeValue.newHighValue();
+          if (!lifeValue.isRelative()) lifeDiff -= life;
+      
+          lifeOffset = lifeOffsetValue.active ? (int) lifeOffsetValue.newLowValue() : 0;
+          lifeOffsetDiff = (int) lifeOffsetValue.newHighValue();
+          if (!lifeOffsetValue.isRelative()) lifeOffsetDiff -= lifeOffset;
+}
+  ```
+    ]]>
+  </code>
+</response>

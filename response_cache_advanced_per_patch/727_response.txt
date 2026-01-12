@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+          public void set(
+              BaseShader shader,
+              int inputID,
+              Renderable renderable,
+              Attributes combinedAttributes) {
+            TextureAttribute ta =
+                (TextureAttribute) (combinedAttributes.get(TextureAttribute.Normal));
+            if (ta == null) ta = new TextureAttribute(TextureAttribute.Normal);
+            shader.set(inputID, ta.offsetU, ta.offsetV, ta.scaleU, ta.scaleV);
+  }
+  ```
+    ]]>
+  </code>
+</response>

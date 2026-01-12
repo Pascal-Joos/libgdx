@@ -1,0 +1,80 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all possible control-flow paths reaching the line `entries2.reset();`.
+
+Method:
+
+public Entries<K> entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+      entries1 = new Entries(this);
+      entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+      entries1.reset();
+      entries1.valid = true;
+      entries2.valid = false;
+      return entries1;
+    }
+    entries2.reset();
+    entries2.valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+Key points:
+
+1. **Early return when `Collections.allocateIterators` is true**  
+   - If `Collections.allocateIterators` is `true`, the method returns immediately:
+     `return new Entries(this);`
+   - In this path, control never reaches `entries2.reset();`.
+
+2. **Initialization of `entries1` and `entries2`**  
+   - If `Collections.allocateIterators` is `false`, we proceed.
+   - Next, we have:
+     ```java
+     if (entries1 == null) {
+       entries1 = new Entries(this);
+       entries2 = new Entries(this);
+     }
+     ```
+   - This guarantees that after this `if` block:
+     - `entries1` is non-null, and
+     - `entries2` is non-null,
+     regardless of their prior values.
+   - There are no code paths between this block and the use of `entries2` that can reassign `entries2` to null.
+
+3. **Branching on `entries1.valid`**  
+   - Next, the code checks:
+     ```java
+     if (!entries1.valid) {
+       entries1.reset();
+       entries1.valid = true;
+       entries2.valid = false;
+       return entries1;
+     }
+     ```
+   - If `!entries1.valid` is true, the method returns `entries1` and never reaches `entries2.reset();`.
+   - If this condition is false (i.e., `entries1.valid` is true), execution falls through to:
+     ```java
+     entries2.reset();
+     ```
+   - At this point in the method, we have already passed the `if (entries1 == null) { ... }` block, which ensures `entries2` has been assigned `new Entries(this)` at least once and has not been changed since.
+
+4. **No other assignments to `entries2` in the shown method**  
+   - The only assignments to `entries2` in this method are inside the `if (entries1 == null)` block, where it is set to `new Entries(this)`.
+   - There are no subsequent assignments that could set `entries2` to null before `entries2.reset();`.
+
+5. **Assumptions and contracts**  
+   - We assume normal Java semantics:
+     - `new Entries(this)` never yields null (object instantiation cannot return null in standard Java; if an exception occurs, control doesn't reach the assignment).
+   - Therefore, once the assignment `entries2 = new Entries(this);` executes, `entries2` is definitely non-null.
+
+Conclusion:
+
+On all paths that reach the line `entries2.reset();`, `entries2` must have been initialized to a non-null value via `entries2 = new Entries(this);` and is never reassigned to null within this method. Thus, `entries2` cannot be null at the call site `entries2.reset();`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

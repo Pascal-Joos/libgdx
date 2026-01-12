@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void remove(N node) {
+    if (node.parent != null) {
+      node.parent.remove(node);
+      return;
+    }
+    if (!rootNodes.removeValue(node, true)) return;
+    if (node.actor == null) throw new IllegalArgumentException("actor cannot be null.");
+    int actorIndex = node.actor.getZIndex();
+    if (actorIndex != -1) node.removeFromTree(this, actorIndex);
+}
+  ```
+    ]]>
+  </code>
+</response>

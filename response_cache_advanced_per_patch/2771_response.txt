@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefWidth() {
+        if (style == null) throw new IllegalStateException("style cannot be null");
+        return Nullability.castToNonnull(style).background != null ? Nullability.castToNonnull(style).background.getMinWidth() : 0;
+}
+  ```
+    ]]>
+  </code>
+</response>

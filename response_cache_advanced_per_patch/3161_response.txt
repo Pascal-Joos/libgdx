@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void pop() {
+      root = elements.pop();
+      if (current != null && current.size > 0) lastChild.pop();
+      current = elements.size > 0 ? elements.peek() : null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

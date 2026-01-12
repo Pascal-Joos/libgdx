@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public IndexBufferObject(boolean isStatic, int maxIndices) {
+
+    empty = maxIndices == 0;
+    if (empty) {
+      maxIndices =
+          1; // avoid allocating a zero-sized buffer because of bug in Android's ART < Android 5.0
+    }
+
+    byteBuffer = BufferUtils.newUnsafeByteBuffer(maxIndices * 2);
+    isDirect = true;
+
+    buffer = byteBuffer.asShortBuffer();
+    ownsBuffer = true;
+    ((Buffer) buffer).flip();
+    ((Buffer) byteBuffer).flip();
+    if (Gdx.gl20 == null) return;
+    bufferHandle = Gdx.gl20.glGenBuffer();
+    usage = isStatic ? GL20.GL_STATIC_DRAW : GL20.GL_DYNAMIC_DRAW;
+}
+  ```
+    ]]>
+  </code>
+</response>

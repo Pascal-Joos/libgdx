@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public TextureArray(TextureArrayData data) {
+    super(GL30.GL_TEXTURE_2D_ARRAY, Gdx.gl.glGenTexture());
+
+    if (Gdx.gl30 == null) {
+      throw new GdxRuntimeException(
+          "TextureArray requires a device running with GLES 3.0 compatibilty");
+    }
+
+    load(data);
+
+    if (data.isManaged())
+      if (managedTextureArrays.get(Gdx.app) != null)
+        managedTextureArrays.get(Gdx.app).add(this);
+}
+  ```
+    ]]>
+  </code>
+</response>

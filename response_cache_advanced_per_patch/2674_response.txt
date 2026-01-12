@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void copy() {
+      if (hasSelection && !passwordMode && text != null) {
+        clipboard.setContents(
+            text.substring(Math.min(cursor, selectionStart), Math.max(cursor, selectionStart)));
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

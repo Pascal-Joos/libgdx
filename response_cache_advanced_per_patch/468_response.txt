@@ -1,0 +1,50 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+protected void transformUV(final Matrix3 matrix, final int start, final int count) {
+    final VertexAttribute posAttr = getVertexAttribute(Usage.TextureCoordinates);
+    // ...
+}
+```
+
+`getVertexAttribute(int usage)` searches the mesh’s `VertexAttributes` for an attribute whose `usage` equals the given value. If none is found, it executes the bottom `return null;`.
+
+Whether `null` is returned depends entirely on whether this `Mesh` instance actually has a `VertexAttribute` with `usage == Usage.TextureCoordinates`.
+
+From the provided code:
+
+- There are multiple meshes in the system (e.g., meshes from `Model`, meshes created by `ImmediateModeRenderer20`, others not shown).
+- Some call sites explicitly handle possible `null`:
+  ```java
+  texCoordOffset =
+      mesh.getVertexAttribute(Usage.TextureCoordinates) != null
+          ? mesh.getVertexAttribute(Usage.TextureCoordinates).offset / 4
+          : 0;
+  ```
+  This conditional shows that `Usage.TextureCoordinates` is *not* guaranteed to exist for every mesh; the library author expects `null` here in normal situations.
+- For `Usage.Position`, several places either check for `null` (e.g., `MeshSpawnShapeValue.setMesh` throws if it is `null`) or early‑return when it is `null` (e.g., `scale`). No similar guard exists for `Usage.TextureCoordinates` in `Mesh.transformUV(Matrix3, int, int)`.
+
+Nothing in the provided call chain or constructors enforces that **all** `Mesh` instances on which `transformUV(Matrix3, int, int)` might be called must have `Usage.TextureCoordinates`. For example:
+
+- `Mesh` can be constructed via various paths not all shown here.
+- `transformUV(Matrix3, int, int)` is a public method on `Mesh` and can be invoked on any mesh, including those created without texture coordinate attributes.
+
+Given that:
+
+1. The implementation of `getVertexAttribute` clearly returns `null` when the requested usage is absent.
+2. Other parts of the code explicitly treat `getVertexAttribute(Usage.TextureCoordinates)` as potentially `null`.
+3. There is no global or local guarantee at this specific call site that the mesh must contain texture coordinates.
+
+it follows that at this call site:
+
+```java
+final VertexAttribute posAttr = getVertexAttribute(Usage.TextureCoordinates);
+```
+
+`posAttr` can indeed be `null` if the mesh does not define a `Usage.TextureCoordinates` attribute. There is no preceding check or invariant provided that rules this out.
+
+Therefore, the method can return null at this specific call site.]]></reason>
+  <value>YES</value>
+</response>
