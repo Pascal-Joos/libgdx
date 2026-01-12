@@ -48,24 +48,29 @@ public class ModelInstanceRenderer
 
   @Override
   public void allocateChannels() {
-    renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+    if (renderData != null)
+      renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
   }
 
   @Override
   public void init() {
-    renderData.modelInstanceChannel =
-        controller.particles.getChannel(ParticleChannels.ModelInstance);
-    renderData.colorChannel = controller.particles.getChannel(ParticleChannels.Color);
-    renderData.scaleChannel = controller.particles.getChannel(ParticleChannels.Scale);
-    renderData.rotationChannel = controller.particles.getChannel(ParticleChannels.Rotation3D);
-    hasColor = renderData.colorChannel != null;
-    hasScale = renderData.scaleChannel != null;
-    hasRotation = renderData.rotationChannel != null;
+    if (renderData != null) {
+      renderData.modelInstanceChannel =
+          controller.particles.getChannel(ParticleChannels.ModelInstance);
+      renderData.colorChannel = controller.particles.getChannel(ParticleChannels.Color);
+      renderData.scaleChannel = controller.particles.getChannel(ParticleChannels.Scale);
+      renderData.rotationChannel = controller.particles.getChannel(ParticleChannels.Rotation3D);
+      hasColor = renderData.colorChannel != null;
+      hasScale = renderData.scaleChannel != null;
+      hasRotation = renderData.rotationChannel != null;
+    }
   }
 
   @Override
   public void update() {
-    if (renderData.modelInstanceChannel == null || renderData.positionChannel == null) return;
+    if (renderData == null
+        || renderData.modelInstanceChannel == null
+        || renderData.positionChannel == null) return;
     for (int i = 0, positionOffset = 0, c = controller.particles.size;
         i < c;
         ++i, positionOffset += Nullability.castToNonnull(renderData.positionChannel).strideSize) {
