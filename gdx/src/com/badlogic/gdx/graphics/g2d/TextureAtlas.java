@@ -594,12 +594,12 @@ public class TextureAtlas implements Disposable {
       public boolean rotate;
       public int index = -1;
       @Nullable public @Null String[] names;
-      public @Null int[][] values;
+      @Nullable public @Null int[][] values;
       public boolean flip;
 
       @Nullable
       public @Null int[] findValue(String name) {
-        if (names != null) {
+        if (names != null && values != null) {
           for (int i = 0, n = names.length; i < n; i++) if (name.equals(names[i])) return values[i];
         }
         return null;
@@ -739,8 +739,9 @@ public class TextureAtlas implements Disposable {
 
     @Nullable
     public @Null int[] findValue(String name) {
-      if (names != null && values != null) {
-        for (int i = 0, n = names.length; i < n; i++) if (name.equals(names[i])) return values[i];
+      if (names != null) {
+        for (int i = 0, n = names.length; i < n; i++)
+          if (name.equals(names[i])) return values == null ? null : values[i];
       }
       return null;
     }
