@@ -333,7 +333,7 @@ public class BaseAnimationController {
     } else {
       for (final Node node : out.keys()) node.isAnimated = false;
       for (final NodeAnimation nodeAnim : animation.nodeAnimations)
-        applyNodeAnimationBlending(nodeAnim, out, pool, alpha, time);
+        applyNodeAnimationBlending(nodeAnim, out, Nullability.castToNonnull(pool), alpha, time);
       for (final ObjectMap.Entry<Node, Transform> e : out.entries()) {
         if (!e.key.isAnimated) {
           e.key.isAnimated = true;
