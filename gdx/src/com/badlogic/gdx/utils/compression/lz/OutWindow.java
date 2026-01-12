@@ -37,6 +37,7 @@ public class OutWindow {
   }
 
   public void Flush() throws IOException {
+    if (_stream == null) return;
     int size = _pos - _streamPos;
     if (size == 0) return;
     _stream.write(_buffer, _streamPos, size);
