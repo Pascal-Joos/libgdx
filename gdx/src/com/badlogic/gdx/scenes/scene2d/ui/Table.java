@@ -1249,7 +1249,7 @@ public class Table extends WidgetGroup {
 
       currentX += c.computedPadLeft;
 
-      float fillX = c.fillX, fillY = c.fillY;
+      float fillX = Nullability.castToNonnull(c.fillX), fillY = c.fillY;
       if (fillX > 0) {
         float minWidth =
             c.minWidth == null
