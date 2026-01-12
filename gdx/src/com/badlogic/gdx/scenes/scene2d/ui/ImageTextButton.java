@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -58,7 +59,7 @@ public class ImageTextButton extends Button {
 
     image = newImage();
 
-    label = newLabel(text, new LabelStyle(style.font, style.fontColor));
+    label = newLabel(text, new LabelStyle(Nullability.castToNonnull(style.font), style.fontColor));
     label.setAlignment(Align.center);
 
     add(image);

@@ -185,6 +185,7 @@ public class Label extends Widget {
 
   public void layout() {
     if (style == null) throw new IllegalStateException("Label style must not be null.");
+    if (style.font == null) throw new IllegalStateException("Missing LabelStyle font.");
     BitmapFont font = cache.getFont();
     float oldScaleX = font.getScaleX();
     float oldScaleY = font.getScaleY();
@@ -229,10 +230,10 @@ public class Label extends Widget {
 
     if ((labelAlign & Align.top) != 0) {
       y += cache.getFont().isFlipped() ? 0 : height - textHeight;
-      y += Nullability.castToNonnull(style.font).getDescent();
+      y += font.getDescent();
     } else if ((labelAlign & Align.bottom) != 0) {
       y += cache.getFont().isFlipped() ? height - textHeight : 0;
-      y -= font.getDescent();
+      y -= Nullability.castToNonnull(style.font).getDescent();
     } else {
       y += (height - textHeight) / 2;
     }
@@ -276,6 +277,7 @@ public class Label extends Widget {
     if (style.font == null) throw new IllegalArgumentException("Missing LabelStyle font.");
     if (prefSizeInvalid) scaleAndComputePrefSize();
     float descentScaleCorrection = 1;
+    BitmapFont font = Nullability.castToNonnull(style.font);
     if (fontScaleChanged)
       descentScaleCorrection = fontScaleY / Nullability.castToNonnull(style.font).getScaleY();
     float height =
