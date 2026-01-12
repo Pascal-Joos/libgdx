@@ -630,17 +630,22 @@ public class ParticleEmitter {
     float[] color;
     if ((updateFlags & UPDATE_TINT) != 0) color = tintValue.getColor(percent);
     else color = particle.tint;
+    if (color == null) color = particle.tint = new float[3];
 
     if (premultipliedAlpha) {
       float alphaMultiplier = additive ? 0 : 1;
       float a =
           particle.transparency + particle.transparencyDiff * transparencyValue.getScale(percent);
-      particle.setColor(color[0] * a, color[1] * a, color[2] * a, a * alphaMultiplier);
+      particle.setColor(
+          Nullability.castToNonnull(color)[0] * a,
+          Nullability.castToNonnull(color)[1] * a,
+          Nullability.castToNonnull(color)[2] * a,
+          a * alphaMultiplier);
     } else {
       particle.setColor(
-          color[0],
-          color[1],
-          color[2],
+          Nullability.castToNonnull(color)[0],
+          Nullability.castToNonnull(color)[1],
+          Nullability.castToNonnull(color)[2],
           particle.transparency + particle.transparencyDiff * transparencyValue.getScale(percent));
     }
 
@@ -1260,7 +1265,7 @@ public class ParticleEmitter {
     protected float transparency, transparencyDiff;
     protected float wind, windDiff;
     protected float gravity, gravityDiff;
-    protected float[] tint;
+    @Nullable protected float[] tint;
     protected int frame;
 
     public Particle(@Nullable Sprite sprite) {
