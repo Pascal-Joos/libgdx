@@ -19,6 +19,7 @@ package com.badlogic.gdx.utils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
  * @author Nathan Sweet
  */
 public class ReflectionPool<T> extends Pool<T> {
-  private final Constructor constructor;
+  @Nullable private final Constructor constructor;
 
   public ReflectionPool(Class<T> type) {
     this(type, 16, Integer.MAX_VALUE);
@@ -63,11 +64,16 @@ public class ReflectionPool<T> extends Pool<T> {
   }
 
   protected T newObject() {
+    if (constructor == null)
+      throw new GdxRuntimeException(
+          "Class cannot be created (missing no-arg constructor): " + getClass().getName());
     try {
       return (T) constructor.newInstance((Object[]) null);
     } catch (Exception ex) {
       throw new GdxRuntimeException(
-          "Unable to create new instance: " + constructor.getDeclaringClass().getName(), ex);
+          "Unable to create new instance: "
+              + Nullability.castToNonnull(constructor).getDeclaringClass().getName(),
+          ex);
     }
   }
 }
