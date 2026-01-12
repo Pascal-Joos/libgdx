@@ -170,6 +170,11 @@ public class NetJavaImpl {
 
     try {
       final String method = httpRequest.getMethod();
+      if (method == null) {
+        httpResponseListener.failed(
+            new GdxRuntimeException("can't process a HTTP request without HTTP method set"));
+        return;
+      }
       URL url;
 
       final boolean doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
