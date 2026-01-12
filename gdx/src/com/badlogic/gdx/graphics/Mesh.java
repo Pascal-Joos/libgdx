@@ -39,6 +39,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -718,7 +719,7 @@ public class Mesh implements Disposable {
    * @param count number of vertices or indices to use
    */
   public void render(@Nullable ShaderProgram shader, int primitiveType, int offset, int count) {
-    render(shader, primitiveType, offset, count, autoBind);
+    render(Nullability.castToNonnull(shader), primitiveType, offset, count, autoBind);
   }
 
   /**
