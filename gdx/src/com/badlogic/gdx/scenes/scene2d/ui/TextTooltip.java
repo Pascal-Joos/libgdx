@@ -70,7 +70,7 @@ public class TextTooltip extends Tooltip<Label> {
     container.fill(wrap);
 
     Label label = container.getActor();
-    Nullability.castToNonnull(label).setStyle(style.label);
+    Nullability.castToNonnull(label).setStyle(Nullability.castToNonnull(style.label));
     Nullability.castToNonnull(label).setWrap(wrap);
   }
 
