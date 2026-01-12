@@ -888,9 +888,10 @@ public class Table extends WidgetGroup {
       if (a == null) continue;
 
       // Collect rows that expand and colspan=1 columns that expand.
-      if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
-      if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
-        expandWidth[column] = c.expandX;
+      if (Nullability.castToNonnull(c.expandY) != 0 && expandHeight[row] == 0)
+        expandHeight[row] = Nullability.castToNonnull(c.expandY);
+      if (colspan == 1 && Nullability.castToNonnull(c.expandX) != 0 && expandWidth[column] == 0)
+        expandWidth[column] = Nullability.castToNonnull(c.expandX);
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
@@ -975,7 +976,7 @@ public class Table extends WidgetGroup {
 
       // Colspan with expand will expand all spanned columns if none of the spanned columns have
       // expand.
-      int expandX = c.expandX;
+      int expandX = Nullability.castToNonnull(c.expandX);
       outer:
       if (expandX != 0) {
         int nn = column + c.colspan;
