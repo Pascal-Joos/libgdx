@@ -18,6 +18,7 @@ package com.badlogic.gdx.utils;
 
 import static com.badlogic.gdx.utils.ObjectSet.tableSize;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -77,9 +78,9 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
    */
   protected int mask;
 
-  private transient Entries entries1, entries2;
-  private transient Values values1, values2;
-  private transient Keys keys1, keys2;
+  @Nullable private transient Entries entries1, entries2;
+  @Nullable private transient Values values1, values2;
+  @Nullable private transient Keys keys1, keys2;
 
   /** Creates a new map with an initial capacity of 51 and a load factor of 0.8. */
   public LongMap() {
@@ -493,6 +494,7 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
    * each time this method is called. Use the {@link Entries} constructor for nested or
    * multithreaded iteration.
    */
+  @SuppressWarnings("NullAway")
   public Entries<V> entries() {
     if (Collections.allocateIterators) return new Entries(this);
     if (entries1 == null) {
@@ -502,11 +504,11 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
     if (!entries1.valid) {
       entries1.reset();
       entries1.valid = true;
-      entries2.valid = false;
+      Nullability.castToNonnull(entries2).valid = false;
       return entries1;
     }
-    entries2.reset();
-    entries2.valid = true;
+    Nullability.castToNonnull(entries2).reset();
+    Nullability.castToNonnull(entries2).valid = true;
     entries1.valid = false;
     return entries2;
   }
@@ -522,16 +524,20 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
     if (Collections.allocateIterators) return new Values(this);
     if (values1 == null) {
       values1 = new Values(this);
-      values2 = new Values(this);
     }
     if (!values1.valid) {
       values1.reset();
       values1.valid = true;
-      values2.valid = false;
+      if (values2 != null) values2.valid = false;
       return values1;
     }
-    values2.reset();
-    values2.valid = true;
+    if (values2 == null) {
+      values2 = new Values(this);
+    }
+    if (values2 != null) {
+      Nullability.castToNonnull(values2).reset();
+      Nullability.castToNonnull(values2).valid = true;
+    }
     values1.valid = false;
     return values2;
   }
@@ -543,6 +549,7 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
    * each time this method is called. Use the {@link Entries} constructor for nested or
    * multithreaded iteration.
    */
+  @SuppressWarnings("NullAway")
   public Keys keys() {
     if (Collections.allocateIterators) return new Keys(this);
     if (keys1 == null) {
@@ -552,11 +559,11 @@ public class LongMap<V> implements Iterable<LongMap.Entry<V>> {
     if (!keys1.valid) {
       keys1.reset();
       keys1.valid = true;
-      keys2.valid = false;
+      Nullability.castToNonnull(keys2).valid = false;
       return keys1;
     }
-    keys2.reset();
-    keys2.valid = true;
+    Nullability.castToNonnull(keys2).reset();
+    Nullability.castToNonnull(keys2).valid = true;
     keys1.valid = false;
     return keys2;
   }
