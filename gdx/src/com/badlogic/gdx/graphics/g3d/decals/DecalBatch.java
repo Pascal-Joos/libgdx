@@ -175,9 +175,10 @@ public class DecalBatch implements Disposable {
     }
     Nullability.castToNonnull(groupStrategy).beforeGroups();
     for (SortedIntList.Node<Array<Decal>> group : groupList) {
-      Nullability.castToNonnull(groupStrategy).beforeGroup(group.index, group.value);
+      Nullability.castToNonnull(groupStrategy)
+          .beforeGroup(group.index, Nullability.castToNonnull(group.value));
       ShaderProgram shader = Nullability.castToNonnull(groupStrategy).getGroupShader(group.index);
-      render(shader, group.value);
+      render(shader, Nullability.castToNonnull(group.value));
       Nullability.castToNonnull(groupStrategy).afterGroup(group.index);
     }
     Nullability.castToNonnull(groupStrategy).afterGroups();
