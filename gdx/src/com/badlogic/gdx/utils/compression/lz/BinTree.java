@@ -2,7 +2,9 @@
 
 package com.badlogic.gdx.utils.compression.lz;
 
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class BinTree extends InWindow {
   int _cyclicBufferPos;
@@ -10,7 +12,7 @@ public class BinTree extends InWindow {
   int _matchMaxLen;
 
   int[] _son;
-  int[] _hash;
+  @Nullable int[] _hash;
 
   int _cutValue = 0xFF;
   int _hashMask;
@@ -45,7 +47,9 @@ public class BinTree extends InWindow {
 
   public void Init() throws IOException {
     super.Init();
-    for (int i = 0; i < _hashSizeSum; i++) _hash[i] = kEmptyHashValue;
+    if (_hash != null) {
+      for (int i = 0; i < _hashSizeSum; i++) Nullability.castToNonnull(_hash)[i] = kEmptyHashValue;
+    }
     _cyclicBufferPos = 0;
     ReduceOffsets(-1);
   }
@@ -93,6 +97,7 @@ public class BinTree extends InWindow {
   }
 
   public int GetMatches(int[] distances) throws IOException {
+    if (_hash == null) return 0;
     int lenLimit;
     if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
     else {
@@ -204,6 +209,8 @@ public class BinTree extends InWindow {
   }
 
   public void Skip(int num) throws IOException {
+    if (_hash == null) return;
+    if (_hashSizeSum == 0) return;
     do {
       int lenLimit;
       if (_pos + _matchMaxLen <= _streamPos) lenLimit = _matchMaxLen;
@@ -223,15 +230,15 @@ public class BinTree extends InWindow {
       if (HASH_ARRAY) {
         int temp = CrcTable[_bufferBase[cur] & 0xFF] ^ (_bufferBase[cur + 1] & 0xFF);
         int hash2Value = temp & (kHash2Size - 1);
-        _hash[hash2Value] = _pos;
+        Nullability.castToNonnull(_hash)[hash2Value] = _pos;
         temp ^= ((int) (_bufferBase[cur + 2] & 0xFF) << 8);
         int hash3Value = temp & (kHash3Size - 1);
-        _hash[kHash3Offset + hash3Value] = _pos;
+        Nullability.castToNonnull(_hash)[kHash3Offset + hash3Value] = _pos;
         hashValue = (temp ^ (CrcTable[_bufferBase[cur + 3] & 0xFF] << 5)) & _hashMask;
       } else hashValue = ((_bufferBase[cur] & 0xFF) ^ ((int) (_bufferBase[cur + 1] & 0xFF) << 8));
 
-      int curMatch = _hash[kFixHashSize + hashValue];
-      _hash[kFixHashSize + hashValue] = _pos;
+      int curMatch = Nullability.castToNonnull(_hash)[kFixHashSize + hashValue];
+      Nullability.castToNonnull(_hash)[kFixHashSize + hashValue] = _pos;
 
       int ptr0 = (_cyclicBufferPos << 1) + 1;
       int ptr1 = (_cyclicBufferPos << 1);
@@ -289,9 +296,10 @@ public class BinTree extends InWindow {
   }
 
   void Normalize() {
+    if (_hash == null) return;
     int subValue = _pos - _cyclicBufferSize;
     NormalizeLinks(_son, _cyclicBufferSize * 2, subValue);
-    NormalizeLinks(_hash, _hashSizeSum, subValue);
+    NormalizeLinks(Nullability.castToNonnull(_hash), _hashSizeSum, subValue);
     ReduceOffsets(subValue);
   }
 
