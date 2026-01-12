@@ -42,7 +42,7 @@ public abstract class ParticleControllerRenderer<
 
   @Override
   public void update() {
-    if (renderData != null) batch.draw(Nullability.castToNonnull(renderData));
+    if (batch != null && renderData != null) batch.draw(Nullability.castToNonnull(renderData));
   }
 
   @SuppressWarnings("unchecked")
