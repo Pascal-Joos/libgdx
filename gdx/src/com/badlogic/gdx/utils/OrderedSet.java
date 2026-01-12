@@ -178,10 +178,10 @@ public class OrderedSet<T> extends ObjectSet<T> {
       Nullability.castToNonnull(iterator2).valid = false;
       return iterator1;
     }
-    iterator2.reset();
-    iterator2.valid = true;
+    Nullability.castToNonnull(iterator2).reset();
+    Nullability.castToNonnull(iterator2).valid = true;
     iterator1.valid = false;
-    return iterator2;
+    return Nullability.castToNonnull(iterator2);
   }
 
   public String toString() {
