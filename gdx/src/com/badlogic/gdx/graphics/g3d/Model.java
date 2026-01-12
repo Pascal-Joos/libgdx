@@ -54,6 +54,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import javax.annotation.Nullable;
 
@@ -264,7 +265,8 @@ public class Model implements Disposable {
       numIndices += part.indices.length;
     }
     boolean hasIndices = numIndices > 0;
-    VertexAttributes attributes = new VertexAttributes(modelMesh.attributes);
+    VertexAttributes attributes =
+        new VertexAttributes(Nullability.castToNonnull(modelMesh.attributes));
     int numVertices = modelMesh.vertices.length / (attributes.vertexSize / 4);
 
     Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
