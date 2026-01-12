@@ -232,10 +232,13 @@ public abstract class DynamicsModifier extends Influencer {
       if (lifeChannel == null) {
         allocateChannels();
       }
+      if (rotationalVelocity2dChannel == null) {
+        return;
+      }
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               s = 0,
-              c = i + controller.particles.size * rotationalVelocity2dChannel.strideSize;
+              c = controller.particles.size * rotationalVelocity2dChannel.strideSize;
           i < c;
           s += strengthChannel.strideSize, i += rotationalVelocity2dChannel.strideSize,
               l += lifeChannel.strideSize) {
