@@ -146,6 +146,7 @@ public abstract class RegionInfluencer extends Influencer {
     public void update() {
       if (regionChannel == null)
         regionChannel = controller.particles.addChannel(ParticleChannels.TextureRegion);
+      if (lifeChannel == null) lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
       for (int i = 0,
               l = ParticleChannels.LifePercentOffset,
               c = controller.particles.size * regionChannel.strideSize;
