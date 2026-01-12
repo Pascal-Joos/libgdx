@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.OrderedMap;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.regex.Matcher;
@@ -456,7 +457,11 @@ public class PixmapPacker implements Disposable {
           PixmapPackerRectangle rect = page.rects.get(name);
           TextureAtlas.AtlasRegion region =
               new TextureAtlas.AtlasRegion(
-                  page.texture, (int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
+                  Nullability.castToNonnull(page.texture),
+                  (int) rect.x,
+                  (int) rect.y,
+                  (int) rect.width,
+                  (int) rect.height);
 
           if (rect.splits != null) {
             region.names = new String[] {"split", "pad"};
@@ -484,7 +489,7 @@ public class PixmapPacker implements Disposable {
           atlas.getRegions().add(region);
         }
         page.addedRects.clear();
-        atlas.getTextures().add(page.texture);
+        atlas.getTextures().add(Nullability.castToNonnull(page.texture));
       }
     }
   }
