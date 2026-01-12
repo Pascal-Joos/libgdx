@@ -931,37 +931,38 @@ public class Cell<T extends Actor> implements Poolable {
 
   public float getPadRight() {
     if (actor == null) return 0;
-    Value value = padRight == null ? defaults().getPadRightValue() : padRight;
-    return value == null ? 0 : value.get(actor);
+    Value value =
+        padRight == null ? Nullability.castToNonnull(defaults()).getPadRightValue() : padRight;
+    return value == null ? 0 : Nullability.castToNonnull(value).get(actor);
   }
 
   /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
   public float getPadX() {
     if (actor == null) return 0;
-    float padLeftValue;
     if (padLeft == null) {
-      Value value = defaults().getPadLeftValue();
-      padLeftValue = value == null ? 0 : value.get(actor);
-    } else {
-      padLeftValue = padLeft.get(actor);
+      Cell defaults = defaults();
+      if (defaults == null) return 0;
+      Value value = defaults.getPadLeftValue();
+      value = value == null ? Value.zero : value;
+      return value.get(actor) + Nullability.castToNonnull(padRight).get(actor);
     }
-    float padRightValue;
     if (padRight == null) {
-      Value value = defaults().getPadRightValue();
-      padRightValue = value == null ? 0 : value.get(actor);
-    } else {
-      padRightValue = Nullability.castToNonnull(padRight).get(actor);
+      Cell defaults = defaults();
+      if (defaults == null) return 0;
+      Value value = defaults.getPadRightValue();
+      value = value == null ? Value.zero : value;
+      return padLeft.get(actor) + value.get(actor);
     }
-    return padLeftValue + padRightValue;
+    return padLeft.get(actor) + Nullability.castToNonnull(padRight).get(actor);
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
   public float getPadY() {
     Actor a = actor;
     if (a == null) return 0;
-    float padTopValue = padTop == null ? 0 : padTop.get(a);
-    float padBottomValue = padBottom == null ? 0 : Nullability.castToNonnull(padBottom).get(a);
-    return padTopValue + padBottomValue;
+    float top = padTop == null ? 0 : Nullability.castToNonnull(padTop).get(a);
+    float bottom = padBottom == null ? 0 : Nullability.castToNonnull(padBottom).get(a);
+    return top + bottom;
   }
 
   @Nullable
