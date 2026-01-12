@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.uber.nullaway.annotations.Initializer;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import javax.annotation.Nullable;
 
 /**
@@ -27,7 +28,7 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable private static Files files;
   @Nullable private static Cell defaults;
 
-  Value minWidth, minHeight;
+  @Nullable Value minWidth, minHeight;
   Value prefWidth, prefHeight;
   Value maxWidth, maxHeight;
   Value spaceTop, spaceLeft, spaceBottom, spaceRight;
@@ -747,23 +748,26 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this cell is row defaults.
    */
+  @Nullable
   public @Null Value getMinWidthValue() {
     return minWidth;
   }
 
   public float getMinWidth() {
-    return minWidth.get(actor);
+    if (actor == null) return 0;
+    return minWidth == null ? 0 : Nullability.castToNonnull(minWidth).get(actor);
   }
 
   /**
    * @return May be null if this cell is row defaults.
    */
+  @Nullable
   public @Null Value getMinHeightValue() {
     return minHeight;
   }
 
   public float getMinHeight() {
-    return minHeight.get(actor);
+    return actor == null || minHeight == null ? 0 : Nullability.castToNonnull(minHeight).get(actor);
   }
 
   /**
@@ -1018,6 +1022,7 @@ public class Cell<T extends Actor> implements Poolable {
 
   @Initializer
   void set(@Nullable Cell cell) {
+    if (cell == null) return;
     minWidth = cell.minWidth;
     minHeight = cell.minHeight;
     prefWidth = cell.prefWidth;
