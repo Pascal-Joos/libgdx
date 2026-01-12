@@ -885,6 +885,8 @@ public class Table extends WidgetGroup {
       int column = c.column, row = c.row, colspan = c.colspan;
       Actor a = c.actor;
 
+      if (a == null) continue;
+
       // Collect rows that expand and colspan=1 columns that expand.
       if (c.expandY != 0 && expandHeight[row] == 0) expandHeight[row] = c.expandY;
       if (colspan == 1 && c.expandX != 0 && expandWidth[column] == 0)
@@ -892,24 +894,56 @@ public class Table extends WidgetGroup {
 
       // Compute combined padding/spacing for cells.
       // Spacing between actors isn't additive, the larger is used. Also, no spacing around edges.
+      float padLeftValue = c.padLeft == null ? 0 : c.padLeft.get(a);
+      float spaceLeftValue = c.spaceLeft == null ? 0 : c.spaceLeft.get(a);
       c.computedPadLeft =
-          c.padLeft.get(a) + (column == 0 ? 0 : Math.max(0, c.spaceLeft.get(a) - spaceRightLast));
-      c.computedPadTop = c.padTop.get(a);
+          padLeftValue + (column == 0 ? 0 : Math.max(0, spaceLeftValue - spaceRightLast));
+      c.computedPadTop = c.padTop == null ? 0 : c.padTop.get(a);
       if (c.cellAboveIndex != -1) {
         Cell above = (Cell) cells[c.cellAboveIndex];
-        c.computedPadTop += Math.max(0, c.spaceTop.get(a) - above.spaceBottom.get(a));
+        Actor aboveActor = above.actor;
+        if (aboveActor != null) {
+          c.computedPadTop +=
+              Math.max(
+                  0,
+                  (c.spaceTop == null ? 0 : c.spaceTop.get(a))
+                      - (above.spaceBottom == null ? 0 : above.spaceBottom.get(aboveActor)));
+        }
       }
-      float spaceRight = c.spaceRight.get(a);
-      c.computedPadRight = c.padRight.get(a) + ((column + colspan) == columns ? 0 : spaceRight);
-      c.computedPadBottom = c.padBottom.get(a) + (row == rows - 1 ? 0 : c.spaceBottom.get(a));
+      float spaceRight;
+      if (c.spaceRight == null) {
+        Value value = defaults().getSpaceRightValue();
+        spaceRight = value == null ? 0 : value.get(a);
+      } else {
+        spaceRight = Nullability.castToNonnull(c.spaceRight).get(a);
+      }
+      c.computedPadRight =
+          (c.padRight == null ? 0 : c.padRight.get(a))
+              + ((column + colspan) == columns ? 0 : spaceRight);
+      c.computedPadBottom =
+          (c.padBottom == null ? 0 : c.padBottom.get(a))
+              + (row == rows - 1 ? 0 : (c.spaceBottom == null ? 0 : c.spaceBottom.get(a)));
       spaceRightLast = spaceRight;
 
       // Determine minimum and preferred cell sizes.
-      float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+      float prefWidth = c.prefWidth == null ? 0 : c.prefWidth.get(a),
+          prefHeight = c.prefHeight == null ? 0 : c.prefHeight.get(a);
       float minWidth = c.minWidth == null ? 0 : c.minWidth.get(a),
           minHeight = c.minHeight == null ? 0 : c.minHeight.get(a);
-      float maxWidth = c.maxWidth == null ? 0 : c.maxWidth.get(a),
-          maxHeight = c.maxHeight == null ? 0 : c.maxHeight.get(a);
+      float maxWidth;
+      if (c.maxWidth == null) {
+        Value value = defaults().maxWidth;
+        maxWidth = value == null ? 0 : value.get(a);
+      } else {
+        maxWidth = c.maxWidth.get(a);
+      }
+      float maxHeight;
+      if (c.maxHeight == null) {
+        Value value = defaults().maxHeight;
+        maxHeight = value == null ? 0 : value.get(a);
+      } else {
+        maxHeight = c.maxHeight.get(a);
+      }
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (prefHeight < minHeight) prefHeight = minHeight;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
@@ -986,9 +1020,18 @@ public class Table extends WidgetGroup {
       int column = c.column;
 
       Actor a = c.actor;
+
+      if (a == null) continue;
+
       float minWidth = c.minWidth == null ? 0 : c.minWidth.get(a),
-          prefWidth = c.prefWidth.get(a),
-          maxWidth = c.maxWidth == null ? 0 : c.maxWidth.get(a);
+          prefWidth = c.prefWidth == null ? 0 : c.prefWidth.get(a),
+          maxWidth;
+      if (c.maxWidth == null) {
+        Value value = defaults().maxWidth;
+        maxWidth = value == null ? 0 : value.get(a);
+      } else {
+        maxWidth = c.maxWidth.get(a);
+      }
       if (prefWidth < minWidth) prefWidth = minWidth;
       if (maxWidth > 0 && prefWidth > maxWidth) prefWidth = maxWidth;
       if (round) {

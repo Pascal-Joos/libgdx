@@ -31,7 +31,7 @@ public class Cell<T extends Actor> implements Poolable {
   @Nullable Value minWidth, minHeight;
   Value prefWidth, prefHeight;
   @Nullable Value maxWidth, maxHeight;
-  Value spaceTop, spaceLeft, spaceBottom, spaceRight;
+  @Nullable Value spaceTop, spaceLeft, spaceBottom, spaceRight;
   Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
@@ -821,45 +821,61 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getSpaceTopValue() {
     return spaceTop;
   }
 
   public float getSpaceTop() {
+    if (actor == null) throw new IllegalStateException("actor cannot be null.");
+    Value spaceTop = this.spaceTop;
+    if (spaceTop == null) throw new IllegalStateException("spaceTop cannot be null.");
     return spaceTop.get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getSpaceLeftValue() {
     return spaceLeft;
   }
 
   public float getSpaceLeft() {
-    return spaceLeft.get(actor);
+    if (spaceLeft == null) return 0;
+    return Nullability.castToNonnull(spaceLeft).get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getSpaceBottomValue() {
     return spaceBottom;
   }
 
   public float getSpaceBottom() {
-    return spaceBottom.get(actor);
+    if (spaceBottom == null) return 0f;
+    if (actor == null) return 0f;
+    return Nullability.castToNonnull(spaceBottom).get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getSpaceRightValue() {
     return spaceRight;
   }
 
   public float getSpaceRight() {
-    return spaceRight.get(actor);
+    Actor a = actor;
+    if (a == null) return 0;
+    if (spaceRight == null) {
+      Value value = defaults().getSpaceRightValue();
+      return value == null ? 0 : value.get(a);
+    }
+    return spaceRight.get(a);
   }
 
   /**
