@@ -136,7 +136,8 @@ public class ParticleEffect implements Disposable {
   public ParticleEmitter findEmitter(String name) {
     for (int i = 0, n = emitters.size; i < n; i++) {
       ParticleEmitter emitter = emitters.get(i);
-      if (emitter.getName().equals(name)) return emitter;
+      String emitterName = emitter.getName();
+      if (emitterName != null && emitterName.equals(name)) return emitter;
     }
     return null;
   }
