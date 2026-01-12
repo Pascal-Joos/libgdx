@@ -207,6 +207,7 @@ public class ModelInstance implements RenderableProvider {
     this.model = model;
     this.transform = transform == null ? new Matrix4() : transform;
     Node copy, node = model.getNode(nodeId, recursive);
+    if (node == null) return;
     this.nodes.add(copy = node.copy());
     if (mergeTransform) {
       this.transform.mul(parentTransform ? node.globalTransform : node.localTransform);
