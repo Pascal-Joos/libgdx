@@ -82,6 +82,9 @@ public abstract class ParticleSorter {
         if (data.controller == null) {
           continue;
         }
+        if (data.positionChannel == null) {
+          continue;
+        }
         for (int k = 0, c = i + Nullability.castToNonnull(data.controller).particles.size;
             i < c;
             ++i, k += data.positionChannel.strideSize) {

@@ -27,5 +27,5 @@ import javax.annotation.Nullable;
  */
 public abstract class ParticleControllerRenderData {
   @Nullable public ParticleController controller;
-  public FloatChannel positionChannel;
+  @Nullable public FloatChannel positionChannel;
 }
