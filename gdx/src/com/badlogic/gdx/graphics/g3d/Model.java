@@ -263,7 +263,8 @@ public class Model implements Disposable {
     ModelMeshPart[] modelMeshParts = Nullability.castToNonnull(modelMesh.parts);
     int numIndices = 0;
     for (ModelMeshPart part : modelMeshParts) {
-      numIndices += part.indices.length;
+      short[] indices = Nullability.castToNonnull(part.indices);
+      numIndices += indices.length;
     }
     boolean hasIndices = numIndices > 0;
     VertexAttributes attributes =
@@ -286,11 +287,12 @@ public class Model implements Disposable {
       MeshPart meshPart = new MeshPart();
       meshPart.id = part.id;
       meshPart.primitiveType = part.primitiveType;
+      short[] indices = Nullability.castToNonnull(part.indices);
       meshPart.offset = offset;
-      meshPart.size = hasIndices ? part.indices.length : numVertices;
+      meshPart.size = hasIndices ? indices.length : numVertices;
       meshPart.mesh = mesh;
       if (hasIndices) {
-        mesh.getIndicesBuffer().put(part.indices);
+        mesh.getIndicesBuffer().put(indices);
       }
       offset += meshPart.size;
       meshParts.add(meshPart);
