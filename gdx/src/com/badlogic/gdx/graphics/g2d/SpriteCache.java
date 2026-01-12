@@ -34,6 +34,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import javax.annotation.Nullable;
@@ -261,8 +262,10 @@ public class SpriteCache implements Disposable {
         cache.textures = new Texture[cache.textureCount];
       for (int i = 0, n = cache.textureCount; i < n; i++) cache.textures[i] = textures.get(i);
 
-      if (cache.counts.length < cache.textureCount) cache.counts = new int[cache.textureCount];
-      for (int i = 0, n = cache.textureCount; i < n; i++) cache.counts[i] = counts.get(i);
+      if (Nullability.castToNonnull(cache.counts).length < cache.textureCount)
+        cache.counts = new int[cache.textureCount];
+      for (int i = 0, n = cache.textureCount; i < n; i++)
+        Nullability.castToNonnull(cache.counts)[i] = counts.get(i);
 
       FloatBuffer vertices = mesh.getVerticesBuffer();
       ((Buffer) vertices).position(0);
@@ -986,11 +989,12 @@ public class SpriteCache implements Disposable {
     Cache cache = caches.get(cacheID);
     int verticesPerImage = mesh.getNumIndices() > 0 ? 4 : 6;
     int offset = cache.offset / (verticesPerImage * VERTEX_SIZE) * 6;
+    if (cache.textures == null) return;
     Texture[] textures = cache.textures;
     int[] counts = cache.counts;
     int textureCount = cache.textureCount;
     for (int i = 0; i < textureCount; i++) {
-      int count = counts[i];
+      int count = Nullability.castToNonnull(counts)[i];
       textures[i].bind();
       if (customShader != null) mesh.render(customShader, GL20.GL_TRIANGLES, offset, count);
       else mesh.render(shader, GL20.GL_TRIANGLES, offset, count);
@@ -1013,12 +1017,13 @@ public class SpriteCache implements Disposable {
     int verticesPerImage = mesh.getNumIndices() > 0 ? 4 : 6;
     offset = cache.offset / (verticesPerImage * VERTEX_SIZE) * 6 + offset * 6;
     length *= 6;
+    if (cache.textures == null) return;
     Texture[] textures = cache.textures;
     int[] counts = cache.counts;
     int textureCount = cache.textureCount;
     for (int i = 0; i < textureCount; i++) {
       textures[i].bind();
-      int count = counts[i];
+      int count = Nullability.castToNonnull(counts)[i];
       if (count > length) {
         i = textureCount;
         count = length;
@@ -1060,8 +1065,8 @@ public class SpriteCache implements Disposable {
     final int offset;
     int maxCount;
     int textureCount;
-    Texture[] textures;
-    int[] counts;
+    @Nullable Texture[] textures;
+    @Nullable int[] counts;
 
     public Cache(int id, int offset) {
       this.id = id;
