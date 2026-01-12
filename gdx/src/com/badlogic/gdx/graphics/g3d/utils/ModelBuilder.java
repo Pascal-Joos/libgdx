@@ -155,7 +155,8 @@ public class ModelBuilder {
    * use {@link #manage(Disposable)} to add those to the model.
    */
   public void part(final MeshPart meshpart, final Material material) {
-    if (node == null) node();
+    if (model == null) throw new GdxRuntimeException("Call begin() first");
+    if (node == null) throw new GdxRuntimeException("Call node() first");
     node.parts.add(new NodePart(meshpart, material));
   }
 
