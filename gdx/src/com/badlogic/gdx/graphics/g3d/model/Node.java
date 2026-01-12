@@ -395,9 +395,17 @@ public class Node {
     final int n = nodes.size;
     Node node;
     if (ignoreCase) {
-      for (int i = 0; i < n; i++) if ((node = nodes.get(i)).id.equalsIgnoreCase(id)) return node;
+      for (int i = 0; i < n; i++) {
+        node = nodes.get(i);
+        if (node == null || node.id == null) return null;
+        if (node.id.equalsIgnoreCase(id)) return node;
+      }
     } else {
-      for (int i = 0; i < n; i++) if ((node = nodes.get(i)).id.equals(id)) return node;
+      for (int i = 0; i < n; i++) {
+        node = nodes.get(i);
+        if (node == null || node.id == null) return null;
+        if (node.id.equals(id)) return node;
+      }
     }
     if (recursive) {
       for (int i = 0; i < n; i++)
