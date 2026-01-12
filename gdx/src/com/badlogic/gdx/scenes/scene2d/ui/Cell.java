@@ -43,7 +43,7 @@ public class Cell<T extends Actor> implements Poolable {
   float actorX, actorY;
   float actorWidth, actorHeight;
 
-  private Table table;
+  @Nullable private Table table;
   boolean endRow;
   int column, row;
   int cellAboveIndex;
@@ -67,7 +67,7 @@ public class Cell<T extends Actor> implements Poolable {
     if (actor != newActor) {
       if (actor != null && actor.getParent() == table) actor.remove();
       actor = newActor;
-      if (newActor != null) table.addActor(newActor);
+      if (newActor != null && table != null) table.addActor(newActor);
     }
     return (Cell<A>) this;
   }
@@ -1032,9 +1032,10 @@ public class Cell<T extends Actor> implements Poolable {
   }
 
   public void row() {
-    table.row();
+    if (table != null) Nullability.castToNonnull(table).row();
   }
 
+  @Nullable
   public Table getTable() {
     return table;
   }
