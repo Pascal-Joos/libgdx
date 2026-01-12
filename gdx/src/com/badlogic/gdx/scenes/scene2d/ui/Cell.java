@@ -830,7 +830,7 @@ public class Cell<T extends Actor> implements Poolable {
     if (actor == null) throw new IllegalStateException("actor cannot be null.");
     Value spaceTop = this.spaceTop;
     if (spaceTop == null) throw new IllegalStateException("spaceTop cannot be null.");
-    return spaceTop.get(actor);
+    return Nullability.castToNonnull(spaceTop).get(actor);
   }
 
   /**
@@ -843,7 +843,9 @@ public class Cell<T extends Actor> implements Poolable {
 
   public float getSpaceLeft() {
     if (spaceLeft == null) return 0;
-    return Nullability.castToNonnull(spaceLeft).get(actor);
+    Actor a = actor;
+    if (a == null) return 0;
+    return Nullability.castToNonnull(spaceLeft).get(a);
   }
 
   /**
@@ -875,7 +877,7 @@ public class Cell<T extends Actor> implements Poolable {
       Value value = defaults().getSpaceRightValue();
       return value == null ? 0 : value.get(a);
     }
-    return spaceRight.get(a);
+    return Nullability.castToNonnull(spaceRight).get(a);
   }
 
   /**

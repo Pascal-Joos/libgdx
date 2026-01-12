@@ -907,7 +907,9 @@ public class Table extends WidgetGroup {
               Math.max(
                   0,
                   (c.spaceTop == null ? 0 : c.spaceTop.get(a))
-                      - (above.spaceBottom == null ? 0 : above.spaceBottom.get(aboveActor)));
+                      - (above.spaceBottom == null
+                          ? 0
+                          : Nullability.castToNonnull(above.spaceBottom).get(aboveActor)));
         }
       }
       float spaceRight;
