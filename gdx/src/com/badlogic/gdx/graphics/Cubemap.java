@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import edu.ucr.cs.riple.annotator.util.Nullability;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -365,6 +366,6 @@ public class Cubemap extends GLTexture {
    * @return the number of managed cubemaps currently loaded
    */
   public static int getNumManagedCubemaps() {
-    return managedCubemaps.get(Gdx.app).size;
+    return Nullability.castToNonnull(managedCubemaps.get(Gdx.app)).size;
   }
 }
