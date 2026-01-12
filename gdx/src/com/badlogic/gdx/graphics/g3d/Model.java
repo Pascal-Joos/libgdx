@@ -260,23 +260,29 @@ public class Model implements Disposable {
   }
 
   protected void convertMesh(ModelMesh modelMesh) {
+    ModelMeshPart[] modelMeshParts = Nullability.castToNonnull(modelMesh.parts);
     int numIndices = 0;
-    for (ModelMeshPart part : modelMesh.parts) {
+    for (ModelMeshPart part : modelMeshParts) {
       numIndices += part.indices.length;
     }
     boolean hasIndices = numIndices > 0;
     VertexAttributes attributes =
         new VertexAttributes(Nullability.castToNonnull(modelMesh.attributes));
-    int numVertices = modelMesh.vertices.length / (attributes.vertexSize / 4);
+    int numVertices =
+        Nullability.castToNonnull(modelMesh.vertices).length / (attributes.vertexSize / 4);
 
     Mesh mesh = new Mesh(true, numVertices, numIndices, attributes);
     meshes.add(mesh);
     disposables.add(mesh);
 
-    BufferUtils.copy(modelMesh.vertices, mesh.getVerticesBuffer(), modelMesh.vertices.length, 0);
+    BufferUtils.copy(
+        Nullability.castToNonnull(modelMesh.vertices),
+        mesh.getVerticesBuffer(),
+        modelMesh.vertices.length,
+        0);
     int offset = 0;
     ((Buffer) mesh.getIndicesBuffer()).clear();
-    for (ModelMeshPart part : modelMesh.parts) {
+    for (ModelMeshPart part : modelMeshParts) {
       MeshPart meshPart = new MeshPart();
       meshPart.id = part.id;
       meshPart.primitiveType = part.primitiveType;
