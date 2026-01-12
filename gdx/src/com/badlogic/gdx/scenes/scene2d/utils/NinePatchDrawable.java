@@ -19,6 +19,8 @@ package com.badlogic.gdx.scenes.scene2d.utils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import edu.ucr.cs.riple.annotator.util.Nullability;
+import javax.annotation.Nullable;
 
 /**
  * Drawable for a {@link NinePatch}.
@@ -34,7 +36,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
  * @author Nathan Sweet
  */
 public class NinePatchDrawable extends BaseDrawable implements TransformDrawable {
-  private NinePatch patch;
+  @Nullable private NinePatch patch;
 
   /**
    * Creates an uninitialized NinePatchDrawable. The ninepatch must be {@link #setPatch(NinePatch)
@@ -52,7 +54,9 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
   }
 
   public void draw(Batch batch, float x, float y, float width, float height) {
-    patch.draw(batch, x, y, width, height);
+    if (patch != null) {
+      patch.draw(batch, x, y, width, height);
+    }
   }
 
   public void draw(
@@ -66,7 +70,11 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
       float scaleX,
       float scaleY,
       float rotation) {
-    patch.draw(batch, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
+    if (patch == null) {
+      return;
+    }
+    Nullability.castToNonnull(patch)
+        .draw(batch, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
   }
 
   /**
@@ -85,6 +93,7 @@ public class NinePatchDrawable extends BaseDrawable implements TransformDrawable
     }
   }
 
+  @Nullable
   public NinePatch getPatch() {
     return patch;
   }
