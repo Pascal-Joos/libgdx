@@ -32,7 +32,7 @@ public class Cell<T extends Actor> implements Poolable {
   Value prefWidth, prefHeight;
   @Nullable Value maxWidth, maxHeight;
   @Nullable Value spaceTop, spaceLeft, spaceBottom, spaceRight;
-  Value padTop, padLeft, padBottom, padRight;
+  @Nullable Value padTop, padLeft, padBottom, padRight;
   @Nullable Float fillX, fillY;
   @Nullable Integer align;
   Integer expandX, expandY;
@@ -883,55 +883,85 @@ public class Cell<T extends Actor> implements Poolable {
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getPadTopValue() {
     return padTop;
   }
 
   public float getPadTop() {
-    return padTop.get(actor);
+    Actor a = actor;
+    if (a == null) return 0;
+    float padTopValue = padTop == null ? 0 : Nullability.castToNonnull(padTop).get(a);
+    return padTopValue;
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getPadLeftValue() {
     return padLeft;
   }
 
   public float getPadLeft() {
-    return padLeft.get(actor);
+    return padLeft == null || actor == null ? 0 : Nullability.castToNonnull(padLeft).get(actor);
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getPadBottomValue() {
     return padBottom;
   }
 
   public float getPadBottom() {
-    return padBottom.get(actor);
+    Actor a = actor;
+    if (a == null) return 0;
+    return padBottom == null ? 0 : Nullability.castToNonnull(padBottom).get(a);
   }
 
   /**
    * @return May be null if this value is not set.
    */
+  @Nullable
   public @Null Value getPadRightValue() {
     return padRight;
   }
 
   public float getPadRight() {
-    return padRight.get(actor);
+    if (actor == null) return 0;
+    Value value = padRight == null ? defaults().getPadRightValue() : padRight;
+    return value == null ? 0 : value.get(actor);
   }
 
   /** Returns {@link #getPadLeft()} plus {@link #getPadRight()}. */
   public float getPadX() {
-    return padLeft.get(actor) + padRight.get(actor);
+    if (actor == null) return 0;
+    float padLeftValue;
+    if (padLeft == null) {
+      Value value = defaults().getPadLeftValue();
+      padLeftValue = value == null ? 0 : value.get(actor);
+    } else {
+      padLeftValue = padLeft.get(actor);
+    }
+    float padRightValue;
+    if (padRight == null) {
+      Value value = defaults().getPadRightValue();
+      padRightValue = value == null ? 0 : value.get(actor);
+    } else {
+      padRightValue = Nullability.castToNonnull(padRight).get(actor);
+    }
+    return padLeftValue + padRightValue;
   }
 
   /** Returns {@link #getPadTop()} plus {@link #getPadBottom()}. */
   public float getPadY() {
-    return padTop.get(actor) + padBottom.get(actor);
+    Actor a = actor;
+    if (a == null) return 0;
+    float padTopValue = padTop == null ? 0 : padTop.get(a);
+    float padBottomValue = padBottom == null ? 0 : Nullability.castToNonnull(padBottom).get(a);
+    return padTopValue + padBottomValue;
   }
 
   @Nullable
