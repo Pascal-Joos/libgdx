@@ -1134,7 +1134,7 @@ public class Table extends WidgetGroup {
     for (int i = 0; i < cellCount; i++) {
       Cell c = (Cell) cells[i];
       int column = c.column, row = c.row;
-      Actor a = c.actor;
+      Actor a = Nullability.castToNonnull(c.actor);
 
       float spannedWeightedWidth = 0;
       int colspan = Nullability.castToNonnull(c.colspan);
