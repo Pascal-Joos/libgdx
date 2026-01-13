@@ -1,0 +1,27 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    int width = bufferBuilder.width;
+
+However, just above that line the code has:
+
+    GLFrameBufferBuilder<? extends GLFrameBuffer<T>> localBufferBuilder = bufferBuilder;
+    if (localBufferBuilder == null) throw new IllegalStateException("bufferBuilder cannot be null");
+    
+    int width = localBufferBuilder.width;
+
+So in the method as provided, the actual dereference is performed on `localBufferBuilder`, not directly on `bufferBuilder`. The control flow is:
+
+1. `localBufferBuilder` is assigned from `bufferBuilder`.
+2. An explicit null check is performed: if `localBufferBuilder` is null, the method throws an `IllegalStateException` immediately.
+3. Only if `localBufferBuilder` is non‑null does execution continue to `int width = localBufferBuilder.width;`.
+
+Because of this explicit null check and the lack of any reassignments to `localBufferBuilder` between the check and the use, `localBufferBuilder` cannot be null at the point where `.width` is accessed. By inheritance from that logic, the original `bufferBuilder` reference must also have been non-null at the moment of assignment.
+
+Therefore, under the code shown, the dereference at the width/height access point cannot see a null value; a null `bufferBuilder` would cause an exception to be thrown earlier and would not reach the dereference.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

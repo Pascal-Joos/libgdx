@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void update(float percent) {
+          if (color == null) color = target.getColor();
+          if (percent == 0) color.a = start;
+          else if (percent == 1) color.a = end;
+          else color.a = start + (end - start) * percent;
+  }
+  ```
+    ]]>
+  </code>
+</response>

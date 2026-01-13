@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the given method body:
+
+    protected void updateRelative(float percentDelta) {
+        if (target != null) target.moveBy(amountX * percentDelta, amountY * percentDelta);
+    }
+
+the only access to `target` is inside an explicit null check: `if (target != null)`. Within that `if` branch, Java’s definite-assignment and flow analysis guarantees that `target` is treated as non-null for the subsequent expression `target.moveBy(...)` in the same thread of execution.
+
+There is no other control flow in this snippet that could bypass or invalidate the check. The only way `target` could be null at the point of dereference would be if it changed between the null check and the call (e.g., by another thread mutating a shared `target` field). However, the problem statement does not indicate concurrency concerns, volatile fields, or any other modification between the check and the call.
+
+Under standard single-threaded or simple object-usage assumptions (and with no intervening operations that could reassign `target`), `target` cannot be null at the evaluated expression `target.moveBy(amountX * percentDelta, amountY * percentDelta);`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

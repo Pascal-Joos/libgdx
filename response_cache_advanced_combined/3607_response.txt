@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  void Normalize() {
+      if (_son == null) return;
+      int subValue = _pos - _cyclicBufferSize;
+      NormalizeLinks(_son, _cyclicBufferSize * 2, subValue);
+      NormalizeLinks(_hash, _hashSizeSum, subValue);
+      ReduceOffsets(subValue);
+  }
+  ```
+    ]]>
+  </code>
+</response>

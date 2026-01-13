@@ -1,0 +1,53 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void set(RegularEmitter emitter) {
+        super.set(emitter);
+        if (delayValue == null) {
+            delayValue = new RangedNumericValue();
+        }
+        if (emitter.delayValue != null) {
+            Nullability.castToNonnull(delayValue).load(emitter.delayValue);
+        }
+        if (durationValue == null) {
+            durationValue = new RangedNumericValue();
+        }
+        if (emitter.durationValue != null) {
+            durationValue.load(emitter.durationValue);
+        }
+        if (lifeOffsetValue == null) {
+            lifeOffsetValue = new ScaledNumericValue();
+        }
+        if (emitter.lifeOffsetValue != null) {
+            lifeOffsetValue.load(emitter.lifeOffsetValue);
+        }
+        if (lifeValue == null) {
+            lifeValue = new ScaledNumericValue();
+        }
+        if (emitter.lifeValue != null) {
+            lifeValue.load(emitter.lifeValue);
+        }
+        if (emissionValue == null) {
+            emissionValue = new ScaledNumericValue();
+        }
+        if (emitter.emissionValue != null) {
+            emissionValue.load(emitter.emissionValue);
+        }
+        emission = emitter.emission;
+        emissionDiff = emitter.emissionDiff;
+        emissionDelta = emitter.emissionDelta;
+        lifeOffset = emitter.lifeOffset;
+        lifeOffsetDiff = emitter.lifeOffsetDiff;
+        life = emitter.life;
+        lifeDiff = emitter.lifeDiff;
+        duration = emitter.duration;
+        delay = emitter.delay;
+        durationTimer = emitter.durationTimer;
+        delayTimer = emitter.delayTimer;
+        continuous = emitter.continuous;
+  }
+  ```
+    ]]>
+  </code>
+</response>

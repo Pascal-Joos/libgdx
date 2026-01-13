@@ -1,0 +1,39 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, `particleIndices` is explicitly checked for null before any use:
+
+```java
+if (particleIndices == null) {
+  return null;
+}
+```
+
+This check occurs before the loops where `particleIndices` is written to:
+
+```java
+for (ParticleControllerRenderData data : renderData) {
+  ...
+  particleIndices[i] = i;
+}
+...
+for (i = 0; i < count; ++i) {
+  Nullability.castToNonnull(particleOffsets)[particleIndices[i]] = i;
+}
+```
+
+Since the method returns immediately if `particleIndices` is null, any execution reaching the line:
+
+```java
+particleOffsets[particleIndices[i]] = i;
+```
+
+(ignoring the explicit cast wrapper) must necessarily have a non-null `particleIndices`.
+
+Other parts of the code (e.g., `ensureCapacity(capacity)`, `qsort`) might affect contents or length but not the nullness of `particleIndices` without visible reassignments. There is no reassignment of `particleIndices` between the null check and its later usages, and no intermediate early return that would bypass the null check and still lead to the final loop.
+
+Therefore, along all code paths that reach the line using `particleIndices[i]`, `particleIndices` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

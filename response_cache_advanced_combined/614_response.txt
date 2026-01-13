@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void draw(int cacheID, int offset, int length) {
+      if (!drawing) throw new IllegalStateException("SpriteCache.begin must be called before draw.");
+  
+      Cache cache = caches.get(cacheID);
+      int verticesPerImage = mesh.getNumIndices() > 0 ? 4 : 6;
+      offset = cache.offset / (verticesPerImage * VERTEX_SIZE) * 6 + offset * 6;
+      length *= 6;
+      if (cache.textures == null) return;
+      Texture[] textures = cache.textures;
+      int[] counts = cache.counts;
+      int textureCount = cache.textureCount;
+      for (int i = 0; i < textureCount; i++) {
+        textures[i].bind();
+        int count = Nullability.castToNonnull(counts)[i];
+        if (count > length) {
+          i = textureCount;
+          count = length;
+        } else length -= count;
+        if (customShader != null) mesh.render(customShader, GL20.GL_TRIANGLES, offset, count);
+        else mesh.render(shader, GL20.GL_TRIANGLES, offset, count);
+        offset += count;
+      }
+      renderCalls += cache.textureCount;
+      totalRenderCalls += textureCount;
+  }
+  ```
+    ]]>
+  </code>
+</response>

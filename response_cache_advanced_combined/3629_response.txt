@@ -1,0 +1,54 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially-null expression in question is `_son` at the line:
+
+    Nullability.castToNonnull(_son)[ptr1] = Nullability.castToNonnull(_son)[cyclicPos];
+
+To determine whether `_son` can be null there, consider the control flow:
+
+1. At the very start of `GetMatches`:
+   
+       if (_son == null) return 0;
+       int[] son = Nullability.castToNonnull(_son);
+
+   - If `_son` is null, the method returns immediately.
+   - Execution can only proceed past this point if `_son != null`.
+   - Therefore, on all subsequent paths within this invocation, `_son` is guaranteed to be non-null (barring data races / unsynchronized concurrent mutation, which are not implied by the snippet).
+
+2. The local variable `son` is set as:
+
+       int[] son = Nullability.castToNonnull(_son);
+
+   This indicates that the intended contract of `Nullability.castToNonnull` is: “treat this reference as non-null”. Whatever its implementation, the subsequent code assumes that if we have reached this line, `_son` is already non-null due to the explicit check.
+
+3. Inside the loop, the line under discussion is reached only under this condition:
+
+       if (len == lenLimit) {
+         Nullability.castToNonnull(_son)[ptr1] = Nullability.castToNonnull(_son)[cyclicPos];
+         son[ptr0] = son[cyclicPos + 1];
+         break;
+       }
+
+   There are no assignments to `_son` anywhere in `GetMatches`, so `_son`’s value has not changed since the initial null check.
+
+4. Other uses of `_son` within the method:
+   
+       while (true) {
+         if (curMatch <= matchMinPos || count-- == 0) {
+           Nullability.castToNonnull(_son)[ptr0] = Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+           break;
+         }
+         ...
+       }
+
+   This is similar: reuses `_son` under the same invocation where `_son` has already been checked against null.
+
+Thus, under normal single-threaded assumptions (and given that `_son` is not modified to null inside this method), `_son` cannot be null at that line. If there were unsynchronized concurrent writes to `_son` from other threads, then all bets are off, but that would be a general race condition outside the scope of this method’s local reasoning.
+
+Given the provided code and usual Java semantics, `_son` is guaranteed non-null at the expression in question.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void switchTexture( Texture texture) {
+      flush();
+      lastTexture = texture;
+      if (texture == null) {
+        invTexWidth = 0f;
+        invTexHeight = 0f;
+      } else {
+        invTexWidth = 1.0f / Nullability.castToNonnull(texture).getWidth();
+        invTexHeight = 1.0f / Nullability.castToNonnull(texture).getHeight();
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

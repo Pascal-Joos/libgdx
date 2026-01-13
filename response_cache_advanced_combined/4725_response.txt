@@ -1,0 +1,54 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, the expression `node.actor` at the line
+
+    float rowX = node.actor.getX();
+
+is not guarded by any explicit null check on that particular code path.
+
+Control flow analysis:
+
+1. `node` is obtained and checked for null:
+   - `N node = getNodeAt(y);`
+   - `if (node == null) return;`
+   After this, `node` is non-null along all remaining paths.
+
+2. The first `if` block (shift-selection range logic) contains explicit null checks:
+   - `if (rangeStart == null || rangeStart.actor == null) throw ...`
+   - `if (node == null || node.actor == null) throw ...`
+   Inside that block, `node.actor` is either:
+     * proven non-null by the check, or
+     * causes an immediate exception if null.
+   However, this applies only within that `if (selection.getMultiple() && ... && UIUtils.shift())` block.
+
+3. The line in question is in a *different* block:
+
+   ```java
+   if (node.children.size > 0 && (!selection.getMultiple() || !UIUtils.ctrl())) {
+     // Toggle expanded if left of icon.
+     if (node.actor == null) throw new IllegalStateException("node.actor cannot be null.");
+     float rowX = node.actor.getX();
+     ...
+   }
+   ```
+
+   Here, there *is* a prior null check:
+
+   ```java
+   if (node.actor == null) throw new IllegalStateException("node.actor cannot be null.");
+   ```
+
+   This guarantees at runtime that:
+   - If `node.actor` is null, the method will throw `IllegalStateException` and never reach `node.actor.getX()`.
+   - If execution reaches `float rowX = node.actor.getX();`, then `node.actor` is non-null.
+
+4. No other assignments to `node` or `node.actor` occur between the null check and `node.actor.getX()`, so there is no intervening write that could reintroduce null.
+
+Therefore, on all execution paths that reach the expression `node.actor.getX()`, `node.actor` is guaranteed to be non-null by the immediate preceding null check. If `node.actor` were null, the method would have already thrown an exception and exited before evaluating the expression.
+
+So, as far as the evaluated expression is concerned, `node.actor` cannot be null at that line; the only way it is null leads to an earlier exception and prevents the expression from being executed.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

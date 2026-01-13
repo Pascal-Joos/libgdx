@@ -1,0 +1,76 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all paths reaching the line `entries2.reset();`:
+
+Method:
+
+public Entries<V> entries() {
+      if (Collections.allocateIterators) return new Entries(this);
+      if (entries1 == null) {
+        entries1 = new Entries(this);
+        entries2 = new Entries(this);
+      }
+      if (!entries1.valid) {
+        entries1.reset();
+        entries1.valid = true;
+        Nullability.castToNonnull(entries2).valid = false;
+        return entries1;
+      }
+      entries2.reset();
+      entries2.valid = true;
+      entries1.valid = false;
+      return entries2;
+}
+
+1. Early return:
+   - If `Collections.allocateIterators` is true, the method returns immediately and never reaches `entries2.reset();`.
+   - Therefore this branch is irrelevant for the nullability of `entries2` at that line.
+
+2. Initialization block:
+   - If `entries1 == null`, then:
+        entries1 = new Entries(this);
+        entries2 = new Entries(this);
+     Both `entries1` and `entries2` are assigned non-null values (assuming `new Entries(this)` never returns null, which is guaranteed in Java).
+   - If `entries1 != null`, the `if (entries1 == null)` block is skipped. In that case:
+       - For `entries2.reset();` to be executed, the method must continue past the following `if`:
+
+3. Validity check:
+   - Next we have:
+        if (!entries1.valid) {
+          entries1.reset();
+          entries1.valid = true;
+          Nullability.castToNonnull(entries2).valid = false;
+          return entries1;
+        }
+     If this condition is true, we return early and do not reach `entries2.reset();`.
+   - Therefore, to reach `entries2.reset();`, the condition must be false, i.e. `entries1.valid == true`.
+
+4. Can `entries2` be null at that point?
+   - We have two mutually exclusive high-level states just before the `if (entries1 == null)`:
+     a) First call (or call when `entries1` has not been initialized):
+        - `entries1 == null`:
+            → We necessarily execute:
+               entries1 = new Entries(this);
+               entries2 = new Entries(this);
+        - So, on any path that proceeds past this `if`, `entries2` has just been initialized to a non-null value.
+
+     b) Subsequent calls (where `entries1 != null`):
+        - The `if (entries1 == null)` is skipped. In previous calls to `entries()`, the only code that can set `entries2` is:
+             entries2 = new Entries(this);
+        - Once assigned, `entries2` is never set to null in this method.
+        - The line:
+             Nullability.castToNonnull(entries2).valid = false;
+          implies a contract / assumption that `entries2` is non-null at that point. If `entries2` could be null, this would be exactly where we would see a defensive null check or a different handling. Instead, `castToNonnull` explicitly asserts non-nullness.
+
+   - Therefore, combining:
+       • On first initialization path: `entries2` is newly constructed and thus non-null.
+       • On later calls: `entries2` has been initialized earlier and never reassigned to null.
+       • There is no intervening code that can make `entries2` null.
+       • Any execution path reaching `entries2.reset();` must have passed (or skipped) the initialization in a way that preserves a non-null `entries2`.
+
+   Hence, under standard Java semantics (where `new` never yields null) and given this method’s body alone, `entries2` cannot be null at `entries2.reset();`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

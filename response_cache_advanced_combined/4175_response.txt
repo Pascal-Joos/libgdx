@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void sendUpdate() {
+      DataOutputStream outLocal;
+      synchronized (this) {
+        if (!connected || out == null) return;
+        outLocal = out;
+      }
+      try {
+        Nullability.castToNonnull(out).writeInt(ACCEL);
+        outLocal.writeFloat(Gdx.input.getAccelerometerX());
+        outLocal.writeFloat(Gdx.input.getAccelerometerY());
+        outLocal.writeFloat(Gdx.input.getAccelerometerZ());
+        outLocal.writeInt(COMPASS);
+        outLocal.writeFloat(Gdx.input.getAzimuth());
+        outLocal.writeFloat(Gdx.input.getPitch());
+        outLocal.writeFloat(Gdx.input.getRoll());
+        outLocal.writeInt(SIZE);
+        outLocal.writeFloat(Gdx.graphics.getWidth());
+        outLocal.writeFloat(Gdx.graphics.getHeight());
+        outLocal.writeInt(GYRO);
+        outLocal.writeFloat(Gdx.input.getGyroscopeX());
+        outLocal.writeFloat(Gdx.input.getGyroscopeY());
+        outLocal.writeFloat(Gdx.input.getGyroscopeZ());
+      } catch (Throwable t) {
+        synchronized (this) {
+          out = null;
+          connected = false;
+        }
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

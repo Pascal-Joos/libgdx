@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public ParticleController newObject() {
+    if (templates.size == 0) return null;
+    ParticleController controller = templates.random().copy();
+    controller.init();
+    return controller;
+  }
+  ```
+    ]]>
+  </code>
+</response>

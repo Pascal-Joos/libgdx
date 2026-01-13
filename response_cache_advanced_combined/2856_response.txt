@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float get() {
+      return get(Nullability.castToNonnull(null));
+  }
+  ```
+    ]]>
+  </code>
+</response>

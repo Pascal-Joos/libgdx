@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector2 getVertex(int vertexNum, Vector2 pos) {
+      if (vertexNum < 0 || vertexNum > getVertexCount())
+        throw new IllegalArgumentException("the vertex " + vertexNum + " doesn't exist");
+      float[] vertices = this.getTransformedVertices();
+      return pos.set(Nullability.castToNonnull(vertices)[2 * vertexNum], Nullability.castToNonnull(vertices)[2 * vertexNum + 1]);
+  }
+  ```
+    ]]>
+  </code>
+</response>

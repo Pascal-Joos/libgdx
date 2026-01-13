@@ -1,0 +1,76 @@
+<response>
+  <reason><![CDATA[
+At this call site:
+
+```java
+final TextureAttribute ta =
+    (TextureAttribute)(combinedAttributes.get(TextureAttribute.Specular));
+```
+
+the `get(long type)` implementation is:
+
+```java
+public final Attribute get(final long type) {
+  if (has(type))
+    for (int i = 0; i < attributes.size; i++)
+      if (attributes.get(i).type == type) return attributes.get(i);
+  return null;
+}
+```
+
+This method explicitly returns `null` when either:
+
+1. `has(type)` is `false`, or
+2. `has(type)` is `true` but no matching `Attribute` is found in the loop (e.g., data inconsistency).
+
+We are not given the implementation of `has(long type)`, so we cannot assume it always returns `true` for `TextureAttribute.Specular`, nor that `combinedAttributes` is guaranteed to contain a `Specular` texture attribute at this point.
+
+The surrounding code in the same class hierarchy shows both patterns:
+
+- Some setters defensively check for `null`:
+
+  ```java
+  final TextureAttribute specular =
+      ((TextureAttribute) (combinedAttributes.get(TextureAttribute.Specular)));
+  if (specular == null) return;   // DefaultShader$Setters$17
+  ```
+
+  This explicitly acknowledges that `get(TextureAttribute.Specular)` can be `null`.
+
+- Other setters **do not** check and dereference immediately:
+
+  ```java
+  final TextureAttribute ta =
+      (TextureAttribute) (combinedAttributes.get(TextureAttribute.Specular));
+  shader.set(inputID, ta.offsetU, ta.offsetV, ta.scaleU, ta.scaleV); // DefaultShader$Setters$18
+  ```
+
+  The absence of a null-check here does not change the semantics of `get`; it only means this code will throw a `NullPointerException` if `Specular` is missing. It does not prove that `get` cannot return `null`.
+
+Additionally, the more generic `Attributes.get(Class<T> clazz, long type)` simply delegates to `get(type)` and returns its result unchecked:
+
+```java
+public final <T extends Attribute> T get(Class<T> clazz, final long type) {
+    return (T) get(type);
+}
+```
+
+Elsewhere in the codebase, numerous uses of `get(...)` explicitly check against `null` (e.g., for lights, diffuse textures, emissive textures, etc.), consistently treating `get`’s result as nullable.
+
+Given:
+
+- `get(long)` has an explicit `return null;` path.
+- No provided guarantee that `combinedAttributes` has `TextureAttribute.Specular` at this point.
+- Other code paths around `Specular` itself explicitly guard for a `null` result from `get(TextureAttribute.Specular)`.
+
+we must conclude that at this specific call site the expression:
+
+```java
+combinedAttributes.get(TextureAttribute.Specular)
+```
+
+**can** evaluate to `null`. The cast to `TextureAttribute` does not change that: the variable `ta` may be assigned `null`, and subsequent field access would then cause a `NullPointerException`.
+
+Therefore, the invocation can return `null` at this call site.]]></reason>
+  <value>YES</value>
+</response>

@@ -1,0 +1,42 @@
+<response>
+    <reason><![CDATA[
+The parameter verts1 of the method
+
+public static boolean overlapConvexPolygons(
+        float[] verts1, float[] verts2, MinimumTranslationVector mtv)
+
+is used directly in the call:
+
+return overlapConvexPolygons(verts1, 0, verts1.length,
+                             Nullability.castToNonnull(verts2), 0, verts2.length, mtv);
+
+There is no reassignment or null-check on verts1 inside this method.
+
+From the provided call chain:
+
+Depth 1:
+public static boolean overlapConvexPolygons(
+        Polygon p1, Polygon p2, MinimumTranslationVector mtv) {
+    return overlapConvexPolygons(
+        Nullability.castToNonnull(p1.getTransformedVertices()),
+        p2.getTransformedVertices(),
+        mtv
+    );
+}
+
+Depth 2:
+public static boolean overlapConvexPolygons(Polygon p1, Polygon p2) {
+    return overlapConvexPolygons(p1, p2, null);
+}
+
+At depth 1, only the first float-array argument (corresponding to verts1) is wrapped in Nullability.castToNonnull, but we are instructed to ignore annotations and any nullability helpers (including this cast) as guarantees, and also not to assume behavior of such methods without their implementation. However, that only affects the first parameter in the depth-0 method when it is called from depth 1.
+
+Critically:
+- The depth-0 method is public and can be called directly by external code, independent of the shown call chain.
+- In such a direct call, a caller may pass null for verts1.
+- The method then immediately dereferences verts1 as verts1.length, which will cause a NullPointerException if verts1 is null.
+- There is no internal null check or reassignment for verts1.
+
+Therefore, considering all possible callers (not only the shown chain) and the lack of internal guards, verts1 can indeed be null at runtime, and the method would crash in that case.]]></reason>
+    <value>YES</value>
+</response>

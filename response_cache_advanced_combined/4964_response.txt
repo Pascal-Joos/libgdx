@@ -1,0 +1,47 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are analyzing whether the local variable `a` can be null at the line:
+
+    a[dest++] = a[cursor2++];
+
+in the method `mergeLo`.
+
+1. Variable assignment and null check
+
+Early in the method:
+
+    T[] a = this.a;
+    if (a == null) {
+      throw new IllegalStateException("Array to sort must not be null");
+    }
+
+After this point, there is no reassignment to the local variable `a`. Thus:
+
+- If `this.a` is null, the method throws `IllegalStateException` and does not proceed.
+- If execution passes beyond the `if (a == null)` block, then `a` is guaranteed to be non-null for the remainder of the method.
+
+2. Code paths and control flow
+
+There is no code path that:
+
+- Reassigns `a` to null,
+- Calls any method that might change the local variable `a`, or
+- Shadows `a` with another variable of the same name.
+
+All use sites of `a`, including:
+
+    a[dest++] = a[cursor2++];
+
+and all calls via `Nullability.castToNonnull(a)` rely on the same local `a`, which is already proven non-null by the preceding check.
+
+3. Semantics of other methods
+
+Methods such as `ensureCapacity`, `System.arraycopy`, `gallopRight`, `gallopLeft`, and the comparator `c` operate on arrays and values but do not modify the local variable `a`. Even if `this.a` field were to change concurrently, the *local copy* `a` used in this method remains the original non-null reference.
+
+Therefore, along all execution paths that reach the line in question, `a` cannot be null.
+
+]]></reason>
+    <value>NO</value>
+</response>
+```

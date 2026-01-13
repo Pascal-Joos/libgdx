@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void render(ShaderProgram shader, boolean autoBind) {
+        if (mesh == null) return;
+        Nullability.castToNonnull(mesh).render(shader, primitiveType, offset, size, autoBind);
+}
+  ```
+    ]]>
+  </code>
+</response>

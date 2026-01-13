@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int getHeight() {
+    return Nullability.castToNonnull(data).getHeight();
+  }
+  ```
+    ]]>
+  </code>
+</response>

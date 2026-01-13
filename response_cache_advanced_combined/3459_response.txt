@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    @Initializer
+    @Override
+    @Nullable
+    public Node<E> next() {
+      previousPosition = position;
+      if (position == null) {
+        return null;
+      }
+      position = position.n;
+      return previousPosition;
+    }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,15 @@
+<response>
+    <reason><![CDATA[
+`bindSide` is only called from `nextSide()` as:
+
+    bindSide(getSide());
+
+`getSide()` returns:
+
+    return currentSide < 0 ? null : cubemapSides[currentSide];
+
+Thus, whenever `currentSide` is negative, `getSide()` will return `null`, and `nextSide()` does not prevent this situation before calling `bindSide`. There is no reassignment or null-check of the `side` parameter inside `bindSide` itself, and it is dereferenced immediately (`side.glEnum`).
+
+Therefore, based solely on this context and call chain, it is possible for `side` to be `null`.]]></reason>
+    <value>YES</value>
+</response>

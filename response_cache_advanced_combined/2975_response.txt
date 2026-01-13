@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public String get(String key) {
+        if (properties == null) {
+          if (exceptionOnMissingKey)
+            throw new MissingResourceException(
+                "Can't find bundle key " + key, this.getClass().getName(), key);
+          else return "???" + key + "???";
+        }
+        String result = Nullability.castToNonnull(properties).get(key);
+        if (result == null) {
+          if (parent != null) result = parent.get(key);
+          if (result == null) {
+            if (exceptionOnMissingKey)
+              throw new MissingResourceException(
+                  "Can't find bundle key " + key, this.getClass().getName(), key);
+            else return "???" + key + "???";
+          }
+        }
+        return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

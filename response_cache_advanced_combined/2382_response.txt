@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+`selectedDrawable` is assigned directly from `style.selection`:
+
+    Drawable selectedDrawable = style.selection;
+
+There are no null checks or other assignments to `selectedDrawable` before it is used here:
+
+    itemHeight += selectedDrawable.getTopHeight() + selectedDrawable.getBottomHeight();
+
+The only earlier guard is:
+
+    BitmapFont font = style.font;
+    if (font == null) return;
+
+which protects only against `style.font` being null. It does not establish anything about `style.selection`. There is also no use of `Nullability.castToNonnull` or any similar assertion on `style.selection`.
+
+Thus, unless there is an external, documented contract that `style.selection` is *always* non-null whenever `layout()` is called (which is not visible from this method alone), `style.selection` may legitimately be null. In that case, `selectedDrawable` would be null and the calls to `getTopHeight()` and `getBottomHeight()` would throw a `NullPointerException`.
+
+Given only the code shown and no additional guarantees about `style.selection`, `selectedDrawable` can be null at that line.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

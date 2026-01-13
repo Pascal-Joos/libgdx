@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void setActive(boolean active) {
+      super.setActive(active);
+      if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+      if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+      if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+      spawnWidthValue.setActive(active);
+      spawnHeightValue.setActive(active);
+      spawnDepthValue.setActive(active);
+  }
+  ```
+    ]]>
+  </code>
+</response>

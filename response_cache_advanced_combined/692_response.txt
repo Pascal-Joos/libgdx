@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setRegionWidth(int width) {
+            Texture texture = this.texture;
+            if (texture == null) throw new IllegalStateException("texture cannot be null.");
+            if (isFlipX()) {
+              setU(u2 + width / (float) Nullability.castToNonnull(texture).getWidth());
+            } else {
+              setU2(u + width / (float) Nullability.castToNonnull(texture).getWidth());
+            }
+  }
+  ```
+    ]]>
+  </code>
+</response>

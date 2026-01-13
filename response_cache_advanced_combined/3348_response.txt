@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void remove(String name, Class type) {
+      if (name == null) throw new IllegalArgumentException("name cannot be null.");
+      ObjectMap<String, Object> typeResources = resources.get(type);
+      if (typeResources == null) return;
+      typeResources.remove(name);
+  }
+  ```
+    ]]>
+  </code>
+</response>

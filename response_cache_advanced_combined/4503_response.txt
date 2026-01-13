@@ -1,0 +1,30 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPadX() {
+                    if (actor == null) return 0;
+                    float padLeftValue;
+                    if (padLeft == null) {
+                      Cell defaults = defaults();
+                      if (defaults == null) return 0;
+                      Value value = defaults.getPadLeftValue();
+                      padLeftValue = value == null ? 0 : value.get(actor);
+                    } else {
+                      padLeftValue = padLeft.get(actor);
+                    }
+                    float padRightValue;
+                    if (padRight == null) {
+                      Cell defaults = defaults();
+                      if (defaults == null) return 0;
+                      Value value = defaults.getPadRightValue();
+                      padRightValue = value == null ? 0 : value.get(actor);
+                    } else {
+                      padRightValue = padRight.get(actor);
+                    }
+                    return padLeftValue + padRightValue;
+}
+  ```
+    ]]>
+  </code>
+</response>

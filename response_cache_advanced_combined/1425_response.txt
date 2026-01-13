@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void part(final MeshPart meshpart, final Material material) {
+      if (model == null) throw new GdxRuntimeException("Call begin() first");
+      if (node == null) throw new GdxRuntimeException("Call node() first");
+      node.parts.add(new NodePart(meshpart, material));
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,57 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+  FieldMetadata metadata = fields.get(fieldNames.get(i));
+
+we are in Json.writeFields(Object):
+
+  OrderedMap<String, FieldMetadata> fields = getFields(type);
+  int defaultIndex = 0;
+  Array<String> fieldNames = fields.orderedKeys();
+  for (int i = 0, n = fieldNames.size; i < n; i++) {
+    FieldMetadata metadata = fields.get(fieldNames.get(i));
+    ...
+
+Here:
+
+1. `fields` is an OrderedMap<String, FieldMetadata> returned by `getFields(type)`.
+2. `fieldNames` is obtained via `fields.orderedKeys()`.
+
+Looking at `getFields(Class type)`:
+
+- It constructs `nameToField` as a new OrderedMap.
+- For each discovered Field, it does:
+
+    nameToField.put(field.getName(), new FieldMetadata(field));
+
+  So every key inserted into `nameToField` has a non-null `FieldMetadata` value.
+
+- Then it calls `sortFields(type, nameToField.keys);`
+- Then: `typeToFields.put(type, nameToField);`
+- Finally it returns `nameToField` (which is what `fields` refers to).
+
+So `fields` holds exactly the key–value pairs created in that loop.
+
+Next, `fields.orderedKeys()`:
+
+- For OrderedMap, `orderedKeys()` returns an Array of the keys in insertion/sorted order, but they are the same keys present in the map. There is no code path adding extra keys without values; the keys array is directly tied to the map’s existing entries.
+
+Thus, for every index `i` in `0 .. fieldNames.size-1`, `fieldNames.get(i)` is guaranteed to be a key present in `fields`, and that key was inserted with a non-null `FieldMetadata`.
+
+The `ObjectMap.get` implementation is:
+
+  public @Null <T extends K> V get(T key) {
+      int i = locateKey(key);
+      return i < 0 ? null : valueTable[i];
+  }
+
+`get` returns null only if `locateKey` does not find the key (`i < 0`) or if a stored value is null. In this context:
+
+- The key definitely exists (it comes from `fields`’ own ordered keys array).
+- Values stored for those keys are created as `new FieldMetadata(field)` and never set to null.
+
+Therefore `locateKey` will find the key (i ≥ 0) and `valueTable[i]` will be a non-null `FieldMetadata`. So at this particular call site, `fields.get(fieldNames.get(i))` cannot evaluate to null.
+  ]]></reason>
+  <value>NO</value>
+</response>

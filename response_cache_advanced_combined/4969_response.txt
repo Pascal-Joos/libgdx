@@ -1,0 +1,118 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void mergeHi(int base1, int len1, int base2, int len2) {
+      if (DEBUG) assert len1 > 0 && len2 > 0 && base1 + len1 == base2;
+  
+      // Copy second run into temp array
+      T[] a = this.a;
+      if (a == null) {
+        throw new NullPointerException();
+      }
+      a = Nullability.castToNonnull(a);
+      T[] tmp = ensureCapacity(len2);
+      System.arraycopy(a, base2, tmp, 0, len2);
+  
+      int cursor1 = base1 + len1 - 1; // Indexes into a
+      int cursor2 = len2 - 1; // Indexes into tmp array
+      int dest = base2 + len2 - 1; // Indexes into a
+  
+      // Move last element of first run and deal with degenerate cases
+      Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+      if (--len1 == 0) {
+        System.arraycopy(tmp, 0, a, dest - (len2 - 1), len2);
+        return;
+      }
+      if (len2 == 1) {
+        dest -= len1;
+        cursor1 -= len1;
+        System.arraycopy(a, cursor1 + 1, a, dest + 1, len1);
+        a[dest] = tmp[cursor2];
+        return;
+      }
+  
+      Comparator<? super T> c = this.c; // Use local variable for performance
+      if (c == null) {
+        throw new NullPointerException();
+      }
+      int minGallop = this.minGallop; // " " " " "
+      outer:
+      while (true) {
+        int count1 = 0; // Number of times in a row that first run won
+        int count2 = 0; // Number of times in a row that second run won
+  
+        /*
+         * Do the straightforward thing until (if ever) one run appears to win consistently.
+         */
+        do {
+          if (DEBUG) assert len1 > 0 && len2 > 1;
+          if (Nullability.castToNonnull(c).compare(tmp[cursor2], a[cursor1]) < 0) {
+            a[dest--] = a[cursor1--];
+            count1++;
+            count2 = 0;
+            if (--len1 == 0) break outer;
+          } else {
+            a[dest--] = tmp[cursor2--];
+            count2++;
+            count1 = 0;
+            if (--len2 == 1) break outer;
+          }
+        } while ((count1 | count2) < minGallop);
+  
+        /*
+         * One run is winning so consistently that galloping may be a huge win. So try that, and continue galloping until (if
+         * ever) neither run appears to be winning consistently anymore.
+         */
+        do {
+          if (DEBUG) assert len1 > 0 && len2 > 1;
+          count1 =
+              len1
+                  - gallopRight(tmp[cursor2], a, base1, len1, len1 - 1, Nullability.castToNonnull(c));
+          if (count1 != 0) {
+            dest -= count1;
+            cursor1 -= count1;
+            len1 -= count1;
+            System.arraycopy(a, cursor1 + 1, a, dest + 1, count1);
+            if (len1 == 0) break outer;
+          }
+          a[dest--] = tmp[cursor2--];
+          if (--len2 == 1) break outer;
+  
+          count2 =
+              len2 - gallopLeft(a[cursor1], tmp, 0, len2, len2 - 1, Nullability.castToNonnull(c));
+          if (count2 != 0) {
+            dest -= count2;
+            cursor2 -= count2;
+            len2 -= count2;
+            System.arraycopy(tmp, cursor2 + 1, a, dest + 1, count2);
+            if (len2 <= 1) // len2 == 1 || len2 == 0
+            break outer;
+          }
+          a[dest--] = a[cursor1--];
+          if (--len1 == 0) break outer;
+          minGallop--;
+        } while (count1 >= MIN_GALLOP | count2 >= MIN_GALLOP);
+        if (minGallop < 0) minGallop = 0;
+        minGallop += 2; // Penalize for leaving gallop mode
+      } // End of "outer" loop
+      this.minGallop = minGallop < 1 ? 1 : minGallop; // Write back to field
+  
+      if (len2 == 1) {
+        if (DEBUG) assert len1 > 0;
+        dest -= len1;
+        cursor1 -= len1;
+        System.arraycopy(a, cursor1 + 1, a, dest + 1, len1);
+        a[dest] = tmp[cursor2]; // Move first elt of run2 to front of merge
+      } else if (len2 == 0) {
+        throw new IllegalArgumentException("Comparison method violates its general contract!");
+      } else {
+        if (DEBUG) assert len1 == 0;
+        if (DEBUG) assert len2 > 0;
+        System.arraycopy(tmp, 0, a, dest - (len2 - 1), len2);
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

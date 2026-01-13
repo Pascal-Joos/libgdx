@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the top of the method you have an explicit null-check:
+
+    if (_hash == null) return;
+
+This is the only place where execution can exit early before reaching the line in question:
+
+    _hash[hash2Value] = _pos;
+
+There are no assignments to `_hash` within this method, and no calls to other methods before this line that could change `_hash` (e.g., `MovePos()` is only called later in the loop body, after `_hash[hash2Value] = _pos;`).
+
+Control-flow wise, the only paths to `_hash[hash2Value] = _pos;` are:
+
+1. `_hash == null` → method returns immediately, so the assignment is never executed.
+2. `_hash != null` and `_hashSizeSum == 0` → method returns due to the second guard, still before the assignment.
+3. `_hash != null` and `_hashSizeSum != 0` → execution continues into the loop and reaches `_hash[hash2Value] = _pos;` with `_hash` definitely non-null.
+
+Since:
+
+- `_hash` is checked for null once and, if null, the method exits;
+- There are no subsequent writes to `_hash` that could set it to null afterward;
+- No intervening method calls that could modify `_hash` occur before `_hash[hash2Value] = _pos;`;
+
+it follows that `_hash` cannot be null at the point of `_hash[hash2Value] = _pos;`. (Array-index or other runtime errors are still possible, but `_hash` itself will not be null.)
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

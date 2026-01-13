@@ -1,0 +1,29 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, there is no prior assignment or guarantee that `c.spaceTop` is non-null before the line:
+
+    c.computedPadTop += Math.max(
+        0,
+        (c.spaceTop == null ? 0 : c.spaceTop.get(a))
+            - (above.spaceBottom == null
+                ? 0
+                : Nullability.castToNonnull(above.spaceBottom).get(aboveActor)));
+
+The code explicitly treats `c.spaceTop` as nullable by using a ternary operator:
+
+    (c.spaceTop == null ? 0 : c.spaceTop.get(a))
+
+This construct is required precisely because `c.spaceTop` may be null at runtime. If it were guaranteed non-null, this null-check and ternary would be unnecessary, and the code would more likely call `c.spaceTop.get(a)` directly or use a non-null-cast helper similar to `Nullability.castToNonnull`.
+
+Moreover:
+- There are no earlier assignments in `computeSize()` that ensure `c.spaceTop` is non-null.
+- The method uses a consistent pattern for other nullable `Value` fields (`padLeft`, `padTop`, `spaceLeft`, `spaceBottom`, `spaceRight`, etc.), checking for null and substituting 0 when null.
+- `Cell` instances are taken from `this.cells.items` and may have been configured elsewhere (e.g., builder-style API of the table/cell); nothing in this snippet forces `spaceTop` to be initialized.
+
+Thus, from the perspective of this method and typical `Cell` usage, `c.spaceTop` can legitimately be null, and the code is written to handle that case safely via the ternary.
+
+Therefore, the expression `c.spaceTop` at that line CAN be null; the method’s own logic assumes and supports that possibility.]]></reason>
+    <value>YES</value>
+</response>
+```

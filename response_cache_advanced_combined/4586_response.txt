@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Drawable getKnobAfterDrawable() {
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+    if (disabled && style.disabledKnobAfter != null) return style.disabledKnobAfter;
+    return style.knobAfter;
+  }
+  ```
+    ]]>
+  </code>
+</response>

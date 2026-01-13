@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void load(ParticleValue value) {
+        super.load(value);
+        SpawnShapeValue shape = (SpawnShapeValue) value;
+        if (shape.xOffsetValue != null && xOffsetValue != null) xOffsetValue.load(shape.xOffsetValue);
+        if (shape.yOffsetValue != null && yOffsetValue != null) yOffsetValue.load(shape.yOffsetValue);
+        if (shape.zOffsetValue != null && zOffsetValue != null) zOffsetValue.load(shape.zOffsetValue);
+  }
+  ```
+    ]]>
+  </code>
+</response>

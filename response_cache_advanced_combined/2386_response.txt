@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    maxItemWidth + listStyle.selection.getLeftWidth() + listStyle.selection.getRightWidth();
+
+In the provided method, the only place where `listStyle.selection` is dereferenced is guarded by an explicit null check:
+
+    ListStyle listStyle = style.listStyle;
+    ...
+    float scrollWidth = maxItemWidth;
+    if (listStyle.selection != null)
+      scrollWidth += listStyle.selection.getLeftWidth() + listStyle.selection.getRightWidth();
+
+So, the dereference `listStyle.selection.getLeftWidth()` and `listStyle.selection.getRightWidth()` only occurs inside:
+
+    if (listStyle.selection != null) {
+        scrollWidth += ...
+    }
+
+Within this block, the Java language guarantees that `listStyle.selection` is non-null (because it has just been compared to `null` and we are in the true branch). There is no reassignment to `listStyle` or `style` or `style.listStyle` inside the block that could change `selection` mid-way.
+
+Therefore, on all possible code paths that reach the dereference, `listStyle.selection` has been checked to be non-null immediately beforehand. On all code paths where `listStyle.selection` is actually null, the body of the `if` statement is skipped, and the expression is not evaluated at all.
+
+Thus, inside the method as written, `listStyle.selection` cannot be null at the point where it is dereferenced.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

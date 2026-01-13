@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Values values() {
+    if (Collections.allocateIterators) return new Values(this);
+    if (values1 == null) {
+      values1 = new Values(this);
+      values2 = new Values(this);
+    }
+    if (!values1.valid) {
+      values1.reset();
+      values1.valid = true;
+      values2.valid = false;
+      return values1;
+    }
+    Nullability.castToNonnull(values2).reset();
+    Nullability.castToNonnull(values2).valid = true;
+    values1.valid = false;
+    return values2;
+}
+  ```
+    ]]>
+  </code>
+</response>

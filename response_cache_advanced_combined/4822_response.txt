@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public @Null String prettyPrint(String json, int singleLineColumns) {
+      JsonValue value = new JsonReader().parse(json);
+      return value == null ? null : value.prettyPrint(outputType, singleLineColumns);
+  }
+  ```
+    ]]>
+  </code>
+</response>

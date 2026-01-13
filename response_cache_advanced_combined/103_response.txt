@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public FileHandle resolve(String fileName) {
+        if (Gdx.files == null) return null;
+        return Nullability.castToNonnull(Gdx.files).local(fileName);
+  }
+  ```
+    ]]>
+  </code>
+</response>

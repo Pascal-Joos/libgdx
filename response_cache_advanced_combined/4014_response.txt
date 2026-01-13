@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method activateParticles, the very first statement is:
+
+    if (strengthChannel == null) return;
+
+This is a guard clause that exits the method immediately if strengthChannel is null.
+
+The expression in question appears in the for-loop header:
+
+    for (int i = startIndex * strengthChannel.strideSize,
+             c = i + count * strengthChannel.strideSize;
+         i < c;
+         i += strengthChannel.strideSize) {
+
+Because execution would have already returned from the method if strengthChannel were null, any point after the null check (including the for-loop header and body) is only reachable when strengthChannel is guaranteed to be non-null.
+
+Under standard Java semantics and assuming no unusual side effects (e.g., no concurrent write that sets strengthChannel to null between the if check and the loop, and no use of reflection/unsafe code to mutate it mid-execution), strengthChannel cannot be null at the point where it is used in the for-loop header.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

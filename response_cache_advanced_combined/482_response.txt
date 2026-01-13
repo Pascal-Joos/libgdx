@@ -1,0 +1,44 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+final VertexAttribute posAttrib = getVertexAttribute(Usage.Position);
+```
+
+inside `Mesh.scale(float scaleX, float scaleY, float scaleZ)`, whether `getVertexAttribute(Usage.Position)` returns null depends entirely on the contents of `vertices.getAttributes()` for that particular `Mesh` instance:
+
+```java
+public VertexAttribute getVertexAttribute(int usage) {
+    VertexAttributes attributes = vertices.getAttributes();
+    int len = attributes.size();
+    for (int i = 0; i < len; i++)
+        if (attributes.get(i).usage == usage)
+            return attributes.get(i);
+
+    return null;
+}
+```
+
+This method clearly returns `null` if and only if none of the attributes in `vertices.getAttributes()` has `usage == Usage.Position`.
+
+From the provided code:
+
+- Some usages of `getVertexAttribute(Usage.Position)` explicitly guard against null and throw if it's absent (e.g., `transform`, `calculateRadiusSquared`, `extendBoundingBox`, `MeshSpawnShapeValue.setMesh`), which indicates that a mesh *may* not have a position attribute, and that callers must defensively handle that case.
+- Other places, such as `Mesh.scale`, explicitly check for null and early-return:
+
+  ```java
+  final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+  if (posAttr == null)
+    return;
+  ```
+
+  This is a direct acknowledgment by the library itself that `getVertexAttribute(Usage.Position)` can be null for some meshes.
+
+- There is no invariant in the given code guaranteeing that every `Mesh` always has a position attribute. For example, `new Mesh(isStatic, numVertices, ..., attrs)` in `copy` may receive an arbitrary set of `VertexAttribute`s driven by the `usage[]` array, and `ImmediateModeRenderer20` constructs a `Mesh` using attributes from `buildVertexAttributes(hasNormals, hasColors, numTexCoords)` (not shown here), which may or may not always include a `Usage.Position` attribute depending on its implementation and arguments.
+
+Because the presence of a `Usage.Position` attribute depends on the attributes actually stored in the `Mesh`'s `vertices`, and because those attributes are not globally constrained in the provided code to always include `Usage.Position`, we cannot rule out the case where the loop finds no matching attribute and executes `return null;`.
+
+Therefore, at this specific call site, `getVertexAttribute(Usage.Position)` can indeed evaluate to `null`, and the surrounding `if (posAttr == null) return;` is necessary and correct.]]></reason>
+  <value>YES</value>
+</response>

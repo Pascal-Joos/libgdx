@@ -1,0 +1,22 @@
+```xml
+<response>
+    <reason><![CDATA[
+There is a data race on the field `out` between the synchronized block and its later use.
+
+Control flow:
+1. The method is synchronized on `this` and checks:
+   - if (!connected || out == null) return false;
+   This guarantees that at the moment of the check, inside the synchronized block, `out` is non-null if we proceed.
+
+2. After passing the check, the method exits the synchronized block and then executes:
+   - out.writeInt(KEY_DOWN);
+   - out.writeInt(keycode);
+
+However, between leaving the synchronized block and calling `out.writeInt(...)`, another thread could modify `out` without holding the same lock (or even with holding the same lock but in between those steps from this thread's perspective). Since there is no synchronization protecting the read of `out` at the call site, and no final/immutability guarantees shown, the JMM does not ensure that `out` remains non-null after the synchronized block.
+
+Therefore, from a static analysis / correctness perspective, `out` can become null after the null-check and before the `writeInt` call, making `out` potentially null at `out.writeInt(KEY_DOWN);`.
+
+We lack any additional guarantees (e.g., `out` being final, or all writes to `out` being properly synchronized and never assigning null after initialization) from the given code. Without such information, we must treat `out` as possibly null at the call site.]]></reason>
+    <value>YES</value>
+</response>
+```

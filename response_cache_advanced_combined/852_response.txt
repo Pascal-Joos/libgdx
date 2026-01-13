@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public boolean canRender(final Renderable renderable) {
+      if (renderable.bones != null && renderable.bones.length > config.numBones) return false;
+      if (renderable.meshPart.mesh == null) return false;
+      final long renderableMask = combineAttributeMasks(renderable);
+      return (attributesMask == (renderableMask | optionalAttributes))
+          && (vertexMask == Nullability.castToNonnull(renderable.meshPart.mesh).getVertexAttributes().getMaskWithSizePacked())
+          && (renderable.environment != null) == lighting;
+}
+  ```
+    ]]>
+  </code>
+</response>

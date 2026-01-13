@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextureDescriptor(final T texture) {
+      this(Nullability.castToNonnull(texture), null, null, null, null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

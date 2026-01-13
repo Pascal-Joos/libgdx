@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of switchTexture, the parameter is named "texture" and is immediately checked:
+
+    if (texture == null) throw new IllegalArgumentException("texture cannot be null");
+
+This check guarantees that, for all subsequent statements in this method, the parameter "texture" is non-null. If "texture" were null, the method would throw an IllegalArgumentException and execution would not reach:
+
+    invTexWidth = 1.0f / texture.getWidth();
+
+Therefore, along all code paths that reach this line, the reference "texture" cannot be null.
+
+Note: This analysis assumes standard Java semantics (no external bytecode manipulation or suppressed null checks) and that the code shown is exactly what is executed.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

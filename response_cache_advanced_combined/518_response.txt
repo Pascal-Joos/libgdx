@@ -1,0 +1,11 @@
+```xml
+<response>
+    <reason><![CDATA[
+Inside the ternary operator `data == null ? 0 : data.getHeight()`, the `data.getHeight()` expression is evaluated only when the condition `data == null` is false. That means, on any code path where `data.getHeight()` is actually executed, `data` is guaranteed to be non-null at that point.
+
+Even if `data` might be null at other times (e.g., if it is not initialized or can be set to null elsewhere), the ternary condition explicitly guards the access: when `data` is null, the expression evaluates to `0` and `data.getHeight()` is not called.
+
+Therefore, along all execution paths leading to the evaluation of the expression `data.getHeight()`, `data` cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

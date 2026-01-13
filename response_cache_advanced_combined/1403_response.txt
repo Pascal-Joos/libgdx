@@ -1,0 +1,32 @@
+<response>
+    <reason><![CDATA[
+Within the provided call chain, the `AnimationDesc anim` parameter of
+
+```java
+protected AnimationDesc action(final AnimationDesc anim, float transitionTime)
+```
+
+can be null.
+
+1. At depth 1, both overloads of `action(...)` call this method as:
+   ```java
+   return action(obtain(...), transitionTime);
+   ```
+2. At depth 2, the `obtain(final Animation anim, ...)` method explicitly returns null when its `Animation anim` argument is null:
+   ```java
+   if (anim == null) return null;
+   ```
+   Thus, `obtain(...)` can yield `null`, which is then passed directly as the `anim` parameter to `action(final AnimationDesc anim, ...)`.
+
+3. Inside `action(final AnimationDesc anim, ...)`, the parameter is immediately dereferenced:
+   ```java
+   if (anim.loopCount < 0) throw new GdxRuntimeException("An action cannot be continuous");
+   ```
+   If `anim` is null, this line will throw a `NullPointerException`.
+
+4. No checks or reassignments of `anim` occur before its first dereference; therefore, if a caller has passed `null` (via `obtain(...)` returning null due to a null `Animation`), the method will indeed receive `anim == null` and then crash.
+
+Since the call chain shows a concrete path where `anim` becomes null and is not guarded before use, the parameter can be null in this method.
+    ]]></reason>
+    <value>YES</value>
+</response>

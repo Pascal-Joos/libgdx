@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is setStyle, which follows the JavaBeans setter naming convention and does not start with "init" or "initialize". By your own criteria, setter methods must not be considered initializer methods, even if they initialize fields. This method simply sets a style (and related properties) and can reasonably be called multiple times, so it does not fit the special “initializer method” contract assumed by NullAway (like onCreate or init). Therefore, it should not be treated as an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

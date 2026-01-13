@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefHeight() {
+    if (prefRows <= 0) {
+      return super.getPrefHeight();
+    } else {
+      // without ceil we might end up with one less row then expected
+      // due to how linesShowing is calculated in #sizeChanged and #getHeight() returning rounded
+      // value
+      float prefHeight = MathUtils.ceil((style.font != null ? style.font : style.messageFont).getLineHeight() * prefRows);
+      if (style.background != null) {
+        prefHeight =
+            Math.max(
+                prefHeight + style.background.getBottomHeight() + style.background.getTopHeight(),
+                style.background.getMinHeight());
+      }
+      return prefHeight;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

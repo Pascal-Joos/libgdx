@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the line:
+
+    son[ptr0] = son[ptr1] = kEmptyHashValue;
+
+the potentially null expression is the field `_son` (from which `son` is derived), not the local `son` itself. The question is whether `_son` can be null at this point.
+
+1. At the start of the method we have:
+
+       if (_son == null) return 0;
+       int[] son = Nullability.castToNonnull(_son);
+
+   This immediately returns if `_son` is null, and on the next line passes `_son` into `castToNonnull`. The intent and usual contract of such a helper is that it only be called with non-null values and that it returns a non-null reference (here, of type `int[]`).
+
+2. There is no assignment to `_son` anywhere in the rest of `GetMatches`. Thus, between the null check and the use of `son`, `_son` cannot change within this method.
+
+3. From the Java type system point of view:
+   - `son` is a local variable of type `int[]` and cannot be null unless assigned a null reference.
+   - Its only assignment is `son = Nullability.castToNonnull(_son);`.
+
+   So the only way `son` could be null is if `Nullability.castToNonnull` itself returns null even when given a non-null input. That would contradict the evident intention of the method name and its use as a nullness cast. Under any reasonable contract for `castToNonnull`, `son` is non-null.
+
+4. All later uses, including:
+
+       son[ptr0] = son[ptr1] = kEmptyHashValue;
+
+   operate on the local `son`. Since the method has already returned in the case `_son == null`, and since `son` is only derived from a non-null `_son` via a nullability helper that is assumed to enforce/guarantee non-nullness, `son` cannot be null at this point.
+
+Therefore, under standard assumptions about `Nullability.castToNonnull` (and absent pathological behavior in that helper), the expression `son` in `son[ptr0] = son[ptr1] = kEmptyHashValue;` cannot be null. The field `_son` has already been checked for null and is unchanged afterward.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextField(@Null String text, TextFieldStyle style) {
+      setStyle(style);
+      if (Gdx.app != null) clipboard = Gdx.app.getClipboard();
+      initialize();
+      setText(text);
+      setSize(getPrefWidth(), getPrefHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

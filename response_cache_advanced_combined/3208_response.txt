@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void load(ParticleValue value) {
+      super.load(value);
+      PrimitiveSpawnShapeValue shape = (PrimitiveSpawnShapeValue) value;
+      edges = shape.edges;
+      if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+      if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+      if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+      if (shape.spawnWidthValue == null) shape.spawnWidthValue = new ScaledNumericValue();
+      if (shape.spawnHeightValue == null) shape.spawnHeightValue = new ScaledNumericValue();
+      if (shape.spawnDepthValue == null) shape.spawnDepthValue = new ScaledNumericValue();
+      spawnWidthValue.load(shape.spawnWidthValue);
+      spawnHeightValue.load(shape.spawnHeightValue);
+      spawnDepthValue.load(shape.spawnDepthValue);
+    }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method body, every use of data.controller (including in the line
+    for (int k = 0, c = i + data.controller.particles.size;
+occurs only inside the loop:
+
+    for (ParticleControllerRenderData data : renderData) {
+      if (data.controller == null) {
+        continue;
+      }
+      for (int k = 0, c = i + data.controller.particles.size;
+           i < c;
+           ++i, k += data.positionChannel.strideSize) {
+
+        ...
+      }
+      count += data.controller.particles.size;
+    }
+
+Immediately before entering the inner for-loop, there is an explicit null check:
+
+    if (data.controller == null) {
+      continue;
+    }
+
+If data.controller is null, the method executes `continue`, skipping the rest of the loop body for that iteration, which includes the inner for-loop header and body. Therefore, the inner for-loop (and the referenced expression `data.controller` within it) is executed only when `data.controller` is guaranteed non-null.
+
+No operation in the inner loop reassigns `data.controller`, so it cannot become null between the check and its usage. Thus, under standard Java semantics and given only this method's code, `data.controller` cannot be null at the point where it is used in the for-loop header.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

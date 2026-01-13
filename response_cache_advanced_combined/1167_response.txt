@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Array<AssetDescriptor> getAssetDescriptors() {
+    Array<AssetDescriptor> descriptors = new Array<AssetDescriptor>();
+    for (AssetData data : sharedAssets) {
+      if (data.filename != null) {
+        descriptors.add(new AssetDescriptor<T>(data.filename, data.type));
+      }
+    }
+    return descriptors;
+}
+  ```
+    ]]>
+  </code>
+</response>

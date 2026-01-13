@@ -1,0 +1,61 @@
+<response>
+  <reason><![CDATA[
+At this call site, the method invoked is:
+
+```java
+Element tilesheets = root.getChildByName("TileSheets");
+```
+
+The implementation of `getChildByName` is:
+
+```java
+public @Null Element getChildByName(String name) {
+  if (children == null) return null;
+  for (int i = 0; i < children.size; i++) {
+    Element element = children.get(i);
+    if (element.name.equals(name)) return element;
+  }
+  return null;
+}
+```
+
+From this code alone, there are two explicit ways it can return null:
+
+1. `children == null`
+2. `children` is non-null, but none of its elements has `element.name.equals("TileSheets")`
+
+Now consider the specific usage context in `TideMapLoader`:
+
+```java
+Element tilesheets = Nullability.castToNonnull(root).getChildByName("TileSheets");
+if (tilesheets != null) {
+  for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+    loadTileSheet(map, tilesheet, tmxFile, imageResolver);
+  }
+}
+```
+
+and in `loadTileSheets`:
+
+```java
+Element tilesheets = root.getChildByName("TileSheets");
+for (Element tileset : tilesheets.getChildrenByName("TileSheet")) {
+  ...
+}
+```
+
+Nothing in the provided code guarantees that:
+
+- `root.children` is non-null, nor that
+- there must exist a child element named `"TileSheets"`.
+
+The XML structure is determined by the contents of the `.tide` file, which is external data. The loader code merely parses `root = xml.parse(tideFile);` and then calls `root.getChildByName("TileSheets")`. If the file omits a `TileSheets` element, or `root` has no children at all, `getChildByName("TileSheets")` will return null along the normal, non-exception control flow:
+
+- If `root.children == null` → direct `return null;`
+- If `root.children` exists but no child with name `"TileSheets"` → loop completes and `return null;`
+
+The fact that some callers later use `Nullability.castToNonnull(root)` affects only the static/nullability annotation of `root` itself, not the result of `getChildByName`. There is no check or invariant in the shown code that would ensure `"TileSheets"` must be present for every valid map.
+
+Therefore, at this specific call site, `root.getChildByName("TileSheets")` can legitimately evaluate to null.]]></reason>
+  <value>YES</value>
+</response>

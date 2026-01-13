@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static byte[] decode(String s) {
+      return decode(Nullability.castToNonnull(s).toCharArray());
+  }
+  ```
+    ]]>
+  </code>
+</response>

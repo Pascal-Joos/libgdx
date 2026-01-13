@@ -1,0 +1,30 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void add(T geometry) {
+      if (!collider.intersects(bounds, geometry)) {
+        return;
+      }
+
+      // If is not leaf, check children
+      if (!leaf) {
+        if (children == null) return;
+        for (Octree.OctreeNode child : children) {
+          child.add(geometry);
+        }
+      } else {
+        if (geometries.size >= maxItemsPerNode && level > 0) {
+          split();
+          for (Octree.OctreeNode child : children) {
+            child.add(geometry);
+          }
+        } else {
+          geometries.add(geometry);
+        }
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

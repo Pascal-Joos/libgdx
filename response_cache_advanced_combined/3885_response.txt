@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+  public boolean canRender(final Renderable renderable) {
+    return renderable.meshPart.mesh != null
+        && (materialMask == (renderable.material.getMask() | optionalAttributes))
+        && (vertexMask == renderable.meshPart.mesh.getVertexAttributes().getMask());
+}
+  ```
+    ]]>
+  </code>
+</response>

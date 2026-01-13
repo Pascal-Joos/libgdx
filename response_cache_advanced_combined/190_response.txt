@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void dispose() {
+        if (Gdx.gl20 == null) return;
+        GL20 gl = Gdx.gl20;
+        if (gl == null) return;
+    
+        for (T texture : textureAttachments) {
+          disposeColorTexture(texture);
+        }
+    
+        if (hasDepthStencilPackedBuffer) {
+          if (Gdx.gl20 == null) return;
+          gl.glDeleteRenderbuffer(depthStencilPackedBufferHandle);
+        } else {
+          if (bufferBuilder.hasDepthRenderBuffer) {
+            if (Gdx.gl20 == null) return;
+            gl.glDeleteRenderbuffer(depthbufferHandle);
+          }
+          if (bufferBuilder.hasStencilRenderBuffer) {
+            if (Gdx.gl20 == null) return;
+            gl.glDeleteRenderbuffer(stencilbufferHandle);
+          }
+        }
+    
+        if (Gdx.gl20 == null) return;
+        gl.glDeleteFramebuffer(framebufferHandle);
+    
+        if (buffers.get(Gdx.app) != null) buffers.get(Gdx.app).removeValue(this, true);
+  }
+  ```
+    ]]>
+  </code>
+</response>

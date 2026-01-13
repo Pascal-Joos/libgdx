@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public @Null int[] findValue(String name) {
+      if (names != null) {
+        for (int i = 0, n = names.length; i < n; i++) if (name.equals(names[i])) return values == null ? null : values[i];
+      }
+      return null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

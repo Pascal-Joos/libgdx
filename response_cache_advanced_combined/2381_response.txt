@@ -1,0 +1,39 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void layout() {
+      BitmapFont font = style.font;
+      if (font == null) return;
+      Drawable selectedDrawable = style.selection;
+  
+      itemHeight = Nullability.castToNonnull(font).getCapHeight() - Nullability.castToNonnull(font).getDescent() * 2;
+      itemHeight += selectedDrawable.getTopHeight() + selectedDrawable.getBottomHeight();
+  
+      prefWidth = 0;
+      Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
+      GlyphLayout layout = layoutPool.obtain();
+      for (int i = 0; i < items.size; i++) {
+        layout.setText(Nullability.castToNonnull(font), toString(items.get(i)));
+        prefWidth = Math.max(layout.width, prefWidth);
+      }
+      layoutPool.free(layout);
+      prefWidth += selectedDrawable.getLeftWidth() + selectedDrawable.getRightWidth();
+      prefHeight = items.size * itemHeight;
+  
+      Drawable background = style.background;
+      if (background != null) {
+        prefWidth =
+            Math.max(
+                prefWidth + background.getLeftWidth() + background.getRightWidth(),
+                background.getMinWidth());
+        prefHeight =
+            Math.max(
+                prefHeight + background.getTopHeight() + background.getBottomHeight(),
+                background.getMinHeight());
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

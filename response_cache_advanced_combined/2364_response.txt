@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getItemIndexAt(float y) {
+      if (style == null) return -1;
+      float height = getHeight();
+      Drawable background = List.this.style.background;
+      if (background != null) {
+        height -= background.getTopHeight() + background.getBottomHeight();
+        y -= background.getBottomHeight();
+      }
+      int index = (int) ((height - y) / itemHeight);
+      if (index < 0 || index >= items.size) return -1;
+      return index;
+  }
+  ```
+    ]]>
+  </code>
+</response>

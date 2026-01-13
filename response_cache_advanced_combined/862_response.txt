@@ -1,0 +1,35 @@
+<response>
+  <reason><![CDATA[
+The method in question is:
+
+```java
+public Node getNode( final String id, boolean recursive) {
+  return getNode(id, recursive, false);
+}
+```
+
+You also provided the overloaded implementation in `Model`:
+
+```java
+public Node getNode( final String id, boolean recursive, boolean ignoreCase) {
+  return Node.getNode(nodes, id, recursive, ignoreCase);
+}
+```
+
+Therefore, the return value of `getNode(String, boolean)` is exactly whatever `Node.getNode(nodes, id, recursive, ignoreCase)` returns.
+
+We have not been given the declaration or implementation of the static method:
+
+```java
+Node.getNode(nodes, id, recursive, ignoreCase)
+```
+
+Because that method directly determines the return value, and we do not know whether it may return `null` (for example, if no node with the given id is found), we cannot safely conclude that the wrapper `getNode(String, boolean)` can or cannot return `null` without seeing `Node.getNode`.
+
+Thus, the nullability of the return value is unknown until the declaration/implementation of `Node.getNode` is provided.
+  ]]></reason>
+  <value>UNKNOWN</value>
+  <methods>
+    <method>getNode</method>
+  </methods>
+</response>

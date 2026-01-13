@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void update() {
+    if (renderData != null) batch.draw(renderData);
+  }
+  ```
+    ]]>
+  </code>
+</response>

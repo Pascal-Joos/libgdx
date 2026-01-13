@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+    protected void updateRelative(float percentDelta) {
+        target.sizeBy(amountWidth * percentDelta, amountHeight * percentDelta);
+    }
+
+there is no visible guarantee that `target` is non-null. The method uses `target` directly without:
+
+- Any local initialization in the method.
+- Any null-checks (e.g., `if (target != null)`).
+- Any annotations or contracts shown (e.g., @NotNull) that would guarantee non-nullity.
+- Any demonstrated prior control flow that ensures `target` was assigned.
+
+Whether `target` can be null depends entirely on:
+
+- How and where `target` is declared (field vs. parameter vs. inherited),
+- How and where it is initialized,
+- Whether there are class-level or framework-level guarantees (e.g., in a superclass or lifecycle method) that `target` is always set before `updateRelative` is invoked,
+- And whether callers respect any such contract.
+
+Since none of that context is provided, it is impossible to prove that `target` is always non-null, and impossible to prove that it can definitely be null. The nullability of `target` is therefore indeterminate from the given snippet alone.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration and type of `target` (including any annotations).]]></request>
+        <request><![CDATA[Show the constructor(s) or initialization logic where `target` is assigned.]]></request>
+        <request><![CDATA[Show the class hierarchy (superclass or interfaces) if `updateRelative` overrides or implements a method with a contract on `target`.]]></request>
+    </requests>
+</response>
+```

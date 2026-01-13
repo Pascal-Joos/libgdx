@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean panStop(float stageX, float stageY, int pointer, int button) {
+                                            if (actor == null) return false;
+                                            Nullability.castToNonnull(actor).stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                                            ActorGestureListener.this.panStop(event, tmpCoords.x, tmpCoords.y, pointer, button);
+                                            return true;
+}
+  ```
+    ]]>
+  </code>
+</response>

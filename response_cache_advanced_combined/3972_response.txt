@@ -1,0 +1,50 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    strengthValue.getScale(Nullability.castToNonnull(lifeChannel).data[lifeOffset])
+
+You are asking about the possible nullability of "lifeChannel" at this call site.
+
+Inside update(), we have:
+
+    @Override
+    public void update() {
+      if (lifeChannel == null) return;
+      int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
+      for (int i = 0, c = controller.particles.size;
+          i < c;
+          ++i, strengthOffset += strengthChannel.strideSize,
+              forceOffset += accelerationChannel.strideSize, lifeOffset += Nullability.castToNonnull(lifeChannel).strideSize) {
+
+        float strength =
+            strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
+                + strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
+                    * strengthValue.getScale(
+                        Nullability.castToNonnull(lifeChannel).data[lifeOffset]);
+
+The only relevant control-flow fact is the initial guard:
+
+    if (lifeChannel == null) return;
+
+This exits the method immediately if lifeChannel is null. Therefore, any subsequent code in this method (including the for-loop and the strengthValue.getScale(...) call) can only execute on paths where lifeChannel != null.
+
+Within the loop header and body, lifeChannel is not reassigned. For standard Java semantics:
+
+- A field or local variable that is non-null at this point remains non-null unless it is explicitly set to null later.
+- There is no such assignment in the provided snippet.
+
+Thus, along all paths that reach:
+
+    strengthValue.getScale(Nullability.castToNonnull(lifeChannel).data[lifeOffset])
+
+the variable lifeChannel is guaranteed to be non-null by the earlier guard clause.
+
+The use of Nullability.castToNonnull(lifeChannel) is a hint to static analysis tools; it does not change the runtime behavior. Even if we conceptually removed it and used lifeChannel directly, lifeChannel would still be non-null at that point due to the explicit null check and early return.
+
+Given only the standard Java model (no reflection or unsafe memory tricks) and the snippet as-is, lifeChannel cannot be null where it is dereferenced in that expression.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

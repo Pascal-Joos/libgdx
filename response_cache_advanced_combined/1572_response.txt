@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected boolean remove(T object) {
+          if (!leaf) {
+            if (children == null) return false;
+            boolean removed = false;
+            Octree.OctreeNode[] currentChildren = children;
+            for (Octree.OctreeNode node : currentChildren) {
+              removed |= node.remove(object);
+            }
+    
+            if (removed) {
+              ObjectSet<T> geometrySet = new ObjectSet<T>();
+              for (Octree.OctreeNode node : currentChildren) {
+                node.getAll(geometrySet);
+              }
+              if (geometrySet.size <= maxItemsPerNode) {
+                for (T geometry : geometrySet) {
+                  geometries.add(geometry);
+                }
+                merge();
+              }
+            }
+    
+            return removed;
+          }
+          return geometries.removeValue(object, true);
+}
+  ```
+    ]]>
+  </code>
+</response>

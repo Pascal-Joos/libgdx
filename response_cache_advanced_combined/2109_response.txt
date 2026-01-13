@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+Given only the provided method:
+
+public float getSpaceLeft() {
+    return spaceLeft.get(actor);
+}
+
+there is not enough information to determine whether spaceLeft.get(actor) can be null:
+
+- We do not know the type of spaceLeft (e.g., Map, specialized collection, custom class).
+- We do not know whether spaceLeft itself can be null.
+- If spaceLeft is a Map, get(actor) is declared to return a possibly-null value (V), so null is allowed unless there is a documented or enforced invariant (e.g., map is always fully populated with non-null values for all possible actor keys).
+- We do not know the type or possible values of actor, nor whether there are checks elsewhere ensuring actor is non-null and present in spaceLeft.
+- There are no visible null checks, defaulting logic, or guarantees in this snippet itself.
+
+Without surrounding class code, initializations, invariants, or contracts of spaceLeft’s type, we cannot soundly conclude that spaceLeft.get(actor) is always non-null or may be null.
+
+Therefore, based purely on this method body, the nullability of spaceLeft.get(actor) is UNKNOWN.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration and type of `spaceLeft` (including any generics) and how it is initialized.]]></request>
+        <request><![CDATA[Provide the type and handling of `actor` (where it is set, and any guarantees about its non-nullness and presence in `spaceLeft`).]]></request>
+        <request><![CDATA[If `spaceLeft` is a custom class or wrapper, share its `get` method signature and contract (does it guarantee non-null?).]]></request>
+    </requests>
+</response>
+```

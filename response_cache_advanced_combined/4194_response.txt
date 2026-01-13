@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector2 getCentroid(Vector2 centroid) {
+      float[] vertices = getTransformedVertices();
+      return GeometryUtils.polygonCentroid(Nullability.castToNonnull(vertices), 0, vertices.length, centroid);
+  }
+  ```
+    ]]>
+  </code>
+</response>

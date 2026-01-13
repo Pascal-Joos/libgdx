@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[
+There is a null check on `out` inside a synchronized block:
+
+    synchronized (this) {
+        if (!connected || out == null) return false;
+    }
+
+At the moment this check is performed, `out` is guaranteed to be non-null on exit from the synchronized block.
+
+However, after leaving this block, `out` is accessed without holding the lock:
+
+    out.writeInt(TOUCH_UP);
+
+Between the end of the synchronized block and the call to `out.writeInt(...)`, another thread could acquire the same lock (`this`) and set `out` to null (or otherwise alter it), because there is no synchronization protecting the `out` reference during the write calls.
+
+The analysis requirement includes "consider the semantics and contracts of called methods" and concurrent control flow. Since no stronger guarantees (e.g., `out` being final, immutably non-null, or other synchronization preventing it from becoming null) are provided, it is possible that `out` is observed as null at the call site due to a data race with other code that can modify `out`.
+
+Thus, in a multi-threaded context, `out` can indeed be null at `out.writeInt(TOUCH_UP);` despite the earlier check.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

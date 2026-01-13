@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getMaxHeight() {
+      if (maxHeight == null) return 0;
+      if (actor == null) return 0;
+      return maxHeight.get(Nullability.castToNonnull(actor));
+  }
+  ```
+    ]]>
+  </code>
+</response>

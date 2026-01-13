@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void remove() {
+      if (current == null) throw new IllegalStateException();
+      if (Nullability.castToNonnull(current).prev == null) {
+        child = Nullability.castToNonnull(current).next;
+        if (child != null) child.prev = null;
+      } else {
+        Nullability.castToNonnull(current).prev.next = Nullability.castToNonnull(current).next;
+        if (Nullability.castToNonnull(current).next != null) Nullability.castToNonnull(current).next.prev = Nullability.castToNonnull(current).prev;
+      }
+      size--;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected T newObject() {
+      if (constructor == null)
+        throw new GdxRuntimeException(
+            "Class cannot be created (missing no-arg constructor): " + getClass().getName());
+      try {
+        return (T) constructor.newInstance(Nullability.castToNonnull((Object[]) null));
+      } catch (Exception ex) {
+        throw new GdxRuntimeException(
+            "Unable to create new instance: "
+                + Nullability.castToNonnull(constructor).getDeclaringClass().getName(),
+            ex);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

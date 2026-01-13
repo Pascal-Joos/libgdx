@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is read, not one of the canonical framework lifecycle methods listed (e.g., onCreate, init) and does not start with "init" or "initialize". Your own criterion explicitly says: "or any method that has a name that starts with 'init' or 'initialize' and is not a setter method." This method does not match that naming rule, nor is it one of the special-cased known initializer methods. It is simply a deserialization/read method that happens to assign fields, which is not sufficient by itself to treat it as a NullAway initializer method under the policy you described.
+    ]]></reason>
+    <value>NO</value>
+</response>

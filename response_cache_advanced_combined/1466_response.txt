@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  protected Texture createTexture(FrameBufferTextureAttachmentSpec attachmentSpec) {
+    GLFrameBufferBuilder<? extends GLFrameBuffer<T>> localBufferBuilder = this.bufferBuilder;
+    GLOnlyTextureData data =
+        new GLOnlyTextureData(
+            localBufferBuilder.width,
+            localBufferBuilder.height,
+            0,
+            attachmentSpec.internalFormat,
+            attachmentSpec.format,
+            attachmentSpec.type);
+    Texture result = new Texture(data);
+    result.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+    result.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
+    return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void set(
+      BaseShader shader,
+      int inputID,
+      Renderable renderable,
+      Attributes combinedAttributes) {
+    ColorAttribute diffuse = (ColorAttribute) combinedAttributes.get(ColorAttribute.Diffuse);
+    if (diffuse != null) {
+      shader.set(inputID, diffuse.color);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

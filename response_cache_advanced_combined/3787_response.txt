@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Mesh updateInstanceData(int targetOffset, float[] source, int sourceOffset, int count) {
+    if (instances != null) {
+      Nullability.castToNonnull(this.instances).updateInstanceData(targetOffset, source, sourceOffset, count);
+    } else {
+      throw new GdxRuntimeException(
+          "An InstanceBufferObject must be set before updating instance data!");
+    }
+    return this;
+}
+  ```
+    ]]>
+  </code>
+</response>

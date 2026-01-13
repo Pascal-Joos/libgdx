@@ -1,0 +1,58 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+Element tilesheets = root.getChildByName("TileSheets");
+```
+
+`root` is an `XmlReader.Element` representing the root of a Tide (`.tide`) map file in `TideMapLoader`.
+
+The implementation of `getChildByName` is:
+
+```java
+public @Null Element getChildByName(String name) {
+  if (children == null) return null;
+  for (int i = 0; i < children.size; i++) {
+    Element element = children.get(i);
+    if (element.name.equals(name)) return element;
+  }
+  return null;
+}
+```
+
+From this code alone, `getChildByName("TileSheets")` will return:
+
+- `null` if `root.children == null`, or
+- `null` if `root.children` exists but no child with `name.equals("TileSheets")` is present.
+
+Looking at the surrounding usages in `TideMapLoader`:
+
+```java
+Element tilesheets = root.getChildByName("TileSheets");
+if (tilesheets != null) {
+  for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+    loadTileSheet(map, tilesheet, tmxFile, imageResolver);
+  }
+}
+```
+
+and
+
+```java
+Element tilesheets = root.getChildByName("TileSheets");
+for (Element tileset : tilesheets.getChildrenByName("TileSheet")) {
+  ...
+}
+```
+
+the loader clearly anticipates that `tilesheets` might be `null` (hence the `if (tilesheets != null)` guard in one place) and does *not* enforce its presence structurally or via any prior checks. The XML parsing (`xml.parse`) does not guarantee that a `<TileSheets>` child exists, nor that `children` is non-null.
+
+Therefore, at this specific call site there is no guarantee that:
+
+- `root.children` is non-null, or
+- a child named `"TileSheets"` exists.
+
+Consequently, `root.getChildByName("TileSheets")` can evaluate to `null`.]]></reason>
+  <value>YES</value>
+</response>

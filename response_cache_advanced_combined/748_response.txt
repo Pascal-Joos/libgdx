@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void set(
+      BaseShader shader,
+      int inputID,
+      Renderable renderable,
+      Attributes combinedAttributes) {
+    final TextureAttribute specular =
+        ((TextureAttribute) (combinedAttributes.get(TextureAttribute.Specular)));
+    if (specular == null) return;
+    final int unit =
+        shader.context.textureBinder.bind(
+            specular.textureDescription);
+    shader.set(inputID, unit);
+  }
+  ```
+    ]]>
+  </code>
+</response>

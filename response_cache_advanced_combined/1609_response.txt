@@ -1,0 +1,40 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Rectangle getBoundingRectangle() {
+      float[] vertices = getTransformedVertices();
+      if (vertices == null || vertices.length == 0) {
+        if (bounds == null) bounds = new Rectangle();
+        bounds.x = 0;
+        bounds.y = 0;
+        bounds.width = 0;
+        bounds.height = 0;
+        return bounds;
+      }
+
+      float minX = vertices[0];
+      float minY = vertices[1];
+      float maxX = vertices[0];
+      float maxY = vertices[1];
+
+      final int numFloats = vertices.length;
+      for (int i = 2; i < numFloats; i += 2) {
+        minX = minX > vertices[i] ? vertices[i] : minX;
+        minY = minY > vertices[i + 1] ? vertices[i + 1] : minY;
+        maxX = maxX < vertices[i] ? vertices[i] : maxX;
+        maxY = maxY < vertices[i + 1] ? vertices[i + 1] : maxY;
+      }
+
+      if (bounds == null) bounds = new Rectangle();
+      bounds.x = minX;
+      bounds.y = minY;
+      bounds.width = maxX - minX;
+      bounds.height = maxY - minY;
+
+      return bounds;
+  }
+  ```
+    ]]>
+  </code>
+</response>

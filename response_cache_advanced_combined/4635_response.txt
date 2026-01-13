@@ -1,0 +1,44 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void draw(Batch batch, float parentAlpha) {
+    Stage stage = getStage();
+    if (stage == null) return;
+
+    validate();
+
+    Color color = getColor();
+    float alpha = color.a * parentAlpha;
+
+    applyTransform(batch, computeTransform());
+    if (firstWidget != null && firstWidget.isVisible()) {
+      batch.flush();
+      stage.calculateScissors(firstWidgetBounds, tempScissors);
+      if (ScissorStack.pushScissors(tempScissors)) {
+        firstWidget.draw(batch, alpha);
+        batch.flush();
+        ScissorStack.popScissors();
+      }
+    }
+    if (secondWidget != null && secondWidget.isVisible()) {
+      batch.flush();
+      stage.calculateScissors(secondWidgetBounds, tempScissors);
+      if (ScissorStack.pushScissors(tempScissors)) {
+        secondWidget.draw(batch, alpha);
+        batch.flush();
+        ScissorStack.popScissors();
+      }
+    }
+    batch.setColor(color.r, color.g, color.b, alpha);
+    SplitPaneStyle style = this.style;
+    if (style != null && style.handle != null) {
+      style.handle.draw(
+          batch, handleBounds.x, handleBounds.y, handleBounds.width, handleBounds.height);
+    }
+    resetTransform(batch);
+}
+  ```
+    ]]>
+  </code>
+</response>

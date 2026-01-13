@@ -1,0 +1,10 @@
+<response>
+    <reason><![CDATA[
+The method name `prepare` does not match any of the documented initializer patterns (it neither starts with "init"/"initialize" nor is one of the known framework lifecycle methods like `onCreate`, `init` in various interfaces). NullAway’s notion of an initializer method is based on name/contract conventions and external framework semantics, not just the fact that it initializes fields or is intended to be called before use. 
+
+Although `prepare()` clearly initializes the object state (`width`, `height`, `isPrepared`, potentially `data`) and guards against being called multiple times, it does not satisfy the naming/annotation-style criteria described. It also isn’t obviously a constructor-surrogate mandated by a framework lifecycle interface (no evidence here that this class implements an interface that defines `prepare` as a required setup step always invoked before other methods).
+
+Therefore, under the given definition, it should not be treated as an initializer method for NullAway; it is a regular lifecycle or setup method, not one of the recognized initializer categories.
+    ]]></reason>
+    <value>NO</value>
+</response>

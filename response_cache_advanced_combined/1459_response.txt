@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getWidth() {
+      return bufferBuilder == null ? 0 : bufferBuilder.width;
+  }
+  ```
+    ]]>
+  </code>
+</response>

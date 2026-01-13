@@ -1,0 +1,21 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the provided method body, the loop explicitly checks:
+
+    if (entry.key != null && entry.key.actor != null)
+        entry.key.actor.removeCaptureListener(entry.value);
+
+The expression in question is `entry.key` at the line:
+
+    entry.key.actor.removeCaptureListener(entry.value);
+
+This line is executed only if the condition `entry.key != null` evaluates to true. Therefore, along every code path that reaches the call to `removeCaptureListener`, `entry.key` is guaranteed to be non-null by the surrounding null check.
+
+No other code paths inside this method can reach that expression without passing through the `entry.key != null` guard. Regardless of how `sourceListeners.entries()` is implemented or how entries are added to it, the method-level control flow ensures that `entry.key` cannot be null at the point where `entry.key.actor.removeCaptureListener(entry.value);` is executed.
+
+Thus, in this method, `entry.key` at that line cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

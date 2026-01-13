@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector2 toCoordinates(Actor actor, Vector2 actorCoords) {
+      actorCoords.set(stageX, stageY);
+      Nullability.castToNonnull(actor).stageToLocalCoordinates(actorCoords);
+      return actorCoords;
+  }
+  ```
+    ]]>
+  </code>
+</response>

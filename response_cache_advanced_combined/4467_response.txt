@@ -1,0 +1,46 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially dangerous part of the line in question is:
+
+    c.computedPadTop += Math.max(
+        0,
+        (c.spaceTop == null ? 0 : c.spaceTop.get(a))
+            - (above.spaceBottom == null ? 0 : above.spaceBottom.get(aboveActor))
+    );
+
+The subexpression you are asking about is:
+
+    above.spaceBottom.get(a)
+
+But note what is actually executed:
+
+1. `Cell above = (Cell) cells[c.cellAboveIndex];`
+2. `Actor aboveActor = above.actor;`
+3. `if (aboveActor != null) { ... above.spaceBottom.get(aboveActor) ... }`
+
+Inside the `if` block, `above.spaceBottom` is always used in this guarded form:
+
+    (above.spaceBottom == null ? 0 : above.spaceBottom.get(aboveActor))
+
+So, there are two relevant checks:
+
+- `above` itself:  
+  `above` comes from `cells[c.cellAboveIndex]`. The code first checks `if (c.cellAboveIndex != -1)`, so we only index into `cells` with a non-negative index that must have been assigned earlier as a `Cell`. There is no indication in this method that `cells` can contain `null` where `cellAboveIndex` points (the algorithm assumes the layout structure is valid). Within this method, there is no unguarded dereference of `above`—it is used immediately and consistently as a `Cell`.
+
+- `above.spaceBottom`:  
+  Before calling `.get(...)`, the code checks `above.spaceBottom == null ? 0 : above.spaceBottom.get(aboveActor)`. This ensures that if `above.spaceBottom` is null, the `get` method is never called on it; instead, the expression evaluates to `0`.
+
+Given this, the exact expression `above.spaceBottom.get(a)` (with that argument, or with `aboveActor`) only executes in the branch where:
+
+- `above` is non-null (due to indexing an existing `Cell`), and
+- `above.spaceBottom != null`.
+
+Therefore, on all code paths where `.get(...)` is actually invoked, `above.spaceBottom` is guaranteed to be non-null. On paths where `above.spaceBottom` is null, the ternary operator bypasses the `.get(...)` call entirely.
+
+From the perspective of this method alone, there is no execution path in which `above.spaceBottom.get(...)` is called while `above.spaceBottom` is null.
+
+]]></reason>
+    <value>NO</value>
+</response>
+```

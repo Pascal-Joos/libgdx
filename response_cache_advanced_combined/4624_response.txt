@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected List<T> newList() {
+        if (selectBox.style.listStyle == null) {
+          throw new IllegalStateException("listStyle cannot be null");
+        }
+        return new List<T>(selectBox.style.listStyle) {
+          public String toString(T obj) {
+            return selectBox.toString(obj);
+          }
+        };
+  }
+  ```
+    ]]>
+  </code>
+</response>

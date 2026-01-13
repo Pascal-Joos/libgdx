@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+          public void set(
+              BaseShader shader,
+              int inputID,
+              Renderable renderable,
+              Attributes combinedAttributes) {
+            TextureAttribute diffuse = (TextureAttribute) combinedAttributes.get(TextureAttribute.Diffuse);
+            if (diffuse == null) return;
+            final int unit =
+                shader.context.textureBinder.bind(
+                    diffuse.textureDescription);
+            shader.set(inputID, unit);
+}
+  ```
+    ]]>
+  </code>
+</response>

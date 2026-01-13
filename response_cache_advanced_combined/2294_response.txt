@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public <A extends Actor> Cell<A> setActor( @Null A newActor) {
+    if (actor != newActor) {
+      if (actor != null && actor.getParent() == table) actor.remove();
+      actor = newActor;
+      if (newActor != null && table != null) table.addActor(newActor);
+    }
+    return (Cell<A>) this;
+}
+  ```
+    ]]>
+  </code>
+</response>

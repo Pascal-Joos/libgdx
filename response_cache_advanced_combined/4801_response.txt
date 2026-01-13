@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name is `read`, which does not start with "init" or "initialize", and it is not one of the known framework lifecycle/initializer methods (like `onCreate`, `init`, etc.). By the criteria you described (NullAway’s notion of initializer methods), a method is treated as an initializer either if it is a known framework lifecycle method or if its name starts with "init"/"initialize" and is not a setter. This `read(Json json, JsonValue jsonData)` method does not meet those naming or framework-specific criteria, even though it populates fields. Therefore, it should not be considered an initializer method under your rules.]]></reason>
+    <value>NO</value>
+</response>

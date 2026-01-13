@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void switchTexture( Texture texture) {
+      if (texture == null) throw new IllegalArgumentException("texture cannot be null");
+      flush();
+      lastTexture = texture;
+      invTexWidth = 1.0f / Nullability.castToNonnull(texture).getWidth();
+      invTexHeight = 1.0f / Nullability.castToNonnull(texture).getHeight();
+  }
+  ```
+    ]]>
+  </code>
+</response>

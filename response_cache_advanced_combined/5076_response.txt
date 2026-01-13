@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potentially-null field is `_bufferBase`, but at the point of the expression
+
+    int temp = CrcTable[_bufferBase[cur] & 0xFF] ^ (_bufferBase[cur + 1] & 0xFF);
+
+the method has already executed a definitive null-check on `_bufferBase` and returned early if it is null:
+
+    byte[] bufferBase = _bufferBase;
+    if (bufferBase == null) return;
+
+Because:
+- `bufferBase` is a local variable referencing `_bufferBase`,
+- the code returns immediately if `bufferBase` is null,
+- and no reassignments to `_bufferBase` occur between this check and the use,
+
+it follows that, on all code paths reaching the `temp` assignment, `_bufferBase` (and thus `bufferBase`) is non-null.
+
+Even though the expression itself syntactically references `_bufferBase` rather than `bufferBase`, the logical guarantee is the same: the only way to reach that line is if `_bufferBase` was non-null at the time `bufferBase` was set and the null-check passed, and there is no intervening write to `_bufferBase` in this method that could make it null afterward.
+
+So under normal Java semantics (no concurrent mutation from other threads considered in the method’s contract), `_bufferBase` cannot be null at this expression.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

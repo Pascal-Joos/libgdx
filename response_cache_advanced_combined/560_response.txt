@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public T getKeyFrame(float stateTime) {
+      if (keyFrames == null || keyFrames.length == 0) {
+          return null;
+      }
+      int frameNumber = getKeyFrameIndex(stateTime);
+      return keyFrames[frameNumber];
+  }
+  ```
+    ]]>
+  </code>
+</response>

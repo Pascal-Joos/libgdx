@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void apply(boolean centerCamera) {
+      if (camera == null) return;
+      HdpiUtils.glViewport(screenX, screenY, screenWidth, screenHeight);
+      camera.viewportWidth = worldWidth;
+      camera.viewportHeight = worldHeight;
+      if (centerCamera) camera.position.set(worldWidth / 2, worldHeight / 2, 0);
+      camera.update();
+  }
+  ```
+    ]]>
+  </code>
+</response>

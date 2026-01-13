@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Vector2 project(Vector2 worldCoords) {
+      if (camera == null) {
+          return worldCoords;
+      }
+      tmp.set(worldCoords.x, worldCoords.y, 1);
+      Nullability.castToNonnull(camera).project(tmp, screenX, screenY, screenWidth, screenHeight);
+      worldCoords.set(tmp.x, tmp.y);
+      return worldCoords;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public String name() {
+      return file().getName();
+  }
+  ```
+    ]]>
+  </code>
+</response>

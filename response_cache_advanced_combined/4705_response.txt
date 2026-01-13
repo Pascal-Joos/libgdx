@@ -1,0 +1,80 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the *expression* on the right-hand side
+
+    text = text.substring(0, cursor - 1) + text.substring(cursor--);
+
+can possibly evaluate to null at runtime inside the given method.
+
+1. **Scope and context**
+
+   That line occurs only inside this block:
+
+   ```java
+   if (remove) {
+       if (hasSelection) cursor = delete(false);
+       else if (text != null) {
+         if (backspace && cursor > 0) {
+           text = text.substring(0, cursor - 1) + text.substring(cursor--);
+           renderOffset = 0;
+         }
+         if (delete && text != null && cursor < text.length()) {
+           text = text.substring(0, cursor) + text.substring(cursor + 1);
+         }
+       }
+   }
+   ```
+
+   So:
+
+   - The assignment is executed only when:
+     - `remove` is `true` (i.e. `backspace || delete`)
+     - `hasSelection` is `false`
+     - `text != null`
+     - `backspace` is `true`
+     - `cursor > 0`
+
+2. **Null checks before the expression**
+
+   Before the line:
+
+   ```java
+   text = text.substring(0, cursor - 1) + text.substring(cursor--);
+   ```
+
+   we have:
+
+   ```java
+   else if (text != null) {
+       if (backspace && cursor > 0) {
+           ...
+       }
+   }
+   ```
+
+   So immediately before evaluating that expression:
+
+   - `text != null` is guaranteed.
+   - `cursor > 0` is guaranteed.
+
+   Therefore:
+   - `text.substring(0, cursor - 1)` is called on a non-null `text`.
+   - `text.substring(cursor--)` is called on the same non-null `text`.
+   - Java `String.substring(...)` never returns null; it returns a new non-null `String` (or a shared one internally), or throws an exception on invalid indices.
+   - The `+` operator on two non-null Strings also yields a non-null String.
+
+3. **Other code paths and later changes do not affect this expression**
+
+   - Earlier in the method, `text` may be null or non-null in general, but **this specific line is guarded by `else if (text != null)`**.
+   - The cursor manipulation (`cursor--` inside the expression) only affects the variable value after evaluation; it cannot make `text` null during the evaluation.
+   - No method in the expression (`substring`, `+`) has a contract that returns null.
+
+   The only failure mode here is an exception (e.g., `StringIndexOutOfBoundsException` if indices are invalid), but that is *not* a null result.
+
+Hence, at the point of the assignment, `text.substring(0, cursor - 1) + text.substring(cursor--)` cannot evaluate to null; it will either produce a non-null String or throw an exception. Under normal, non-exceptional execution, the value is non-null.
+
+Therefore the expression on the right-hand side cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

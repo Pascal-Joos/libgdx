@@ -1,0 +1,54 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the relevant line:
+
+    c.actorHeight =
+        Math.max(
+            rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
+            c.minHeight == null ? 0 : c.minHeight.get(c.actor));
+
+the expression that is actually dereferenced is `c.minHeight.get(c.actor)`. The question is whether `c.minHeight` (the field) can be null at this point.
+
+Within `layout()`, the only information we have about `c.minHeight` is:
+
+1. Earlier in the same method, the code uses:
+       float minWidth = c.minWidth == null ? 0 : c.minWidth.get(a),
+           minHeight = c.minHeight == null ? 0 : c.minHeight.get(a);
+
+   This shows the code explicitly considers the possibility that `c.minHeight` is null and guards against it with a ternary operator. That is, `c.minHeight` is *not* guaranteed non-null by design; it’s part of the public contract that it may be null.
+
+2. Later, in the fillY block, the code:
+
+       if (fillY > 0) {
+         c.actorHeight =
+             Math.max(
+                 rowHeight[c.row] * fillY - c.computedPadTop - c.computedPadBottom,
+                 c.minHeight == null ? 0 : c.minHeight.get(c.actor));
+         ...
+       }
+
+   This uses the same pattern: it checks `c.minHeight == null ? 0 : ...`. Because of this check, the dereference `c.minHeight.get(c.actor)` is executed only when `c.minHeight != null`.
+
+Control-flow analysis around this expression:
+
+- The `if (fillY > 0)` gate controls only whether the block runs at all; it doesn’t change `c.minHeight`.
+- There are no assignments to `c.minHeight` inside `layout()` prior to this point.
+- `c` is obtained from `cells[i]` and could come from user code or upstream APIs. The method does not enforce non-nullness of `c.minHeight` anywhere.
+- Given the earlier minHeight computation already had to guard `c.minHeight` with a null check, we know the design allows `c.minHeight` to be null for some cells (e.g., when no minimum-height constraint is set).
+
+Because the dereference appears inside a `c.minHeight == null ? 0 : ...` construct, there is no execution path where `c.minHeight.get(c.actor)` is called while `c.minHeight` is null. If `c.minHeight` is null, the ternary chooses `0` and does not evaluate the `.get(...)` expression.
+
+Java semantics guarantee that in a ternary expression `cond ? expr1 : expr2`, only the selected branch (`expr1` or `expr2`) is evaluated. Thus there is no risk of `NullPointerException` from evaluating `c.minHeight.get(c.actor)` when `c.minHeight` is null.
+
+So:
+
+- The *field* `c.minHeight` can indeed be null at runtime (by design).
+- The *expression* `c.minHeight.get(c.actor)` at that line cannot be reached when `c.minHeight` is null, due to the guard `c.minHeight == null ? 0 : ...`.
+
+Interpreting the question "can the expression `c.minHeight` at line `c.minHeight.get(c.actor));` possibly be null": yes, `c.minHeight` itself can be null, but it is always checked before dereference at that location, so the dereference is safe.
+
+Because your yes/no asks specifically about the possibility of null for `c.minHeight` itself (not whether it can cause an exception on that line), the proper answer is that it *can* be null as a field value.]]></reason>
+    <value>YES</value>
+</response>
+```

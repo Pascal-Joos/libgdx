@@ -1,0 +1,15 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the start of the method, there is an explicit null check:
+
+    if (keyFrames == null || keyFrames.length == 0) return 0;
+
+If `keyFrames` is null, the method returns immediately and does not execute any subsequent lines, including:
+
+    if (keyFrames.length == 1) return 0;
+
+Therefore, on every code path that reaches `if (keyFrames.length == 1)`, the condition `keyFrames == null` has already been ruled out by the earlier `if`, guaranteeing that `keyFrames` is non-null at that point. As a result, the expression `keyFrames` at that line cannot be null within this method.]]></reason>
+    <value>NO</value>
+</response>
+```

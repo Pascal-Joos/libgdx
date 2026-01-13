@@ -1,0 +1,77 @@
+<response>
+  <reason><![CDATA[
+At the call site in question, `tileset.getChildByName("image")` is invoked where `tileset` is an `XmlReader.Element` representing a `<tileset>` element in a TMX/TSX file.
+
+The implementation of `getChildByName` is:
+
+```java
+public @Null Element getChildByName(String name) {
+  if (children == null) return null;
+  for (int i = 0; i < children.size; i++) {
+    Element element = children.get(i);
+    if (element.name.equals(name)) return element;
+  }
+  return null;
+}
+```
+
+From this alone, the method clearly *can* return null if either:
+- `children == null`, or
+- none of the children has `name.equals("image")`.
+
+The question is whether, along this particular call chain, those null-returning paths are possible.
+
+In the provided code, `getChildByName("image")` on a `tileset` element is used multiple times:
+
+- In `BaseTmxMapLoader.loadTileSet`:
+  - On inline tilesets:
+    ```java
+    Element imageElement = element.getChildByName("image");
+    if (imageElement != null) {
+      ...
+    }
+    ```
+  - On external TSX tilesets:
+    ```java
+    element = xml.parse(tsx);
+    Element imageElement = element.getChildByName("image");
+    if (imageElement != null) {
+      ...
+    }
+    ```
+
+- In `TmxMapLoader.getDependencyFileHandles`:
+  ```java
+  Element imageElement = tileset.getChildByName("image");
+  if (imageElement != null) {
+    ...
+  } else {
+    for (Element tile : tileset.getChildrenByName("tile")) {
+      Element tileImageElement = tile.getChildByName("image");
+      if (tileImageElement != null) {
+        ...
+      }
+    }
+  }
+  ```
+
+These call sites *all* explicitly check `if (imageElement != null)` (or similar) before dereferencing. That pattern itself indicates the library authors consider a null result possible.
+
+More importantly, TMX and TSX formats explicitly allow tilesets without a single shared `<image>` element; instead each `<tile>` can have its own `<image>`. The loader code reflects this:
+
+- In `getDependencyFileHandles`, if `tileset.getChildByName("image")` returns null, it falls back to iterating `tileset.getChildrenByName("tile")` and then `tile.getChildByName("image")` for each tile.
+
+So, for a valid map:
+
+- A `<tileset>` may have:
+  - A shared `<image>` child (then `getChildByName("image")` returns non-null), or
+  - No `<image>` child, but per-tile `<image>` tags, or
+  - In malformed or partial data, neither.
+
+The code is written to handle the “no `<image>` on tileset” case, which implies that at runtime `tileset.getChildByName("image")` *can* evaluate to null and is intentionally guarded.
+
+Nothing in the provided call chain establishes an invariant that `tileset` must always contain an `<image>` child. The loader simply tries to read it if present and then conditionally handles both cases. Because the presence of a child named `"image"` depends on the external TMX/TSX XML content, which is not constrained by the code, both branches of `getChildByName` (returning an `Element` or `null`) are reachable at this call site.
+
+Therefore, at this specific call site, the invocation `tileset.getChildByName("image")` can indeed return `null`.]]></reason>
+  <value>YES</value>
+</response>

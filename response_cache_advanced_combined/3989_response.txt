@@ -1,0 +1,42 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the potentially-null field `angularChannel` is handled as follows:
+
+1. It is checked for null:
+   ```java
+   if (angularChannel == null) {
+       angularChannel = controller.particles.addChannel(ParticleChannels.Interpolation4);
+   }
+   ```
+
+2. Immediately afterward, a local non-null reference is obtained:
+   ```java
+   FloatChannel angularChannelLocal = Nullability.castToNonnull(angularChannel);
+   ```
+
+3. All subsequent uses in the expression in question go through `angularChannelLocal`, not `angularChannel`:
+   ```java
+   phi =
+       angularChannelLocal.data[a + ParticleChannels.VelocityPhiStartOffset]
+           + angularChannelLocal.data[a + ParticleChannels.VelocityPhiDiffOffset]
+               * phiValue.getScale(lifePercent);
+   ```
+
+So the *field* `angularChannel` itself is never dereferenced directly in `phi = angularChannel.data[...]`; instead, the code uses `angularChannelLocal`. Given only this method, this guarantees that the expression at the given line actually involves `angularChannelLocal`, which by design is intended to be non-null.
+
+However, the non-nullness of `angularChannelLocal` in practice depends on the behavior of:
+- `controller.particles.addChannel(ParticleChannels.Interpolation4)`: must return a non-null `FloatChannel`.
+- `Nullability.castToNonnull(angularChannel)`: must either (a) guarantee that `angularChannel` is non-null and simply return it, or (b) throw if `angularChannel` is null.
+
+Since the implementation/contract of these methods is not shown, we cannot be absolutely certain at the static analysis level that `angularChannelLocal` can *never* be null. If `addChannel` for some reason can return null, and `castToNonnull` is a no-op or does not enforce non-null, then a null could flow into `angularChannelLocal`.
+
+Because these guarantees are external to the provided code and not specified, we cannot definitively prove that the underlying reference cannot be null. Thus the possibility remains open, contingent on those external contracts.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation or documented contract of controller.particles.addChannel(...) to confirm whether it can ever return null.]]></request>
+        <request><![CDATA[Provide the implementation or documented contract of Nullability.castToNonnull(...) to confirm that it either enforces non-null or throws on null input.]]></request>
+    </requests>
+</response>
+```

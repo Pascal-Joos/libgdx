@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void stageToLocalAmount(Vector2 amount) {
+                if (actor == null) return;
+                actor.stageToLocalCoordinates(amount);
+                amount.sub(actor.stageToLocalCoordinates(tmpCoords2.set(0, 0)));
+  }
+  ```
+    ]]>
+  </code>
+</response>

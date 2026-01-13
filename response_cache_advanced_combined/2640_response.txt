@@ -1,0 +1,20 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the only explicit null check is:
+
+    if (style == null) throw new IllegalStateException("Label style must not be null.");
+
+This guarantees that `style` itself is non-null for the rest of the method, but it does not provide any guarantee about `style.font`. No further checks or assignments ensure that `style.font` is non-null before the line:
+
+    y += style.font.getDescent();
+
+In fact, the method uses `cache.getFont()` (assigned to local `font`) as the working font, not `style.font`. These can differ: it is possible (and in libGDX common) that the label has been constructed or modified so that `cache` has a valid `BitmapFont` while `style.font` is null (for instance, if a style was partially constructed, or a non-null style is set with `font` left null).
+
+There is no contract in the shown code that enforces `style.font` to be non-null at `layout()` time, and no defensive null check is done before dereferencing it. Therefore, `style.font` can be null and would cause a `NullPointerException` on `style.font.getDescent()` if that happens.
+
+Thus, given only the guarantees from this method and typical style objects, `style.font` can be null at that point.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

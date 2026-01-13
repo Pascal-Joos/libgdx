@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Vector2 set( Vector2 v) {
+    x = Nullability.castToNonnull(v).x;
+    y = v.y;
+    return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

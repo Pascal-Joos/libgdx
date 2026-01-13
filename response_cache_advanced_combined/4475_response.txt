@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getSpaceRight() {
+      Actor a = actor;
+      if (a == null) return 0;
+      if (spaceRight == null) {
+        Value value = defaults().getSpaceRightValue();
+        return value == null ? 0 : value.get(a);
+      }
+      return Nullability.castToNonnull(spaceRight).get(a);
+  }
+  ```
+    ]]>
+  </code>
+</response>

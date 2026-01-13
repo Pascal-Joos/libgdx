@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void write(Json json) {
+    super.write(json);
+    if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+    if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+    if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+    json.writeValue("spawnWidthValue", spawnWidthValue);
+    json.writeValue("spawnHeightValue", spawnHeightValue);
+    json.writeValue("spawnDepthValue", spawnDepthValue);
+    json.writeValue("edges", edges);
+  }
+  ```
+    ]]>
+  </code>
+</response>

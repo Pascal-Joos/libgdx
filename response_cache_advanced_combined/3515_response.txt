@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void attribute( String name,  String value) {
+      Element parent = current;
+      if (parent != null) parent.setAttribute(name, value);
+  }
+  ```
+    ]]>
+  </code>
+</response>

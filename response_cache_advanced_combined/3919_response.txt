@@ -1,0 +1,47 @@
+<response>
+  <reason><![CDATA[
+The specific call site is inside the `ModelInstance` constructor:
+
+```java
+} else if (parentTransform && copy.hasParent())
+  this.transform.mul(node.getParent().globalTransform);
+```
+
+The invocation we must analyze is `node.getParent()` (not `copy.getParent()`), and the only available information about `node` is that it is obtained as:
+
+```java
+Node copy, node = model.getNode(nodeId, recursive);
+if (node == null) return;
+this.nodes.add(copy = node.copy());
+```
+
+From this:
+
+1. `node` is only checked for being non-null (`if (node == null) return;`). There is **no** check on `node.getParent()`.
+
+2. The code later uses `copy.hasParent()` to guard access to a parent transform, but it does **not** use `node.hasParent()` to guard `node.getParent()`. So we have no guarantee that `node` has a parent.
+
+3. The `Node` class definition provided only shows:
+
+   ```java
+   public Node getParent() {
+     return parent;
+   }
+   ```
+
+   There is no evidence that `parent` is always initialized to a non-null value. In typical scene graph/node hierarchies (including libGDX’s `Node`), the root node usually has `parent == null`. Thus `getParent()` may legitimately return `null`.
+
+4. The other methods shown (`insertChild`, `addChild`, etc.) set `child.parent = this;` when adding children, but they do not prevent the existence of a root node with no parent, nor do they ensure every `Node` constructed via `model.getNode(...)` has a non-null `parent`.
+
+Therefore, at this specific call site:
+
+```java
+node.getParent().globalTransform
+```
+
+`node.getParent()` can legally evaluate to `null` (e.g., if `node` is a root node of the model hierarchy), making the return value of `getParent()` potentially null at this call site.
+
+Because no additional invariants or guarantees are provided that `node` must always have a parent in this constructor, we must conclude the method can return null here.
+  ]]></reason>
+  <value>YES</value>
+</response>

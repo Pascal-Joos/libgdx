@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setIndices(short[] indices, int offset, int count) {
+      isDirty = true;
+      ((Buffer) buffer).clear();
+      buffer.put(indices, offset, count);
+      ((Buffer) buffer).flip();
+      ((Buffer) byteBuffer).position(0);
+      ((Buffer) byteBuffer).limit(count << 1);
+
+      if (isBound && Gdx.gl20 != null) {
+        Gdx.gl20.glBufferSubData(GL20.GL_ELEMENT_ARRAY_BUFFER, 0, byteBuffer.limit(), byteBuffer);
+        isDirty = false;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

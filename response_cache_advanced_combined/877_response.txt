@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void add(Decal decal) {
+      if (groupStrategy == null) {
+          throw new IllegalStateException("groupStrategy must be set before adding decals");
+      }
+      int groupIndex = groupStrategy.decideGroup(decal);
+      Array<Decal> targetGroup = groupList.get(groupIndex);
+      if (targetGroup == null) {
+        targetGroup = groupPool.obtain();
+        targetGroup.clear();
+        usedGroups.add(targetGroup);
+        groupList.insert(groupIndex, targetGroup);
+      }
+      targetGroup.add(decal);
+  }
+  ```
+    ]]>
+  </code>
+</response>

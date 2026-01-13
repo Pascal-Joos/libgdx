@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void enableVertexAttribute(String name) {
+      if (Gdx.gl20 == null) return;
+      GL20 gl = Gdx.gl20;
+      checkManaged();
+      int location = fetchAttributeLocation(name);
+      if (location == -1) return;
+      gl.glEnableVertexAttribArray(location);
+  }
+  ```
+    ]]>
+  </code>
+</response>

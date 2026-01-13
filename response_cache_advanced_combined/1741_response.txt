@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void addAction( Action action) {
+    Nullability.castToNonnull(action).setActor(this);
+    actions.add(action);
+
+    if (stage != null && stage.getActionsRequestRendering()) Gdx.graphics.requestRendering();
+}
+  ```
+    ]]>
+  </code>
+</response>

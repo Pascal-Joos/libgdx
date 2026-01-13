@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void bind() {
+      if (emitter != null) emitter.set(this);
+      for (Influencer influencer : influencers) influencer.set(this);
+      renderer.set(this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

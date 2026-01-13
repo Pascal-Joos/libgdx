@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float area() {
+      float[] vertices = getTransformedVertices();
+      if (vertices == null) return 0;
+      return GeometryUtils.polygonArea(vertices, 0, vertices.length);
+  }
+  ```
+    ]]>
+  </code>
+</response>

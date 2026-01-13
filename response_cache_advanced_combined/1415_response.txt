@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the array access `unitsLRU[i]` at:
+
+    final int idx = unitsLRU[i];
+
+In Java, `unitsLRU` must be an array of some type. Key points:
+
+1. The variable `idx` is declared as a primitive `int`.
+2. In Java, accessing an element of a primitive `int[]` array (i.e., `int x = arr[i];`) cannot yield `null`; it either returns an `int` value or throws an exception (e.g., `NullPointerException` if `arr` itself is null, or `ArrayIndexOutOfBoundsException` if `i` is out of range).
+3. The only way `idx` could be “null” in the sense of Java semantics is if `idx` were a reference type (e.g., `Integer`) and `unitsLRU` were an `Integer[]`. However:
+   - The code compiles only if `unitsLRU`’s element type is compatible with assignment to a primitive `int`. That means `unitsLRU` must be an `int[]`, not `Integer[]`.
+   - If `unitsLRU` were `Integer[]`, the line `final int idx = unitsLRU[i];` would involve auto-unboxing. Then a null element would cause a `NullPointerException` at unboxing time, not a “null” `int`. But such code is only valid if `unitsLRU` is actually declared as `Integer[]`. In typical OpenGL texture unit LRU code, `unitsLRU` is an `int[]` storing texture unit indices.
+
+4. The nullability concern in Java applies to:
+   - The reference `unitsLRU` itself (could be null and cause `NullPointerException`), or
+   - Elements of a reference-type array, not a primitive `int[]`.
+
+Given the provided method and the assignment to a primitive `int`, the only consistent and compiling type for `unitsLRU` is `int[]`. For an `int[]`, neither the array element nor the resulting `idx` can ever be null.
+
+Conclusion: within this method, assuming it compiles as shown, `unitsLRU[i]` represents a primitive `int` value and cannot be null. Any failure related to `unitsLRU` at that line would be via an exception (e.g., `NullPointerException` if `unitsLRU` itself is null, or `ArrayIndexOutOfBoundsException`), not a nullable value.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

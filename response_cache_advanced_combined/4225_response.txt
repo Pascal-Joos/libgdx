@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean act(float delta) {
+        Actor localTarget = target;
+        if (localTarget != null) {
+            if (capture) localTarget.removeCaptureListener(listener);
+            else localTarget.removeListener(listener);
+        }
+        return true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

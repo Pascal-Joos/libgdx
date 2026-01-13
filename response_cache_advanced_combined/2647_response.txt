@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setText(@Null String str) {
+      if (str == null) str = "";
+      if (str.equals(text)) return;
+
+      clearSelection();
+      String oldText = text == null ? "" : text;
+      text = "";
+      paste(str, false);
+      if (programmaticChangeEvents) changeText(oldText, text);
+      cursor = 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

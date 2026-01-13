@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void init() {
+    if (controller != null) {
+      controllerChannel = controller.particles.getChannel(ParticleChannels.ParticleController);
+      if (controllerChannel == null)
+        throw new GdxRuntimeException(
+            "ParticleController channel not found, specify an influencer which will allocate it please.");
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

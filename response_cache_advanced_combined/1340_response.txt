@@ -1,0 +1,40 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the enhanced for-loop:
+
+    for (ParticleControllerRenderData data : renderData) {
+        if (data.controller == null) continue;
+        for (int k = 0, c = i + data.controller.particles.size;
+             i < c;
+             ++i, k += data.positionChannel.strideSize) {
+            ...
+        }
+        count += data.controller.particles.size;
+    }
+
+the expression in question is `data.controller` as used in:
+
+    int k = 0, c = i + data.controller.particles.size;
+
+Immediately before entering the inner `for` loop, there is an explicit null check:
+
+    if (data.controller == null) continue;
+
+This means:
+
+- If `data.controller` is `null`, the loop body is skipped via `continue`, and execution moves to the next `data` in `renderData`.
+- The inner `for` loop (and thus the evaluation of `data.controller.particles.size` in its initializer) is only reached when `data.controller != null`.
+
+In Java, the enhanced for-loop guarantees that `data` itself is a non-null reference to the loop variable (though the elements inside `renderData` could be null, that would cause a different kind of problem earlier, but not a scenario where the code after a `null`-check is reached with `data.controller` still null).
+
+Given only this method body and standard Java semantics, along the path to the expression `data.controller` inside the inner `for` initializer, `data.controller` has already been checked for null and any null case has been short-circuited by `continue`.
+
+Therefore, along all code paths that reach the line:
+
+    for (int k = 0, c = i + data.controller.particles.size; ...
+
+`data.controller` cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

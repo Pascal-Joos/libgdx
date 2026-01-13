@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getSpaceBottom() {
+    if (spaceBottom == null) return 0f;
+    if (actor == null) return 0f;
+    return Nullability.castToNonnull(spaceBottom).get(actor);
+}
+  ```
+    ]]>
+  </code>
+</response>

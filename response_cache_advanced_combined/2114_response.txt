@@ -1,0 +1,31 @@
+```xml
+<response>
+    <reason><![CDATA[
+Inside the method, the relevant line is:
+
+    float spaceRight = Nullability.castToNonnull(c.spaceRight == null ? Value.zero : c.spaceRight).get(a);
+
+The expression in question is the field access `c.spaceRight` that occurs inside the ternary:
+
+    c.spaceRight == null ? Value.zero : c.spaceRight
+
+1. `c` is assigned from `cells[i]`:
+       Cell c = (Cell) cells[i];
+   There is no null-check on `c` itself. However, the method never assigns null into `cells[]` here; whether `c` can be null depends on how `cells` is populated outside this method. The question, however, is about `c.spaceRight`, not `c` itself.
+
+2. `c.spaceRight` is **explicitly allowed to be null** at this point in the code:
+   - The idiom used is:
+         c.spaceRight == null ? Value.zero : c.spaceRight
+     which is a standard null-safe pattern indicating that `spaceRight` may be null, and if it is, a non-null default (`Value.zero`) is substituted.
+   - `Nullability.castToNonnull(...)` is applied to the *result of the ternary*, not to `c.spaceRight` directly. The whole purpose of the ternary is to handle the possibility that `c.spaceRight` is null.
+
+3. The `Value.zero` constant is assumed to be non-null (otherwise this pattern would be broken everywhere). Therefore the expression passed into `Nullability.castToNonnull` is guaranteed non-null, but that guarantee is created by allowing `c.spaceRight` to be null and replacing it when it is.
+
+4. There is no prior assignment or invariant in this method that would force `c.spaceRight` to be non-null before this line. In fact, other fields (`padLeft`, `spaceLeft`, etc.) are treated with the same `== null ? Value.zero : ...` pattern, which is consistent with LibGDX’s `Table$Cell` design where these fields are optional and may be left null to indicate "use default".
+
+Therefore, *as a field on `Cell`*, `c.spaceRight` itself can indeed be null at this program point; the code is explicitly written to handle that. What is guaranteed non-null is the evaluated expression `c.spaceRight == null ? Value.zero : c.spaceRight`, not `c.spaceRight` alone.
+
+]]></reason>
+    <value>YES</value>
+</response>
+```

@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+The value of params.textureData comes directly from:
+
+    params.textureData = texture.getTextureData();
+
+So the nullability of params.textureData is exactly the nullability of Texture.getTextureData().
+
+In libGDX’s Texture implementation:
+
+- A Texture is always constructed with a non-null TextureData (either provided explicitly or created internally from the file, pixmap, etc.).
+- That TextureData is stored and later returned by getTextureData().
+- TextureData is required for uploading/reloading the texture to OpenGL; this same method (invalidateAllTextures) calls texture.reload(), which in turn relies on the texture having valid TextureData.
+- There is no standard libGDX code path where a Texture exists but its internal TextureData is set to null; doing so would break reload(), and libGDX’s own implementations do not do this.
+
+Given normal/libGDX-intended usage (i.e., textures created via the standard constructors and not via custom subclasses that override getTextureData in a broken way), texture.getTextureData() is guaranteed non-null, thus params.textureData is non-null, and the call:
+
+    params.genMipMaps = params.textureData.useMipMaps();
+
+cannot encounter a null params.textureData.
+
+The only way params.textureData could be null is if:
+- Someone provides a custom Texture subclass that overrides getTextureData() to return null, or
+- Someone manually manipulates internals in a nonstandard way (e.g., reflection) to clear the TextureData.
+
+Those would be violations of the normal contract and not supported by libGDX’s own API design.
+
+Therefore, under the intended and documented usages of libGDX’s Texture, params.textureData cannot be null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

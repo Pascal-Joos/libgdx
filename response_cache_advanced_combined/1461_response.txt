@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  protected Cubemap createTexture(FrameBufferTextureAttachmentSpec attachmentSpec) {
+    GLOnlyTextureData data =
+        new GLOnlyTextureData(
+            this.bufferBuilder.width,
+            this.bufferBuilder.height,
+            0,
+            attachmentSpec.internalFormat,
+            attachmentSpec.format,
+            attachmentSpec.type);
+    Cubemap result = new Cubemap(data, data, data, data, data, data);
+    result.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+    result.setWrap(TextureWrap.ClampToEdge, TextureWrap.ClampToEdge);
+    return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

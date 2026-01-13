@@ -1,0 +1,48 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the *array reference* `a` in the write `a[dest++] = a[cursor2++];` can ever be null at that point in the method.
+
+1. The relevant code sequence is:
+
+   ```java
+   T[] a = this.a;
+   if (a == null) {
+     throw new IllegalStateException("Array to sort must not be null");
+   }
+   T[] tmp = ensureCapacity(len1);
+   System.arraycopy(a, base1, tmp, 0, len1);
+
+   int cursor1 = 0; // Indexes into tmp array
+   int cursor2 = base2; // Indexes int a
+   int dest = base1; // Indexes int a
+
+   // Move first element of second run and deal with degenerate cases
+   a[dest++] = a[cursor2++];
+   ```
+
+2. Immediately after loading `this.a` into the local variable `a`, the code checks:
+
+   ```java
+   if (a == null) {
+     throw new IllegalStateException("Array to sort must not be null");
+   }
+   ```
+
+   - If `this.a` is null, the method throws an exception and returns abruptly.
+   - Therefore, execution cannot proceed past this `if` with `a` being null.
+
+3. There are no subsequent assignments to the local variable `a` in the method:
+   - `a` is only read from after the null check.
+   - No method calls (such as `ensureCapacity` or `System.arraycopy`) modify the local variable `a` or can rebind it.
+   - Therefore, once `a` has been proven non-null by the `if (a == null)` check, it stays non-null for the remainder of the method.
+
+4. The index values (`dest` and `cursor2`) might be out of bounds in theory if preconditions are violated, but that would cause `ArrayIndexOutOfBoundsException`, not `a` itself becoming null. The question is about `a` being null, not about index safety.
+
+Given this control flow and the explicit null check, the array reference `a` in `a[dest++] = a[cursor2++];` is guaranteed to be non-null whenever that line is executed.
+
+Note: Individual elements `a[cursor2]` or `a[dest]` may be null depending on the contents of the array, but that is unrelated to whether the *array reference* `a` is null. The expression in question uses `a` as the array reference.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

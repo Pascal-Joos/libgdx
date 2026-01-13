@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPadTop() {
+      Actor a = actor;
+      if (a == null) return 0;
+      return padTop == null ? 0 : padTop.get(a);
+  }
+  ```
+    ]]>
+  </code>
+</response>

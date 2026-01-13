@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static boolean overlapConvexPolygons(
+      Polygon p1, Polygon p2,  MinimumTranslationVector mtv) {
+    return overlapConvexPolygons(Nullability.castToNonnull(p1.getTransformedVertices()), p2.getTransformedVertices(), mtv);
+}
+  ```
+    ]]>
+  </code>
+</response>

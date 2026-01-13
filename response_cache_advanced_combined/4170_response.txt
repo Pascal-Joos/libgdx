@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public boolean touchDragged(int x, int y, int pointer) {
+      DataOutputStream localOut;
+      synchronized (this) {
+        if (!connected || out == null) return false;
+        localOut = out;
+      }
+  
+      try {
+        Nullability.castToNonnull(localOut).writeInt(TOUCH_DRAGGED);
+        Nullability.castToNonnull(localOut).writeInt(x);
+        Nullability.castToNonnull(localOut).writeInt(y);
+        Nullability.castToNonnull(localOut).writeInt(pointer);
+      } catch (Throwable t) {
+        synchronized (this) {
+          connected = false;
+        }
+      }
+      return false;
+}
+  ```
+    ]]>
+  </code>
+</response>

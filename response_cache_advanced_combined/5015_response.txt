@@ -1,0 +1,35 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the enhanced for-loop header:
+
+    for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+
+The potential nullity being asked about is the variable `tilesheets` used in this expression.
+
+Within the method:
+
+    Element tilesheets = Nullability.castToNonnull(root).getChildByName("TileSheets");
+    if (tilesheets != null) {
+        for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+            loadTileSheet(map, tilesheet, tmxFile, imageResolver);
+        }
+    }
+
+`tilesheets` is first assigned the result of `getChildByName("TileSheets")`. This call may return null, so `tilesheets` itself can be null in general. However, the enhanced for-loop is strictly guarded by the `if (tilesheets != null)` condition.
+
+Therefore:
+- Outside the `if` block, `tilesheets` may be null.
+- Inside the body of the `if (tilesheets != null)` and in the loop header itself, execution only reaches that code when `tilesheets` is non-null.
+- Consequently, at the specific line:
+
+      for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+
+`tilesheets` cannot be null at runtime, due to the preceding null check on all code paths that reach this line.
+
+The possibility that `Nullability.castToNonnull(root)` changes the behavior is irrelevant to `tilesheets`'s nullity here, because `tilesheets` is derived from `getChildByName`, not from `castToNonnull`'s return value directly in a way that could bypass the null check. Even if `castToNonnull(root)` were to throw on null `root`, that would prevent reaching this code, not make `tilesheets` null at the loop line.
+
+Thus, considering control flow and the explicit null check, the expression `tilesheets` at that line cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

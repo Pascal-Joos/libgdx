@@ -1,0 +1,60 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are analyzing the receiver expression `a` in the statement:
+
+    a[dest--] = a[cursor1--];
+
+The question is whether `a` itself can be null at this point.
+
+1. **Initialization of `a`**
+
+   At the beginning of the method:
+
+   ```java
+   Object[] a = this.a; // For performance
+   if (a == null) {
+     throw new IllegalStateException();
+   }
+   a = Nullability.castToNonnull(a);
+   ```
+
+   - `a` is first assigned from `this.a`.
+   - Immediately after, there is an explicit null check:
+     ```java
+     if (a == null) {
+       throw new IllegalStateException();
+     }
+     ```
+     Therefore, if `this.a` were null, the method would throw `IllegalStateException` and **never** reach the line in question.
+   - `a` is then passed through `Nullability.castToNonnull(a)`. Regardless of what that method does at runtime, the local variable `a` already holds a non-null reference at this point due to the prior check, and no assignment from any possibly null value occurs after that.
+
+2. **Subsequent reassignments of `a`**
+
+   - After the null check and cast, `a` is **never reassigned**:
+     - It is used in `System.arraycopy(a, ...)` calls as a source or destination.
+     - It is used in array index expressions as in `a[dest--]` and `a[cursor1--]`.
+   - No later statement reassigns `a` from any source that could be null. Thus, the null-checked, non-null value of `a` is preserved through to `a[dest--] = a[cursor1--];`.
+
+3. **Exceptions and early returns**
+
+   - There are early returns and exceptions later in the method, but none involve reassigning `a`.
+   - If any other runtime exception occurs (e.g., `ArrayIndexOutOfBoundsException`, `ClassCastException`, `NullPointerException` from elements inside the array, or from `compareTo`), it does not affect the nullness of the reference `a` itself; it just stops execution. There is no path where `a` becomes null between its null check and the assignment line.
+
+4. **Contracts of called methods**
+
+   - `ensureCapacity(len2)` returns an `Object[] tmp`; it does not touch `a`.
+   - `Nullability.castToNonnull(a)` is called **after** the explicit null check, and its result is assigned back to `a`. Given the name and usage, its contract is to treat the argument as non-null for static analysis; in any case, it is invoked with a non-null argument.
+   - `gallopRight` and `gallopLeft` operate on `a` as a parameter, but they cannot change the local variable `a` in this method (Java is pass-by-value for references). They might inspect the array, but cannot null it out.
+
+Given all control-flow paths to the statement:
+
+   a[dest--] = a[cursor1--];
+
+the local variable `a` has already been checked against null and not modified to any other value afterward. Therefore, `a` cannot be null at that point.
+
+(Individual elements `a[cursor1]` or `a[dest]` could be null depending on the contents of the array, but the question is about the reference `a` itself, not its elements.)
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

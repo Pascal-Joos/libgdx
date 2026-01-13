@@ -1,0 +1,29 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone, there is no local declaration or initialization of the field/variable `instances`. Its nullability depends entirely on how the surrounding class is constructed and used (i.e., where and how `instances` is assigned), which is not shown.
+
+The control flow in this method is:
+
+- `int numInstances = 0;`
+- `if (isInstanced) numInstances = instances.getNumInstances();`
+
+There is no null check on `instances` before calling `instances.getNumInstances()`. The only guard is `if (isInstanced)`, but `isInstanced` does not logically guarantee that `instances` is non-null unless there is a class-level invariant such as: “if `isInstanced` is true, then `instances` is always non-null.”
+
+Because the snippet does not show:
+- the declaration of `instances`,
+- its initialization,
+- any guarantees/invariants tying `isInstanced` and `instances` together, or
+- any external contracts (e.g., documentation or framework guarantees that `instances` is always set before `isInstanced` is true),
+
+it is not possible to conclude from this code alone that `instances` cannot be null when `isInstanced` is true. Conversely, we also cannot *prove* that it *can* be null without seeing other parts of the class or system.
+
+Therefore, based solely on the given method, we cannot definitively determine the nullability of `instances` at that line.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of the `instances` field/variable (its type, where it is defined).]]></request>
+        <request><![CDATA[Show all constructors and any methods that assign to `instances` or modify `isInstanced`.]]></request>
+        <request><![CDATA[Provide any documentation or comments that describe the contract between `isInstanced` and `instances` (e.g., “when isInstanced is true, instances is guaranteed non-null”).]]></request>
+    </requests>
+</response>
+```

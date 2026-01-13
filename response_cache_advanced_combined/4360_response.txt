@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefWidth() {
+      return prefWidth == null ? 0 : prefWidth.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

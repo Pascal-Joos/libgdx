@@ -1,0 +1,61 @@
+```xml
+<response>
+    <reason><![CDATA[
+keys2 is a field that is only ever assigned in one place within this method:
+
+    if (keys1 == null) {
+      keys1 = new Keys(this);
+      keys2 = new Keys(this);
+    }
+
+From that point on, there are only reads of keys2 (no reassignments to null, no other writes shown).
+
+Now analyze all paths that reach the line:
+
+    keys2.reset();
+
+Control flow:
+
+1. If (Collections.allocateIterators) is true:
+   - The method returns new Keys(this) immediately.
+   - The keys2.reset() line is never reached on this path.
+
+2. If (Collections.allocateIterators) is false:
+   - We proceed.
+
+   2.1. If (keys1 == null):
+        - keys1 is assigned new Keys(this)
+        - keys2 is assigned new Keys(this)
+        - So after this block executes, keys2 is guaranteed non-null.
+
+   2.2. If (!keys1.valid):
+        - The method returns keys1.
+        - keys2.reset() is not reached on this path.
+
+   2.3. Else (keys1.valid is true):
+        - This is the only path that reaches keys2.reset().
+        - To be on this path:
+          * Collections.allocateIterators must be false
+          * Either:
+            - keys1 was previously null in some earlier call and has since been initialized together with keys2
+            - or keys1 was already non-null before entering the method (which implies keys2 must also already have been initialized in that same earlier block, assuming no other writes).
+        - Additionally, when entering this path in the current call:
+          * If keys1 was null at the start of this call, the method just executed:
+                keys1 = new Keys(this);
+                keys2 = new Keys(this);
+            guaranteeing keys2 is non-null before the validity checks.
+          * If keys1 was non-null at the start of this call, then by the invariant imposed by this method (the only shown initialization site), keys2 must also have been initialized non-null at some prior time.
+
+Given the code provided, there is no path that both:
+   - Reaches keys2.reset()
+   - Leaves keys2 uninitialized or assigns it to null beforehand.
+
+There are also no null checks or alternative assignments that could set keys2 back to null shown in this snippet. Therefore, under the assumptions that:
+   - The shown method is the only place keys2 is written (or at least nowhere else sets keys2 to null),
+   - The constructor new Keys(this) never returns null,
+
+keys2 cannot be null at the point of keys2.reset().
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

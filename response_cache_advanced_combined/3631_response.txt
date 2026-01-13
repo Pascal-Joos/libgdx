@@ -1,0 +1,45 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the beginning of the method, there is an explicit null check:
+
+    if (_son == null) return 0;
+    int[] son = Nullability.castToNonnull(_son);
+
+From this point onward, within this invocation of GetMatches, the instance field `_son` is guaranteed to be non-null, assuming no data races (i.e., that `_son` is not concurrently modified by another thread during execution of this method).
+
+The line in question is inside the while-loop:
+
+    while (true) {
+      if (curMatch <= matchMinPos || count-- == 0) {
+        Nullability.castToNonnull(_son)[ptr0] = Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+        break;
+      }
+      ...
+    }
+
+Control-flow analysis:
+
+1. The only path into the `while (true)` block occurs when `_son` has already passed the null check and the method has not yet returned.
+2. The `if (_son == null) return 0;` occurs before the loop and before any use of `_son`.
+3. There is no re-assignment to `_son` within the method; no statements in this method can set `_son` to null after the initial check.
+4. `Nullability.castToNonnull(_son)` is a cast/annotation helper. It does not change `_son`; it simply asserts to the static analyzer or at runtime (depending on implementation) that the reference is non-null. Its precondition is that `_son` is non-null at that call site. Given the prior check and lack of mutation, that precondition holds.
+5. Therefore, along all code paths where execution reaches:
+       Nullability.castToNonnull(_son)[ptr0] = Nullability.castToNonnull(_son)[ptr1] = kEmptyHashValue;
+   `_son` must still be the same non-null array reference observed after the initial null check.
+
+The only way `_son` could be null at that expression would be:
+- Another thread concurrently setting the instance field `_son` to null between the if-check and the assignment, or
+- The constructor / class invariant allows `_son` to be null and some other concurrently executing method mutates it.
+
+Such concurrent mutation is not visible in the provided code, and ordinary single-threaded reasoning (and typical library design for this kind of structure) treats `_son` as stable over the duration of the call. Under that assumption, `_son` cannot be null at the point of the assignment.
+
+Hence, within the method’s own control flow and in the absence of concurrent unsynchronized modification, the expression `_son` at:
+
+    _son[ptr0] = _son[ptr1] = kEmptyHashValue;
+
+cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

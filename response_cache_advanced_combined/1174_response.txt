@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void write(Json json) {
+    json.writeValue("filename", filename);
+    json.writeValue("type", type != null ? type.getName() : null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

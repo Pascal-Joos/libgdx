@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the `out` parameter is explicitly checked for null:
+
+    if (out == null) {
+        ...
+    } else {
+        for (final Node node : out.keys()) node.isAnimated = false;
+        ...
+    }
+
+The `for (final Node node : out.keys())` line is in the `else` branch, which is only executed when `out != null`. Therefore, at the point `out.keys()` is evaluated, `out` itself cannot be null via this code path.
+
+The remaining question is whether `out.keys()` could itself return null when `out` is non-null. `out` is an `ObjectMap<Node, Transform>`, which by library contract (LibGDX’s `ObjectMap`) returns a non-null iterable collection from `keys()`—it returns a `Keys` iterator object, not null. LibGDX’s `ObjectMap.keys()` is implemented to always allocate or reuse a `Keys` instance; it does not return null.
+
+Thus, given:
+- The null check on `out` before the call, and
+- The documented and de facto behavior of `ObjectMap.keys()` (non-null return),
+
+the expression `out.keys()` cannot be null here.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

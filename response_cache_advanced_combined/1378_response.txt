@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+With only the provided method:
+
+@Override
+public void update() {
+    batch.draw(renderData);
+}
+
+there is no visible information about:
+
+- Where or how `batch` is declared (field, local, inherited, etc.)
+- How and where `batch` is initialized
+- Whether it is ever assigned `null`
+- Any framework or API contract that might guarantee `batch` to be non-null at this point
+- Any prior null-checks on `batch`
+
+Because those details are not shown, we cannot soundly conclude that `batch` is always non-null, nor that it might be null. Both are possible depending on the surrounding class and lifecycle.
+
+Therefore, based strictly on the given snippet, it is not possible to determine whether `batch` can be null at the call `batch.draw(renderData);`.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of `batch` (field or local), including its type and any annotations (e.g. @Nonnull, @Nullable).]]></request>
+        <request><![CDATA[Show all constructors, initialization methods, or setters where `batch` is assigned, as well as any code that might set it to null.]]></request>
+        <request><![CDATA[If `batch` is inherited or injected (e.g., via a framework), provide the relevant base class, interface, or injection configuration that describes its lifecycle and nullability guarantees.]]></request>
+    </requests>
+</response>
+```

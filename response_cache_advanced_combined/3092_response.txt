@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void activateParticles(int startIndex, int count) {
+      if (emitter != null) emitter.activateParticles(startIndex, count);
+      for (Influencer influencer : influencers) influencer.activateParticles(startIndex, count);
+  }
+  ```
+    ]]>
+  </code>
+</response>

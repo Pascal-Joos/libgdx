@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void clearRenderablesPool() {
+      renderablePool.freeAll(renderables);
+      for (int i = 0, free = renderablePool.getFree(); i < free; ++i) {
+        Renderable renderable = renderablePool.obtain();
+        if (renderable.meshPart.mesh != null) renderable.meshPart.mesh.dispose();
+      }
+      renderables.clear();
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setUniformf(int location, float value1, float value2, float value3) {
+    GL20 gl = Gdx.gl20;
+    if (gl == null) return;
+    checkManaged();
+    gl.glUniform3f(location, value1, value2, value3);
+}
+  ```
+    ]]>
+  </code>
+</response>

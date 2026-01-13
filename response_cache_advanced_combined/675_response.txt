@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getRegionX() {
+      if (texture == null) throw new IllegalStateException("texture cannot be null.");
+      return Math.round(u * texture.getWidth());
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the specific line
+
+    Nullability.castToNonnull(_matchFinder).SetStream(_inStream);
+
+the call is executed only inside this guard:
+
+    if (_inStream != null && _matchFinder != null) {
+        Nullability.castToNonnull(_matchFinder).SetStream(_inStream);
+        ...
+    }
+
+Within this `if` block, Java guarantees that `_matchFinder` is non‑null on entry because the body is executed only when `_matchFinder != null` evaluates to true. There are no assignments to `_matchFinder` between the condition check and the call to `SetStream`, so `_matchFinder` cannot change to null in between.
+
+The method `Nullability.castToNonnull` is only a static helper that takes `_matchFinder` as an argument; it does not influence whether the passed reference is null at the call site. The nullness of the expression `_matchFinder` at this point is fully determined by the `if (_matchFinder != null)` check.
+
+Therefore, along all code paths that reach this line, `_matchFinder` is non‑null, and the expression `_matchFinder` at that line cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector3 project(Vector3 worldCoords) {
+      if (camera == null) {
+          return worldCoords;
+      }
+      camera.project(worldCoords, screenX, screenY, screenWidth, screenHeight);
+      return worldCoords;
+  }
+  ```
+    ]]>
+  </code>
+</response>

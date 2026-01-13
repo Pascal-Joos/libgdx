@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean newLineAtEnd() {
+        return text != null && Nullability.castToNonnull(text).length() != 0
+            && (Nullability.castToNonnull(text).charAt(Nullability.castToNonnull(text).length() - 1) == NEWLINE
+                || Nullability.castToNonnull(text).charAt(Nullability.castToNonnull(text).length() - 1) == CARRIAGE_RETURN);
+}
+  ```
+    ]]>
+  </code>
+</response>

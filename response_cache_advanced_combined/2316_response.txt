@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getMaxWidth() {
+    float v = maxWidth.get(Nullability.castToNonnull(actor));
+    if (v > 0) v += padLeft.get(this) + padRight.get(this);
+    return v;
+}
+  ```
+    ]]>
+  </code>
+</response>

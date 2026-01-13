@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefWidth() {
+          if (vertical) {
+            ProgressBarStyle style = this.style;
+            if (style == null) throw new IllegalStateException("style has not been set.");
+            Drawable knob = Nullability.castToNonnull(style).knob, bg = getBackgroundDrawable();
+            return Math.max(knob == null ? 0 : knob.getMinWidth(), bg == null ? 0 : bg.getMinWidth());
+          } else return 140;
+  }
+  ```
+    ]]>
+  </code>
+</response>

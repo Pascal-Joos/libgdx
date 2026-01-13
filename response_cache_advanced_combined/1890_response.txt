@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefHeight() {
+      if (style == null) throw new IllegalStateException("style cannot be null.");
+      float height = super.getPrefHeight();
+      if (Nullability.castToNonnull(style).up != null) height = Math.max(height, Nullability.castToNonnull(style).up.getMinHeight());
+      if (Nullability.castToNonnull(style).down != null) height = Math.max(height, Nullability.castToNonnull(style).down.getMinHeight());
+      if (Nullability.castToNonnull(style).checked != null) height = Math.max(height, Nullability.castToNonnull(style).checked.getMinHeight());
+      return height;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean newLineAtEnd() {
+      return text != null && text.length() != 0
+          && (text.charAt(text.length() - 1) == NEWLINE
+              || text.charAt(text.length() - 1) == CARRIAGE_RETURN);
+  }
+  ```
+    ]]>
+  </code>
+</response>

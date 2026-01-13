@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void updateUVs() {
+        if (material.textureRegion == null) {
+            return;
+        }
+        TextureRegion tr = material.textureRegion;
+        // left top
+        vertices[U1] = Nullability.castToNonnull(tr).getU();
+        vertices[V1] = Nullability.castToNonnull(tr).getV();
+        // right top
+        vertices[U2] = Nullability.castToNonnull(tr).getU2();
+        vertices[V2] = Nullability.castToNonnull(tr).getV();
+        // left bot
+        vertices[U3] = Nullability.castToNonnull(tr).getU();
+        vertices[V3] = Nullability.castToNonnull(tr).getV2();
+        // right bot
+        vertices[U4] = Nullability.castToNonnull(tr).getU2();
+        vertices[V4] = Nullability.castToNonnull(tr).getV2();
+  }
+  ```
+    ]]>
+  </code>
+</response>

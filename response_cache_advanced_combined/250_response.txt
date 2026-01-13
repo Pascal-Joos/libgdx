@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void run() {
+          if (getStage() == null) {
+            cancel();
+            return;
+          }
+          cursorOn = !cursorOn;
+          if (Gdx.graphics != null) {
+            Gdx.graphics.requestRendering();
+          }
+  }
+  ```
+    ]]>
+  </code>
+</response>

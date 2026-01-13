@@ -1,0 +1,58 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the array reference on the left-hand side of:
+
+    a[dest--] = a[cursor1--];
+
+as it appears in:
+
+    Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+
+You are asking whether the underlying array object referred to by `a` can be null at that point.
+
+1. Initialization and explicit null-check
+
+At the start of `mergeHi`:
+
+    Object[] a = this.a; // For performance
+    if (a == null) {
+      throw new IllegalStateException();
+    }
+
+If `a` were null, the method would immediately throw `IllegalStateException` and exit. Therefore, for all subsequent lines in this method (including the line with `a[dest--] = a[cursor1--];`), execution only continues under the condition `a != null`.
+
+2. Use of `Nullability.castToNonnull(a)`
+
+Every later occurrence of `a` in array access is wrapped as:
+
+    Nullability.castToNonnull(a)[...]
+
+`Nullability.castToNonnull(a)` is clearly intended as a helper/annotation aid to mark that `a` is non-null. Regardless of the exact implementation of `castToNonnull`, at the program point where it is called, we already know from the explicit null-check that `a` is non-null. Therefore, `Nullability.castToNonnull(a)` must evaluate to a non-null `Object[]`.
+
+3. Control flow / reassignments
+
+- `a` is a local variable, set exactly once:
+  
+      Object[] a = this.a;
+
+- `a` is never reassigned later in the method.
+- No other operation can change the nullness of that local variable.
+- All code paths that reach any use of `a` (e.g., arraycopy, indexing) must have passed the `if (a == null) { throw ... }` guard.
+
+Thus, there is no reachable execution path in which the variable `a` is null at the line:
+
+    Nullability.castToNonnull(a)[dest--] = Nullability.castToNonnull(a)[cursor1--];
+
+4. Distinguishing array reference vs. array contents
+
+The question is about whether the *array reference* (`a`, i.e. `Nullability.castToNonnull(a)`) can be null. The array *elements* (`a[cursor1]`, `a[dest]`) may be null (this method is part of a sort/merge implementation that can handle null elements in principle), but that is a different concern and does not affect the nullness of the array object itself.
+
+Given the explicit null check and lack of reassignment, the array reference used in that expression cannot be null.
+
+Conclusion: the array reference `a` at that line cannot be null on any reachable path.
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

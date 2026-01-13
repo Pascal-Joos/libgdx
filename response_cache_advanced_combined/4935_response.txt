@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method alone, there is no guarantee that `entry.key` is always non-null.
+
+The loop iterates over `sourceListeners.entries()`, which returns `Entry<Source, DragListener>` objects. Whether `entry.key` can be null depends entirely on:
+- How `sourceListeners` is implemented (its collection type and semantics).
+- How entries are inserted into `sourceListeners` (e.g., whether null keys are prevented by contract or runtime checks).
+
+Inside `clear()`, the code explicitly checks `if (entry.key != null && entry.key.actor != null)` before dereferencing `entry.key.actor`. This indicates the original author considered it possible that `entry.key` might be null (either due to the data structure allowing null keys or defensive programming against misuse).
+
+No earlier code in this method constrains or changes `entry.key`; it is simply read from the entries supplied by `sourceListeners`. Without:
+- The definition/implementation of `sourceListeners` (likely some LibGDX/ custom map or multimap),
+- Its insertion code (where keys are added),
+- Or a documented contract forbidding null keys,
+
+we cannot prove that `entry.key` is always non-null. The null check is the only safeguard, and its presence suggests that null keys are at least considered possible.
+
+Therefore, based solely on the shown method and without additional guarantees from the surrounding code or data structure, it is not possible to conclusively determine that `entry.key` can never be null.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the type and implementation (or library class) of `sourceListeners`, including whether it permits null keys and how its `entries()` method is defined.]]></request>
+        <request><![CDATA[Show where and how entries are inserted into `sourceListeners` (all `put`/`add`-like calls), to see if null keys are prevented by construction or checks.]]></request>
+    </requests>
+</response>
+```

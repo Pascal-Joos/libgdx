@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  void MovePos(int num) throws java.io.IOException {
+      if (num > 0 && _matchFinder != null) {
+        _matchFinder.Skip(num);
+        _additionalOffset += num;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

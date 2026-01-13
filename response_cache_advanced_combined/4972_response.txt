@@ -1,0 +1,40 @@
+```xml
+<response>
+    <reason><![CDATA[
+The array variable `a` at the line
+
+    a[dest++] = a[cursor2++];
+
+refers to the local variable declared as:
+
+    T[] a = Nullability.castToNonnull(this.a);
+    if (a == null) {
+        throw new IllegalStateException("Array to sort must not be null");
+    }
+
+Key observations:
+
+1. `a` is assigned exactly once in this method:
+   - First, it is initialized from `Nullability.castToNonnull(this.a)`.
+   - Immediately after, there is an explicit null check:
+     
+         if (a == null) {
+             throw new IllegalStateException("Array to sort must not be null");
+         }
+     
+   So any execution that proceeds beyond this `if` statement can only see a non-null `a`.
+
+2. There are no reassignments to `a` later in the method. All subsequent uses (including at `a[dest++] = a[cursor2++];`) refer to the same local variable `a` that has already been checked against null.
+
+3. The possibility that `this.a` is null is fully handled:
+   - If `this.a` is null, `Nullability.castToNonnull(this.a)` may return null, but then the code immediately throws `IllegalStateException` and exits the method before reaching `a[dest++] = a[cursor2++]`.
+
+4. No other control flow path bypasses the null check; there are no early returns or exceptions thrown between the initialization of `a` and the referenced line, except that explicit null-check guard.
+
+Thus, on all reachable paths to the line `a[dest++] = a[cursor2++];`, the local variable `a` is guaranteed to be non-null. (Note: individual *elements* of `a` might be null depending on how the array is populated, but the expression in question is the array reference `a` itself.)
+
+Therefore, the expression `a` at that line cannot be null at runtime.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

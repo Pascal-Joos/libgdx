@@ -1,0 +1,45 @@
+<response>
+  <reason><![CDATA[
+Within getChannel, null is returned when no Channel in arrays has an id matching descriptor.id.
+
+At the specific call site:
+
+```java
+FloatChannel positionChannel = particles.getChannel(ParticleChannels.Position);
+```
+
+there is no guarantee in the provided code that a Position channel has already been added to particles before calculateBoundingBox() is called.
+
+The presence of other code that *sometimes* allocates a Position channel (e.g. in BillboardRenderer.allocateChannels() and PointSpriteRenderer.allocateChannels(), and inside DynamicsInfluencer.allocateChannels() when acceleration is present) does not imply that, in all usages of ParticleController.getBoundingBox(), such a renderer or influencer has been run, or that they have been run on this particular particles instance.
+
+The call chain for this site:
+
+```java
+public BoundingBox getBoundingBox() {
+    if (boundingBox == null) boundingBox = new BoundingBox();
+    calculateBoundingBox();
+    return boundingBox;
+}
+
+protected void calculateBoundingBox() {
+    boundingBox.clr();
+    FloatChannel positionChannel = particles.getChannel(ParticleChannels.Position);
+    for (int pos = 0, c = positionChannel.strideSize * particles.size;
+         pos < c;
+         pos += positionChannel.strideSize) {
+      ...
+    }
+}
+```
+
+does not include any prior call that ensures:
+
+```java
+particles.addChannel(ParticleChannels.Position, ...)
+```
+
+has been invoked on this particles object. The earlier usages of getChannel in other classes (e.g., ModelInstanceRenderer.init(), ParticleControllerFinalizerInfluencer.init(), ParticleControllerControllerRenderer.init()) explicitly check for null or throw if the channel is missing, which indicates that the library itself treats getChannel as potentially returning null.
+
+Therefore, for this particular invocation, if no Position channel has been allocated/added to particles beforehand, getChannel(ParticleChannels.Position) will fall through the loop and return null. Hence the method can return null at this specific call site.]]></reason>
+  <value>YES</value>
+</response>

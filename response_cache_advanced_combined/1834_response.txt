@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `begin` does not match any of the patterns NullAway considers as initializer methods (well‑known framework lifecycle methods, or names starting with `init` or `initialize`). Although it assigns to fields, by your criteria it should *not* be treated as an initializer method because it is neither a recognized framework initialization hook nor named like an initializer (`init*` / `initialize*`).]]></reason>
+    <value>NO</value>
+</response>

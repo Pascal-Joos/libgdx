@@ -1,0 +1,42 @@
+```xml
+<response>
+    <reason><![CDATA[
+There are two distinct control-flow cases governed by the initial condition:
+
+1. If `Collections.allocateIterators` is **true**:
+   - The method executes `return new Keys(this);` immediately.
+   - None of the subsequent code (including `keys2.valid = false;`) is executed.
+   - In this branch, the nullability of `keys2` is irrelevant, because the line in question is unreachable.
+
+2. If `Collections.allocateIterators` is **false**:
+   - Execution proceeds past the first `if`:
+
+     ```java
+     if (keys1 == null) {
+       keys1 = new Keys(this);
+       keys2 = new Keys(this);
+     }
+     ```
+
+   - If `keys1` is `null`, both `keys1` and `keys2` are assigned `new Keys(this)`. After this block, we know:
+       - `keys1 != null`
+       - `keys2 != null`
+   - If `keys1` is **not** null on entry:
+       - The `if (keys1 == null)` block is skipped.
+       - That implies `keys1` has already been assigned at some previous point in the object's lifetime.
+       - From the method's own code, the only place `keys1` and `keys2` are assigned is inside this `if (keys1 == null)` block, and in that block they are both set together.
+       - Therefore, if `keys1` is non-null, it must have been set by this same initialization block earlier, and in that same earlier execution `keys2` was set to `new Keys(this)` as well.
+       - Thus in the non-null-`keys1` case, by the invariant established by this method, `keys2` is also non-null.
+
+   - Consequently, in the only paths where the line `keys2.valid = false;` is reachable (i.e., `Collections.allocateIterators == false`), `keys2` has been initialized to a new `Keys(this)` instance and therefore cannot be null.
+
+   - The subsequent logic (`if (!keys1.valid) { ... } else { ... }`) only reads and writes the `valid` field and calls `reset()` on `keys1` and `keys2`; it does not reassign `keys2` to null. There are no other assignments shown that could null out `keys2`.
+
+Given the method as written, and assuming:
+- `keys1` and `keys2` are fields of the same object,
+- and no other code is assigning `keys2 = null` or otherwise reinitializing it between calls,
+
+then on every execution path that reaches `keys2.valid = false;`, `keys2` is guaranteed to be non-null.]]></reason>
+    <value>NO</value>
+</response>
+```

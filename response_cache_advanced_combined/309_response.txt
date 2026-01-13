@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public RemoteSender(String ip, int port) {
+    try {
+      Socket socket = new Socket(ip, port);
+      socket.setTcpNoDelay(true);
+      socket.setSoTimeout(3000);
+      out = new DataOutputStream(socket.getOutputStream());
+      if (Gdx.input != null) {
+        out.writeBoolean(Gdx.input.isPeripheralAvailable(Peripheral.MultitouchScreen));
+        Gdx.input.setInputProcessor(this);
+      }
+      connected = true;
+    } catch (Exception e) {
+      Gdx.app.log("RemoteSender", "couldn't connect to " + ip + ":" + port);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

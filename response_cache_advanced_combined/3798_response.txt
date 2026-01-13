@@ -1,0 +1,7 @@
+<response>
+    <success>false</success>
+    <methods>
+      <method>Nullability.castToNonnull</method>
+      <method>uploadImageData</method>
+    </methods>
+</response>

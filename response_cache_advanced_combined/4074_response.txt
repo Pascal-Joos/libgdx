@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, every iteration over `renderData` first performs:
+
+    if (data.controller == null) continue;
+
+This guarantees that for any subsequent code in that same iteration, including the inner loop
+
+    for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
+
+`data.controller` is non-null, because the only way to reach this `for` statement is when `data.controller != null`. The `continue` prevents control flow from ever reaching the inner loop in the `data.controller == null` case.
+
+Therefore, under the assumption that:
+
+- `data` is not being modified concurrently in another thread during this loop, and
+- there is no code elsewhere that sets `data.controller` to null between the null-check and the `for` statement,
+
+then `data.controller` at the expression `data.controller.particles.size` cannot be null.
+
+Given typical single-threaded or properly-synchronized usage (as is standard in such rendering code), this is a safe assumption.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

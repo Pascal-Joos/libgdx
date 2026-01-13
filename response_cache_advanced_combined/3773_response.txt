@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean isDirectory() {
+      if (type == FileType.Classpath) return false;
+      File f = file();
+      return f != null && f.isDirectory();
+  }
+  ```
+    ]]>
+  </code>
+</response>

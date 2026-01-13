@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void draw(PolygonSpriteBatch spriteBatch) {
+    if (!drawing)
+      throw new IllegalStateException("PolygonSpriteBatch.begin must be called before draw.");
+
+    final PolygonRegion region = this.region;
+    final TextureRegion textureRegion = region.region;
+    Texture texture = textureRegion.texture;
+    if (texture != lastTexture) switchTexture(texture);
+    else if (triangleIndex + region.triangles.length > triangles.length
+        || vertexIndex + vertices.length > this.vertices.length) flush();
+
+    spriteBatch.draw(
+        texture,
+        getVertices(),
+        0,
+        vertices.length,
+        region.triangles,
+        0,
+        region.triangles.length);
+}
+  ```
+    ]]>
+  </code>
+</response>

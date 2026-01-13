@@ -1,0 +1,34 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is `keyFrames` as used in the condition:
+
+    if (Nullability.castToNonnull(keyFrames).length == 1) return 0;
+
+Immediately before this line the method has:
+
+    if (keyFrames == null || keyFrames.length == 0) return 0;
+
+This provides a control-flow guard:
+
+1. If `keyFrames` is null:
+   - The condition `keyFrames == null` is true.
+   - The method returns 0.
+   - Execution never reaches the subsequent `Nullability.castToNonnull(keyFrames)` call.
+
+2. If `keyFrames` is not null:
+   - The left-hand side of `||` is false.
+   - Java guarantees short-circuit evaluation for `||`, so `keyFrames.length` is only accessed when `keyFrames` is non-null.
+   - Therefore, passing `keyFrames` into `Nullability.castToNonnull` happens only on paths where `keyFrames` is non-null.
+
+Under standard Java semantics, the null-check at the start of the method excludes all paths where `keyFrames` might be null by the time `Nullability.castToNonnull(keyFrames)` is evaluated. Thus, on any reachable path to the line:
+
+    if (Nullability.castToNonnull(keyFrames).length == 1) return 0;
+
+the value of `keyFrames` cannot be null.
+
+(If `Nullability.castToNonnull` itself could arbitrarily return null, that would be a separate issue, but the question is specifically about the underlying `keyFrames` expression.)
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

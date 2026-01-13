@@ -1,0 +1,16 @@
+```xml
+<response>
+    <reason><![CDATA[
+The provided method contains an explicit null check:
+
+    if (patch != null) {
+        patch.draw(batch, x, y, width, height);
+    }
+
+The call to `patch.draw(...)` is made only inside the `if (patch != null)` block. Therefore, along any execution path where `patch.draw(batch, x, y, width, height);` is evaluated, `patch` is guaranteed to be non-null at that program point.
+
+Even without knowing how `patch` is assigned elsewhere, this specific line is guarded by a null check in the same method, so within the scope of that line’s execution, `patch` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

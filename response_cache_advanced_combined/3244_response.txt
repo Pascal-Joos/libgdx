@@ -1,0 +1,28 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private void readNamedObjects(Json json, Class type, JsonValue valueMap) {
+            Class addType = type == TintedDrawable.class ? Drawable.class : type;
+            for (JsonValue valueEntry = valueMap.child;
+                valueEntry != null;
+                valueEntry = valueEntry.next) {
+              Object object = json.readValue(type, valueEntry);
+              if (object == null) continue;
+              if (valueEntry.name == null) continue;
+              try {
+                add(valueEntry.name, object, addType);
+                if (addType != Drawable.class
+                    && ClassReflection.isAssignableFrom(Drawable.class, addType))
+                  add(valueEntry.name, object, Drawable.class);
+              } catch (Exception ex) {
+                throw new SerializationException(
+                    "Error reading " + ClassReflection.getSimpleName(type) + ": " + valueEntry.name,
+                    ex);
+              }
+            }
+}
+  ```
+    ]]>
+  </code>
+</response>

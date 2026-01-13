@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefHeight() {
+      float v = prefHeight.get(Nullability.castToNonnull(actor));
+      if (background != null) v = Math.max(v, background.getMinHeight());
+      return Math.max(getMinHeight(), v + padTop.get(this) + padBottom.get(this));
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public InputStream read() {
+        File f = file();
+        if (type == FileType.Classpath
+            || (type == FileType.Internal && (f == null || !f.exists()))
+            || (type == FileType.Local && (f == null || !f.exists()))) {
+          File classpathFile = f;
+          if (classpathFile == null)
+            throw new GdxRuntimeException("File not found: " + file + " (" + type + ")");
+          InputStream input =
+              FileHandle.class.getResourceAsStream("/" + classpathFile.getPath().replace('\\', '/'));
+          if (input == null)
+            throw new GdxRuntimeException("File not found: " + file + " (" + type + ")");
+          return input;
+        }
+        try {
+          File f2 = file();
+          if (f2 == null)
+            throw new GdxRuntimeException("File not found: " + file + " (" + type + ")");
+          return new FileInputStream(f2);
+        } catch (Exception ex) {
+          File f3 = file();
+          if (f3 != null && f3.isDirectory())
+            throw new GdxRuntimeException(
+                "Cannot open a stream to a directory: " + file + " (" + type + ")", ex);
+          throw new GdxRuntimeException("Error reading file: " + file + " (" + type + ")", ex);
+        }
+}
+  ```
+    ]]>
+  </code>
+</response>

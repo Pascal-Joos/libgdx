@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder content(InputStream contentStream, long contentLength) {
+      validate();
+      if (httpRequest == null) {
+          throw new IllegalStateException(
+              "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
+      }
+      httpRequest.setContent(contentStream, contentLength);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

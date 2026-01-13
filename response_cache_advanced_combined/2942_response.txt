@@ -1,0 +1,47 @@
+```xml
+<response>
+    <reason><![CDATA[
+Analyze all paths to the line `keys2.index = 0;`:
+
+1. The method starts:
+   - If `Collections.allocateIterators` is true, the method returns immediately: `return new Keys(this);`
+   - Thus, in that branch we never reach `keys2.index = 0;`
+
+2. Otherwise, `Collections.allocateIterators` is false, and we execute:
+   ```java
+   if (keys1 == null) {
+     keys1 = new Keys(this);
+     keys2 = new Keys(this);
+   }
+   ```
+   - On every path past this if-statement, either:
+     - `keys1` was already non-null, in which case the method had previously executed the same initialization block in an earlier call (because the fields exist at the instance scope, not local scope), or
+     - `keys1` was null, and inside the `if` we assign *both* `keys1` and `keys2` to `new Keys(this)`.
+
+   Therefore, after this `if` finishes, we know `keys2` is non-null on all paths where we continue in the method.
+
+3. Next:
+   ```java
+   if (!keys1.valid) {
+     keys1.index = 0;
+     keys1.valid = true;
+     Nullability.castToNonnull(keys2).valid = false;
+     return keys1;
+   }
+   keys2.index = 0;  // <-- target line
+   ```
+   - If `!keys1.valid` is true, we execute that block and return `keys1` before ever reaching `keys2.index = 0;`.
+   - If we *do* reach `keys2.index = 0;`, control has passed the `if (!keys1.valid)` without returning, and no reassignment to `keys2` has occurred after the earlier initialization.
+   - The only earlier assignment of `keys2` is `keys2 = new Keys(this);`, which is non-null (a direct constructor call).
+   - Also, the earlier line `Nullability.castToNonnull(keys2).valid = false;` would already have thrown or failed if `keys2` were null; but that line is only executed in the `!keys1.valid` branch, which returns and does not lead to `keys2.index = 0;`. Thus it doesn’t affect the nullness at the target line.
+
+4. No other assignments to `keys2` are shown in the method. The method’s logic ensures that:
+   - On any path that reaches `keys2.index = 0;`, `Collections.allocateIterators` is false, and
+   - The `if (keys1 == null)` block has executed at least once previously (either in this call or a prior call) ensuring `keys2` is non-null, and
+   - No subsequent assignment can set `keys2` to null before `keys2.index = 0;` executes.
+
+Under these assumptions (standard Java semantics, `new Keys(this)` never returns null, and `keys2` is a normal field/variable not modified elsewhere concurrently), `keys2` cannot be null at `keys2.index = 0;`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

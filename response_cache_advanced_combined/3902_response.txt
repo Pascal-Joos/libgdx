@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private static void rebuildReferences(final Model model, final Node node) {
+      for (final NodePart mpm : node.parts) {
+        if (!model.materials.contains(mpm.material, true)) model.materials.add(mpm.material);
+        if (!model.meshParts.contains(mpm.meshPart, true)) {
+          model.meshParts.add(mpm.meshPart);
+          final Mesh mesh = mpm.meshPart.mesh;
+          if (mesh != null && !model.meshes.contains(mesh, true)) model.meshes.add(mesh);
+          if (mesh != null) model.manageDisposable(mesh);
+        }
+      }
+      for (final Node child : node.getChildren()) rebuildReferences(model, child);
+}
+  ```
+    ]]>
+  </code>
+</response>

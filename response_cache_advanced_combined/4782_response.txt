@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+      @Override
+      public void read(Json json, JsonValue jsonData) {
+        filename = json.readValue("filename", String.class, jsonData);
+        String className = json.readValue("type", String.class, jsonData);
+        try {
+          type = (Class<T>) ClassReflection.forName(Nullability.castToNonnull(className));
+        } catch (ReflectionException e) {
+          throw new GdxRuntimeException("Class not found: " + className, e);
+        }
+  }
+  ```
+    ]]>
+  </code>
+</response>

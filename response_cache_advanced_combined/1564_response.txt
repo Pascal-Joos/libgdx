@@ -1,0 +1,37 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void rayCast(Ray ray, RayCastResult<T> result) {
+      // Check intersection with node
+      boolean intersect = Intersector.intersectRayBounds(ray, bounds, tmp);
+      if (!intersect) {
+        return;
+      } else {
+        float dst2 = tmp.dst2(ray.origin);
+        if (dst2 >= result.maxDistanceSq) {
+          return;
+        }
+      }
+
+      // Check intersection with children
+      if (!leaf) {
+        if (children == null) return;
+        for (Octree.OctreeNode child : children) {
+          child.rayCast(ray, result);
+        }
+      } else {
+        for (T geometry : geometries) {
+          // Check intersection with geometries
+          float distance = collider.intersects(ray, geometry);
+          if (result.geometry == null || distance < result.distance) {
+            result.geometry = geometry;
+            result.distance = distance;
+          }
+        }
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

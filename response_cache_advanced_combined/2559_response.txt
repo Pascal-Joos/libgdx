@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefHeight() {
+    float first =
+        firstWidget == null
+            ? 0
+            : (firstWidget instanceof Layout
+                ? ((Layout) firstWidget).getPrefHeight()
+                : firstWidget.getHeight());
+    float second =
+        secondWidget == null
+            ? 0
+            : (secondWidget instanceof Layout
+                ? ((Layout) secondWidget).getPrefHeight()
+                : secondWidget.getHeight());
+    if (!vertical) return Math.max(first, second);
+    Drawable handle = style.handle;
+    return first + (handle == null ? 0 : handle.getMinHeight()) + second;
+}
+  ```
+    ]]>
+  </code>
+</response>

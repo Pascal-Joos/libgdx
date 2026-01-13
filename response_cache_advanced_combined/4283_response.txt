@@ -1,0 +1,20 @@
+```xml
+<response>
+    <reason><![CDATA[
+Immediately before the call, there is an explicit null check on `focus.listener`:
+
+    if (focus.listener == null) continue;
+
+Only if this condition is false (i.e., `focus.listener` is non-null) does execution proceed to:
+
+    if (Nullability.castToNonnull(focus.listener).handle(event)) event.handle();
+
+Within the same loop iteration, there are no assignments to `focus.listener`, and no intervening code that could change `focus` or its fields. Thus, for the specific object referenced by `focus` in that iteration, `focus.listener` is guaranteed to be non-null at the point of the call.
+
+The use of `Nullability.castToNonnull(...)` appears to be a helper to satisfy static analysis/annotations, not to modify the value. It simply casts the already-checked non-null reference to a non-null type. Since Java field values cannot spontaneously become null without explicit writes and none occur here, `focus.listener` cannot be null at the call site given this control flow.
+
+Therefore, under normal Java semantics and assuming no undefined/native/agent-based mutation happening concurrently on `focus.listener` between the null check and the call, `focus.listener` cannot be null at the point of `focus.listener.handle(event)`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

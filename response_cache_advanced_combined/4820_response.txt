@@ -1,0 +1,20 @@
+<response>
+  <reason><![CDATA[
+The `parse(String json)` method itself has only one return path:
+
+```java
+public JsonValue parse(String json) {
+    char[] data = json.toCharArray();
+    return parse(data, 0, data.length);
+}
+```
+
+The returned value comes directly from the other overload `parse(char[] data, int offset, int length)`. We have not been given the declaration or implementation of this `parse` method. Its behavior (including whether it may return `null` for some inputs, or ever) directly determines whether `parse(String json)` can return `null` at the call site `new JsonReader().parse(json)`.
+
+Because we are instructed not to assume the behavior of methods whose declarations are not provided, and there is no annotation or contract here indicating non-null, we cannot determine whether `parse(char[], int, int)` might return `null`. Therefore we cannot conclusively say whether `new JsonReader().parse(json)` may be `null` without that method’s declaration.
+  ]]></reason>
+  <success>false</success>
+  <methods>
+    <method>parse</method>
+  </methods>
+</response>

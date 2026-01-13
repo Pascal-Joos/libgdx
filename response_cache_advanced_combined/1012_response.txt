@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  @Override
+  public void allocateChannels() {
+    if (controller.particles != null) {
+      rotationChannel = controller.particles.addChannel(ParticleChannels.Rotation3D);
+      accellerationChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

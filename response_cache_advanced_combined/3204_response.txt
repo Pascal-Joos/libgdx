@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setDimensions(float width, float height, float depth) {
+        if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+        if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+        if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+        spawnWidthValue.setHigh(width);
+        spawnHeightValue.setHigh(height);
+        spawnDepthValue.setHigh(depth);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  @Override
+  public void allocateChannels() {
+    super.allocateChannels();
+    if (controller.particles != null) {
+      directionalVelocityChannel = controller.particles.addChannel(ParticleChannels.Acceleration);
+      positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

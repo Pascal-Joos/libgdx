@@ -1,0 +1,30 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the line in question the code does:
+
+    float[] nonnullScaling = Nullability.castToNonnull(scaling);
+    float startValue = nonnullScaling[startIndex];
+
+Key points:
+
+1. The array being indexed is `nonnullScaling`, not `scaling` directly.
+2. `nonnullScaling` is the result of `Nullability.castToNonnull(scaling)`, which is a cast/utility method whose behavior is not shown.
+3. The name `castToNonnull` strongly suggests it is a helper intended either:
+   - purely as an unchecked cast for a static nullness checker/annotation framework (i.e., it just returns the argument and may throw NPE if it is actually null), or
+   - to validate non-null at runtime and throw if `scaling` is null.
+
+4. In either case, for the array index operation itself (`nonnullScaling[startIndex]`) to succeed:
+   - `nonnullScaling` must not be null. If `scaling` were null and `castToNonnull` simply returns its argument, `nonnullScaling` would be null and the code would throw a `NullPointerException` before reading any element — but the expression would never produce a `float` value from a null array; it would just crash.
+   - If `castToNonnull` has any non-trivial logic, its entire purpose is to enforce or assert that the reference is non-null at this point.
+
+5. Additionally, the expression is of primitive type `float`, so even the *value read* (`startValue`) cannot be null at the language level. The only potential nullness concern is the array reference, and that is funneled through `castToNonnull`.
+
+6. There is no code path in this method that uses `scaling[startIndex]` without first passing `scaling` through `Nullability.castToNonnull`. For the earlier `return` as well, the code uses `Nullability.castToNonnull(scaling)[n - 1]`.
+
+Given the typical semantics and intent of a method named `castToNonnull` in nullness-checked code, plus the fact that primitives cannot be null, there is no valid runtime path in which the array element access successfully occurs and yields a null value. If `scaling` were null at runtime, the code would fail earlier with an exception, not produce a null float.
+
+Therefore, under the intended contract of `Nullability.castToNonnull`, the expression at that line cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

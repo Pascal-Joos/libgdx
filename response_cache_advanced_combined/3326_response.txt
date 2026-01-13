@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Values<V> values() {
+      if (Collections.allocateIterators) return new OrderedMapValues(this);
+      if (values1 == null) {
+        values1 = new OrderedMapValues(this);
+        values2 = new OrderedMapValues(this);
+      }
+      if (!values1.valid) {
+        values1.reset();
+        values1.valid = true;
+        Nullability.castToNonnull(values2).valid = false;
+        return values1;
+      }
+      values2.reset();
+      values2.valid = true;
+      values1.valid = false;
+      return values2;
+  }
+  ```
+    ]]>
+  </code>
+</response>

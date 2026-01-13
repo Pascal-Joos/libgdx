@@ -1,0 +1,20 @@
+<response>
+  <reason><![CDATA[
+The method body is:
+
+```java
+@SuppressWarnings("NullAway") @Override
+public TextureAtlas getAtlas() {
+  return assetManager.get(atlasName, TextureAtlas.class);
+}
+```
+
+The returned value depends entirely on the result of `assetManager.get(...)`. Since the full declaration and behavior of this `get` method are not provided, we cannot determine whether it is guaranteed to return a non-null `TextureAtlas`, may return `null`, or may throw if the asset is missing.
+
+Because the specification requires not to assume behavior of called methods without their declarations, and this method has no other logic or checks that constrain the return value, we must treat the nullability as unknown until we see the declaration of `get`.
+  ]]></reason>
+  <value>UNKNOWN</value>
+  <methods>
+    <method>get</method>
+  </methods>
+</response>

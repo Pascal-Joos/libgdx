@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void prepare() {
+    if (isPrepared) throw new GdxRuntimeException("Already prepared");
+    if (file == null && data == null)
+      throw new GdxRuntimeException("Can only load once from ETC1Data");
+    if (file != null) {
+      data = new ETC1Data(file);
+    }
+    ETC1Data nonnullData = Nullability.castToNonnull(data);
+    width = Nullability.castToNonnull(data).width;
+    height = nonnullData.height;
+    isPrepared = true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,47 @@
+<response>
+  <reason><![CDATA[
+The method `getTileSet(String name)` explicitly returns `null` when no `TiledMapTileSet` in `tilesets` has a name equal to the provided `name`:
+
+```java
+for (TiledMapTileSet tileset : tilesets) {
+  if (name.equals(tileset.getName())) {
+    return tileset;
+  }
+}
+return null;
+```
+
+At the specific call site in question:
+
+```java
+currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
+```
+
+the argument is `frame.getAttribute("Ref")`. From the provided code, there is no guarantee that:
+
+1. Every `Element frame` inside the `"Frames"` element with `frame.getName().equals("TileSheet")` has a `"Ref"` attribute that exactly matches the name of some `TiledMapTileSet` previously loaded into `map.getTileSets()`, and
+2. The collection `tilesets` (the `TiledMapTileSets` instance returned by `map.getTileSets()`) necessarily contains a `TiledMapTileSet` whose `getName()` equals that `"Ref"` string.
+
+No additional constraints, validations, or invariants about the XML content or about `TiledMapTileSet` naming are given that would force a match to exist for every `"Ref"` encountered in a `"TileSheet"` frame element. Because the search is linear over the internal `tilesets` collection and explicitly falls through to `return null` when no match is found, a missing or mismatched `"Ref"` value will cause `getTileSet(...)` to return `null`.
+
+This is consistent with how the same method is used earlier in `loadLayer`:
+
+```java
+currentTileSet = tilesets.getTileSet(currentChild.getAttribute("Ref"));
+if (currentTileSet != null) {
+  firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+}
+```
+
+The explicit null-check indicates that the library author expects `getTileSet(...)` to sometimes return `null`. The same method and pattern of invocation are used for the `frame` case, but there is no extra guarantee here that would remove the possibility of a null result.
+
+Therefore, at the call site
+
+```java
+currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
+```
+
+`currentTileSet` can be assigned `null` if no tileset name matches the `"Ref"` attribute from `frame`.
+  ]]></reason>
+  <value>YES</value>
+</response>

@@ -1,0 +1,10 @@
+<response>
+    <reason><![CDATA[
+Based on the description, initializer methods for NullAway are typically:
+- Well-known framework lifecycle methods (e.g., onCreate, init), or
+- Methods whose names start with "init" or "initialize" and are not setters.
+
+The given method is named allocParticlesData, does not start with "init" or "initialize", and is not one of the known framework lifecycle initializers. Although it does allocate/initialize fields, by the naming and conventions you've defined it does not qualify as an initializer method for NullAway purposes. It instead looks like a regular configuration/allocation method.
+    ]]></reason>
+    <value>NO</value>
+</response>

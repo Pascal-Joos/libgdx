@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the method
+
+    public static boolean overlapConvexPolygons(
+            float[] verts1, float[] verts2, MinimumTranslationVector mtv) {
+        return overlapConvexPolygons(verts1, 0, verts1.length, Nullability.castToNonnull(verts2), 0, verts2.length, mtv);
+    }
+
+the expression in question is the first argument of the inner call:
+
+    return overlapConvexPolygons(verts1, 0, verts1.length, ...);
+
+This inner call uses `verts1` exactly as passed into the outer method; there is no reassignment, no null check, and no transformation of `verts1` between the method parameter and its use in the return statement.
+
+From the code shown:
+
+- `verts1` is a method parameter of type `float[]`.
+- There is no indication that the caller is prevented (by type system, annotations, or explicit checks) from passing `null` as `verts1`.
+- The only non-null enforcement in the shown code is for `verts2`, via `Nullability.castToNonnull(verts2)`. No analogous safeguard exists for `verts1`.
+- The semantics or contract of the *other* `overlapConvexPolygons` overload do not affect whether the *expression* `verts1` at the call site can be null; they only affect what happens if a null is passed (likely an NPE).
+
+Therefore, on some valid code path (a caller passing `null` for `verts1`), the expression `verts1` at this call site can indeed be `null`. There is nothing in the provided snippet that rules out this possibility.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

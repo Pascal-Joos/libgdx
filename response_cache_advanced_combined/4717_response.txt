@@ -1,0 +1,19 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the given method, the local variable `manager` is assigned from the field `this.manager`:
+
+    TooltipManager manager = this.manager;
+    if (manager == null) return;
+
+Immediately after this assignment, the code checks `if (manager == null) return;`. Therefore, on all code paths that reach the line
+
+    container.setSize(manager.maxWidth, Integer.MAX_VALUE);
+
+the `manager` variable is guaranteed to be non-null, because execution would have already returned otherwise.
+
+This reasoning depends only on standard Java control flow and the fact that `manager` is a local variable that cannot be modified between the null-check and the `setSize` call. No intervening method calls occur that might reassign or shadow `manager`. Thus, the expression `manager` at `container.setSize(manager.maxWidth, Integer.MAX_VALUE);` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

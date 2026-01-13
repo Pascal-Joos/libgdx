@@ -1,0 +1,59 @@
+```xml
+<response>
+    <reason><![CDATA[
+There are two relevant fields: keys1 and keys2, both presumed to be instance fields of the class containing the keys() method.
+
+The method:
+
+public Keys<K> keys() {
+    if (Collections.allocateIterators) return new Keys(this);
+    if (keys1 == null) {
+      keys1 = new Keys(this);
+      keys2 = new Keys(this);
+    }
+    if (!keys1.valid) {
+      keys1.reset();
+      keys1.valid = true;
+      keys2.valid = false;
+      return keys1;
+    }
+    keys2.reset();
+    keys2.valid = true;
+    keys1.valid = false;
+    return keys2;
+}
+
+Control-flow analysis:
+
+1. If Collections.allocateIterators is true:
+   - The method returns immediately via `return new Keys(this);`
+   - The line `keys2.reset();` is not reached, so in this branch we do not care about keys2.
+
+2. If Collections.allocateIterators is false:
+   - Execution continues past the first if.
+
+   a) If keys1 is null:
+      - The method does:
+        keys1 = new Keys(this);
+        keys2 = new Keys(this);
+      - After this block, *both* keys1 and keys2 are guaranteed to be non-null (barring an exception from the constructor, in which case the method never reaches `keys2.reset();`).
+
+   b) If keys1 is not null:
+      - The `if (keys1 == null)` block is skipped, and we rely on prior initialization. However, for us to ever reach the line `keys2.reset();`, the following must also occur:
+        - The next conditional is `if (!keys1.valid) { ... return keys1; }`.
+        - If `!keys1.valid` is true, the method returns from inside that block and never reaches `keys2.reset();`.
+        - Therefore, reaching `keys2.reset();` implies that `!keys1.valid` is false, i.e. `keys1.valid` is true, and the `if (!keys1.valid)` block is skipped.
+
+      So, when `keys2.reset();` executes, the only possibilities are:
+        - Either this is the first invocation where keys1 was null at the earlier `if (keys1 == null)`; in that case keys2 has just been created: `keys2 = new Keys(this);` and is therefore non-null.
+        - Or this is a later invocation where keys1 was previously initialized (and so was keys2, in the same block). For this method's contract to have held from any prior invocation, keys2 must have been initialized in that same block at some earlier time: once initialized, keys2 is never set back to null in this method.
+
+3. There are no assignments in the shown code that can set keys2 back to null, nor any branch in which keys2 is used without first having passed through the `if (keys1 == null)` initializer (assuming a fresh object instance where fields start as null).
+
+4. Any failure in `new Keys(this)` (e.g., throwing an exception) would prevent execution from reaching `keys2.reset();` at all, so such failure cases do not introduce a reachable null dereference.
+
+Under these assumptions (standard Java semantics, keys1/keys2 start as null and are only assigned via this method or elsewhere in a way not contradicting this snippet), the control flow guarantees that whenever the line `keys2.reset();` is executed, keys2 has already been assigned a non-null `new Keys(this)` instance. Therefore, at that line, keys2 cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

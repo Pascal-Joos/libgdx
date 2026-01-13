@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void goEnd(boolean jump) {
+      if (text == null) return;
+      cursor = text.length();
+  }
+  ```
+    ]]>
+  </code>
+</response>

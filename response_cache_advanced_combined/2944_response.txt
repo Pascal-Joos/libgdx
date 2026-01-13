@@ -1,0 +1,75 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all paths that reach the final `return keys2;`:
+
+Method:
+
+public Keys<K> keys() {
+    if (Collections.allocateIterators) return new Keys(this);
+    if (keys1 == null) {
+        keys1 = new Keys(this);
+        keys2 = new Keys(this);
+    }
+    if (!keys1.valid) {
+        keys1.index = 0;
+        keys1.valid = true;
+        Nullability.castToNonnull(keys2).valid = false;
+        return keys1;
+    }
+    Nullability.castToNonnull(keys2).index = 0;
+    Nullability.castToNonnull(keys2).valid = true;
+    keys1.valid = false;
+    return keys2;
+}
+
+1. First branch:
+   - If `Collections.allocateIterators` is true, we return `new Keys(this)` and never reach `return keys2;`.
+
+2. Initialization branch:
+   - If `keys1 == null`, then:
+        keys1 = new Keys(this);
+        keys2 = new Keys(this);
+     After this executes, both `keys1` and `keys2` are non-null.
+
+3. Second conditional:
+   - We check `if (!keys1.valid)`. There are two subpaths:
+     a) If `!keys1.valid` is true:
+        - We set some fields and return `keys1`.
+        - `return keys2;` is not reached.
+     b) If `!keys1.valid` is false (i.e., `keys1.valid` is true):
+        - We execute:
+              Nullability.castToNonnull(keys2).index = 0;
+              Nullability.castToNonnull(keys2).valid = true;
+              keys1.valid = false;
+              return keys2;
+        - This is the path that leads to `return keys2;`.
+
+4. Can `keys2` be null on the path that reaches `return keys2;`?
+
+   - If `keys1` was initially null:
+       The `if (keys1 == null)` block executes first, assigning
+           keys1 = new Keys(this);
+           keys2 = new Keys(this);
+       So `keys2` is definitely non-null before any later use or return.
+
+   - If `keys1` was initially non-null:
+       Then we skip the `if (keys1 == null)` block entirely. In that case, for `keys2` to be null, it must have been left uninitialized or explicitly set to null elsewhere.
+       However, we know the following:
+       - The method invokes `Nullability.castToNonnull(keys2)` just before the final return, and uses its result to dereference `.index` and `.valid`.
+       - For this code to be sound (and not immediately fail at runtime), `Nullability.castToNonnull(keys2)` is intended to enforce or rely on the invariant that `keys2` is non-null at that point.
+       - In addition, in any typical usage pattern of such paired iterator fields (keys1/keys2), both are created together and kept non-null; `keys2` is not conditionally created or cleared in the shown method.
+
+   Since within the body of this method:
+   - Every path that can reach `return keys2;` either:
+       • Has just executed `keys2 = new Keys(this);` (if `keys1` was null), or
+       • Must rely on the invariant that `keys2` has been previously initialized and not set to null, as evidenced by the call to `Nullability.castToNonnull(keys2)` and field dereferences off its result.
+   - There is no assignment in this method that can set `keys2` back to null.
+   - The final `return keys2;` occurs immediately after `Nullability.castToNonnull(keys2)` is used to dereference `keys2`, which would not be valid if `keys2` were allowed to be null here.
+
+Therefore, under the method's internal logic and its use of `Nullability.castToNonnull`, there is no execution path within this method that can reach `return keys2;` with `keys2` being null.
+
+]]></reason>
+    <value>NO</value>
+</response>
+```

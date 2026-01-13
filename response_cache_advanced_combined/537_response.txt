@@ -1,0 +1,30 @@
+<response>
+  <reason><![CDATA[
+The implementation of `findByUsage(int usage)` clearly returns `null` whenever no `VertexAttribute` in the `VertexAttributes` collection has a `usage` equal to the provided argument:
+
+```java
+public VertexAttribute findByUsage(int usage) {
+    int len = size();
+    for (int i = 0; i < len; i++) if (get(i).usage == usage) return get(i);
+    return null;
+}
+```
+
+At the call site in `MeshBuilder.begin`:
+
+```java
+a = attributes.findByUsage(Usage.TextureCoordinates);
+uvOffset = a == null ? -1 : a.offset / 4;
+```
+
+the code explicitly handles the case where `findByUsage(Usage.TextureCoordinates)` returns `null` by using `-1` as `uvOffset`. This indicates that the library itself expects that the `Usage.TextureCoordinates` attribute may be absent from `attributes`.
+
+From the provided code, there is no guarantee that any `VertexAttributes` instance (including the specific `CPU_ATTRIBUTES` you mention) must contain an attribute with `usage == Usage.TextureCoordinates`. The presence or absence of that attribute depends entirely on how that `VertexAttributes` object was created, and no constraints or invariants about that construction are shown in the supplied definitions.
+
+Because:
+- `findByUsage` returns `null` when no matching `usage` is found, and
+- nothing in the given code ensures that the `CPU_ATTRIBUTES` instance always includes a `TextureCoordinates` attribute,
+
+the result of `CPU_ATTRIBUTES.findByUsage(Usage.TextureCoordinates)` can be `null` at this call site.]]></reason>
+  <value>YES</value>
+</response>

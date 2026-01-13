@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getSpaceTop() {
+    if (actor == null) throw new IllegalStateException("actor cannot be null.");
+    Value spaceTop = this.spaceTop;
+    if (spaceTop == null) throw new IllegalStateException("spaceTop cannot be null.");
+    return spaceTop.get(actor);
+}
+  ```
+    ]]>
+  </code>
+</response>

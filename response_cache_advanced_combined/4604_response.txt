@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getKnobDrawable() {
+        ProgressBarStyle style = this.style;
+        if (style == null) throw new IllegalStateException("style cannot be null.");
+        if (disabled && Nullability.castToNonnull(style).disabledKnob != null) return Nullability.castToNonnull(style).disabledKnob;
+        return Nullability.castToNonnull(style).knob;
+  }
+  ```
+    ]]>
+  </code>
+</response>

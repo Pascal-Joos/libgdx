@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void write(Json json) {
+        if (data == null) {
+            data = new Array<SaveData>(true, 3, SaveData.class);
+        }
+        json.writeValue("unique", uniqueData, ObjectMap.class);
+        json.writeValue("data", Nullability.castToNonnull(data), Array.class, SaveData.class);
+        json.writeValue("assets", sharedAssets.toArray(AssetData.class), AssetData[].class);
+        json.writeValue("resource", resource, null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

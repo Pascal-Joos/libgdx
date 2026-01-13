@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void killParticles(int startIndex, int count) {
+      if (modelChannel == null) return;
+      Object[] data = Nullability.castToNonnull(modelChannel).data;
+      for (int i = startIndex, c = startIndex + count; i < c; ++i) {
+        pool.free(data[i]);
+        data[i] = null;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

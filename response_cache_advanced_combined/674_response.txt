@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setU(float u) {
+      if (texture == null) throw new IllegalStateException("texture cannot be null.");
+      this.u = u;
+      regionWidth = Math.round(Math.abs(u2 - u) * texture.getWidth());
+  }
+  ```
+    ]]>
+  </code>
+</response>

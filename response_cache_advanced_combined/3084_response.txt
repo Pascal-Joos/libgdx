@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void dispose() {
+    if (emitter != null) emitter.dispose();
+    for (Influencer influencer : influencers) influencer.dispose();
+}
+  ```
+    ]]>
+  </code>
+</response>

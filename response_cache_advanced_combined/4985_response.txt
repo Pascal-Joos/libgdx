@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void text( String text) {
+    if (current != null) {
+      String existing = Nullability.castToNonnull(current).getText();
+      Nullability.castToNonnull(current).setText(existing != null ? existing + text : text);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

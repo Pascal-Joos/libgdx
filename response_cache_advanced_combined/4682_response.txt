@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPrefHeight() {
+              if (style == null) throw new IllegalArgumentException("Missing LabelStyle font.");
+              if (style.font == null) throw new IllegalArgumentException("Missing LabelStyle font.");
+              if (prefSizeInvalid) scaleAndComputePrefSize();
+              float descentScaleCorrection = 1;
+              BitmapFont font = Nullability.castToNonnull(style.font);
+              if (fontScaleChanged) descentScaleCorrection = fontScaleY / font.getScaleY();
+              float height = prefHeight - font.getDescent() * descentScaleCorrection * 2;
+              Drawable background = style.background;
+              if (background != null)
+                height =
+                    Math.max(
+                        height + background.getTopHeight() + background.getBottomHeight(),
+                        background.getMinHeight());
+              return height;
+}
+  ```
+    ]]>
+  </code>
+</response>

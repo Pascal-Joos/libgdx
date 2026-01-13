@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static boolean ctrl() {
+      Input input = Gdx.input;
+      if (input == null) return false;
+      if (isMac) return input.isKeyPressed(Keys.SYM);
+      else
+        return input.isKeyPressed(Keys.CONTROL_LEFT)
+            || input.isKeyPressed(Keys.CONTROL_RIGHT);
+}
+  ```
+    ]]>
+  </code>
+</response>

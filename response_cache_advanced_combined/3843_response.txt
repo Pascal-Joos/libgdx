@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the line in question:
+
+    if (!region.name.equals(name)) continue;
+
+there is a preceding null check on the same field in the same loop iteration:
+
+    if (region.name == null || !region.name.equals(name)) continue;
+
+Java’s short-circuit evaluation semantics guarantee that if `region.name` is null, the left-hand side of the `||` (`region.name == null`) evaluates to true, and the right-hand side (`!region.name.equals(name)`) is not evaluated at all. In that case, the `continue` executes and the loop moves to the next iteration, so execution never reaches the later line using `region.name.equals(name)`.
+
+The only way for control to flow past the guard
+
+    if (region.name == null || !region.name.equals(name)) continue;
+
+is if `region.name != null` and `region.name.equals(name)` is true. Thus, at the point where the later line
+
+    if (!region.name.equals(name)) continue;
+
+is executed, `region.name` is guaranteed to be non-null in that same iteration of the loop.
+
+Assuming no concurrent mutation of `region.name` between these two checks and no use of reflection or unsafe operations that could change `region.name` to null between them, `region.name` cannot be null at the second usage.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

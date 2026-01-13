@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Stage() {
+    this(
+        new ScalingViewport(
+            Scaling.stretch,
+            Gdx.graphics != null ? Gdx.graphics.getWidth() : 0,
+            Gdx.graphics != null ? Gdx.graphics.getHeight() : 0,
+            new OrthographicCamera()),
+        new SpriteBatch());
+    ownsBatch = true;
+}
+  ```
+    ]]>
+  </code>
+</response>

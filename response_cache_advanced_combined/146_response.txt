@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void unsafeSetWrap( TextureWrap u,  TextureWrap v, boolean force) {
+    if (Gdx.gl != null) {
+      if (u != null && (force || uWrap != u)) {
+        Gdx.gl.glTexParameteri(glTarget, GL20.GL_TEXTURE_WRAP_S, u.getGLEnum());
+        uWrap = u;
+      }
+      if (v != null && (force || vWrap != v)) {
+        Gdx.gl.glTexParameteri(glTarget, GL20.GL_TEXTURE_WRAP_T, v.getGLEnum());
+        vWrap = v;
+      }
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SaveData createSaveData() {
+      SaveData saveData = new SaveData(this);
+      Nullability.castToNonnull(data).add(saveData);
+      return saveData;
+  }
+  ```
+    ]]>
+  </code>
+</response>

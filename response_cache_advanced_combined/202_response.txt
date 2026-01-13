@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public VertexBufferObjectWithVAO(
+      boolean isStatic, ByteBuffer unmanagedBuffer, VertexAttributes attributes) {
+    this.isStatic = isStatic;
+    this.attributes = attributes;
+
+    byteBuffer = unmanagedBuffer;
+    ownsBuffer = false;
+    buffer = byteBuffer.asFloatBuffer();
+    ((Buffer) buffer).flip();
+    ((Buffer) byteBuffer).flip();
+    if (Gdx.gl20 == null) return;
+    bufferHandle = Gdx.gl20.glGenBuffer();
+    usage = isStatic ? GL20.GL_STATIC_DRAW : GL20.GL_DYNAMIC_DRAW;
+    createVAO();
+}
+  ```
+    ]]>
+  </code>
+</response>

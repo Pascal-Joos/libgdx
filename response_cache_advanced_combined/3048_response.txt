@@ -1,0 +1,29 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    if (jsonData == null) return null;
+
+This line is checking whether the parameter `jsonData` is null. Because `jsonData` is a method parameter and there is no annotation or other contract shown that forbids it from being null, the caller is free to pass `null` to this method:
+
+    public @Null <T> T readValue(
+           @Null Class<T> type,
+           @Null Class elementType,
+           JsonValue jsonData) {
+
+Unlike `type` and `elementType`, `jsonData` is not annotated with `@Null` or `@NotNull` (or any similar annotation), so from this code alone there is no guarantee that `jsonData` is non-null on entry.
+
+Control-flow-wise:
+
+- `jsonData` is never assigned a new value before this line; it is still exactly whatever the caller supplied.
+- There are no earlier checks or preconditions that would ensure `jsonData` is non-null.
+- Therefore, if the caller passes `null`, the condition `jsonData == null` evaluates to true, and the method returns `null`.
+
+Thus, along some valid call paths (those where the caller supplies a null `jsonData`), the condition is true and the method returns null at that line. The nullness being considered is simply the possibility that `jsonData` is null at that check, and that is clearly possible.
+
+No additional information about external contracts or frameworks was provided that would rule out `null` being passed for `jsonData`, so based solely on the given code, it must be considered nullable at that point.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

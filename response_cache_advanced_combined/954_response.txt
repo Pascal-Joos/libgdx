@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public <T extends Channel> T addChannel( ChannelDescriptor channelDescriptor) {
+      return addChannel(Nullability.castToNonnull(channelDescriptor), null);
+  }
+  ```
+    ]]>
+  </code>
+</response>

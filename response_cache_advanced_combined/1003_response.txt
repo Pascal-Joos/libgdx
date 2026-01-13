@@ -1,0 +1,50 @@
+<response>
+  <reason><![CDATA[
+Within `ParallelArray.getChannel`, `null` is returned when no existing `Channel` in `arrays` has the requested descriptor id. So in general it *can* return null.
+
+The specific call site in question is inside `ParticleController.calculateBoundingBox()`:
+
+```java
+protected void calculateBoundingBox() {
+    boundingBox.clr();
+    FloatChannel positionChannel = particles.getChannel(ParticleChannels.Position);
+    for (int pos = 0, c = positionChannel.strideSize * particles.size;
+         pos < c;
+         pos += positionChannel.strideSize) {
+      boundingBox.ext(
+          positionChannel.data[pos + ParticleChannels.XOffset],
+          positionChannel.data[pos + ParticleChannels.YOffset],
+          positionChannel.data[pos + ParticleChannels.ZOffset]);
+    }
+}
+```
+
+There is no null‑check here, so the safety of this call depends entirely on whether a `Position` channel is guaranteed to have been added to `particles` before `calculateBoundingBox()` is called.
+
+From the provided call chain:
+
+- Some renderers (`BillboardRenderer`, `PointSpriteRenderer`) do allocate a `Position` channel via:
+  ```java
+  renderData.positionChannel = controller.particles.addChannel(ParticleChannels.Position);
+  ```
+  In those cases, `getChannel(ParticleChannels.Position)` will return a non‑null channel after `allocateChannels()` runs.
+
+- However, there is no global guarantee shown that:
+  1. One of these specific renderers is always in use, and
+  2. Its `allocateChannels()` has been called before `getBoundingBox()` / `calculateBoundingBox()`.
+
+Other classes (e.g., `DynamicsInfluencer`) may conditionally allocate position channels, but again this depends on whether those influencers are actually present and initialized on the `ParticleController` in question.
+
+Given the instructions:
+- We must not assume behavior of methods whose declarations are not fully provided (e.g., lifecycle of `ParticleController`, when `allocateChannels()` and `init()` are called, or whether some renderer is always attached).
+- We only know that `getChannel` returns `null` when no matching channel exists in `arrays`, and nothing in the shown code forces that a `Position` channel must exist at the time `calculateBoundingBox()` runs.
+
+Therefore, at this specific call site:
+
+```java
+FloatChannel positionChannel = particles.getChannel(ParticleChannels.Position);
+```
+
+it is entirely possible that no `Position` channel has yet been allocated on `particles`, in which case the loop in `getChannel` will not find a matching `Channel` and will hit `return null;`. Hence this invocation *can* observe a `null` result.]]></reason>
+  <value>YES</value>
+</response>

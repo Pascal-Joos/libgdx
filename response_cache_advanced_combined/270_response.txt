@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static float getMaxAnisotropicFilterLevel() {
+    if (maxAnisotropicFilterLevel > 0) return maxAnisotropicFilterLevel;
+    if (Gdx.graphics != null && Gdx.graphics.supportsExtension("GL_EXT_texture_filter_anisotropic")) {
+      FloatBuffer buffer = BufferUtils.newFloatBuffer(16);
+      ((Buffer) buffer).position(0);
+      ((Buffer) buffer).limit(buffer.capacity());
+      Gdx.gl20.glGetFloatv(GL20.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, buffer);
+      return maxAnisotropicFilterLevel = buffer.get(0);
+    }
+    return maxAnisotropicFilterLevel = 1f;
+}
+  ```
+    ]]>
+  </code>
+</response>

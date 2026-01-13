@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private float layout(Array<N> nodes, float indent, float y, float plusMinusWidth) {
+      float ySpacing = this.ySpacing;
+      float iconSpacingLeft = this.iconSpacingLeft;
+      float spacing = iconSpacingLeft + iconSpacingRight;
+      for (int i = 0, n = nodes.size; i < n; i++) {
+        N node = nodes.get(i);
+        float x = indent + plusMinusWidth;
+        if (node.icon != null) x += spacing + node.icon.getMinWidth();
+        else x += iconSpacingLeft;
+        if (node.actor instanceof Layout) ((Layout) node.actor).pack();
+        y -= node.getHeight();
+        if (node.actor != null) node.actor.setPosition(x, y);
+        y -= ySpacing;
+        if (node.expanded) y = layout(node.children, indent + indentSpacing, y, plusMinusWidth);
+      }
+      return y;
+  }
+  ```
+    ]]>
+  </code>
+</response>

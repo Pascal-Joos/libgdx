@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public UBJsonWriter value(String value) throws IOException {
+    checkName();
+    byte[] bytes = Nullability.castToNonnull(value).getBytes("UTF-8");
+    out.writeByte('S');
+    if (bytes.length <= Byte.MAX_VALUE) {
+      out.writeByte('i');
+      out.writeByte(bytes.length);
+    } else if (bytes.length <= Short.MAX_VALUE) {
+      out.writeByte('I');
+      out.writeShort(bytes.length);
+    } else {
+      out.writeByte('l');
+      out.writeInt(bytes.length);
+    }
+    out.write(bytes);
+    return this;
+}
+  ```
+    ]]>
+  </code>
+</response>

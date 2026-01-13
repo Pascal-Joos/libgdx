@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is delete, which neither matches any known framework lifecycle/initialization method (e.g., onCreate, init) nor starts with "init" or "initialize". It also does not follow the intended use of initializer methods in NullAway (documented setup hooks guaranteed to run before other methods). Instead, this method performs a text modification operation and is semantically closer to a regular mutator/editor than to an initialization hook. Therefore, it should not be treated as an initializer method under the described criteria.
+    ]]></reason>
+    <value>NO</value>
+</response>

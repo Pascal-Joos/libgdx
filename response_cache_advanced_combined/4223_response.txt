@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void update(float percent) {
+      if (target == null) return;
+      float rotation;
+      if (percent == 0) rotation = start;
+      else if (percent == 1) rotation = end;
+      else if (useShortestDirection) rotation = MathUtils.lerpAngleDeg(this.start, this.end, percent);
+      else rotation = start + (end - start) * percent;
+      target.setRotation(rotation);
+  }
+  ```
+    ]]>
+  </code>
+</response>

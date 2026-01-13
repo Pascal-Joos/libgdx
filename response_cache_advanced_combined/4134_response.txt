@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setTexture(Texture texture) {
+        if (renderable.material == null) return;
+        TextureAttribute attribute =
+            (TextureAttribute) Nullability.castToNonnull(renderable.material).get(TextureAttribute.Diffuse);
+        if (attribute == null) return;
+        attribute.textureDescription.texture = texture;
+}
+  ```
+    ]]>
+  </code>
+</response>

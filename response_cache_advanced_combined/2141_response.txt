@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPadY() {
+      Value padTop = this.padTop;
+      Value padBottom = this.padBottom;
+      if (padTop == null) padTop = Value.zero;
+      if (padBottom == null) padBottom = Value.zero;
+      return padTop.get(actor) + padBottom.get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

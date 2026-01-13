@@ -1,0 +1,40 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Mesh(
+      VertexDataType type,
+      boolean isStatic,
+      int maxVertices,
+      int maxIndices,
+      VertexAttributes attributes) {
+    switch (type) {
+      case VertexBufferObject:
+        vertices = new VertexBufferObject(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObject(isStatic, maxIndices);
+        isVertexArray = false;
+        break;
+      case VertexBufferObjectSubData:
+        vertices = new VertexBufferObjectSubData(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObjectSubData(isStatic, maxIndices);
+        isVertexArray = false;
+        break;
+      case VertexBufferObjectWithVAO:
+        vertices = new VertexBufferObjectWithVAO(isStatic, maxVertices, attributes);
+        indices = new IndexBufferObjectSubData(isStatic, maxIndices);
+        isVertexArray = false;
+        break;
+      case VertexArray:
+      default:
+        vertices = new VertexArray(maxVertices, attributes);
+        indices = new IndexArray(maxIndices);
+        isVertexArray = true;
+        break;
+    }
+
+    if (Gdx.app != null) addManagedMesh(Gdx.app, this);
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,73 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void draw(Batch batch, float parentAlpha) {
+    validate();
+
+    drawBackground(batch, parentAlpha);
+
+    if (style.font == null) return;
+    BitmapFont font = style.font;
+    Drawable selectedDrawable = style.selection;
+    Color fontColorSelected = style.fontColorSelected;
+    Color fontColorUnselected = style.fontColorUnselected;
+
+    Color color = getColor();
+    batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+
+    float x = getX(), y = getY(), width = getWidth(), height = getHeight();
+    float itemY = height;
+
+    Drawable background = style.background;
+    if (background != null) {
+      float leftWidth = background.getLeftWidth();
+      x += leftWidth;
+      itemY -= background.getTopHeight();
+      width -= leftWidth + background.getRightWidth();
+    }
+
+    float textOffsetX = selectedDrawable.getLeftWidth(),
+        textWidth = width - textOffsetX - selectedDrawable.getRightWidth();
+    float textOffsetY = selectedDrawable.getTopHeight() - font.getDescent();
+
+    font.setColor(
+        fontColorUnselected.r,
+        fontColorUnselected.g,
+        fontColorUnselected.b,
+        fontColorUnselected.a * parentAlpha);
+    for (int i = 0; i < items.size; i++) {
+      if (cullingArea == null
+          || (itemY - itemHeight <= cullingArea.y + cullingArea.height && itemY >= cullingArea.y)) {
+        T item = items.get(i);
+        boolean selected = selection.contains(item);
+        Drawable drawable = null;
+        if (pressedIndex == i && style.down != null) drawable = style.down;
+        else if (selected) {
+          drawable = selectedDrawable;
+          font.setColor(
+              fontColorSelected.r,
+              fontColorSelected.g,
+              fontColorSelected.b,
+              fontColorSelected.a * parentAlpha);
+        } else if (overIndex == i && style.over != null) //
+        drawable = style.over;
+        drawSelection(batch, drawable, x, y + itemY - itemHeight, width, itemHeight);
+        drawItem(batch, font, i, item, x + textOffsetX, y + itemY - textOffsetY, textWidth);
+        if (selected) {
+          font.setColor(
+              fontColorUnselected.r,
+              fontColorUnselected.g,
+              fontColorUnselected.b,
+              fontColorUnselected.a * parentAlpha);
+        }
+      } else if (itemY < cullingArea.y) {
+        break;
+      }
+      itemY -= itemHeight;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

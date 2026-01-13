@@ -1,0 +1,90 @@
+```xml
+<response>
+    <reason><![CDATA[
+Analyze all possible control-flow paths to the line `entries2.valid = false;`.
+
+Method:
+
+public Entries<K, V> entries() {
+      if (Collections.allocateIterators) return new OrderedMapEntries(this);
+      if (entries1 == null) {
+        entries1 = new OrderedMapEntries(this);
+        entries2 = new OrderedMapEntries(this);
+      }
+      if (!entries1.valid) {
+        entries1.reset();
+        entries1.valid = true;
+        entries2.valid = false;
+        return entries1;
+      }
+      Nullability.castToNonnull(entries2).reset();
+      Nullability.castToNonnull(entries2).valid = true;
+      entries1.valid = false;
+      return entries2;
+}
+
+Key observations:
+
+1. Early return branch:
+   - If `Collections.allocateIterators` is true, the method returns immediately:
+     `return new OrderedMapEntries(this);`
+   - In this branch, the body where `entries2.valid = false;` occurs is not executed at all, so it does not affect nullability at that line.
+
+2. Initialization branch:
+   - If the method does not return early, execution continues.
+   - Next:
+     `if (entries1 == null) {`
+       `entries1 = new OrderedMapEntries(this);`
+       `entries2 = new OrderedMapEntries(this);`
+     `}`
+   - There are only two possibilities when we reach the `if (!entries1.valid)` block:
+
+     a) `entries1` was null on entry:
+        - Then the `if (entries1 == null)` block executes and sets:
+          - `entries1` to a new non-null `OrderedMapEntries(this)`
+          - `entries2` to a new non-null `OrderedMapEntries(this)`
+        - Thus, after this block, `entries2` is definitely non-null.
+
+     b) `entries1` was not null on entry:
+        - The `if (entries1 == null)` block is skipped.
+        - In this case, `entries2` is a field that would have been initialized in some prior call or in the constructor. For this specific method execution, the only way for `entries2` to be null at this point would be:
+          - It was never initialized anywhere else, *and*
+          - `entries1` was non-null from before, *and*
+          - We are now entering this `if (!entries1.valid)` block.
+
+        However, in *this* method, there is a stronger guarantee: any first-time call with `entries1` null will also initialize `entries2`. For later calls, we rely on the class invariant that `entries2` has not been set to null elsewhere (it is only assigned non-null `new OrderedMapEntries(this)` in this snippet). There’s no assignment in this method that ever sets `entries2` back to null.
+
+3. Path to the line in question:
+   - The line in question is inside:
+
+     if (!entries1.valid) {
+       entries1.reset();
+       entries1.valid = true;
+       entries2.valid = false;
+       return entries1;
+     }
+
+   - To reach `entries2.valid = false;`, the following must be true:
+
+     - We did *not* return from the first line (so `Collections.allocateIterators` is false).
+     - We got past `if (entries1 == null)` either:
+       • After initializing `entries1` and `entries2` (case a), or
+       • With an already-existing `entries1` and correspondingly already-existing `entries2` (case b, by class invariant).
+     - We are executing the `if (!entries1.valid)` branch.
+
+   - In case (a), `entries2` has just been assigned `new OrderedMapEntries(this)`, so it is definitely non-null.
+
+   - In case (b), within the confines of this method, there is no path that assigns `entries2` to null. The only explicit assignments shown are to new `OrderedMapEntries(this)`, which by construction are non-null objects. Thus, assuming normal Java semantics and no reflection or unsafe mutation external to this method, `entries2` is non-null on all paths reaching `entries2.valid = false;`.
+
+4. Comparison with the later code:
+   - After the `if (!entries1.valid)` block, the method uses:
+     `Nullability.castToNonnull(entries2).reset();`
+     `Nullability.castToNonnull(entries2).valid = true;`
+   - This indicates a design assumption or contract: `entries2` is expected to be non-null at that point as well. That same assumption applies in the earlier branch where `entries2.valid = false;` is called directly without a null-check.
+
+Conclusion:
+
+Within this method’s logic and under standard Java field semantics (no outside interference setting `entries2` to null and `new OrderedMapEntries(this)` never returning null), every execution path that reaches `entries2.valid = false;` must have previously assigned a non-null value to `entries2`. Therefore, at that line, `entries2` cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

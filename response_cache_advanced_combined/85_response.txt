@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private static FileHandle[] getInternalHandles(String... internalPaths) {
+      if (Gdx.files == null) return new FileHandle[0];
+      FileHandle[] handles = new FileHandle[internalPaths.length];
+      for (int i = 0; i < internalPaths.length; i++) {
+        handles[i] = Nullability.castToNonnull(Gdx.files).internal(internalPaths[i]);
+      }
+      return handles;
+  }
+  ```
+    ]]>
+  </code>
+</response>

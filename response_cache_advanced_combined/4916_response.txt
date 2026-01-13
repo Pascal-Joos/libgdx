@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void end() {
+      if (!applying) throw new GdxRuntimeException("You must call begin() first");
+      for (Entry<Node, Transform> entry : transforms.entries()) {
+        Node node = entry.key;
+        if (node == null) continue;
+        entry.value.toMatrix4(node.localTransform);
+        transformPool.free(entry.value);
+      }
+      transforms.clear();
+      target.calculateTransforms();
+      applying = false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

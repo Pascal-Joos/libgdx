@@ -1,0 +1,16 @@
+<response>
+  <reason><![CDATA[
+The method body is:
+
+public SliderStyle getStyle() {
+    return (SliderStyle) super.getStyle();
+}
+
+The returned value depends entirely on the result of super.getStyle(). Since the declaration and implementation of super.getStyle() have not been provided, we cannot determine whether it may return null. A cast does not change nullability; if super.getStyle() can return null, then this method can also return null.
+
+Because super.getStyle() directly determines the return value and its implementation is unknown, we must inspect its declaration/implementation before concluding whether this method can return null.]]></reason>
+  <value>UNKNOWN</value>
+  <methods>
+    <method>getStyle</method>
+  </methods>
+</response>

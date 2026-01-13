@@ -1,0 +1,60 @@
+<response>
+  <reason><![CDATA[
+At the specific call site in question, `element.getChildByName("Description")` occurs in `TideMapLoader.loadTileSheet`:
+
+```java
+private void loadTileSheet(
+      TiledMap map, Element element, FileHandle tideFile, ImageResolver imageResolver) {
+    if (element.getName().equals("TileSheet")) {
+      String id = element.getAttribute("Id");
+      String description = element.getChildByName("Description").getText();
+      String imageSource = element.getChildByName("ImageSource").getText();
+      ...
+```
+
+We must determine whether the *result* of `element.getChildByName("Description")` can be null, not whether the subsequent `.getText()` call is safe.
+
+The implementation of `getChildByName` is:
+
+```java
+public @Null Element getChildByName(String name) {
+    if (children == null) return null;
+    for (int i = 0; i < children.size; i++) {
+      Element element = children.get(i);
+      if (element.name.equals(name)) return element;
+    }
+    return null;
+}
+```
+
+This method returns null in two cases:
+1. `children == null`, or
+2. `children` is non-null but no child has `element.name.equals(name)`.
+
+At this call site:
+- `element` is a `TileSheet` XML element, passed in from:
+
+  ```java
+  Element tilesheets = root.getChildByName("TileSheets");
+  if (tilesheets != null) {
+    for (Element tilesheet : tilesheets.getChildrenByName("TileSheet")) {
+      loadTileSheet(map, tilesheet, tmxFile, imageResolver);
+    }
+  }
+  ```
+
+- There is no check anywhere that guarantees that a `TileSheet` element must contain a `Description` child.
+- There is also no prior use of `hasChild("Description")` or any other guard on the presence of this child.
+- The XML structure is external data; the loader does not enforce or validate that every `TileSheet` has such a child before calling `getChildByName("Description")`.
+
+Therefore, from the code alone we must allow that:
+- The `TileSheet` element may have no children at all (`children == null`), or
+- It may have children but none named `"Description"`.
+
+In either case, `getChildByName("Description")` will return null. The fact that `.getText()` is called immediately afterwards does not change the return value of `getChildByName`; it only means a `NullPointerException` would occur when the child is missing.
+
+Since the presence of a `"Description"` child is not guaranteed by the provided Java code and depends on the external Tide map XML file, the method can indeed return null at this specific call site.
+
+]]></reason>
+  <value>YES</value>
+</response>

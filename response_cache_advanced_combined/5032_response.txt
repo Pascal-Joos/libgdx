@@ -1,0 +1,74 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+String[] array = Nullability.castToNonnull(data.getText()).split(",");
+```
+
+we are analyzing `data.getText()` where `data` is an instance of `XmlReader.Element` obtained via:
+
+```java
+Element data = element.getChildByName("data");
+if (data == null) {
+  throw new GdxRuntimeException("The map is missing the 'data' element");
+}
+String encoding = data.getAttribute("encoding", null);
+if (encoding == null) {
+  throw new GdxRuntimeException("Unsupported encoding (XML) for TMX Layer Data");
+}
+...
+if (encoding.equals("csv")) {
+  String[] array = Nullability.castToNonnull(data.getText()).split(",");
+  ...
+} else if (encoding.equals("base64")) {
+  byte[] bytes = Base64Coder.decode(Nullability.castToNonnull(data.getText()));
+  ...
+}
+```
+
+The `getText()` implementation is:
+
+```java
+public String getText() {
+    return text;
+}
+```
+
+Nothing in `Element` guarantees that `text` is non‑null:
+
+- The XML parser sets text via `XmlReader.text(String text)`:
+
+  ```java
+  protected void text(String text) {
+    if (current != null) {
+      String existing = current.getText();
+      current.setText(existing != null ? existing + text : text);
+    }
+  }
+  ```
+
+  If no character data (including CDATA) is encountered for `data`, `text` is never set and remains `null`.
+
+- Other usages of `getText()` in the provided code clearly account for possible null values:
+  - `Element.get(String name, String defaultValue)` does:
+
+    ```java
+    String value = child.getText();
+    if (value == null) return defaultValue;
+    return value;
+    ```
+
+  - Several places check for `element != null` but never check `getText()` for null, which indicates that `text` can indeed be absent.
+
+The TMX schema or typical content might in practice always include text inside `<data>` when `encoding` is `"csv"` or `"base64"`, but that is a *content/format* guarantee, not a guarantee from the code. From the Java side:
+
+- `data` is guaranteed non-null (or an exception is thrown earlier).
+- `encoding` is guaranteed non-null (or an exception is thrown earlier).
+- There is no check or assignment ensuring `data.text` is non-null before calling `getText()`.
+
+Therefore, from the code alone, `data.getText()` can return `null` at this call site, and if it does, the null is only filtered later by `Nullability.castToNonnull`, which is outside the `getText()` method itself.
+
+Thus, considering only the implementation of `getText()` and how `text` is populated, the return value of `data.getText()` may be `null` at this specific invocation.]]></reason>
+  <value>YES</value>
+</response>

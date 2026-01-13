@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void update() {
+    if (batch != null && renderData != null) batch.draw(Nullability.castToNonnull(renderData));
+  }
+  ```
+    ]]>
+  </code>
+</response>

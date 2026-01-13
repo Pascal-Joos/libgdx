@@ -1,0 +1,45 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+@Override
+    public void update() {
+      if (controller == null) return;
+      float cx = 0, cy = 0, cz = 0;
+      if (!isGlobal) {
+        float[] val = controller.transform.val;
+        cx = val[Matrix4.M03];
+        cy = val[Matrix4.M13];
+        cz = val[Matrix4.M23];
+      }
+
+      int lifeOffset = ParticleChannels.LifePercentOffset,
+          strengthOffset = 0,
+          positionOffset = 0,
+          forceOffset = 0;
+      for (int i = 0, c = controller.particles.size;
+          i < c;
+          ++i, positionOffset += positionChannel.strideSize,
+              strengthOffset += strengthChannel.strideSize,
+              forceOffset += accelerationChannel.strideSize, lifeOffset += lifeChannel.strideSize) {
+
+        float strength =
+            strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
+                + strengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
+                    * strengthValue.getScale(lifeChannel.data[lifeOffset]);
+        TMP_V3
+            .set(
+                positionChannel.data[positionOffset + ParticleChannels.XOffset] - cx,
+                positionChannel.data[positionOffset + ParticleChannels.YOffset] - cy,
+                positionChannel.data[positionOffset + ParticleChannels.ZOffset] - cz)
+            .nor()
+            .scl(strength);
+        accelerationChannel.data[forceOffset + ParticleChannels.XOffset] += TMP_V3.x;
+        accelerationChannel.data[forceOffset + ParticleChannels.YOffset] += TMP_V3.y;
+        accelerationChannel.data[forceOffset + ParticleChannels.ZOffset] += TMP_V3.z;
+      }
+}
+  ```
+    ]]>
+  </code>
+</response>

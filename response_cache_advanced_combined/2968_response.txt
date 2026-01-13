@@ -1,0 +1,56 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is:
+
+    a[dest++] = a[cursor2++];
+
+Here the potentially-null subexpression is the array reference `a`.
+
+1. **Where does `a` come from?**
+
+   ```java
+   Object[] a = Nullability.castToNonnull(this.a); // For performance
+   if (a == null) {
+     throw new NullPointerException();
+   }
+   ```
+
+   - `a` is assigned from `Nullability.castToNonnull(this.a)`.
+   - Immediately after this assignment, there is an explicit null-check:
+     - If `a` is null, a `NullPointerException` is thrown.
+   - There are no intervening assignments to `a` later in the method.
+   - Therefore, on any path that proceeds beyond this null-check, `a` is guaranteed to be non-null.
+
+2. **Control-flow to the line in question**
+
+   The line:
+
+   ```java
+   a[dest++] = a[cursor2++];
+   ```
+
+   occurs *after* the null-check on `a`. There is no early return or reassignment of `a` between the check and that line:
+
+   - `Object[] a = ...`
+   - `if (a == null) { throw new NullPointerException(); }`
+   - `Object[] tmp = ensureCapacity(len1);`
+   - `System.arraycopy(a, base1, tmp, 0, len1);`
+   - Variable initializations (`cursor1`, `cursor2`, `dest`)
+   - Then `a[dest++] = a[cursor2++];`
+
+   So any execution that reaches this line must have passed the null check, implying `a != null`.
+
+3. **Method contracts and external calls**
+
+   - Even if `Nullability.castToNonnull(this.a)` is allowed to return null, the method immediately guards against this with the explicit null check.
+   - `ensureCapacity` and `System.arraycopy` cannot change the value of the local variable `a`; they operate on it but do not reassign it.
+
+4. **Conclusion**
+
+   Given the explicit null check and the absence of any reassignment to `a`, `a` cannot be null at the line `a[dest++] = a[cursor2++]`. (Array elements `a[cursor2]` could theoretically be null, but that is not what was asked; the question is about the reference `a` itself.)
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

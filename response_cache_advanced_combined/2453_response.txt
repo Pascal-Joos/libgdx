@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected Color getFontColor() {
+      if (style == null) throw new IllegalStateException("style cannot be null.");
+      if (isDisabled() && style.disabledFontColor != null) return style.disabledFontColor;
+      if (style.overFontColor != null && (isOver() || scrollPane.hasParent()))
+        return style.overFontColor;
+      return style.fontColor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

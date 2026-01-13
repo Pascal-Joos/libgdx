@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+      if (Gdx.input == null) {
+        return false;
+      }
+      float deltaX = -Nullability.castToNonnull(Gdx.input).getDeltaX() * degreesPerPixel;
+      float deltaY = -Nullability.castToNonnull(Gdx.input).getDeltaY() * degreesPerPixel;
+      camera.direction.rotate(camera.up, deltaX);
+      tmp.set(camera.direction).crs(camera.up).nor();
+      camera.direction.rotate(tmp, deltaY);
+      return true;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void bindSide( final Cubemap.CubemapSide side) {
+    Gdx.gl20.glFramebufferTexture2D(
+        GL20.GL_FRAMEBUFFER,
+        GL20.GL_COLOR_ATTACHMENT0,
+        Nullability.castToNonnull(side).glEnum,
+        getColorBufferTexture().getTextureObjectHandle(),
+        0);
+}
+  ```
+    ]]>
+  </code>
+</response>

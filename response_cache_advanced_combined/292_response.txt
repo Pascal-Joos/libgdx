@@ -1,0 +1,42 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public PolygonSpriteBatch(
+      int maxVertices, int maxTriangles,  ShaderProgram defaultShader) {
+    // 32767 is max vertex index.
+    if (maxVertices > 32767)
+      throw new IllegalArgumentException(
+          "Can't have more than 32767 vertices per batch: " + maxVertices);
+
+    Mesh.VertexDataType vertexDataType = Mesh.VertexDataType.VertexArray;
+    if (Gdx.gl30 != null) {
+      vertexDataType = VertexDataType.VertexBufferObjectWithVAO;
+    }
+    mesh =
+        new Mesh(
+            vertexDataType,
+            false,
+            maxVertices,
+            maxTriangles * 3,
+            new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE),
+            new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+            new VertexAttribute(
+                Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+
+    vertices = new float[maxVertices * VERTEX_SIZE];
+    triangles = new short[maxTriangles * 3];
+
+    if (defaultShader == null) {
+      shader = SpriteBatch.createDefaultShader();
+      ownsShader = true;
+    } else shader = defaultShader;
+
+    if (Gdx.graphics != null) {
+      projectionMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

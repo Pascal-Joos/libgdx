@@ -1,0 +1,71 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is on this line in the Map-handling branch:
+
+    if (object instanceof Map) {
+      Map result = (Map) object;
+      for (JsonValue child = jsonData.child; child != null; child = child.next) {
+        if (child.name.equals(typeName)) continue;
+        result.put(child.name, readValue(elementType, null, child));
+      }
+      return (T) result;
+    }
+
+We must decide if `child.name` can ever be null when we reach:
+
+    if (child.name.equals(typeName)) continue;
+
+Relevant facts (from libGDX Json/JsonValue design, which this code clearly belongs to):
+
+1. `jsonData.child` iteration
+   - The loop is iterating over `jsonData.child`/`child.next`. This is how libGDX’s `JsonValue` represents:
+     - members of a JSON object (key/value pairs), or
+     - elements of a JSON array (values only, with no name).
+   - In a JSON **object**, each child has a non-null `name` (the property key).
+   - In a JSON **array**, children represent elements and have **no key**, so `child.name` is `null`.
+
+2. Context: object must be a `Map`
+   - This branch is reached only when the deserialized `object` is an instance of `java.util.Map`.
+   - That does *not* constrain `jsonData` to be a JSON object. `jsonData` comes from the input JSON, and there is no check here that it actually is an object. The method earlier mostly branches on `jsonData.isObject()` vs `jsonData.isArray()`, but we are *already* inside the large `if (jsonData.isObject()) { ... }` block at this point.
+   - So in this particular method, by the time we reach the `Map` branch, we are inside `if (jsonData.isObject())`, which guarantees that `jsonData` is a JSON object, not an array.
+
+3. Key point: children of a JSON object in libGDX
+   - For a `JsonValue` representing an **object**, its children list represents object members:
+       for (JsonValue child = jsonData.child; child != null; child = child.next) {
+           // child is a member: child.name is the property key, child is a JsonValue for the value
+       }
+   - According to libGDX's `JsonValue` implementation and its usage throughout the library, object members have non-null `name` values. If `name` were null, that child would not be a valid member of an object; this is how object entries are parsed and stored.
+
+4. Execution path check:
+   - We are in the outer branch: `if (jsonData.isObject()) { ... }`
+   - Inside that, after many special cases, we eventually construct `object = newInstance(type);`
+   - Then we fall into:
+       if (object instanceof Map) {
+           Map result = (Map) object;
+           for (JsonValue child = jsonData.child; child != null; child = child.next) {
+               if (child.name.equals(typeName)) continue;
+               ...
+           }
+       }
+   - So, by contract of `jsonData.isObject()`, `jsonData.child` here is the first member of a JSON object; each such child corresponds to a named property.
+   - Therefore, for this object-based iteration, libGDX’s parser will assign a non-null `name` to every child that is part of this list.
+
+5. Nullability of `typeName`
+   - `typeName` itself may be null (it is used with null checks earlier: `typeName == null ? null : ...`). If `typeName` is null, then `child.name.equals(typeName)` is effectively `someNonNullString.equals(null)`, which is safe: it evaluates to `false`.
+   - The only way to get a NullPointerException here would be if `child` were null (it is not, guarded by the loop condition) or `child.name` were null.
+   - Given we are restricted to `jsonData.isObject()` and libGDX’s contract for object members, `child.name` is not null in this context.
+
+6. Could malformed JSON or misuse create a child with null `name` inside an object?
+   - Under libGDX’s `JsonReader` / `JsonValue` implementation, object members are only created with valid keys parsed from the input.
+   - There is no code here manually constructing such `JsonValue` children; they come from `jsonData` produced by the parser or by well-formed API calls.
+   - So, within the normal API contracts (which this method assumes), `child.name` is non-null for object children.
+
+Conclusion:
+- Under the assumptions of normal use of libGDX’s JSON API and the fact we’re inside `if (jsonData.isObject())`, the `child` loop is iterating members of a JSON object. For such members, `child.name` is guaranteed non-null by the library’s design.
+- Therefore, `child.name` cannot be null on this line, and the call `child.name.equals(typeName)` is safe with respect to `child.name`.
+
+]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `newRequest` does not match any of the patterns treated by NullAway as initializer methods (such as framework-known lifecycle methods, or names starting with “init” / “initialize”). It is also not a constructor, nor is it a conventional "init*" method; rather, it is a builder-style factory/start method that prepares a new request and returns `this`. Even though it initializes internal state (`httpRequest`, timeout), by the criteria you specified (including excluding setters and relying on naming conventions / known framework methods), this should not be treated as an initializer method for NullAway’s purposes.
+    ]]></reason>
+    <value>NO</value>
+</response>

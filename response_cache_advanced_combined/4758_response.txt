@@ -1,0 +1,28 @@
+<response>
+  <reason><![CDATA[
+The implementation of `Array.random()` clearly returns `null` when `size == 0`:
+
+```java
+public @Null T random() {
+    if (size == 0) return null;
+    return items[MathUtils.random(0, size - 1)];
+}
+```
+
+At the specific call site in `ParticleControllerInfluencer$Random$ParticleControllerPool.newObject()`:
+
+```java
+public ParticleController newObject() {
+    ParticleController controller = templates.random().copy();
+    controller.init();
+    return controller;
+}
+```
+
+there is no prior check that `templates.size != 0`, nor any other guard that would prevent `templates` from being empty. The provided call chain (including `init()` where `newObject()` is called in a loop) does not show any code that guarantees `templates` has at least one element before `templates.random()` is invoked.
+
+Because `size` can be `0` at this call site, the `if (size == 0) return null;` branch is reachable. Therefore, `templates.random()` can evaluate to `null` here.
+
+Thus the invocation `templates.random()` at this call site can return `null`.]]></reason>
+  <value>YES</value>
+</response>

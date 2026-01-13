@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public TiledMapTileMapObject(
+       TiledMapTile tile, boolean flipHorizontally, boolean flipVertically) {
+    this.flipHorizontally = flipHorizontally;
+    this.flipVertically = flipVertically;
+    this.tile = tile;
+
+    TextureRegion textureRegion = new TextureRegion(Nullability.castToNonnull(tile).getTextureRegion());
+    textureRegion.flip(flipHorizontally, flipVertically);
+    setTextureRegion(textureRegion);
+}
+  ```
+    ]]>
+  </code>
+</response>

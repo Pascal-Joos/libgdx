@@ -1,0 +1,44 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void draw(Batch batch, float parentAlpha) {
+            validate();
+        
+            if (style == null) throw new IllegalStateException("style cannot be null.");
+            ButtonStyle style = this.style;
+            if (style == null) throw new IllegalStateException("style cannot be null.");
+        
+            setBackground(getBackgroundDrawable());
+        
+            float offsetX = 0, offsetY = 0;
+            if (isPressed() && !isDisabled()) {
+              offsetX = Nullability.castToNonnull(style).pressedOffsetX;
+              offsetY = Nullability.castToNonnull(style).pressedOffsetY;
+            } else if (isChecked() && !isDisabled()) {
+              offsetX = Nullability.castToNonnull(style).checkedOffsetX;
+              offsetY = Nullability.castToNonnull(style).checkedOffsetY;
+            } else {
+              offsetX = Nullability.castToNonnull(style).unpressedOffsetX;
+              offsetY = Nullability.castToNonnull(style).unpressedOffsetY;
+            }
+            boolean offset = offsetX != 0 || offsetY != 0;
+        
+            Array<Actor> children = getChildren();
+            if (offset) {
+              for (int i = 0; i < children.size; i++) children.get(i).moveBy(offsetX, offsetY);
+            }
+            super.draw(batch, parentAlpha);
+            if (offset) {
+              for (int i = 0; i < children.size; i++) children.get(i).moveBy(-offsetX, -offsetY);
+            }
+        
+            Stage stage = getStage();
+            if (stage != null
+                && stage.getActionsRequestRendering()
+                && isPressed() != clickListener.isPressed()) Gdx.graphics.requestRendering();
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,51 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the expression "before.actor" at the line
+
+    actorIndex = Nullability.castToNonnull(before.actor).getZIndex() + before.countActors();
+
+can be null.
+
+Relevant control flow:
+
+1. `before` is assigned as:
+   
+   ```java
+   N before = rootNodes.get(index - 1);
+   ```
+
+   This is used only in the `else` branch of:
+
+   ```java
+   if (index == 0) actorIndex = 0;
+   else if (index < rootNodes.size - 1)
+       actorIndex = Nullability.castToNonnull(rootNodes.get(index + 1).actor).getZIndex();
+   else {
+       N before = rootNodes.get(index - 1);
+       if (before.actor == null) throw new IllegalArgumentException("actor cannot be null.");
+       actorIndex = Nullability.castToNonnull(before.actor).getZIndex() + before.countActors();
+   }
+   ```
+
+2. Immediately before the use of `before.actor` in the `castToNonnull` call, there is an explicit null-check:
+
+   ```java
+   if (before.actor == null) throw new IllegalArgumentException("actor cannot be null.");
+   ```
+
+   This guarantees that if execution continues past this line, `before.actor != null`.
+
+3. No reassignment to `before` or `before.actor` occurs between this null-check and the use in the expression:
+
+   ```java
+   actorIndex = Nullability.castToNonnull(before.actor).getZIndex() + before.countActors();
+   ```
+
+4. Therefore, on all reachable execution paths that reach this expression, `before.actor` is proven non-null at the point of use. If it were null, control flow would have thrown an `IllegalArgumentException` and would not reach the expression at all.
+
+Given only the provided method and normal Java semantics (no concurrent mutation of `before.actor` between the check and the use, and no exotic VM behavior), `before.actor` cannot be null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void spawnAux(Vector3 vector, float percent) {
+      if (spawnWidthValue == null) spawnWidthValue = new ScaledNumericValue();
+      if (spawnHeightValue == null) spawnHeightValue = new ScaledNumericValue();
+      if (spawnDepthValue == null) spawnDepthValue = new ScaledNumericValue();
+      float width = spawnWidth + (spawnWidthDiff * spawnWidthValue.getScale(percent));
+      float height = spawnHeight + (spawnHeightDiff * spawnHeightValue.getScale(percent));
+      float depth = spawnDepth + (spawnDepthDiff * spawnDepthValue.getScale(percent));
+      vector.x = width;
+      vector.y = height;
+      vector.z = depth;
+  }
+  ```
+    ]]>
+  </code>
+</response>

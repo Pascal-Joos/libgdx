@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public static float polygonArea(float[] polygon, int offset, int count) {
+    float area = 0;
+    int last = offset + count - 2;
+    float[] nonNullPolygon = Nullability.castToNonnull(polygon);
+    float x1 = nonNullPolygon[last], y1 = nonNullPolygon[last + 1];
+    for (int i = offset; i <= last; i += 2) {
+      float x2 = nonNullPolygon[i], y2 = nonNullPolygon[i + 1];
+      area += x1 * y2 - x2 * y1;
+      x1 = x2;
+      y1 = y2;
+    }
+    return area * 0.5f;
+}
+  ```
+    ]]>
+  </code>
+</response>

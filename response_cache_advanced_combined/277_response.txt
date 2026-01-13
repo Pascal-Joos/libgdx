@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static int toBackBufferY(int logicalY) {
+      if (Gdx.graphics == null) {
+          return logicalY;
+      }
+      return (int) (logicalY * Gdx.graphics.getBackBufferHeight() / (float) Gdx.graphics.getHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

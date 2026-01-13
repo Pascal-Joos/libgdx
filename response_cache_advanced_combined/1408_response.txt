@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private AnimationDesc obtain(final AnimationDesc anim) {
+    return obtain(
+        Nullability.castToNonnull(anim.animation), anim.offset, anim.duration, anim.loopCount, anim.speed, anim.listener);
+  }
+  ```
+    ]]>
+  </code>
+</response>

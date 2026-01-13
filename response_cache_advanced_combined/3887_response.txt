@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void addMesh(MeshPart meshpart) {
+    if (meshpart.mesh == null)
+      throw new GdxRuntimeException("Mesh is null");
+    if (meshpart.primitiveType != primitiveType)
+      throw new GdxRuntimeException("Primitive type doesn't match");
+    addMesh(meshpart.mesh, meshpart.offset, meshpart.size);
+  }
+  ```
+    ]]>
+  </code>
+</response>

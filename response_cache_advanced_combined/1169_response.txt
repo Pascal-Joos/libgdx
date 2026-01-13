@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public AssetDescriptor loadAsset() {
+      if (loadIndex == assets.size) return null;
+      AssetData data = (AssetData) resources.sharedAssets.get(assets.get(loadIndex++));
+      if (data == null || data.filename == null || data.type == null) return null;
+      return new AssetDescriptor(data.filename, data.type);
+  }
+  ```
+    ]]>
+  </code>
+</response>

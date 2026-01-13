@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected Drawable getExpandIcon(N node, float iconX) {
+        TreeStyle style = this.style;
+        if (style == null) return null;
+        if (node == overNode //
+            && Gdx.app.getType() == ApplicationType.Desktop //
+            && (!selection.getMultiple() || (!UIUtils.ctrl() && !UIUtils.shift())) //
+        ) {
+          float mouseX = screenToLocalCoordinates(tmp.set(Gdx.input.getX(), 0)).x + getX();
+          if (mouseX >= 0 && mouseX < iconX) {
+            Drawable icon = node.expanded ? style.minusOver : style.plusOver;
+            if (icon != null) return icon;
+          }
+        }
+        return node.expanded ? style.minus : style.plus;
+}
+  ```
+    ]]>
+  </code>
+</response>

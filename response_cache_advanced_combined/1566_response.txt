@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void getAll(ObjectSet<T> resultSet) {
+      if (!leaf && children != null) {
+        for (Octree.OctreeNode child : children) {
+          child.getAll(resultSet);
+        }
+      }
+      resultSet.addAll(geometries);
+}
+  ```
+    ]]>
+  </code>
+</response>

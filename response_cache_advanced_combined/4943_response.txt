@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, `e.value` is assigned to the local variable `bones`:
+
+    ArrayMap<String, Matrix4> bones = e.value;
+    if (bones == null) continue;
+
+Immediately afterward, the loop that contains the expression in question uses `bones.entries()`:
+
+    for (ObjectMap.Entry<String, Matrix4> b : bones.entries())
+
+This `for` loop is only entered if `bones` is non-null, due to the preceding `if (bones == null) continue;`. Because `bones` and `e.value` refer to the same object (no reassignment to `bones` occurs between the assignment and the null-check), the control flow guarantees that:
+
+- If `e.value` were null at that point, then `bones` would be null,
+- The `if (bones == null) continue;` would be triggered,
+- The `for` loop with `bones.entries()` would be skipped.
+
+Therefore, on all execution paths that reach the `for (ObjectMap.Entry<String, Matrix4> b : bones.entries())` line, `bones` (and thus `e.value`) is guaranteed to be non-null.
+
+This conclusion assumes standard Java semantics and that there are no concurrent modifications to `nodePartBones` or its entries that could mutate `e.value` to null between the assignment to `bones` and the loop. Under normal single-threaded usage, or absent such external mutation, `e.value` cannot be null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

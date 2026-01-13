@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean isComplete() {
+      return emitter != null && emitter.isComplete();
+  }
+  ```
+    ]]>
+  </code>
+</response>

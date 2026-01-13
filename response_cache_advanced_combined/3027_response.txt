@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void writeObjectEnd() {
+    if (writer == null) return;
+    try {
+      writer.pop();
+    } catch (IOException ex) {
+      throw new SerializationException(ex);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

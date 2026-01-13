@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void addParticles(int count) {
+      if (controller == null) return;
+      count = Math.min(count, maxParticleCount - controller.particles.size);
+      if (count <= 0) return;
+      controller.activateParticles(controller.particles.size, count);
+      controller.particles.size += count;
+  }
+  ```
+    ]]>
+  </code>
+</response>

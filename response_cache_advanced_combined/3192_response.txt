@@ -1,0 +1,15 @@
+<response>
+    <reason><![CDATA[
+Based on the criteria you described, initializer methods are typically:
+- Known framework lifecycle methods (e.g., onCreate, init), or
+- Methods whose names start with "init" or "initialize" and are not setters.
+
+The given method is named `load`, which:
+- Does not match any of the listed framework/lifecycle patterns.
+- Does not start with "init" or "initialize".
+- While it initializes fields, its name and semantics resemble a data-loading or configuration method rather than a canonical initializer as recognized by NullAway’s conventions.
+
+Therefore, under your stated rules, this should not be treated as an initializer method.
+]]></reason>
+    <value>NO</value>
+</response>

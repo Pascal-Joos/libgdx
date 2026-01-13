@@ -1,0 +1,28 @@
+```xml
+<response>
+    <reason><![CDATA[
+Inside the method, the only null-check for particleIndices is at the very beginning:
+
+    if (particleIndices == null || camera == null || particleOffsets == null) {
+        return particleOffsets;
+    }
+
+If particleIndices is null at method entry, the method returns immediately and never reaches either the inner loop or the final loop.
+
+After this early return, there are no assignments that can make particleIndices null, and there are no further null checks that could allow execution to continue with a null value. Thus, when execution reaches:
+
+    for (i = 0; i < count; ++i) {
+        particleOffsets[particleIndices[i]] = i;
+    }
+
+the only possible control-flow path is one where particleIndices was non-null at the initial if-statement and remained non-null throughout the method.
+
+Therefore, at the line:
+
+    particleOffsets[particleIndices[i]] = i;
+
+particleIndices cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public boolean equals(Object o) {
+        if (o == null) return false;
+    
+        DecalMaterial material = (DecalMaterial) o;
+    
+        return dstBlendFactor == material.dstBlendFactor
+            && srcBlendFactor == material.srcBlendFactor
+            && ((textureRegion == null && material.textureRegion == null)
+                || (textureRegion != null && material.textureRegion != null
+                    && textureRegion.getTexture() != null
+                    && material.textureRegion != null
+                    && material.textureRegion.getTexture() != null
+                    && textureRegion.getTexture() == material.textureRegion.getTexture()));
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,74 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all control-flow paths leading to `return entries2;`:
+
+Method:
+
+public Entries<K, V> entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+      entries1 = new Entries(this);
+      entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+      entries1.reset();
+      entries1.valid = true;
+      Nullability.castToNonnull(entries2).valid = false;
+      return entries1;
+    }
+    Nullability.castToNonnull(entries2).reset();
+    Nullability.castToNonnull(entries2).valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+1. Early return:
+   - If `Collections.allocateIterators` is true, the method returns `new Entries(this);` and never reaches `return entries2;`.
+
+2. Initialization block:
+   - If `Collections.allocateIterators` is false, we proceed.
+   - If `entries1 == null`, then inside that block we execute:
+       entries1 = new Entries(this);
+       entries2 = new Entries(this);
+     So after this `if`, if it ran, `entries2` is definitely non-null (assuming `new Entries(this)` never returns null, which is guaranteed for Java object creation).
+
+   - If `entries1 != null` when entering the method, then `entries2` has whatever value was already stored as an instance field beforehand. This could be non-null or null depending on prior state, but the rest of the method uses `entries2` in a way that constrains this.
+
+3. Branch on `entries1.valid`:
+   - `if (!entries1.valid) { ... return entries1; }`
+     In this branch we do:
+       Nullability.castToNonnull(entries2).valid = false;
+     Calling `Nullability.castToNonnull(entries2)` implies `entries2` must be non-null at runtime, or that method would violate its contract (either by throwing or by unsafely lying about nullability). In any case, this branch returns `entries1` and does **not** reach `return entries2;`.
+
+4. Else branch (the only path to `return entries2;`):
+   - We only get here if:
+       Collections.allocateIterators == false
+       and (entries1 != null, possibly) plus entries1.valid == true.
+   - In this branch:
+       Nullability.castToNonnull(entries2).reset();
+       Nullability.castToNonnull(entries2).valid = true;
+       entries1.valid = false;
+       return entries2;
+   - Before `return entries2;`, the code twice calls `Nullability.castToNonnull(entries2)`. For that to be correct under normal Java assumptions, `entries2` must be non-null on any path reaching here:
+       • If `entries1` was null at method entry, then the earlier `if (entries1 == null)` block must have run, assigning `entries2 = new Entries(this)`, making it non-null.
+       • If `entries1` was non-null at method entry, the design of this iterator-reuse pattern (typical of collections that reuse iterator objects) implies that `entries2` is also expected to have been initialized earlier and not cleared to null; otherwise the explicit casts to non-null would be an immediate source of NPE or contract violation.
+
+   - There is no path where we skip `entries2 = new Entries(this)` and then call `castToNonnull(entries2)` without having previously initialized `entries2` to some non-null instance:
+       • Either the constructor or some earlier call to `entries()` must have created both `entries1` and `entries2`.
+       • The very presence of `Nullability.castToNonnull(entries2)` multiple times in both branches indicates the intended invariant: whenever this method executes beyond the early return, `entries2` must not be null.
+
+5. Nullability tooling:
+   - `Nullability.castToNonnull(entries2)` is a helper that asserts (or promises) at the type level that `entries2` is non-null.
+   - Static analysis and the pattern of use (setting fields, calling methods on it) show that this helper is relied upon as a guarantee that `entries2` is not null on all paths reaching those calls; otherwise the code would likely throw at runtime.
+
+Putting it together:
+- Any execution path that reaches `return entries2;` has already passed through one or more uses of `Nullability.castToNonnull(entries2)` and, in the uninitialized case, through the `entries2 = new Entries(this);` assignment.
+- Under standard Java semantics, `new Entries(this)` cannot produce null, and the design relies on `entries2` being non-null whenever `castToNonnull` is applied.
+- Therefore, on all reachable paths to `return entries2;`, `entries2` is non-null.
+
+Conclusion: the expression at `return entries2;` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

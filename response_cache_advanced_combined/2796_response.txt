@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void drawBackground(Batch batch, float parentAlpha) {
+      TreeStyle style = this.style;
+      if (style != null && Nullability.castToNonnull(style).background != null) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

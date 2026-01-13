@@ -1,0 +1,42 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based on the provided method alone:
+
+@Override
+public int getHeight() {
+  return Nullability.castToNonnull(data).getHeight();
+}
+
+the nullability of `data` at the point of evaluation cannot be determined with certainty:
+
+1. The expression whose nullability we must assess is the receiver of `getHeight()`, i.e. the value returned by `Nullability.castToNonnull(data)`. That value ultimately depends on `data`.
+
+2. The method `Nullability.castToNonnull(...)` is not shown. Its behavior is crucial:
+   - If it is a pure cast/helper used only to satisfy a static analyzer (e.g., returns its argument and may throw/assert if null), then at *runtime*:
+     - `data` can be null as an object reference coming into the call,
+     - but the expression `Nullability.castToNonnull(data)` will either:
+       - throw (e.g., AssertionError, NullPointerException, IllegalStateException) when `data` is null, or
+       - return a non-null reference;
+     - in either case, by the time `.getHeight()` is actually invoked, the receiver will not be null (if the call returns at all).
+   - If it is allowed to return `null` (e.g., just a no-op cast that doesn't enforce non-null at runtime), then `data` can be null and `Nullability.castToNonnull(data)` can also be null, which would make the receiver of `.getHeight()` null and cause a NullPointerException.
+
+3. There is no visible prior null check or invariant enforcement on `data` in the shown snippet, and we do not see:
+   - how `data` is initialized,
+   - whether it is ever assigned null,
+   - whether a class invariant guarantees it is non-null after construction,
+   - or the contract and implementation of `Nullability.castToNonnull`.
+
+4. Therefore:
+   - We cannot assert that `data` is always non-null at this point.
+   - We also cannot assert that `castToNonnull` will necessarily enforce non-nullness at runtime.
+   - Without these contracts, we cannot definitively say whether the expression used as the receiver of `.getHeight()` can be null along some reachable code path.
+
+Because the key information (the semantics/contract of `Nullability.castToNonnull` and the lifecycle of `data`) is missing, it is not possible to conclude definitively whether the expression can be null at this line.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation or contract (documentation/Javadoc) of Nullability.castToNonnull.]]></request>
+        <request><![CDATA[Show how the field/variable 'data' is declared, initialized, and mutated (constructor, setters, and any other relevant methods).]]></request>
+    </requests>
+</response>
+```

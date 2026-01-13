@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private void deleteVAO() {
+        if (vaoHandle != -1 && Gdx.gl30 != null) {
+          ((Buffer) tmpHandle).clear();
+          tmpHandle.put(vaoHandle);
+          ((Buffer) tmpHandle).flip();
+          Nullability.castToNonnull(Gdx.gl30).glDeleteVertexArrays(1, tmpHandle);
+          vaoHandle = -1;
+        }
+}
+  ```
+    ]]>
+  </code>
+</response>

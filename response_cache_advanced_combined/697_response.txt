@@ -1,0 +1,30 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setRegion(float u, float v, float u2, float v2) {
+      if (texture == null) throw new IllegalStateException("texture cannot be null.");
+      int texWidth = Nullability.castToNonnull(texture).getWidth(), texHeight = Nullability.castToNonnull(texture).getHeight();
+      regionWidth = Math.round(Math.abs(u2 - u) * texWidth);
+      regionHeight = Math.round(Math.abs(v2 - v) * texHeight);
+  
+      // For a 1x1 region, adjust UVs toward pixel center to avoid filtering artifacts on AMD GPUs
+      // when drawing very stretched.
+      if (regionWidth == 1 && regionHeight == 1) {
+        float adjustX = 0.25f / texWidth;
+        u += adjustX;
+        u2 -= adjustX;
+        float adjustY = 0.25f / texHeight;
+        v += adjustY;
+        v2 -= adjustY;
+      }
+  
+      this.u = u;
+      this.v = v;
+      this.u2 = u2;
+      this.v2 = v2;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public FileHandle[] list(FileFilter filter) {
+    if (type == FileType.Classpath)
+      throw new GdxRuntimeException("Cannot list a classpath directory: " + file);
+    File file = file();
+    if (file == null) return new FileHandle[0];
+    String[] relativePaths = file.list();
+    if (relativePaths == null) return new FileHandle[0];
+    FileHandle[] handles = new FileHandle[relativePaths.length];
+    int count = 0;
+    for (int i = 0, n = relativePaths.length; i < n; i++) {
+      String path = relativePaths[i];
+      FileHandle child = child(path);
+      if (!filter.accept(child.file())) continue;
+      handles[count] = child;
+      count++;
+    }
+    if (count < relativePaths.length) {
+      FileHandle[] newHandles = new FileHandle[count];
+      System.arraycopy(handles, 0, newHandles, 0, count);
+      handles = newHandles;
+    }
+    return handles;
+}
+  ```
+    ]]>
+  </code>
+</response>

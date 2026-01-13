@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name loadTiledMap does not match any of the patterns that NullAway treats as initializer methods (well-known framework lifecycle methods like onCreate/init, or methods whose names start with "init" or "initialize"). It is also not a constructor. Even though it initializes several fields, it behaves as a regular loader/factory method and is not a “setter-sounding” init* method nor a recognized framework lifecycle hook. Therefore, under the rules you described, it should not be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

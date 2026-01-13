@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void addAll(Array<? extends T> array) {
+      addAll(Nullability.castToNonnull(array).items, 0, Nullability.castToNonnull(array).size);
+  }
+  ```
+    ]]>
+  </code>
+</response>

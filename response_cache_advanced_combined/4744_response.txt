@@ -1,0 +1,16 @@
+```xml
+<response>
+    <reason><![CDATA[
+Immediately before the call, the code checks `if (patch == null) { return; }`. This guarantees that any execution reaching the subsequent line must have `patch != null` at that point in time, assuming:
+- `patch` is a normal field or local variable (not a `volatile` with concurrent unsynchronized writes), and
+- there is no code between the null check and the call that can reassign `patch`.
+
+Given the provided method body, there are no intervening statements that could change `patch` between the null check and the `draw` call. Therefore, along all code paths that reach `patch.draw(...)`, `patch` cannot be null.
+
+Any remaining theoretical possibilities (such as concurrent modification of `patch` from another thread between the null check and the call) are outside what can be inferred from this snippet alone and are not indicated by the code shown.
+
+Within the scope of the given method, the expression `patch` at the line `patch.draw(...)` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

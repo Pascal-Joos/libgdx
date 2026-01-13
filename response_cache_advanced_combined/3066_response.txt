@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public final Vector3 spawn(Vector3 vector, float percent) {
+              spawnAux(vector, percent);
+              RangedNumericValue xOffsetValue = this.xOffsetValue;
+              if (xOffsetValue != null && xOffsetValue.active) vector.x += Nullability.castToNonnull(xOffsetValue).newLowValue();
+              RangedNumericValue yOffsetValue = this.yOffsetValue;
+              if (yOffsetValue != null && yOffsetValue.active) vector.y += yOffsetValue.newLowValue();
+              RangedNumericValue zOffsetValue = this.zOffsetValue;
+              if (zOffsetValue != null && zOffsetValue.active) vector.z += Nullability.castToNonnull(zOffsetValue).newLowValue();
+              return vector;
+}
+  ```
+    ]]>
+  </code>
+</response>

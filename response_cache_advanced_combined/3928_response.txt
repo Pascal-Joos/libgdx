@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+    public Material getMaterial(final String id, boolean ignoreCase) {
+      final int n = materials.size;
+      Material material;
+      if (ignoreCase) {
+        for (int i = 0; i < n; i++) {
+          material = materials.get(i);
+          if (material == null || material.id == null) return null;
+          if (Nullability.castToNonnull(material.id).equalsIgnoreCase(id)) return material;
+        }
+      } else {
+        for (int i = 0; i < n; i++) 
+          if (Nullability.castToNonnull((material = materials.get(i)).id).equals(id)) return material;
+      }
+      return null;
+    }
+  ```
+    ]]>
+  </code>
+</response>

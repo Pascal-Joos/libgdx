@@ -1,0 +1,47 @@
+```xml
+<response>
+    <reason><![CDATA[
+`currentTileSet` is declared and initialized to null:
+
+    TiledMapTileSet currentTileSet = null;
+
+It is then assigned only in these branches:
+
+1) Inside the outer tile loop:
+   if (name.equals("TileSheet")) {
+       currentTileSet = tilesets.getTileSet(currentChild.getAttribute("Ref"));
+       if (currentTileSet != null) {
+           firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+       }
+   }
+
+2) Inside the "Animated" frame loop:
+   if (frameName.equals("TileSheet")) {
+       currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
+       if (currentTileSet != null) {
+           firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+       }
+   }
+
+Immediately before the expression in question:
+
+    firstgid = currentTileSet.getProperties().get("firstgid", Integer.class);
+
+there is an explicit null check:
+
+    if (currentTileSet != null) {
+        firstgid = ...
+    }
+
+Because:
+- `currentTileSet` starts as null,
+- its only reassignments are from `tilesets.getTileSet(...)`,
+- and the dereference `.getProperties()` only occurs inside an `if (currentTileSet != null)` block,
+
+`currentTileSet` cannot be null at the point where `currentTileSet.getProperties()` is evaluated, along any code path that reaches that line.
+
+There are no intervening statements that can reassign `currentTileSet` to null between the `if (currentTileSet != null)` check and the dereference, so the null-check guarantees non-nullness for that expression.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

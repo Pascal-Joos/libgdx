@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[By your own criteria, initializer methods are either known framework lifecycle methods (e.g., onCreate, init) or methods whose names start with "init" or "initialize" and are not setters. The given method is named setCamera, clearly following the standard setter naming convention (setX) and only assigns a single field from its parameter. Therefore, it should be treated as a regular setter, not as an initializer method for NullAway purposes.]]></reason>
+    <value>NO</value>
+</response>

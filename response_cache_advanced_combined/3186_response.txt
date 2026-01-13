@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void init() {
+      bind();
+      if (particles != null) {
+        end();
+        particleChannels.resetIds();
+      }
+      allocateChannels(emitter.maxParticleCount);
+
+      emitter.init();
+      for (Influencer influencer : influencers) influencer.init();
+      if (renderer != null) renderer.init();
+  }
+  ```
+    ]]>
+  </code>
+</response>

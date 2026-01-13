@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void goEnd(boolean jump) {
+      if (text == null) return;
+      if (jump || cursorLine >= getLines()) {
+        cursor = text.length();
+      } else if (cursorLine * 2 + 1 < linesBreak.size) {
+        cursor = linesBreak.get(cursorLine * 2 + 1);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

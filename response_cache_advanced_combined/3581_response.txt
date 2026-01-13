@@ -1,0 +1,64 @@
+<response>
+  <reason><![CDATA[
+At this call site (`String value = property.getText()`), `property` is an instance of `XmlReader.Element`, and `getText()` is implemented as:
+```java
+public String getText() {
+    return text;
+}
+```
+The only question is whether the `text` field of this particular `Element` can be null.
+
+From the provided code, `text` is modified via `XmlReader.text(String text)`:
+```java
+protected void text(String text) {
+    String existing = current.getText();
+    current.setText(existing != null ? existing + text : text);
+}
+```
+Here:
+- `current` is the `Element` being built by the parser.
+- `current.getText()` returns the same `text` field.
+- If `existing` is null, `current.setText(...)` is called with the argument `text` (the parameter passed into `XmlReader.text`), not null.
+- For text nodes that are actually produced from the XML content, the parser always calls `text(entitiesText)` or `text(new String(...))`, both of which are constructed `String` instances and therefore non-null.
+- The parser never calls `text(null)`; all invocations of `text(...)` in the parse method pass in a non-null string (either `entitiesText`, or `new String(data, ...)`).
+
+Thus, for any `Element` that actually has textual body content in the XML, its `text` field will either:
+- remain null (if the element has no body text at all and `text(...)` is never called on it), or
+- be set to a non-null `String`.
+
+The specific call site in question is:
+```java
+if (value == null) {
+    value = property.getText();
+}
+Object castValue = castProperty(name, Nullability.castToNonnull(value), type);
+```
+in `BaseTmxMapLoader.loadProperties` (for TMX files) and similarly:
+```java
+String value = property.getText();
+```
+in `TideMapLoader.loadProperties` (for Tide files).
+
+In both cases:
+
+1. `property` comes from `element.getChildrenByName("property")` (TMX) or `element.getChildrenByName("Property")` (Tide). These are parsed XML `<property>` / `<Property>` elements.
+
+2. The TMX `<property>` and Tide `<Property>` nodes may be declared either:
+   - with a `value` attribute and no body text, or
+   - with body text and possibly no `value` attribute, or
+   - with neither (malformed input).
+
+3. For the TMX loader:
+   - If the `value` attribute is missing (`value == null`), the code explicitly falls back to `property.getText()`.
+   - The `Element` representing `<property>` may validly have no body text in the XML at all (e.g., `<property name="foo" type="string"/>`).  
+     In that case the parser will never call `text(...)` for that element, so its `text` field will remain null. Therefore `property.getText()` will return null.
+
+4. For the Tide loader:
+   - It directly does `String value = property.getText();` without any prior attribute fallback and then parses/uses `value`.  
+   - Again, a `<Property>` element might legitimately contain no body text, so `text` can remain null and `getText()` can return null.
+
+Nothing in the provided code guarantees that every `<property>` / `<Property>` element must have body text; such an invariant would be a schema/usage guarantee, not enforced or checked here. Since the parser allows elements without body text and leaves `text` unset in that case, `getText()` can indeed return null at this call site.
+
+Therefore, at this specific invocation `String value = property.getText()`, the result can be null.]]></reason>
+  <value>YES</value>
+</response>

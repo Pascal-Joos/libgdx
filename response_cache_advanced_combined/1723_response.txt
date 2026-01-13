@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void update(float percent) {
+        float x, y;
+        if (percent == 0) {
+          x = startX;
+          y = startY;
+        } else if (percent == 1) {
+          x = endX;
+          y = endY;
+        } else {
+          x = startX + (endX - startX) * percent;
+          y = startY + (endY - startY) * percent;
+        }
+        if (target != null) Nullability.castToNonnull(target).setScale(x, y);
+  }
+  ```
+    ]]>
+  </code>
+</response>

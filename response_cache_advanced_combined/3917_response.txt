@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void render(Renderable renderable, final Attributes combinedAttributes) {
+          final Mesh mesh = renderable.meshPart.mesh;
+          if (mesh == null) return;
+          for (int u, i = 0; i < localUniforms.size; ++i)
+            if (setters.get(u = localUniforms.get(i)) != null)
+              setters.get(u).set(this, u, renderable, combinedAttributes);
+          if (currentMesh != mesh) {
+            if (currentMesh != null) currentMesh.unbind(program, tempArray.items);
+            currentMesh = mesh;
+            Nullability.castToNonnull(currentMesh).bind(
+                program, getAttributeLocations(mesh.getVertexAttributes()));
+          }
+          renderable.meshPart.render(program, false);
+}
+  ```
+    ]]>
+  </code>
+</response>

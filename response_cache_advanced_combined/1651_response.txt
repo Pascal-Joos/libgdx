@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder method(String httpMethod) {
+      validate();
+      HttpRequest localHttpRequest = this.httpRequest;
+      if (localHttpRequest == null) {
+        throw new IllegalStateException(
+            "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
+      }
+      localHttpRequest.setMethod(httpMethod);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

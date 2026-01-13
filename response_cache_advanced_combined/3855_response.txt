@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Array<AtlasRegion> findRegions( String name) {
+    Array<AtlasRegion> matched = new Array(AtlasRegion.class);
+    for (int i = 0, n = regions.size; i < n; i++) {
+      AtlasRegion region = regions.get(i);
+      if (Nullability.castToNonnull(region.name).equals(name))
+        matched.add(new AtlasRegion(region));
+    }
+    return matched;
+}
+  ```
+    ]]>
+  </code>
+</response>

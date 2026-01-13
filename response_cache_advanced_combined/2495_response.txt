@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SelectBoxStyle(SelectBoxStyle style) {
+      font = style.font;
+      fontColor.set(style.fontColor);
+
+      if (style.overFontColor != null) overFontColor = new Color(style.overFontColor);
+      if (style.disabledFontColor != null) disabledFontColor = new Color(style.disabledFontColor);
+
+      background = style.background;
+      scrollStyle = new ScrollPaneStyle(Nullability.castToNonnull(style.scrollStyle));
+      listStyle = new ListStyle(style.listStyle);
+
+      backgroundOver = style.backgroundOver;
+      backgroundOpen = style.backgroundOpen;
+      backgroundDisabled = style.backgroundDisabled;
+  }
+  ```
+    ]]>
+  </code>
+</response>

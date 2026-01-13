@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the very start of GetMatches, there is an explicit null check:
+
+    if (_hash == null || _son == null || _bufferBase == null) return 0;
+
+If _bufferBase is null, the method returns immediately and no later code is executed.
+
+Right after that, the code creates a non-null alias:
+
+    byte[] nonNullBufferBase = Nullability.castToNonnull(_bufferBase);
+
+This assignment is only reached if _bufferBase != null (due to the earlier guard). From this point on, all accesses to the buffer in the snippet you provided use nonNullBufferBase, including the line in question:
+
+    } else hashValue = ((nonNullBufferBase[cur] & 0xFF) ^ ((int) (nonNullBufferBase[cur + 1] & 0xFF) << 8));
+
+So, on every code path that can reach that line:
+- The method has already returned early if _bufferBase was null.
+- nonNullBufferBase is a direct reference to _bufferBase after that null check and cannot be null unless there is some external mechanism (not shown here) that mutates _bufferBase to null and simultaneously also changes nonNullBufferBase, which is impossible in Java because nonNullBufferBase is a local variable holding the array reference.
+
+Therefore, at the point of that expression, the underlying array reference used (nonNullBufferBase, and therefore _bufferBase as well) cannot be null under normal Java semantics.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

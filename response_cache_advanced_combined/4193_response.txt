@@ -1,0 +1,55 @@
+<response>
+  <reason><![CDATA[
+At this call site, the method is invoked as:
+
+```java
+float[] vertices = getTransformedVertices();
+```
+
+inside `com.badlogic.gdx.math.Polygon` (e.g., in `getBoundingRectangle`, `contains`, etc.).
+
+Within `getTransformedVertices()` there are only two possible return paths:
+
+1. `if (!dirty) return worldVertices;`
+2. After the loop: `return worldVertices;`
+
+So the only way this method could ever return null is if `worldVertices` were null at one of these return points.
+
+Now examine how `worldVertices` is handled:
+
+```java
+final float[] localVertices = this.localVertices;
+if (worldVertices == null || worldVertices.length != localVertices.length)
+  worldVertices = new float[localVertices.length];
+
+final float[] worldVertices = this.worldVertices;
+...
+for (int i = 0, n = localVertices.length; i < n; i += 2) {
+  ...
+  worldVertices[i] = ...;
+  worldVertices[i + 1] = ...;
+}
+return worldVertices;
+```
+
+Key points:
+
+- If `dirty` is true, the method always executes the allocation guard
+  ```java
+  if (worldVertices == null || worldVertices.length != localVertices.length)
+      worldVertices = new float[localVertices.length];
+  ```
+  which guarantees `this.worldVertices` is non-null before being assigned to the local `final float[] worldVertices`. Therefore, along this path the returned `worldVertices` cannot be null.
+
+- If `dirty` is false, the early return executes:
+  ```java
+  if (!dirty) return worldVertices;
+  ```
+  For this to happen correctly in the libGDX `Polygon` class, `worldVertices` must already have been initialized by a previous call when `dirty` was true. The design relies on that invariant: whenever `dirty` transitions from true to false, the method allocates and fills `worldVertices`. After that, calls with `dirty == false` reuse the already-created array.
+
+- In the provided higher-level usages (`getBoundingRectangle`, `contains`, `getVertex`, `area`, `getCentroid`, and all the `Intersector` methods that call `getTransformedVertices()`), there is no code path that resets `worldVertices` back to null once it has been created; they only read from it. The only write to `worldVertices` inside `getTransformedVertices` either leaves it as-is or assigns a new non-null array.
+
+Given this logic, there is no execution path at this call site that allows `getTransformedVertices()` to return null without violating the internal invariant of the `Polygon` implementation. The method will either allocate a new float array or reuse an already-allocated one; in either case, `worldVertices` is non-null at the return.
+  ]]></reason>
+  <value>NO</value>
+</response>

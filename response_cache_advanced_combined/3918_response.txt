@@ -1,0 +1,43 @@
+```xml
+<response>
+    <reason><![CDATA[
+The relevant line is executed only in the following branch:
+
+    else if (parentTransform && copy.hasParent())
+        this.transform.mul(node.getParent().globalTransform);
+
+Key points:
+
+1. `node` is obtained via:
+       node = model.getNode(nodeId, recursive);
+   and immediately checked:
+       if (node == null) return;
+   So in the `else if` block, `node` is guaranteed non-null.
+
+2. `copy` is created from `node`:
+       this.nodes.add(copy = node.copy());
+   Any relationship between `copy` and `node`’s parent chain depends entirely on the implementation of `Node.copy()` in the underlying library (this looks like libGDX’s `ModelInstance` and `Node`).
+
+3. The guard condition is:
+       else if (parentTransform && copy.hasParent())
+   This ensures only that `copy.getParent()` (or equivalent) is non-null. It does not directly assert anything about `node.getParent()`.
+
+4. The line in question uses:
+       node.getParent().globalTransform
+   There is no null check on `node.getParent()` itself. We must therefore rely on the contract of `model.getNode(nodeId, recursive)` and how nodes are structured in the `Model`:
+   - If `node` is a root node of the model, then `node.getParent()` would be `null` in typical scene graph implementations.
+   - Whether `copy.hasParent()` implies `node.getParent() != null` depends on whether `Node.copy()` preserves the same parent structure and on whether `copy` and `node` share equivalent parent relationships.
+
+5. From the snippet alone, there is no explicit guarantee in this code that `node.getParent()` is non-null. The only logical link is indirect:
+   - If the library’s contract is that `Node.copy()` always mirrors the original’s parent/child hierarchy (so `copy.hasParent()` is true iff `node.getParent() != null`), then `node.getParent()` would be non-null under the `copy.hasParent()` guard.
+   - However, that contract is not stated here, and the method does not itself enforce or verify it. Without the external guarantee from the `Node` implementation, a root `node` could still have `node.getParent() == null` while `copy.hasParent()` behavior is uncertain.
+
+Because the answer hinges on the external, undocumented (in this snippet) behavior of `Node.copy()` and the `Model`/`Node` contracts, we cannot be certain from this method alone that `node.getParent()` is never null at the point of use. The code as shown does not provide a defensive check on `node.getParent()` and therefore does not, by itself, guarantee non-nullness.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation or documented contract of Node.copy() and Node.hasParent()/getParent() to determine whether copy.hasParent() logically implies node.getParent() != null.]]></request>
+        <request><![CDATA[Provide the contract of Model.getNode(nodeId, recursive) (e.g., whether it can ever return a root node with a null parent for the given usage).]]></request>
+    </requests>
+</response>
+```

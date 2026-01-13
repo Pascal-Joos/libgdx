@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public long lastModified() {
+      File f = file();
+      return f != null ? f.lastModified() : 0L;
+  }
+  ```
+    ]]>
+  </code>
+</response>

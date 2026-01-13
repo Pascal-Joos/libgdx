@@ -1,0 +1,52 @@
+<response>
+  <reason><![CDATA[
+At the call site in question, `tileset.getChildByName("image")` is invoked where `tileset` is an `XmlReader.Element` representing a `<tileset>` XML element.
+
+The implementation of `getChildByName` is:
+
+```java
+public @Null Element getChildByName(String name) {
+  if (children == null) return null;
+  for (int i = 0; i < children.size; i++) {
+    Element element = children.get(i);
+    if (element.name.equals(name)) return element;
+  }
+  return null;
+}
+```
+
+This method will return `null` in two situations:
+1. `children == null` (no child elements at all), or
+2. none of the child elements have `element.name.equals(name)` for the requested name.
+
+In the provided code, `tileset.getChildByName("image")` is used in several places (both in `TmxMapLoader` and `BaseTmxMapLoader`), and in every case the result is explicitly checked for null:
+
+```java
+Element imageElement = tileset.getChildByName("image");
+if (imageElement != null) {
+  ...
+} else {
+  // handle per-tile images
+}
+```
+
+and
+
+```java
+Element imageElement = element.getChildByName("image");
+if (imageElement != null) {
+  ...
+}
+```
+
+This pattern shows that the library itself expects `getChildByName("image")` to sometimes return `null` when the `<tileset>` (or `<tile>`, etc.) has no `<image>` child. The TMX/Tileset format itself allows two cases: a tileset with a single `<image>` child, and a tileset without such a child but with per-tile `<image>` tags instead. In the latter case, the `<tileset>` element simply has no `<image>` child, so either `children == null` or `children` has entries but none named `"image"`, and the method returns `null`.
+
+Nothing in the provided code guarantees that:
+- the `children` field of this particular `tileset` element is non-null, or
+- there is always a child named `"image"` for this `tileset`.
+
+On the contrary, the branching logic in `getDependencyFileHandles` and `loadTileSet` is explicitly designed to handle the absence of such an `<image>` child (falling back to per-`<tile>` images when `imageElement` is null).
+
+Therefore, for this specific call site `tileset.getChildByName("image")`, the method can legally and realistically return `null`.]]></reason>
+  <value>YES</value>
+</response>

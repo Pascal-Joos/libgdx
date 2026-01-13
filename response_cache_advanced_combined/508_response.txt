@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void load(TextureData data) {
+      if (this.data != null && Nullability.castToNonnull(data).isManaged() != this.data.isManaged())
+        throw new GdxRuntimeException("New data must have the same managed status as the old data");
+      this.data = data;
+  
+      if (!Nullability.castToNonnull(data).isPrepared()) Nullability.castToNonnull(data).prepare();
+  
+      bind();
+      uploadImageData(GL20.GL_TEXTURE_2D, Nullability.castToNonnull(data));
+  
+      unsafeSetFilter(minFilter, magFilter, true);
+      unsafeSetWrap(uWrap, vWrap, true);
+      unsafeSetAnisotropicFilter(anisotropicFilterLevel, true);
+      Gdx.gl.glBindTexture(glTarget, 0);
+}
+  ```
+    ]]>
+  </code>
+</response>

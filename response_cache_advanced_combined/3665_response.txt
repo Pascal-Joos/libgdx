@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void PutByte(byte b) throws IOException {
+      if (_buffer == null) return;
+      _buffer[_pos++] = b;
+      if (_pos >= _windowSize) Flush();
+  }
+  ```
+    ]]>
+  </code>
+</response>

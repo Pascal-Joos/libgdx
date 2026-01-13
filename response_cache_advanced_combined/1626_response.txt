@@ -1,0 +1,65 @@
+<response>
+    <reason><![CDATA[
+We are analyzing whether the parameter `verts2` of:
+
+public static boolean overlapConvexPolygons(
+        float[] verts1, float[] verts2, MinimumTranslationVector mtv) {
+    return overlapConvexPolygons(
+        Nullability.castToNonnull(verts1), 0, verts1.length,
+        Nullability.castToNonnull(verts2), 0, verts2.length, mtv);
+}
+
+can be null at the point it is received by this method, ignoring annotations.
+
+1. This method does not reassign `verts2` before using it; it is immediately passed to `Nullability.castToNonnull(verts2)` and then to another overload of `overlapConvexPolygons`. So inside this method, `verts2` is exactly whatever the caller passed.
+
+2. There is no explicit null-check on `verts2` here before it is used. The only operation is passing it into `Nullability.castToNonnull` and then into another method. Since the implementation of `Nullability.castToNonnull` is not known and you indicated it must be treated as the default/unknown implementation, it might:
+   - simply return the argument unchanged;
+   - throw if the argument is null;
+   - or do something else. We cannot rely on it to guarantee non-null.
+
+3. Call sites:
+   - One caller is:
+
+     public static boolean overlapConvexPolygons(Polygon p1, Polygon p2, MinimumTranslationVector mtv) {
+         return overlapConvexPolygons(
+             Nullability.castToNonnull(p1.getTransformedVertices()),
+             p2.getTransformedVertices(),
+             mtv);
+     }
+
+     Here, `verts2` in the target method is `p2.getTransformedVertices()`. The provided implementation of `Polygon.getTransformedVertices()` always returns the field `worldVertices`. That field is:
+       - either directly returned if `!dirty`,
+       - or, if `dirty` is true, initialized to `new float[localVertices.length]` if null or mismatched in length, and then returned.
+     Consequently, given this implementation, `getTransformedVertices()` never returns null; therefore in this specific call path, `verts2` will be non-null (assuming `p2` itself is non-null, which is required to even call the method).
+
+   - Another caller:
+
+     public static boolean overlapConvexPolygons(Polygon p1, Polygon p2) {
+         return overlapConvexPolygons(p1, p2, null);
+     }
+
+     This just delegates to the above overload, so the same reasoning applies for that path: `verts2` is non-null when coming from a `Polygon`.
+
+4. However, the `float[]` overload of `overlapConvexPolygons` is `public static` and accepts raw arrays. There is nothing in this method that prevents an arbitrary caller from invoking:
+
+   Intersector.overlapConvexPolygons(null, someArray, mtv);
+   Intersector.overlapConvexPolygons(array1, null, mtv);
+   Intersector.overlapConvexPolygons(array1, maybeNullArray, mtv);
+
+   Since the API itself does not enforce non-null at the type level and there are no checks here, such calls are possible. The question is about whether `verts2` *can* be null based on the method’s context and its call invocations.
+
+   - From library-internal usage (the shown call chain via `Polygon`), `verts2` is indeed always non-null.
+   - But from the public API perspective, other callers (not shown) are free to pass null, and no code in this method prevents or corrects that.
+
+5. Because:
+   - `verts2` is directly the caller-supplied parameter;
+   - there is no internal reassignment to make it non-null;
+   - there is no guaranteed null-check/throw we can rely on (implementation of `castToNonnull` is unknown and cannot be assumed to sanitize null without throwing);
+   - and the method is public and can be called with null from outside the shown call chain,
+
+   we must conclude that `verts2` *can* be null at the entry of this method as a matter of possible runtime behavior, even though certain internal callers never provide null.
+
+Therefore, considering all possible callers (not only the shown polygon-based ones), `verts2` can be null when passed into this method.]]></reason>
+    <value>YES</value>
+</response>

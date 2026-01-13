@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getPadX() {
+        Actor a = actor;
+        if (a == null) return 0;
+        Value padLeft = this.padLeft;
+        Value padRight = this.padRight;
+        if (padLeft == null) padLeft = Value.zero;
+        if (padRight == null) padRight = Value.zero;
+        return padLeft.get(a) + Nullability.castToNonnull(padRight).get(a);
+}
+  ```
+    ]]>
+  </code>
+</response>

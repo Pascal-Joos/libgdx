@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void FlushStream() throws IOException {
+      if (Stream == null) {
+          return;
+      }
+      Stream.flush();
+  }
+  ```
+    ]]>
+  </code>
+</response>

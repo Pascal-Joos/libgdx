@@ -1,0 +1,16 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the only direct control over nullability of c.maxWidth is via explicit null checks before use. In the specific line:
+
+    float maxWidth = c.maxWidth == null ? 0 : c.maxWidth.get(a),
+
+the code explicitly guards against c.maxWidth being null by using a ternary expression that substitutes 0 when c.maxWidth is null, and only calls get(a) when c.maxWidth is non-null. Therefore, at this line, the expression `c.maxWidth` is allowed to be null by design, and the code accounts for that possibility.
+
+Nothing in the shown method or surrounding control flow guarantees that c.maxWidth is always initialized to a non-null value before this use. In fact, later usages of maxWidth and maxHeight inside the same method also include `c.maxWidth == null ? 0 : ...` and `c.maxHeight == null ? 0 : ...`, which is another indication that the type contract for these fields is "nullable".
+
+Hence, from the standpoint of this method alone and the visible contracts, `c.maxWidth` can indeed be null at runtime; it just happens that this particular line safely handles that case.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Stage(Viewport viewport, Batch batch) {
+    if (viewport == null) throw new IllegalArgumentException("viewport cannot be null.");
+    if (batch == null) throw new IllegalArgumentException("batch cannot be null.");
+    this.viewport = viewport;
+    this.batch = batch;
+
+    root = new Group();
+    root.setStage(this);
+
+    Graphics graphics = Gdx.graphics;
+    if (graphics != null) {
+        viewport.update(graphics.getWidth(), graphics.getHeight(), true);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public int hashCode() {
+      if (textureRegion == null) {
+        return 1;
+      }
+      int result = textureRegion.getTexture() != null ? textureRegion.getTexture().hashCode() : 0;
+      result = 31 * result + srcBlendFactor;
+      result = 31 * result + dstBlendFactor;
+      return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

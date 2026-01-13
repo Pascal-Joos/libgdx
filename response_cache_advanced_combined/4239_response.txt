@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void begin() {
+        if (color == null && target != null) color = Nullability.castToNonnull(target).getColor();
+        startR = color.r;
+        startG = color.g;
+        startB = color.b;
+        startA = color.a;
+  }
+  ```
+    ]]>
+  </code>
+</response>

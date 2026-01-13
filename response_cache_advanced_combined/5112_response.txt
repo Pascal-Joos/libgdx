@@ -1,0 +1,39 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, every execution path that reaches the expression
+
+    Code = (Code << 8) | Stream.read();
+
+(or equivalently, with the explicit non-null cast,
+    Code = (Code << 8) | readByte;
+after Nullability.castToNonnull(Stream).read())
+
+is guarded by a prior null-check on Stream:
+
+    if (Stream == null) {
+      throw new IOException("Stream is not set");
+    }
+
+This check is at the very start of DecodeBit and immediately throws if Stream is null, so no further code in the method can execute with a null Stream.
+
+The two occurrences of reading from Stream are:
+
+1) In the "then" branch:
+   - The method has already passed the `if (Stream == null)` check.
+   - It calls `Nullability.castToNonnull(Stream).read()`.
+   - If the stream is unexpectedly ended, an IOException is thrown, but that does not make Stream null; it just aborts execution.
+
+2) In the "else" branch:
+   - Same conditions: we are still in the same method invocation that successfully passed the initial null check.
+   - Again calls `Nullability.castToNonnull(Stream).read()` and handles -1 similarly.
+
+There is no re-assignment to Stream inside DecodeBit; hence once the initial null check passes, Stream cannot become null during the rest of this method call (Java references do not spontaneously become null without an explicit assignment).
+
+The presence of `Nullability.castToNonnull(Stream)` also suggests a contract that this call will treat Stream as non-null (and typically should only be invoked when the caller has already established non-nullness, which is exactly what happens here).
+
+Therefore, in this method, at the point of executing the expression involving Stream.read(), Stream cannot be null on any reachable, non-exceptional path.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

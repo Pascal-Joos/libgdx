@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean contains(float x, float y) {
+    final float[] vertices = getTransformedVertices();
+    final int numFloats = Nullability.castToNonnull(vertices).length;
+    int intersects = 0;
+
+    for (int i = 0; i < numFloats; i += 2) {
+      float x1 = Nullability.castToNonnull(vertices)[i];
+      float y1 = Nullability.castToNonnull(vertices)[i + 1];
+      float x2 = Nullability.castToNonnull(vertices)[(i + 2) % numFloats];
+      float y2 = Nullability.castToNonnull(vertices)[(i + 3) % numFloats];
+      if (((y1 <= y && y < y2) || (y2 <= y && y < y1))
+          && x < ((x2 - x1) / (y2 - y1) * (y - y1) + x1)) intersects++;
+    }
+    return (intersects & 1) == 1;
+  }
+  ```
+    ]]>
+  </code>
+</response>

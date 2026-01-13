@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name allocateChannels does not start with "init" or "initialize", and it is not one of the known framework lifecycle methods (e.g., Activity.onCreate, Processor.init, Servlet.init). By the criteria you described, only such known lifecycle methods or methods whose names begin with "init"/"initialize" (and are not setters) should be treated as initializer methods. Even though allocateChannels initializes fields, it is an arbitrary lifecycle/utility method, not a recognized initializer method per your definition. Therefore it should not be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

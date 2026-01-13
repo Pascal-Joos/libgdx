@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void update(float percent) {
+      if (color == null) {
+        color = target.getColor();
+        if (color == null) return;
+      }
+      if (percent == 0) Nullability.castToNonnull(color).set(startR, startG, startB, startA);
+      else if (percent == 1) Nullability.castToNonnull(color).set(end);
+      else {
+        float r = startR + (end.r - startR) * percent;
+        float g = startG + (end.g - startG) * percent;
+        float b = startB + (end.b - startB) * percent;
+        float a = startA + (end.a - startA) * percent;
+        Nullability.castToNonnull(color).set(r, g, b, a);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

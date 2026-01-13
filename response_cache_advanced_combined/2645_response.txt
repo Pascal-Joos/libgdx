@@ -1,0 +1,41 @@
+```xml
+<response>
+    <reason><![CDATA[
+The potential nullability of `text` at the line
+
+    cursor = MathUtils.clamp(cursor, 0, text.length());
+
+cannot be determined from this method alone, because:
+
+1. **No local assignment in this method**  
+   In `keyDown`, `text` is only read (`oldText = text;`, `setText(undoText);`, `text.length()`), never assigned. Its value must come from:
+   - a field initialization in the class, or
+   - a constructor, or
+   - a setter method (e.g., `setText(...)`), outside this snippet.
+
+2. **No null-check in this method**  
+   There is no `if (text == null)` or any other safeguard before calling `text.length()`. So if `text` can be null at runtime, this line will throw a `NullPointerException`.
+
+3. **Other calls do not guarantee non-null**  
+   - `setText(undoText);` could in principle set `text` to null or to a non-null value; we cannot see its contract here.
+   - `updateDisplayText();`, `copy()`, `cut()`, `paste()`, `goHome()`, `goEnd()`, etc., might implicitly rely on `text` being non-null, but without their implementations or the field declaration we cannot rely on that as a guarantee.
+
+4. **Typical library behavior is suggestive but not definitive**  
+   In many UI libraries (e.g., LibGDX’s `TextField`), `text` is initialized to `""` and `setText(null)` converts null to `""`. If this is LibGDX `TextField`-like code, then by convention `text` is never null. However, that is an assumption based on external knowledge of the library, not something provable from the provided snippet alone.
+
+Because the snippet omits:
+- the declaration/initialization of `text`, and
+- the implementation/contract of `setText` and any constructors,
+
+we cannot conclusively state that `text` is always non-null when `keyDown` runs. We also cannot conclusively state that it can be null, since the class could guarantee non-nullability by design.
+
+Therefore, with only this method and no class-level or library contract information, the nullability of `text` at this line is undetermined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of the `text` field (including any default initialization).]]></request>
+        <request><![CDATA[Provide the implementation (or documented contract) of the `setText` method and any constructors of this class.]]></request>
+        <request><![CDATA[If this is from a known library (e.g., LibGDX TextField), specify the library/class so its documented invariants can be taken into account.]]></request>
+    </requests>
+</response>
+```

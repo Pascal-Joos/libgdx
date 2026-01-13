@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void CopyBlock(int distance, int len) throws IOException {
+          if (_buffer == null) return;
+          byte[] nonNullBuffer = Nullability.castToNonnull(_buffer);
+          int pos = _pos - distance - 1;
+          if (pos < 0) pos += _windowSize;
+          for (; len != 0; len--) {
+            if (pos >= _windowSize) pos = 0;
+            nonNullBuffer[_pos++] = nonNullBuffer[pos++];
+            if (_pos >= _windowSize) Flush();
+          }
+}
+  ```
+    ]]>
+  </code>
+</response>

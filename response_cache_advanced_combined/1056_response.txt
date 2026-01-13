@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided snippet alone, we see the expression:
+
+    c = i + controller.particles.size * rotationalVelocity2dChannel.strideSize;
+
+The potential for `controller` to be null depends entirely on:
+
+1. How `controller` is declared (instance field? local variable? inherited field?).
+2. Where and how `controller` is initialized before `update()` is called.
+3. Whether there are any guarantees from the framework or calling code that `controller` is non-null when `update()` executes.
+
+In the given method body, there are:
+- No assignments to `controller`.
+- No null checks on `controller`.
+- No visible contract or annotation (@NonNull, etc.) ensuring `controller` is non-null.
+
+Because you only provided the method body and not the enclosing class, constructor, or any framework contracts, it's impossible to prove either:
+- that `controller` is always initialized to a non-null value before `update()` runs, or
+- that it can be left null by some code path.
+
+Thus, with the information currently available, both of these are logically possible:
+- `controller` is never null at runtime because the framework or class guarantees it.
+- `controller` might be null if some caller or initialization path forgets to set it.
+
+Without additional context (class definition, constructor, framework contract), we cannot soundly conclude either way.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the declaration of the field/variable `controller` (including its type and where it is defined: in this class, a superclass, or elsewhere).]]></request>
+        <request><![CDATA[Provide the constructor(s) and any initialization logic for this class, particularly where `controller` is assigned.]]></request>
+        <request><![CDATA[If applicable, provide the interface or superclass that defines `update()`, plus any documentation or annotations that describe the lifecycle/guarantees for `controller`.]]></request>
+    </requests>
+</response>
+```

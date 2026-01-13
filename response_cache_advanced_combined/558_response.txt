@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean isAnimationFinished(float stateTime) {
+      if (keyFrames == null) return true;
+      int frameNumber = (int) (stateTime / frameDuration);
+      return keyFrames.length - 1 < frameNumber;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,42 @@
+```xml
+<response>
+    <reason><![CDATA[
+Focusing on the specific expression:
+
+    particleOffsets[particleIndices[i]] = i;
+
+The potentially-null value here is the array reference `particleOffsets`.
+
+Within the method, the control flow before this line is:
+
+1. `ensureCapacity(capacity);` – we do not see its implementation, so we cannot rely on it to guarantee `particleOffsets` is non-null.
+
+2. Early-return checks:
+   - If `camera == null || camera.view == null`, the method returns `null`.
+   - If `particleIndices == null`, the method returns `null`.
+
+3. Later, just before the loop that contains our line:
+   ```java
+   if (particleOffsets == null) {
+     return null;
+   }
+   for (i = 0; i < count; ++i) {
+     particleOffsets[particleIndices[i]] = i;
+   }
+   ```
+   This is a direct null check on `particleOffsets`. If `particleOffsets` is `null`, the method *returns* before executing the loop, so the assignment is never reached in that case.
+
+Thus:
+- The method explicitly guards against `particleOffsets` being null immediately before the relevant loop.
+- There are no assignments to `particleOffsets` between the `if (particleOffsets == null)` check and the `particleOffsets[particleIndices[i]] = i;` line.
+- Therefore, on any code path where the assignment runs, `particleOffsets` must have been non-null at the null-check and remains non-null when used.
+
+The only missing piece is the implementation of `ensureCapacity(capacity)`, but that is not needed to answer whether `particleOffsets` can be null *at the point of use*: the method already guards against `particleOffsets == null` and returns early in that case, so the null case is excluded before the expression is executed.
+
+Conclusion: At the line
+    particleOffsets[particleIndices[i]] = i;
+the expression `particleOffsets` cannot be null, because the code path that would make it null returns beforehand.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

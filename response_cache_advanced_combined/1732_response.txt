@@ -1,0 +1,53 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the given method alone:
+
+protected void begin() {
+      if (target == null) setTarget(actor);
+      if (target != null) start = target.getRotation();
+}
+
+we have the following information and constraints:
+
+1. `target` is referenced twice: once in a null-check, and then again in a second null-check before calling `target.getRotation()`.
+
+2. Control flow:
+   - If `target` is initially null, `setTarget(actor)` is called.
+   - After that call, the code checks `if (target != null)` before using `target`.
+   - The call `start = target.getRotation();` only occurs when `target != null` at that point in time.
+
+3. For `target` to be null at the call site:
+   - Either the second `if (target != null)` would need to be bypassed or
+   - `target` would have to become null between the `if (target != null)` check and the `target.getRotation()` call.
+
+   In normal single-threaded Java semantics, the latter cannot happen without additional intervening code (there is no such code here). Within a single thread and no modification between the check and the use, `target` cannot change spontaneously.
+
+4. However, the method `setTarget(actor)` is not shown. It might:
+   - Leave `target` as null (e.g., if `actor` is invalid or some condition fails),
+   - Set `target` to a non-null value,
+   - Or there might be external code (other threads) concurrently mutating `target`.
+
+   The second `if (target != null)` already accounts for the possibility that `setTarget(actor)` did not assign a non-null value: in that case the body will not execute, and the expression `target.getRotation()` will never be evaluated.
+
+5. Concurrency considerations:
+   - If `target` is a shared field accessed from multiple threads without proper synchronization, another thread could potentially set `target` to null after the `if (target != null)` check and before `target.getRotation()` executes.
+   - With no additional information about thread-safety guarantees or immutability, this race condition cannot be ruled out from the snippet alone.
+
+6. Contract/semantics of `setTarget` and `target`:
+   - The snippet does not state that `setTarget` guarantees `target` is non-null afterward.
+   - It also does not state that `target` is thread-confined or final.
+   - Without those guarantees, static analysis in the general case cannot conclusively prove that `target` cannot be null at the call site in a multi-threaded context.
+
+Conclusion:
+- In a purely single-threaded context, given the null check immediately before use, `target` cannot be null at the call to `getRotation()`.
+- In the more general case (which static analysis tools usually assume unless specified), where `target` might be modified by other threads and we have no synchronization or stronger contracts, we *cannot* be certain that `target` is non-null at the point of use.
+
+Because these crucial details (threading model and `setTarget`/field contracts) are not provided, we cannot definitively determine that `target` can or cannot be null at the expression.]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation of setTarget(actor) and any documentation/contract that states whether it guarantees a non-null assignment to target or may leave it null.]]></request>
+        <request><![CDATA[Clarify whether target is accessed from multiple threads and, if so, whether there is any synchronization, immutability, or other thread-safety guarantees for target.]]></request>
+    </requests>
+</response>
+```

@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void clear() {
+    targets.clear();
+    for (Entry<Source, DragListener> entry : Nullability.castToNonnull(sourceListeners.entries()))
+      entry.key.actor.removeCaptureListener(entry.value);
+    sourceListeners.clear(8);
+}
+  ```
+    ]]>
+  </code>
+</response>

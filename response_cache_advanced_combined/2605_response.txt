@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setLabel(Label label) {
+      Cell labelCell = getLabelCell();
+      if (labelCell != null) {
+          labelCell.setActor(label);
+      }
+      this.label = label;
+  }
+  ```
+    ]]>
+  </code>
+</response>

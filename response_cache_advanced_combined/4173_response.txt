@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public boolean touchUp(int x, int y, int pointer, int button) {
+      synchronized (this) {
+        if (!connected || out == null) return false;
+        try {
+          Nullability.castToNonnull(out).writeInt(TOUCH_UP);
+          Nullability.castToNonnull(out).writeInt(x);
+          Nullability.castToNonnull(out).writeInt(y);
+          Nullability.castToNonnull(out).writeInt(pointer);
+        } catch (Throwable t) {
+          connected = false;
+        }
+      }
+      return false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

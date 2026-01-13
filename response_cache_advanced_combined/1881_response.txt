@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the local variable `style` is initially assigned from `this.style`, may be reassigned from `getStyle()` if that returns a `ButtonStyle`, and then is explicitly null-checked:
+
+    ButtonStyle style = this.style;
+    if (style == null && getStyle() instanceof ButtonStyle) style = (ButtonStyle)getStyle();
+    if (style == null) return null;
+    this.style = style;
+
+After the `if (style == null) return null;` line, all remaining code (including the line in question) is in the same method and execution path. This guarantees that `style` is non-null along every path that reaches:
+
+    if (isPressed()) {
+      if (isChecked() && Nullability.castToNonnull(style).checkedDown != null) return Nullability.castToNonnull(style).checkedDown;
+      ...
+    }
+
+The only way for `style` to be null is handled by the early return, so control flow cannot reach the `if (isChecked() && style.checkedDown != null)` check with `style` still null.
+
+This conclusion does not depend on the semantics of `isChecked()`, `isPressed()`, or any other methods; it follows purely from the control flow and null check on `style` within this method. Therefore, at the line `if (isChecked() && style.checkedDown != null)`, the variable `style` cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

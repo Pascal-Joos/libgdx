@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public final Vector3 spawn(Vector3 vector, float percent) {
+      spawnAux(vector, percent);
+      if (xOffsetValue != null && xOffsetValue.active) vector.x += xOffsetValue.newLowValue();
+      if (yOffsetValue != null && yOffsetValue.active) vector.y += yOffsetValue.newLowValue();
+      if (zOffsetValue != null && zOffsetValue.active) vector.z += zOffsetValue.newLowValue();
+      return vector;
+  }
+  ```
+    ]]>
+  </code>
+</response>

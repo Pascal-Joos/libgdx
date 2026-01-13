@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Nullable
+  protected Drawable getKnobBeforeDrawable() {
+    if (style == null) return null;
+    if (disabled && style.disabledKnobBefore != null) return style.disabledKnobBefore;
+    return style.knobBefore;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,45 @@
+<response>
+  <reason><![CDATA[
+At this call site, the value comes from an `ObjectMap<String, PixmapPackerRectangle>`:
+
+```java
+for (String name : page.rects.keys()) {
+  ...
+  PixmapPackerRectangle rect = page.rects.get(name);
+  writer.write("  xy: " + (int) rect.x + "," + (int) rect.y + "\n");
+  ...
+}
+```
+
+Key points:
+
+1. The loop iterates over `page.rects.keys()`. For an `ObjectMap`, `keys()` returns the keys currently present in the map.
+2. For every `name` yielded by `page.rects.keys()`, that key is guaranteed to be present in `page.rects`.
+3. The same `page.rects` map is populated in `PixmapPacker.pack`:
+
+   ```java
+   if (name != null) {
+     page.rects.put(name, rect);
+     page.addedRects.add(name);
+   }
+   ```
+
+   So any key present in `rects.keys()` comes from a prior `put(name, rect)` with a non-null `rect`.
+
+4. There is no code shown that removes entries from `page.rects` between the time they are added and the time `save` iterates over `page.rects.keys()`. Thus, during the loop, every `name` corresponds to an existing entry.
+
+5. Given `ObjectMap.get`’s implementation:
+
+   ```java
+   public @Null <T extends K> V get(T key) {
+       int i = locateKey(key);
+       return i < 0 ? null : valueTable[i];
+   }
+   ```
+
+   `null` is only returned when the key is not found (`i < 0`). At this call site, every `name` is a present key, so `i >= 0`, and the method returns `valueTable[i]`, which is the `PixmapPackerRectangle` previously stored.
+
+Therefore, for this specific invocation inside the `for (String name : page.rects.keys())` loop, `page.rects.get(name)` cannot be `null,` and `rect` is non-null at that point.
+]]></reason>
+  <value>NO</value>
+</response>

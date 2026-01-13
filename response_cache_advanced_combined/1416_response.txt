@@ -1,0 +1,33 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private final int bindTextureLRU(final GLTexture texture) {
+      int i;
+      for (i = 0; i < count; i++) {
+        final int idx = Nullability.castToNonnull(unitsLRU)[i];
+        if (textures[idx] == texture) {
+          reused = true;
+          break;
+        }
+        if (textures[idx] == null) {
+          break;
+        }
+      }
+      if (i >= count) i = count - 1;
+      final int idx = Nullability.castToNonnull(unitsLRU)[i];
+      while (i > 0) {
+        Nullability.castToNonnull(unitsLRU)[i] = Nullability.castToNonnull(unitsLRU)[i - 1];
+        i--;
+      }
+      Nullability.castToNonnull(unitsLRU)[0] = idx;
+      if (!reused) {
+        textures[idx] = texture;
+        texture.bind(offset + idx);
+      }
+      return idx;
+  }
+  ```
+    ]]>
+  </code>
+</response>

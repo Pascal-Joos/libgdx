@@ -1,0 +1,78 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all control paths that reach the line `entries2.reset();`.
+
+Method:
+
+public Entries entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+        entries1 = new Entries(this);
+        entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+        entries1.reset();
+        entries1.valid = true;
+        Nullability.castToNonnull(entries2).valid = false;
+        return entries1;
+    }
+    entries2.reset();
+    entries2.valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+Key points:
+
+1. The early return:
+   - If `Collections.allocateIterators` is `true`, the method returns immediately and never executes `entries2.reset();`.
+   - Therefore, any execution reaching `entries2.reset();` must be on the path where `Collections.allocateIterators` is `false`.
+
+2. Initialization of `entries1` and `entries2`:
+   - When `Collections.allocateIterators` is `false`, execution continues to:
+     if (entries1 == null) {
+         entries1 = new Entries(this);
+         entries2 = new Entries(this);
+     }
+   - If `entries1` is `null`, both `entries1` and `entries2` are assigned `new Entries(this)`, so `entries2` becomes non-null.
+   - If `entries1` is *not* null, this `if` block is skipped. That means `entries2` must have been set previously to some value. For us to reason that `entries2` cannot be null, we must rely on the class invariant that once `entries1` is non-null, `entries2` has also been initialized (this is implied by this method if it is the only place where `entries1` and `entries2` are set, but that is a class-level assumption).
+
+3. The conditional on `entries1.valid`:
+   - Next, we have:
+     if (!entries1.valid) {
+         entries1.reset();
+         entries1.valid = true;
+         Nullability.castToNonnull(entries2).valid = false;
+         return entries1;
+     }
+   - If `!entries1.valid` is true, the method returns before `entries2.reset();` is executed.
+   - Thus, any control path that actually reaches `entries2.reset();` must satisfy:
+     - `Collections.allocateIterators == false`
+     - `entries1 != null`
+     - `entries1.valid == true`
+
+4. Reaching `entries2.reset();`:
+   - Therefore, the line:
+     entries2.reset();
+     is reached only when:
+     - Either `entries1` was null in this call, in which case the `if (entries1 == null)` block executed and just created `entries2 = new Entries(this);`, so `entries2` is definitely non-null.
+     - Or `entries1` was already non-null, and, under the intended invariant of this pattern, `entries2` must have been initialized in some previous call to `entries()` (since the same `if (entries1 == null)` block would have run the first time and set both). Under that invariant, `entries2` cannot be null here.
+
+5. The `Nullability.castToNonnull(entries2)` call:
+   - On the path where `!entries1.valid` is true, we see `Nullability.castToNonnull(entries2).valid = false;`.
+   - This is a non-null assertion at the type level: it documents the intended contract that `entries2` is never null at that point.
+   - Although this is on a different branch than `entries2.reset();`, it reinforces the design intent that `entries2` is always a non-null field once the object is in normal use.
+
+Conclusion:
+
+- Under the method's own logic, whenever control reaches `entries2.reset();`, `entries2` has either:
+  - Just been instantiated in the current call (when `entries1` was null), or
+  - Was instantiated in a previous call when `entries1` was first set, and not set back to null.
+- There is no code path within this method that reaches `entries2.reset();` with `entries2` left uninitialized or possibly null, assuming the rest of the class does not mutate `entries2` to null behind the scenes.
+
+Given only this method and standard Java field behavior (no external writes setting `entries2` to null), `entries2` cannot be null at `entries2.reset();`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

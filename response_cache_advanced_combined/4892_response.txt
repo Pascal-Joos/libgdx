@@ -1,0 +1,16 @@
+<response>
+  <reason><![CDATA[
+At the call site in question, `assets` is an `ObjectMap` (e.g., in `AssetManager` and other classes), and the `get` method used is:
+
+```java
+public @Null <T extends K> V get(T key) {
+    int i = locateKey(key);
+    return i < 0 ? null : valueTable[i];
+}
+```
+
+This method explicitly returns `null` when `locateKey(key)` returns a negative index, i.e., when the key is not present in the map. There is no guarantee at the various shown call sites (e.g., `assets.get(type)`, `assets.get(fileName)`, `map.get(keys.get(nextIndex))`, `values.get(actor)`, etc.) that the key is actually contained in the map before the call; in many places the code checks for `null` right after calling `get` (e.g., `if (assetContainer != null)`, `if (listener == null) return;`, `if (materialGroup == null) { ... }`, `if (sprite == null) { ... }`), which demonstrates that the authors expect `get` to be able to return `null`.
+
+Because `ObjectMap.get` returns `null` for missing keys and the call sites do not prove that the key is always present, the result of `assets.get(type)` (and analogous uses) can indeed be `null`.]]></reason>
+  <value>YES</value>
+</response>

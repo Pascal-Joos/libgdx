@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private static boolean deleteDirectory(File file) {
+      emptyDirectory(file, false);
+      return Nullability.castToNonnull(file).delete();
+  }
+  ```
+    ]]>
+  </code>
+</response>

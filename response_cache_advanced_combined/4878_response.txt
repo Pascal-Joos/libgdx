@@ -1,0 +1,40 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected VertexAttribute[] parseAttributes(JsonValue attributes) {
+    Array<VertexAttribute> vertexAttributes = new Array<VertexAttribute>();
+    int unit = 0;
+    int blendWeightCount = 0;
+    for (JsonValue value = attributes.child; value != null; value = value.next) {
+      String attribute = value.asString();
+      String attr = (String) attribute;
+      if (Nullability.castToNonnull(attr).equals("POSITION")) {
+        vertexAttributes.add(VertexAttribute.Position());
+      } else if (Nullability.castToNonnull(attr).equals("NORMAL")) {
+        vertexAttributes.add(VertexAttribute.Normal());
+      } else if (Nullability.castToNonnull(attr).equals("COLOR")) {
+        vertexAttributes.add(VertexAttribute.ColorUnpacked());
+      } else if (Nullability.castToNonnull(attr).equals("COLORPACKED")) {
+        vertexAttributes.add(VertexAttribute.ColorPacked());
+      } else if (Nullability.castToNonnull(attr).equals("TANGENT")) {
+        vertexAttributes.add(VertexAttribute.Tangent());
+      } else if (Nullability.castToNonnull(attr).equals("BINORMAL")) {
+        vertexAttributes.add(VertexAttribute.Binormal());
+      } else if (Nullability.castToNonnull(attr).startsWith("TEXCOORD")) {
+        vertexAttributes.add(VertexAttribute.TexCoords(unit++));
+      } else if (Nullability.castToNonnull(attr).startsWith("BLENDWEIGHT")) {
+        vertexAttributes.add(VertexAttribute.BoneWeight(blendWeightCount++));
+      } else {
+        throw new GdxRuntimeException(
+            "Unknown vertex attribute '"
+                + Nullability.castToNonnull(attr)
+                + "', should be one of position, normal, uv, tangent or binormal");
+      }
+    }
+    return vertexAttributes.toArray(VertexAttribute.class);
+}
+  ```
+    ]]>
+  </code>
+</response>

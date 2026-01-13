@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void clearChildren() {
+      if (children == null) return;
+      for (int i = 0; i < 8; i++) {
+        children[i].free();
+        children[i] = null;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

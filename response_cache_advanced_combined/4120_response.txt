@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Texture getTexture() {
+      if (renderable.material == null) {
+          return null;
+      }
+      TextureAttribute attribute =
+          (TextureAttribute) renderable.material.get(TextureAttribute.Diffuse);
+      return attribute == null ? null : attribute.textureDescription.texture;
+  }
+  ```
+    ]]>
+  </code>
+</response>

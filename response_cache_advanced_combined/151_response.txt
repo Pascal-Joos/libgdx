@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void bind(int unit) {
+      if (Gdx.gl != null) {
+          Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0 + unit);
+          Gdx.gl.glBindTexture(glTarget, glHandle);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

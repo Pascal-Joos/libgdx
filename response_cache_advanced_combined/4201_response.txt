@@ -1,0 +1,85 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+```java
+float[] vertices2 = p2.getTransformedVertices();
+```
+
+the returned value cannot be null, assuming `p2` is a non-null `Polygon` instance (otherwise the call would throw a `NullPointerException` before any return).
+
+Consider the implementation of `getTransformedVertices()`:
+
+```java
+public float[] getTransformedVertices() {
+    if (!dirty) return worldVertices;
+    dirty = false;
+
+    final float[] localVertices = this.localVertices;
+    if (worldVertices == null || worldVertices.length != localVertices.length)
+      worldVertices = new float[localVertices.length];
+
+    final float[] worldVertices = this.worldVertices;
+    ...
+    for (...) {
+      ...
+      worldVertices[i] = ...;
+      worldVertices[i + 1] = ...;
+    }
+    return worldVertices;
+}
+```
+
+There are exactly two return sites:
+
+1. `if (!dirty) return worldVertices;`
+2. `return worldVertices;` at the end.
+
+For the second path, `worldVertices` is guaranteed non-null:
+
+- `localVertices` is read from `this.localVertices`. If `localVertices` were null, the line `localVertices.length` would throw a `NullPointerException`. The method therefore cannot proceed to the final `return worldVertices` with `localVertices == null`; it would throw instead of returning null.
+- If execution reaches the `if (worldVertices == null || worldVertices.length != localVertices.length)` block, then:
+  - If `worldVertices == null`, it is assigned `new float[localVertices.length]`, which is never null.
+  - If `worldVertices != null` but has wrong length, it is also replaced by a new non-null array.
+  - If the `if` condition is false, then `worldVertices` is already non-null and of correct length.
+- Thus, by the time `final float[] worldVertices = this.worldVertices;` is executed on the dirty path, `this.worldVertices` is definitively non-null. The local `worldVertices` variable therefore also cannot be null, and that is what is returned at the end.
+
+For the first path (`if (!dirty) return worldVertices;`), this is a direct return of the field `worldVertices` without any check/initialization. The question is whether, at this specific call site, there is a possible state where `dirty == false` and `worldVertices == null`.
+
+From the shown call chain, the only relevant uses constructing / manipulating the polygon before `intersectPolygons` call are:
+
+- `RepeatablePolygonSprite.setPolygon(...)` creates `Polygon polygon = new Polygon(vertices);` and later creates `Polygon tmpPoly = new Polygon();` and `Polygon intersectionPoly = new Polygon();`.
+- `Intersector.intersectPolygons(polygon, tmpPoly, intersectionPoly);` is where `p2.getTransformedVertices()` is called, and at that point `p2` is the second argument, which is `tmpPoly`.
+
+Key observations:
+
+- `tmpPoly` is freshly constructed (`new Polygon();`) before being passed to `intersectPolygons`.
+- The default `Polygon` constructor (not shown) will initialize its internal state, including `localVertices` and possibly `worldVertices` and `dirty`. However, even without seeing that constructor, note that `intersectPolygons` itself *always* calls `p2.getVertices()` before `p2.getTransformedVertices()`:
+
+  ```java
+  if (p1.getVertices().length == 0 || p2.getVertices().length == 0) {
+    return false;
+  }
+  ...
+  floatArray2.addAll(Nullability.castToNonnull(p1.getTransformedVertices()));
+  float[] vertices2 = p2.getTransformedVertices();
+  ```
+
+  - `p2.getVertices()` returns the raw vertex array, not `worldVertices`. If this array is empty, `intersectPolygons` returns early and never executes `p2.getTransformedVertices()` at all.
+  - Therefore, the only way the call `p2.getTransformedVertices()` is actually reached is when `p2.getVertices().length != 0`, i.e., `p2` has at least one vertex.
+
+Given a non-empty polygon (non-zero vertices array):
+
+- To have a non-empty vertices array, `localVertices` must be non-null and of positive length; otherwise vertex operations elsewhere (`setVertices`, the constructor taking vertices, etc.) would have to handle null, but within `getTransformedVertices` such a null would cause an immediate exception at `localVertices.length`, not a null return.
+- Once `localVertices` is non-null, the *first* time `getTransformedVertices()` is called on that polygon in a dirty state, the method will take the dirty path and guarantee `worldVertices` is initialized as shown above.
+- Any *subsequent* call with `dirty == false` will just return this already-initialized `worldVertices`. There is no code path shown that ever resets `worldVertices` to null.
+
+Thus, under the only condition where this call is actually executed (`p2.getVertices().length != 0`):
+
+- On the dirty path, `worldVertices` is allocated and returned, so it is non-null.
+- On the non-dirty path, `worldVertices` must already have been initialized by a previous dirty-path invocation, so it is also non-null.
+- If something were misinitialized such that `localVertices` or `worldVertices` were null without going through this logic, the method would throw a `NullPointerException` when accessing `localVertices.length` or `worldVertices[i]`, not return null.
+
+Therefore, at this specific call site, if the code runs without throwing an exception, `p2.getTransformedVertices()` will not return null.]]></reason>
+  <value>NO</value>
+</response>

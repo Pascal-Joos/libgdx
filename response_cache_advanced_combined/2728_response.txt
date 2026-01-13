@@ -1,0 +1,25 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getCursorX() {
+      float textOffset = 0;
+      if (style.font == null) return textOffset;
+      BitmapFont.BitmapFontData fontData = Nullability.castToNonnull(style.font).getData();
+      if (!(cursor >= glyphPositions.size || cursorLine * 2 >= linesBreak.size)) {
+        int lineStart = linesBreak.items[cursorLine * 2];
+        float glyphOffset = 0;
+        BitmapFont.Glyph lineFirst = fontData.getGlyph(displayText.charAt(lineStart));
+        if (lineFirst != null) {
+          // BitmapFontData.getGlyphs()#852
+          glyphOffset =
+              lineFirst.fixedWidth ? 0 : -lineFirst.xoffset * fontData.scaleX - fontData.padLeft;
+        }
+        textOffset = glyphPositions.get(cursor) - glyphPositions.get(lineStart) + glyphOffset;
+      }
+      return textOffset + fontData.cursorX;
+  }
+  ```
+    ]]>
+  </code>
+</response>

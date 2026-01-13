@@ -1,0 +1,51 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, the relevant line has already been updated to:
+
+    float prefWidth =
+            (c.prefWidth != null ? c.prefWidth : Value.prefWidth).get(a),
+        prefHeight =
+            (c.prefHeight != null ? c.prefHeight : Value.prefHeight).get(a);
+
+The question refers to the earlier, simpler form:
+
+    float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+
+In that original form, `c.prefHeight` can indeed be null, because:
+
+1. There is no prior null check on `c.prefHeight` in `layout()`.
+2. The code later in the method accesses `c.minWidth`, `c.maxWidth`, etc., with *fallbacks*:
+   
+   ```java
+   float minWidth =
+           (c.minWidth != null ? c.minWidth : Value.minWidth).get(a),
+       minHeight =
+           (c.minHeight != null ? c.minHeight : Value.minHeight).get(a);
+   float maxWidth =
+           (c.maxWidth != null ? c.maxWidth : Value.maxWidth).get(a),
+       maxHeight =
+           (c.maxHeight != null ? c.maxHeight : Value.maxHeight).get(a);
+   ```
+
+   This pattern shows that the `Cell` API allows these `Value` fields (`minWidth`, `minHeight`, `prefWidth`, `prefHeight`, `maxWidth`, `maxHeight`) to be null, and the correct way to use them is with a null-coalescing fallback to shared defaults (`Value.minWidth`, `Value.prefHeight`, etc.).
+
+3. The updated, safe usage for `prefWidth` and `prefHeight` now follows exactly that pattern:
+
+   ```java
+   (c.prefHeight != null ? c.prefHeight : Value.prefHeight).get(a);
+   ```
+
+   This change only makes sense if `c.prefHeight` is allowed to be null. Otherwise, the null-check would be unnecessary.
+
+4. Unless the `Cell` constructor or some invariant elsewhere in the class hierarchy *guarantees* that `prefHeight` is always initialized to a non-null default (and the rest of the method does not assume that—on the contrary, it assumes nullability for the analogous fields), there is no protection in this method against `c.prefHeight` being null.
+
+Therefore, in the version of the code that reads:
+
+    float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+
+`c.prefHeight` can be null, and calling `.get(a)` on it can cause a `NullPointerException`. The revised, ternary-expression form is specifically there to prevent that scenario.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

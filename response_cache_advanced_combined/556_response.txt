@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `setKeyFrames` clearly follows the setter naming convention (`setX`), and by your own criteria, setter methods must not be treated as initializer methods even if they assign multiple fields. It also does not match any of the special framework lifecycle names (e.g., `onCreate`, `init`, `initialize...`). Therefore, according to the stated rules, this method should not be considered an initializer method for NullAway.]]></reason>
+    <value>NO</value>
+</response>

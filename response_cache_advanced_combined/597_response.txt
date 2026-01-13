@@ -1,0 +1,15 @@
+<response>
+    <reason><![CDATA[
+According to the criteria you described for NullAway, initializer methods are either:
+- Known framework lifecycle/setup methods (e.g., Activity.onCreate, Servlet.init, etc.), or
+- Methods whose names start with "init" or "initialize" and are not setters.
+
+Your method is named `setPolygon`, which:
+- Does not match any of the known framework initializer signatures you listed.
+- Does not start with "init" or "initialize".
+- Follows the naming convention of a setter (prefix `set`), which you explicitly stated should *not* be treated as an initializer, even if it initializes fields.
+
+Therefore, even though `setPolygon` initializes multiple fields and internal structures, by the rules you outlined it should *not* be considered an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

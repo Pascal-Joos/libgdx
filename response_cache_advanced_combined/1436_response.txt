@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `prepare` does not match any of the known framework-style initializer patterns (e.g., `onCreate`, `init`, `initialize`) and does not begin with the prefixes "init" or "initialize" as specified. While it clearly sets up internal state (initializes fields and enforces single use via `isPrepared`), by the criteria you described, initializer methods are either well-known lifecycle hooks (like `onCreate`, `init` in specific frameworks) or methods whose names start with "init"/"initialize" and are not setters. This method's name does not satisfy those naming-based assumptions, so under NullAway's intended heuristic it should not be treated as an initializer method even though it performs initialization logic.
+    ]]></reason>
+    <value>NO</value>
+</response>

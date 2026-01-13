@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void row() {
+        if (table == null) return;
+        Nullability.castToNonnull(table).row();
+}
+  ```
+    ]]>
+  </code>
+</response>

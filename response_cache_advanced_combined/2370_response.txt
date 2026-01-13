@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void drawBackground(Batch batch, float parentAlpha) {
+      if (style == null) throw new IllegalStateException("style cannot be null.");
+      if (Nullability.castToNonnull(style).background != null) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        Nullability.castToNonnull(style).background.draw(batch, getX(), getY(), getWidth(), getHeight());
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

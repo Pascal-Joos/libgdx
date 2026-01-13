@@ -1,0 +1,57 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public synchronized void updateTextureAtlas(
+      TextureAtlas atlas,
+      TextureFilter minFilter,
+      TextureFilter magFilter,
+      boolean useMipMaps,
+      boolean useIndexes) {
+    updatePageTextures(minFilter, magFilter, useMipMaps);
+    for (Page page : pages) {
+      if (page.addedRects.size > 0) {
+        for (String name : page.addedRects) {
+          PixmapPackerRectangle rect = page.rects.get(name);
+          TextureAtlas.AtlasRegion region =
+              new TextureAtlas.AtlasRegion(
+                  Nullability.castToNonnull(page.texture),
+                  (int) Nullability.castToNonnull(rect).x,
+                  (int) Nullability.castToNonnull(rect).y,
+                  (int) Nullability.castToNonnull(rect).width,
+                  (int) Nullability.castToNonnull(rect).height);
+
+          if (Nullability.castToNonnull(rect).splits != null) {
+            region.names = new String[] {"split", "pad"};
+            region.values = new int[][] {Nullability.castToNonnull(rect).splits, Nullability.castToNonnull(rect).pads};
+          }
+
+          int imageIndex = -1;
+          String imageName = name;
+
+          if (useIndexes) {
+            Matcher matcher = indexPattern.matcher(imageName);
+            if (matcher.matches()) {
+              imageName = matcher.group(1);
+              imageIndex = Integer.parseInt(matcher.group(2));
+            }
+          }
+
+          region.name = imageName;
+          region.index = imageIndex;
+          region.offsetX = Nullability.castToNonnull(rect).offsetX;
+          region.offsetY = (int) (Nullability.castToNonnull(rect).originalHeight - Nullability.castToNonnull(rect).height - Nullability.castToNonnull(rect).offsetY);
+          region.originalWidth = Nullability.castToNonnull(rect).originalWidth;
+          region.originalHeight = Nullability.castToNonnull(rect).originalHeight;
+
+          atlas.getRegions().add(region);
+        }
+        page.addedRects.clear();
+        atlas.getTextures().add(Nullability.castToNonnull(page.texture));
+      }
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

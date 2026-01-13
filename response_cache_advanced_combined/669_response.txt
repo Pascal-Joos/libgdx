@@ -1,0 +1,64 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void add(TextureRegion region, float x, float y, float width, float height) {
+    final float fx2 = x + width;
+    final float fy2 = y + height;
+    final float u = region.u;
+    final float v = region.v2;
+    final float u2 = region.u2;
+    final float v2 = region.v;
+
+    tempVertices[0] = x;
+    tempVertices[1] = y;
+    tempVertices[2] = colorPacked;
+    tempVertices[3] = u;
+    tempVertices[4] = v;
+
+    tempVertices[5] = x;
+    tempVertices[6] = fy2;
+    tempVertices[7] = colorPacked;
+    tempVertices[8] = u;
+    tempVertices[9] = v2;
+
+    tempVertices[10] = fx2;
+    tempVertices[11] = fy2;
+    tempVertices[12] = colorPacked;
+    tempVertices[13] = u2;
+    tempVertices[14] = v2;
+
+    if (mesh.getNumIndices() > 0) {
+      tempVertices[15] = fx2;
+      tempVertices[16] = y;
+      tempVertices[17] = colorPacked;
+      tempVertices[18] = u2;
+      tempVertices[19] = v;
+      Texture texture = region.texture;
+      add(texture, tempVertices, 0, 20);
+    } else {
+      tempVertices[15] = fx2;
+      tempVertices[16] = fy2;
+      tempVertices[17] = colorPacked;
+      tempVertices[18] = u2;
+      tempVertices[19] = v2;
+
+      tempVertices[20] = fx2;
+      tempVertices[21] = y;
+      tempVertices[22] = colorPacked;
+      tempVertices[23] = u2;
+      tempVertices[24] = v;
+
+      tempVertices[25] = x;
+      tempVertices[26] = y;
+      tempVertices[27] = colorPacked;
+      tempVertices[28] = u;
+      tempVertices[29] = v;
+      Texture texture = region.texture;
+      add(texture, tempVertices, 0, 30);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

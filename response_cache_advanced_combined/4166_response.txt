@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public boolean keyDown(int keycode) {
+    DataOutputStream localOut;
+    synchronized (this) {
+      if (!connected || out == null) return false;
+      localOut = out;
+    }
+
+    try {
+      localOut.writeInt(KEY_DOWN);
+      localOut.writeInt(keycode);
+    } catch (Throwable t) {
+      synchronized (this) {
+        connected = false;
+      }
+    }
+    return false;
+  }
+  ```
+    ]]>
+  </code>
+</response>

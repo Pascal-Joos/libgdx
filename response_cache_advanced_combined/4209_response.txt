@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void begin() {
+      if (target == null) return;
+      startX = target.getScaleX();
+      startY = target.getScaleY();
+  }
+  ```
+    ]]>
+  </code>
+</response>

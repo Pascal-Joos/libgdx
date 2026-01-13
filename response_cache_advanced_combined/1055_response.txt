@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name is `set`, which makes it a conventional setter, not an initializer. It does not match the documented initializer patterns (e.g., `onCreate`, `init`, `initialize`) and you explicitly do not want to treat setter methods as initializer methods. Therefore, it should not be considered an initializer method for NullAway.]]></reason>
+    <value>NO</value>
+</response>

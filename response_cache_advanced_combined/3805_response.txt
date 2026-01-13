@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+Under LibGDX’s Texture API, `texture.getTextureData()` is expected to return a non-null `TextureData` for any `Texture` that is in a state where `reload()` or asset reloading makes sense.
+
+In this method:
+
+1. `Texture texture` is taken from `managedTextures`, which is the mechanism LibGDX uses to track managed OpenGL textures. These are textures created/loaded through LibGDX such that:
+   - They are backed by a valid `TextureData`.
+   - They are registered for context-loss handling, which internally relies on that `TextureData` being available to recreate the GL texture.
+
+2. The branch in question (the one using `assetManager`) is only reached for textures that the `AssetManager` knows about (i.e., `fileName != null`). Such textures have been loaded via `AssetManager.load(..., Texture.class, ...)`, and that loading path constructs a `Texture` with a non-null `TextureData`. If `TextureData` were null:
+   - The original load through `AssetManager` would have failed (an error or exception), and the texture would not be in `managedTextures`/registered.
+   - LibGDX’s managed-texture reload logic, which this method mirrors, would be broken; but that logic is relied on heavily and assumes a valid `TextureData`.
+
+3. The code itself uses `texture.reload()` in the other branch (when `fileName == null`). The LibGDX implementation of `Texture.reload()` also depends on `texture.getTextureData()` being non-null. If `TextureData` could legitimately be null for a managed texture, `reload()` would itself be unsafe; yet this is the official pattern LibGDX uses and supports.
+
+4. There is no code path in this method that sets `params.textureData` to null: it is directly assigned from `texture.getTextureData()`, which, by contract/usage in LibGDX, is non-null for any properly created/managed `Texture`.
+
+Therefore, in the context of correctly constructed LibGDX `Texture` instances managed by `AssetManager` and registered in `managedTextures`, `texture.getTextureData()` (and hence `params.textureData`) is not expected to be null. The `Nullability.castToNonnull(...)` annotation/helper is consistent with this contract.
+
+So, under normal/valid usage of this API, `texture.data` at the site of `params.textureData.useMipMaps()` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

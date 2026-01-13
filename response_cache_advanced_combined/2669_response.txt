@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  int delete(boolean fireChangeEvent) {
+      int from = selectionStart;
+      int to = cursor;
+      int minIndex = Math.min(from, to);
+      int maxIndex = Math.max(from, to);
+      String newText =
+          (minIndex > 0 && text != null ? text.substring(0, minIndex) : "")
+              + (text != null && maxIndex < text.length() ? text.substring(maxIndex, text.length()) : "");
+      if (fireChangeEvent) changeText(text, newText);
+      else text = newText;
+      clearSelection();
+      return minIndex;
+  }
+  ```
+    ]]>
+  </code>
+</response>

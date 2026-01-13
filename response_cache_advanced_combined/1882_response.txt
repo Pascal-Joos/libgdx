@@ -1,0 +1,35 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected @Null Drawable getBackgroundDrawable() {
+                            ButtonStyle style = this.style;
+                            if (style == null && getStyle() instanceof ButtonStyle) style = (ButtonStyle)getStyle();
+                            if (style == null) return null;
+                            this.style = style;
+                            if (isDisabled() && Nullability.castToNonnull(style).disabled != null) return Nullability.castToNonnull(style).disabled;
+                            if (isPressed()) {
+                              if (isChecked() && Nullability.castToNonnull(style).checkedDown != null) return Nullability.castToNonnull(style).checkedDown;
+                              if (Nullability.castToNonnull(style).down != null) return Nullability.castToNonnull(style).down;
+                            }
+                            if (isOver()) {
+                              if (isChecked()) {
+                                if (Nullability.castToNonnull(style).checkedOver != null) return Nullability.castToNonnull(style).checkedOver;
+                              } else {
+                                if (Nullability.castToNonnull(style).over != null) return Nullability.castToNonnull(style).over;
+                              }
+                            }
+                            boolean focused = hasKeyboardFocus();
+                            if (isChecked()) {
+                              if (focused && Nullability.castToNonnull(style).checkedFocused != null) return Nullability.castToNonnull(style).checkedFocused;
+                              if (Nullability.castToNonnull(style).checked != null) return Nullability.castToNonnull(style).checked;
+                              if (isOver() && Nullability.castToNonnull(style).over != null) return Nullability.castToNonnull(style).over;
+                            }
+                            if (focused && Nullability.castToNonnull(style).focused != null) return Nullability.castToNonnull(style).focused;
+                            if (Nullability.castToNonnull(style).up == null) return null;
+                            return Nullability.castToNonnull(style).up;
+}
+  ```
+    ]]>
+  </code>
+</response>

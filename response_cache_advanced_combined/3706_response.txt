@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public final int DecodeDirectBits(int numTotalBits) throws IOException {
+        if (Stream == null) {
+            throw new IOException("Stream is not set");
+        }
+        int result = 0;
+        for (int i = numTotalBits; i != 0; i--) {
+          Range >>>= 1;
+          int t = ((Code - Range) >>> 31);
+          Code -= Range & (t - 1);
+          result = (result << 1) | (1 - t);
+  
+          if ((Range & kTopMask) == 0) {
+            Code = (Code << 8) | Nullability.castToNonnull(Stream).read();
+            Range <<= 8;
+          }
+        }
+        return result;
+}
+  ```
+    ]]>
+  </code>
+</response>

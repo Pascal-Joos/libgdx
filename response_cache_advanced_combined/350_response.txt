@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public synchronized <T> T get( AssetDescriptor<T> assetDescriptor) {
+      return get(Nullability.castToNonnull(assetDescriptor).fileName, Nullability.castToNonnull(assetDescriptor).type, true);
+  }
+  ```
+    ]]>
+  </code>
+</response>

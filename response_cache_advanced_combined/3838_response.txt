@@ -1,0 +1,26 @@
+```xml
+<response>
+    <reason><![CDATA[
+Yes, `region.name` can be null at that line.
+
+From the method:
+
+  for (int i = 0, n = regions.size; i < n; i++) {
+    AtlasRegion region = regions.get(i);
+    if (region.index != index) continue;
+    if (region.name == null || !region.name.equals(name)) continue;
+    return newSprite(regions.get(i));
+  }
+
+The expression in question is the `region.name` within `!region.name.equals(name)`.
+
+Immediately before that call, the code explicitly checks `region.name == null` and, if true, executes `continue;`. Because Java evaluates `||` left-to-right with short-circuiting, if `region.name` is null, the second operand `!region.name.equals(name)` is not evaluated.
+
+Thus, at the point where `region.name.equals(name)` is invoked, the control flow has already ensured that `region.name` is not null on that particular path:
+- If `region.name` is null → the first part of the `if` is true → the `continue` is taken → the `equals` call is never reached.
+- If execution reaches `region.name.equals(name)` → the condition `region.name == null` must have been false → `region.name` is guaranteed non-null.
+
+No other paths in this method invoke `region.name.equals(name)` without that preceding null check. Therefore, under standard Java semantics and given only this method, `region.name` cannot be null when `region.name.equals(name)` is actually evaluated.]]></reason>
+    <value>NO</value>
+</response>
+```

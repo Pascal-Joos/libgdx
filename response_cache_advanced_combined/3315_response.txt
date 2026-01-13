@@ -1,0 +1,41 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based on typical Java semantics and common collection APIs, the expression `sourceListeners.entries()` itself cannot be null, assuming `sourceListeners` is a properly constructed collection/map-like object and not reassigned to null anywhere before `clear()` is called.
+
+Detailed reasoning:
+
+1. **Expression being analyzed**  
+   The potentially-null expression is `sourceListeners.entries()`, not `sourceListeners` itself, and not the individual `entry` values. So we focus on the return value of the `entries()` method.
+
+2. **Common Java collection contracts**  
+   In standard Java and in common frameworks:
+   - `Map.entrySet()`, `Collection.iterator()`, etc., never return null; they return an empty collection/iterator if there are no elements.
+   - LibGDX and other utility collections that expose `entries()` follow similar patterns: `entries()` returns an iterable/iterator over entries, never null; the "empty" state is represented by an empty iterator/collection, not by `null`.
+
+3. **Control flow in this method**  
+   ```java
+   public void clear() {
+       targets.clear();
+       for (Entry<Source, DragListener> entry : sourceListeners.entries())
+           entry.key.actor.removeCaptureListener(entry.value);
+       sourceListeners.clear(8);
+   }
+   ```
+   - `targets.clear()` has no bearing on `sourceListeners`.
+   - The `for`-each loop requires `sourceListeners.entries()` to be non-null at runtime, otherwise a `NullPointerException` would occur immediately when entering the loop.
+   - After the loop, `sourceListeners.clear(8)` is called; this implies `sourceListeners` is expected to be a valid, non-null collection-like object with a `clear(int)` method, further supporting the assumption that its `entries()` behaves like a normal collection view.
+
+4. **When could it be null?**  
+   The only realistic way `sourceListeners.entries()` could be null is if:
+   - The implementation of `entries()` is explicitly written to sometimes return null (unusual and contrary to typical collection API design), or
+   - `sourceListeners` itself is null, in which case the null dereference occurs at `sourceListeners.entries()`, not because `entries()` returns null.
+
+   Under normal library contracts and idiomatic Java/LibGDX-style collection design, `entries()` will not return null.
+
+5. **Conclusion**  
+   Given standard collection semantics and absent any contrary custom implementation details, `sourceListeners.entries()` is not expected to return null; it should yield either a non-empty or empty iterable/iterator, but not null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

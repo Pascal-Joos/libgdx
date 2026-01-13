@@ -1,0 +1,32 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected FileHandle getAtlasFileHandle(FileHandle tmxFile) {
+      Element properties = this.root.getChildByName("properties");
+
+      String atlasFilePath = null;
+      if (properties != null) {
+        for (Element property : properties.getChildrenByName("property")) {
+          String name = property.getAttribute("name");
+          if (name.startsWith("atlas")) {
+            atlasFilePath = property.getAttribute("value");
+            break;
+          }
+        }
+      }
+      if (atlasFilePath == null) {
+        throw new GdxRuntimeException("The map is missing the 'atlas' property");
+      } else {
+        final FileHandle fileHandle = getRelativeFileHandle(tmxFile, atlasFilePath);
+        if (!fileHandle.exists()) {
+          throw new GdxRuntimeException(
+              "The 'atlas' file could not be found: '" + atlasFilePath + "'");
+        }
+        return fileHandle;
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

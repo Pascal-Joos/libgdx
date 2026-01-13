@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void writeObjectStart(Class actualType, @Null Class knownType, Writer writer) {
+      setWriter(writer);
+      try {
+        this.writer.object();
+      } catch (IOException ex) {
+        throw new SerializationException(ex);
+      }
+      if (knownType == null || knownType != actualType) writeType(actualType);
+  }
+  ```
+    ]]>
+  </code>
+</response>

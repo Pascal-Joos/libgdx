@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public int getWidth() {
+    if (data instanceof FileTextureData) return data.getWidth();
+    return 0;
+  }
+  ```
+    ]]>
+  </code>
+</response>

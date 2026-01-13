@@ -1,0 +1,72 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public synchronized void unload(String fileName) {
+    // check if it's currently processed (and the first element in the stack, thus not a dependency)
+    // and cancel if necessary
+    if (tasks.size > 0) {
+      AssetLoadingTask currentTask = tasks.first();
+      if (currentTask.assetDesc.fileName.equals(fileName)) {
+        log.info("Unload (from tasks): " + fileName);
+        currentTask.cancel = true;
+        currentTask.unload();
+        return;
+      }
+    }
+
+    Class type = assetTypes.get(fileName);
+
+    // check if it's in the queue
+    int foundIndex = -1;
+    for (int i = 0; i < loadQueue.size; i++) {
+      if (loadQueue.get(i).fileName.equals(fileName)) {
+        foundIndex = i;
+        break;
+      }
+    }
+    if (foundIndex != -1) {
+      toLoad--;
+      AssetDescriptor desc = loadQueue.removeIndex(foundIndex);
+      log.info("Unload (from queue): " + fileName);
+
+      // if the queued asset was already loaded, let the callback know it is available.
+      if (type != null && desc.params != null && desc.params.loadedCallback != null)
+        desc.params.loadedCallback.finishedLoading(this, desc.fileName, desc.type);
+      return;
+    }
+
+    if (type == null) throw new GdxRuntimeException("Asset not loaded: " + fileName);
+
+    ObjectMap<String, RefCountedContainer> assetsByType = assets.get(type);
+    if (assetsByType == null)
+      throw new GdxRuntimeException("Asset not loaded: " + fileName);
+    RefCountedContainer assetRef = assetsByType.get(fileName);
+    if (assetRef == null)
+      throw new GdxRuntimeException("Asset not loaded: " + fileName);
+
+    // if it is reference counted, decrement ref count and check if we can really get rid of it.
+    assetRef.refCount--;
+    if (assetRef.refCount <= 0) {
+      log.info("Unload (dispose): " + fileName);
+
+      // if it is disposable dispose it
+      if (assetRef.object instanceof Disposable) ((Disposable) assetRef.object).dispose();
+
+      // remove the asset from the manager.
+      assetTypes.remove(fileName);
+      assets.get(type).remove(fileName);
+    } else log.info("Unload (decrement): " + fileName);
+
+    // remove any dependencies (or just decrement their ref count).
+    Array<String> dependencies = assetDependencies.get(fileName);
+    if (dependencies != null) {
+      for (String dependency : dependencies) if (isLoaded(dependency)) unload(dependency);
+    }
+    // remove dependencies if ref count < 0
+    if (assetRef.refCount <= 0) assetDependencies.remove(fileName);
+}
+  ```
+    ]]>
+  </code>
+</response>

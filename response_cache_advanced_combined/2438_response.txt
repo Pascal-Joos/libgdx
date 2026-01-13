@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPrefHeight() {
+      if (style == null) throw new IllegalStateException("style has not been set");
+      if (vertical) return 140;
+      else {
+        Drawable knob = style.knob, bg = getBackgroundDrawable();
+        return Math.max(knob == null ? 0 : knob.getMinHeight(), bg == null ? 0 : bg.getMinHeight());
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SaveData createSaveData() {
+      if (data == null) {
+          data = new Array<SaveData>(true, 3, SaveData.class);
+      }
+      SaveData saveData = new SaveData(this);
+      data.add(saveData);
+      return saveData;
+  }
+  ```
+    ]]>
+  </code>
+</response>

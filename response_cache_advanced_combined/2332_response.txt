@@ -1,0 +1,15 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within layoutWrapped(), there is an explicit null-check and initialization immediately before the local variable is introduced:
+
+    if (rowSizes == null) rowSizes = new FloatArray();
+    FloatArray rowSizes = this.rowSizes;
+
+After this point, all uses of rowSizes (including rowSizes.size) refer to the local variable, which has just been set from this.rowSizes. Because the `if (rowSizes == null)` branch guarantees that `this.rowSizes` is initialized to a new FloatArray when it was null, by the time execution reaches `rowSizes.size` the local variable `rowSizes` cannot be null.
+
+No subsequent assignments in this method can reassign `rowSizes` to null, and there are no early exits (returns or throws) between the null check and the use. Therefore, along all control-flow paths that reach `rowSizes.size`, `rowSizes` is non-null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

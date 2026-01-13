@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void createVAO() {
+        if (Gdx.gl30 == null)
+            throw new GdxRuntimeException("createVAO requires a device running with GLES 3.0 compatibilty");
+        ((Buffer) tmpHandle).clear();
+        Nullability.castToNonnull(Gdx.gl30).glGenVertexArrays(1, tmpHandle);
+        vaoHandle = tmpHandle.get();
+  }
+  ```
+    ]]>
+  </code>
+</response>

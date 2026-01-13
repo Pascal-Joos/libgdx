@@ -1,0 +1,38 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shift-selection branch, `rangeStart` at the line
+
+    float start = rangeStart.actor.getY(), end = node.actor.getY();
+
+is the local variable:
+
+    N rangeStart = Tree.this.rangeStart;
+
+The control flow there is:
+
+1. We enter the `if (selection.getMultiple() && selection.notEmpty() && UIUtils.shift())` block.
+2. Inside it:
+   - First: `if (rangeStart == null) rangeStart = node;`
+     - Here `rangeStart` refers to the field `Tree.this.rangeStart` (the local has not been declared yet).
+     - After this line:
+       - If `Tree.this.rangeStart` was null, it is set to `node`.
+       - If it was non-null, it remains non-null.
+     - Note: earlier we already had `if (node == null) return;`, so `node` is guaranteed non-null in this block.
+3. Next: `N rangeStart = Tree.this.rangeStart;`
+   - Now a local variable `rangeStart` is introduced and initialized with `Tree.this.rangeStart`, which is guaranteed non-null due to step 2.
+
+Therefore, at the point of:
+
+    float start = rangeStart.actor.getY(), end = node.actor.getY();
+
+the local `rangeStart` cannot be null:
+
+- `node` is non-null (checked at the top of the method).
+- `Tree.this.rangeStart` has just been ensured non-null before assigning it to the local `rangeStart`.
+
+The only remaining theoretical source of null would be `rangeStart.actor`, not `rangeStart` itself, but the question is specifically about whether the expression `rangeStart` can be null. Under the shown control flow, it cannot.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

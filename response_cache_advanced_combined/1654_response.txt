@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder jsonContent(Object content) {
+      validate();
+      HttpRequest localHttpRequest = httpRequest;
+      localHttpRequest.setHeader(HttpRequestHeader.ContentType, "application/json");
+      String jsonContent = json.toJson(content);
+      localHttpRequest.setContent(jsonContent);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

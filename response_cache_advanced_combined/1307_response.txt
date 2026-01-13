@@ -1,0 +1,23 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+        public void activateParticles(int startIndex, int count) {
+          if (regionChannel == null) return;
+          for (int i = startIndex * Nullability.castToNonnull(regionChannel).strideSize, c = i + count * Nullability.castToNonnull(regionChannel).strideSize;
+              i < c;
+              i += Nullability.castToNonnull(regionChannel).strideSize) {
+            AspectTextureRegion region = regions.random();
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.UOffset] = region.u;
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.VOffset] = region.v;
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.U2Offset] = region.u2;
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.V2Offset] = region.v2;
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.HalfWidthOffset] = 0.5f;
+            Nullability.castToNonnull(regionChannel).data[i + ParticleChannels.HalfHeightOffset] = region.halfInvAspectRatio;
+          }
+}
+  ```
+    ]]>
+  </code>
+</response>

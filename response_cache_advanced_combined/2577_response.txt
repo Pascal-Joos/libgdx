@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, the variable `handle` is declared and initialized as:
+
+    Drawable handle = style.handle;
+
+Immediately afterward, there is an explicit null check:
+
+    if (handle == null) return;
+
+This guarantees that any subsequent code in this method is executed only if `handle` is non-null. The line in question:
+
+    float availWidth = getWidth() - Nullability.castToNonnull(handle).getMinWidth();
+
+is inside the same `if (!vertical) { ... }` block that follows the null check, and there are no reassignments to `handle` between the null check and this usage. The control flow does not allow execution to reach this line if `handle` is null.
+
+Additionally, `Nullability.castToNonnull(handle)` does not change the runtime value of `handle`; it only affects static analysis. The runtime value remains exactly the non-null `handle` already checked by `if (handle == null) return;`.
+
+Therefore, at the point of evaluation of `handle` in that expression, it cannot be null on any execution path through this method.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

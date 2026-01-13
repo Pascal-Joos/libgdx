@@ -1,0 +1,35 @@
+```xml
+<response>
+    <reason><![CDATA[
+Immediately before the line `float rowX = node.actor.getX();`, there is an explicit null check:
+
+```java
+if (node.children.size > 0 && (!selection.getMultiple() || !UIUtils.ctrl())) {
+  // Toggle expanded if left of icon.
+  if (node.actor == null) return;
+  float rowX = node.actor.getX();
+  ...
+}
+```
+
+Control flow:
+
+1. `node` is obtained via `N node = getNodeAt(y);`
+2. If `node` is null, the method returns: `if (node == null) return;`
+3. Later, in the `if (node.children.size > 0 && ...)` block, before accessing `node.actor.getX()`, there is:
+   ```java
+   if (node.actor == null) return;
+   ```
+   which exits the method if `node.actor` is null.
+
+Therefore, by the time execution reaches `float rowX = node.actor.getX();`, it is guaranteed that:
+- `node` is non-null (due to the earlier `if (node == null) return;`), and
+- `node.actor` is non-null (due to the `if (node.actor == null) return;` immediately before).
+
+The earlier code in the shift-selection block, where `node.actor` may be null, is guarded by its own `if (rangeStart == null || rangeStart.actor == null || node.actor == null) return;`, so that branch also does not allow execution to continue with a null `node.actor`.
+
+No other assignments to `node` or `node.actor` occur between these checks and the use at `rowX`, and there is no indication that `node.actor` could be concurrently modified to null in this context. Under normal single-threaded UI assumptions (as with typical scene graph / UI frameworks), `node.actor` is therefore non-null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

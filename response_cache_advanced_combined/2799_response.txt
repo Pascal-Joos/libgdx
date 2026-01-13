@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `setActor` clearly follows the standard setter naming convention and does not start with `init` or `initialize`, nor is it one of the known framework lifecycle/init methods (like `onCreate`, `init` in servlet/filter/processor APIs). Although it assigns to a field, it is semantically a setter, not an initializer method as defined for NullAway. Therefore, it should not be treated as an initializer method.]]></reason>
+    <value>NO</value>
+</response>

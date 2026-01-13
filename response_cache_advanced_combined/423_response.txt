@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public String toString() {
+        return file() == null ? "null" : file().getPath().replace('\\', '/');
+  }
+  ```
+    ]]>
+  </code>
+</response>

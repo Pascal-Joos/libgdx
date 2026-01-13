@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public AtlasRegion addRegion(String name, TextureRegion textureRegion) {
+    if (textureRegion == null || textureRegion.texture == null) throw new IllegalArgumentException("textureRegion and its texture cannot be null.");
+    textures.add(textureRegion.texture);
+    AtlasRegion region = new AtlasRegion(textureRegion);
+    region.name = name;
+    regions.add(region);
+    return region;
+}
+  ```
+    ]]>
+  </code>
+</response>

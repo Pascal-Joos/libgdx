@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void updateUV(TextureAtlas atlas) {
+      if (imageName == null) {
+        return;
+      }
+      TextureAtlas.AtlasRegion region = atlas.findRegion(imageName);
+      if (region == null) {
+        throw new GdxRuntimeException("Could not find region " + imageName + " in atlas");
+      }
+      this.u = region.getU();
+      this.v = region.getV();
+      this.u2 = region.getU2();
+      this.v2 = region.getV2();
+      this.halfInvAspectRatio = 0.5f * ((float) region.getRegionHeight() / region.getRegionWidth());
+  }
+  ```
+    ]]>
+  </code>
+</response>

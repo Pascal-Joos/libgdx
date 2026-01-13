@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of this method, `manager` is explicitly checked for null before the line in question:
+
+    if (manager == null) return;
+
+This means that for any execution path that reaches:
+
+    container.setSize(manager.maxWidth, Integer.MAX_VALUE);
+
+the method has already returned early if `manager` were null. There are no intervening statements that reassign `manager` or could otherwise change its nullness between the null check and the use.
+
+Assuming:
+- `manager` is a normal field or local variable of a non-concurrent context (i.e., no other threads mutating it concurrently in a way that would violate the usual Java memory model expectations),
+- and there is no hidden re-assignment of `manager` between the null check and the call,
+
+then `manager` cannot be null when `container.setSize(manager.maxWidth, Integer.MAX_VALUE);` is executed.
+
+Under ordinary Java semantics for single-threaded or properly synchronized code, this guarantees `manager` is non-null at the point of use.]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,5 @@
+<response>
+    <reason><![CDATA[
+The method is named exactly `init`, which starts with "init" and is not a typical property-style setter (it does not take parameters, and it initializes multiple internal fields from framework-provided channels). It is also explicitly annotated with `@Initializer`, strongly indicating it is intended and documented as an initializer method for the framework / analysis tool. This matches the described pattern of initializer methods (like `Processor.init`, `Servlet.init`) that are called by external frameworks to set up object state before other methods run. Therefore, it should be considered an initializer method rather than a simple setter.]]></reason>
+    <value>YES</value>
+</response>

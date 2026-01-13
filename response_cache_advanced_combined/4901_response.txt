@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getScale(float percent) {
+    int endIndex = -1;
+    int n = timeline.length;
+    // if (percent >= timeline[n-1])
+    // return scaling[n - 1];
+    for (int i = 1; i < n; i++) {
+      float t = timeline[i];
+      if (t > percent) {
+        endIndex = i;
+        break;
+      }
+    }
+    if (endIndex == -1) return Nullability.castToNonnull(scaling)[n - 1];
+    int startIndex = endIndex - 1;
+    float[] nonnullScaling = Nullability.castToNonnull(scaling);
+    float startValue = nonnullScaling[startIndex];
+    float startTime = timeline[startIndex];
+    return startValue
+        + (nonnullScaling[endIndex] - startValue)
+            * ((percent - startTime) / (timeline[endIndex] - startTime));
+}
+  ```
+    ]]>
+  </code>
+</response>

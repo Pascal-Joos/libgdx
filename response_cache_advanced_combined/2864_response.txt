@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void drawStageBackground(
+      Batch batch, float parentAlpha, float x, float y, float width, float height) {
+    if (style == null) throw new IllegalStateException("style cannot be null.");
+    Color color = getColor();
+    batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+    style.stageBackground.draw(batch, x, y, width, height);
+  }
+  ```
+    ]]>
+  </code>
+</response>

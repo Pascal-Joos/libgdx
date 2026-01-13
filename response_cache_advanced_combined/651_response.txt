@@ -1,0 +1,61 @@
+```xml
+<response>
+    <reason><![CDATA[
+We need to know whether `values` (the `Array` variable, not its contents) can be null at the point of:
+
+    region.values = values.toArray(int[].class);
+
+Relevant code excerpt:
+
+    Array<Object> names = null, values = null;
+    ...
+    } else {
+        ...
+        while (true) {
+            int count = readEntry(entry, line = reader.readLine());
+            if (count == 0) break;
+            Field field = regionFields.get(entry[0]);
+            if (field != null) field.parse(region);
+            else {
+                if (names == null) {
+                    names = new Array(8);
+                    values = new Array(8);
+                }
+                names.add(entry[0]);
+                int[] entryValues = new int[count];
+                ...
+                values.add(entryValues);
+            }
+        }
+        ...
+        if (names != null && names.size > 0) {
+            region.names = names.toArray(String.class);
+            region.values = values.toArray(int[].class);
+            names.clear();
+            values.clear();
+        }
+
+Key observations:
+
+1. `values` is initialized to null:
+   - `Array<Object> names = null, values = null;`
+
+2. The only assignment that makes `values` non-null is inside the `else` branch when encountering an *unknown* region field (i.e., `field == null`):
+   - `if (names == null) { names = new Array(8); values = new Array(8); }`
+
+3. The call site is guarded by:
+   - `if (names != null && names.size > 0) { ... region.values = values.toArray(int[].class); ... }`
+
+4. Because `names` and `values` are always assigned together in the same `if (names == null)` block, the only way `names` can be non-null is if `values` has also been set to `new Array(8)`.
+
+5. `names.size > 0` additionally guarantees that the `else` branch (where both `names` and `values` are initialized) executed at least once, so `values` cannot still be null if the `if (names != null && names.size > 0)` condition passes.
+
+6. There are no other code paths that assign to `values`. It starts null; either:
+   - No unknown region fields are encountered → `names` remains null → the `if (names != null && names.size > 0)` block is skipped entirely (no call to `values.toArray`), or
+   - At least one unknown region field is encountered → `names` and `values` are both initialized → `names != null` implies `values != null` at the time of the `if`.
+
+Thus, on every path where the line `region.values = values.toArray(int[].class);` is executed, `values` has been initialized and cannot be null. Static analyzers that flag this as potentially null are not accounting for the coupled initialization (`names` and `values` always set together) and the guard condition on `names`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

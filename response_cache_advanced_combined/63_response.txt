@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Texture(String internalPath) {
+      if (Gdx.files == null) throw new GdxRuntimeException("Gdx.files must not be null");
+      this(Gdx.files.internal(internalPath));
+  }
+  ```
+    ]]>
+  </code>
+</response>

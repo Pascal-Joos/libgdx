@@ -1,0 +1,21 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method:
+
+    protected void goEnd(boolean jump) {
+        if (text == null) return;
+        cursor = text.length();
+    }
+
+the only code path that reaches the line `cursor = text.length();` is the path where the `if (text == null)` condition is false. That is, execution proceeds to `cursor = text.length();` only when `text != null`.
+
+Control flow:
+- If `text == null`, the method returns immediately, and the `cursor = text.length();` line is not executed.
+- If execution reaches `cursor = text.length();`, the preceding null check guarantees `text` is non-null on that path.
+
+There are no intervening assignments or method calls between the null check and the use of `text` that could change the value of `text`. Therefore, under standard Java semantics (single-threaded or assuming `text` is not concurrently modified without synchronization), `text` cannot be null at the point of `cursor = text.length();`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

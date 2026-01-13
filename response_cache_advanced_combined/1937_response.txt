@@ -1,0 +1,39 @@
+```xml
+<response>
+    <reason><![CDATA[
+In the shown method, `c` is a local variable of type `Cell` obtained from `cells[i]`. The expression in question is:
+
+    float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a);
+
+Later in the same method, there is defensive code using null checks on `c.minWidth`:
+
+    float minWidth =
+        c.minWidth == null ? 0 : c.minWidth.get(a),
+          minHeight =
+        c.minHeight == null ? 0 : c.minHeight.get(a);
+
+and similarly further down:
+
+    float minWidth =
+        c.minWidth == null ? 0 : c.minWidth.get(a),
+          prefWidth = c.prefWidth.get(a),
+          maxWidth = c.maxWidth.get(a);
+
+These null checks clearly indicate that, by design, `c.minWidth` is allowed to be null for a `Cell` instance.
+
+There is no preceding code in `computeSize()` that guarantees `c.minWidth` is non-null for all cells before the first (unsafe) use. The method simply iterates over all cells:
+
+    for (int i = 0; i < cellCount; i++) {
+        Cell c = (Cell) cells[i];
+        ...
+        float prefWidth = c.prefWidth.get(a), prefHeight = c.prefHeight.get(a);
+        float minWidth = c.minWidth.get(a), minHeight = c.minHeight.get(a); // <-- no null check here
+
+If any `Cell` is constructed or configured such that `minWidth` was never assigned a non-null value, or explicitly set to null, then this line will attempt to call `.get(a)` on a null reference, leading to a `NullPointerException`. The later, safer forms with `c.minWidth == null ? 0 : ...` show that the library authors themselves consider null a valid state for this field.
+
+Because we do not have additional invariants or guarantees (e.g. from the `Cell` constructor, builders, or users of the API) that every `Cell` in `cells` always has a non-null `minWidth` before `computeSize()` runs, the field is logically nullable and, on some code paths, can indeed be null when that line is reached.
+
+Therefore, from the information in this method and the surrounding usage pattern of `c.minWidth`, it is possible that `c.minWidth` is null at that expression.]]></reason>
+    <value>YES</value>
+</response>
+```

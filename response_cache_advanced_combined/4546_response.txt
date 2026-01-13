@@ -1,0 +1,43 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking the nullability of the expression `padRight` at the line:
+
+    return padLeft.get(actor) + padRight.get(actor);
+
+This line is reached only in the final `return` statement:
+
+    if (actor == null) return 0;
+    if (padLeft == null) {
+        ...
+        return value.get(actor) + Nullability.castToNonnull(padRight).get(actor);
+    }
+    if (padRight == null) {
+        ...
+        return padLeft.get(actor) + value.get(actor);
+    }
+    return Nullability.castToNonnull(padLeft).get(actor) + padRight.get(actor);
+
+Analyze the control flow:
+
+1. If `padLeft == null`, the method returns inside that `if` block and never reaches the final line. In that block, `padRight` is accessed only via `Nullability.castToNonnull(padRight)`, which is presumably a helper asserting/marking non-null, but in any case that is separate from the questioned line.
+
+2. If `padRight == null`, the method returns inside that `if` block and likewise never reaches the final line.
+
+3. The final line:
+
+       return Nullability.castToNonnull(padLeft).get(actor) + padRight.get(actor);
+
+   is executed only if both earlier `if` conditions are false, i.e.:
+
+       padLeft != null  AND  padRight != null
+
+   Therefore, at the point where `padRight.get(actor)` is evaluated in this line, `padRight` itself is guaranteed non-null by the explicit `if (padRight == null)` guard and the fact that we are in the `else`-case (execution has fallen through).
+
+Java’s definite assignment and straightforward control flow ensure this: there is no re-assignment of `padRight` in the method, and no other branches alter its value.
+
+Thus, at that specific line, `padRight` cannot be `null`. (Whether `padRight.get(actor)` could return a value that internally behaves badly is a different question, but the variable `padRight` itself is non-null.)
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

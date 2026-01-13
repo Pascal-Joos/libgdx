@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public @Null String prettyPrint(String json, PrettyPrintSettings settings) {
+      JsonValue value = new JsonReader().parse(json);
+      return value == null ? null : value.prettyPrint(settings);
+  }
+  ```
+    ]]>
+  </code>
+</response>

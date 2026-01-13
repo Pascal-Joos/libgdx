@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder timeout(int timeOut) {
+      validate();
+      HttpRequest localHttpRequest = httpRequest;
+      localHttpRequest.setTimeOut(timeOut);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

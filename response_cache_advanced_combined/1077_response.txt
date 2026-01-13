@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+    public void allocateChannels() {
+      super.allocateChannels();
+      if (controller != null) {
+        ParticleChannels.Interpolation.id = controller.particleChannels.newId();
+        strengthChannel = controller.particles.addChannel(ParticleChannels.Interpolation);
+      }
+  }
+  ```
+    ]]>
+  </code>
+</response>

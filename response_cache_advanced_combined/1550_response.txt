@@ -1,0 +1,18 @@
+<response>
+    <reason><![CDATA[
+Within addStaticTiles, the parameter image is:
+
+- Directly checked for null: `if (image != null) { ... } else { ... }`.
+- Potentially left null entering the method (callers are not shown constraining it).
+- In the `else` branch, it is only (re)assigned if `imageElement != null`; otherwise it remains whatever it was (possibly null).
+- Immediately after that conditional, the code does: `TextureRegion texture = imageResolver.getImage(image.path());` with no null check, which would throw a NullPointerException if image is null.
+
+Because:
+- Callers could pass null.
+- The method itself explicitly handles the case `image == null` (by going to the `else` branch).
+- Inside the `else` branch, there is a clear execution path where image can still be null when `image.path()` is called (e.g., when `tileElements` has a tile with no `<image>` child, or if the initial image parameter was null and never reassigned).
+
+Based on this logic and ignoring annotations, image can indeed be null at the point of use, and the method can crash as a result. No other methods in the provided code (getRelativeFileHandle, ImageResolver.getImage) can prevent image from being null before `image.path()` is called, since the null dereference occurs before they are invoked in that path.
+    ]]></reason>
+    <value>YES</value>
+</response>

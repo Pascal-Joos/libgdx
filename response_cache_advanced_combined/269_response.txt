@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public Vector3 project(Vector3 worldCoords) {
+      Graphics graphics = Gdx.graphics;
+      if (graphics == null) {
+          return worldCoords;
+      }
+      project(worldCoords, 0, 0, graphics.getWidth(), graphics.getHeight());
+      return worldCoords;
+  }
+  ```
+    ]]>
+  </code>
+</response>

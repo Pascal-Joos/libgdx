@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void end() {
+    if (bufferedParticlesCount > 0) {
+      ensureCapacity(bufferedParticlesCount);
+      flush(Nullability.castToNonnull(sorter.sort(renderData)));
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

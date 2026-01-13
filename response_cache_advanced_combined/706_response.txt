@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setV(float v) {
+        this.v = v;
+        if (texture == null) throw new IllegalStateException("texture cannot be null.");
+        regionHeight = Math.round(Math.abs(v2 - v) * Nullability.castToNonnull(texture).getHeight());
+}
+  ```
+    ]]>
+  </code>
+</response>

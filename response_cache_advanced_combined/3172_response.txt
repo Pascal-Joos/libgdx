@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public SaveData getSaveData() {
+      return Nullability.castToNonnull(data).get(currentLoadIndex++);
+  }
+  ```
+    ]]>
+  </code>
+</response>

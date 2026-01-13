@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method, the variable `handle` is assigned as:
+
+    Drawable handle = style.handle;
+
+Immediately afterward, there is an explicit null check:
+
+    if (handle == null) return;
+
+If `handle` were null, the method would return at this point and none of the subsequent code—including the line
+
+    float availHeight = getHeight() - handle.getMinHeight();
+
+would execute.
+
+There are no reassignments to `handle` between the null check and the use at `handle.getMinHeight()`, and no control-flow path that bypasses the null check before reaching that line.
+
+Therefore, along any path where the line `float availHeight = getHeight() - handle.getMinHeight();` is executed, `handle` must be non-null.]]></reason>
+    <value>NO</value>
+</response>
+```

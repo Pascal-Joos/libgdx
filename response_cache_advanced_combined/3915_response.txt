@@ -1,0 +1,31 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public DepthShader(
+          final Renderable renderable, final Config config, final ShaderProgram shaderProgram) {
+        super(renderable, config, shaderProgram);
+        final Attributes attributes = combineAttributes(renderable);
+    
+        if (renderable.bones != null && renderable.bones.length > config.numBones) {
+          throw new GdxRuntimeException(
+              "too many bones: " + renderable.bones.length + ", max configured: " + config.numBones);
+        }
+    
+        if (renderable.meshPart.mesh == null)
+          throw new GdxRuntimeException("Renderable meshPart.mesh cannot be null");
+    
+        this.numBones = renderable.bones == null ? 0 : config.numBones;
+        int w = 0;
+        final int n = Nullability.castToNonnull(renderable.meshPart.mesh).getVertexAttributes().size();
+        for (int i = 0; i < n; i++) {
+          final VertexAttribute attr = Nullability.castToNonnull(renderable.meshPart.mesh).getVertexAttributes().get(i);
+          if (attr.usage == Usage.BoneWeight) w |= (1 << attr.unit);
+        }
+        weights = w;
+        alphaTestAttribute = new FloatAttribute(FloatAttribute.AlphaTest, config.defaultAlphaTest);
+  }
+  ```
+    ]]>
+  </code>
+</response>

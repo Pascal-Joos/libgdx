@@ -1,0 +1,5 @@
+<response>
+    <reason><![CDATA[
+The method is named `init`, which matches the convention “name starts with init or initialize.” It is not a simple setter for a single field; instead it performs one-time object setup, guarded by `if (locations != null) throw ... "Already initialized"` to prevent multiple invocations. It initializes multiple internal structures (`program`, `locations`, `globalUniforms`, `localUniforms`, `attributes`) based on the provided `ShaderProgram` and `Renderable`, and it is annotated with `@Initializer`, which explicitly documents its role as an initialization entry point. This all matches the documented notion of an initializer method used by frameworks or tooling and not just a typical setter. Therefore, it should be treated as an initializer method for NullAway’s purposes.]]></reason>
+    <value>YES</value>
+</response>

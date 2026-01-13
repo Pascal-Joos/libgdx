@@ -1,0 +1,32 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the start of qsort, the only protection against a null `distances` is this block:
+
+    if (distances == null || particleIndices == null || currentSize < ei + 1) {
+        ensureCapacity(ei + 1);
+    }
+
+After this block, there is no direct null check or assignment to `distances` in the shown code. Therefore, whether `distances` can be null at:
+
+    for (int j = i; j > si && distances[j - 1] > distances[j]; j--) {
+
+depends entirely on what `ensureCapacity(int)` guarantees.
+
+Two key facts:
+1. We do not see the implementation or contract of `ensureCapacity`.
+2. The if-condition is *not* sufficient by itself to guarantee non-nullness afterward:
+   - `ensureCapacity` might be a no-op, might not assign `distances`, or might itself rely on other conditions.
+   - If `distances` is initially null and `ensureCapacity` fails to initialize it (or sets it back to null), then `distances` remains null and dereferencing it in `distances[j - 1]` would cause a NullPointerException.
+
+The code as written *intends* that `ensureCapacity` create/resize `distances` and `particleIndices` so they are non-null and of sufficient length, but that is an assumption about an external method not shown here. Without its implementation or a documented contract that it *always* initializes `distances` to a non-null array when this method returns, we cannot prove that `distances` cannot be null at the point of use.
+
+Because the answer hinges on behavior of a method whose implementation/contract is not provided, it is not possible to make a definitive determination from the given snippet alone.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Provide the implementation or a precise contract of ensureCapacity(int), specifically whether it always initializes/maintains distances as a non-null array when it returns.]]></request>
+        <request><![CDATA[Confirm whether any other code path (e.g., other threads or methods) can set distances to null concurrently while qsort is executing.]]></request>
+    </requests>
+</response>
+```

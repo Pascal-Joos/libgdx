@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public InstanceBufferObject(
+      boolean isStatic, int numVertices, VertexAttributes instanceAttributes) {
+    if (Gdx.gl30 == null)
+      throw new GdxRuntimeException(
+          "InstanceBufferObject requires a device running with GLES 3.0 compatibilty");
+    if (Gdx.gl20 == null)
+      throw new GdxRuntimeException(
+          "InstanceBufferObject requires a device running with GLES 2.0 compatibilty");
+
+    bufferHandle = Gdx.gl20.glGenBuffer();
+
+    ByteBuffer data = BufferUtils.newUnsafeByteBuffer(instanceAttributes.vertexSize * numVertices);
+    ((Buffer) data).limit(0);
+    setBuffer(data, true, instanceAttributes);
+    setUsage(isStatic ? GL20.GL_STATIC_DRAW : GL20.GL_DYNAMIC_DRAW);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,27 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is `Gdx.input` used inside the condition:
+
+    if (Gdx.input == null
+        || (!Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) && !Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)))
+        value = snap(value);
+
+This code explicitly anticipates that `Gdx.input` may be null and guards subsequent dereferences with `Gdx.input == null || ...`.
+
+From LibGDX’s design:
+- `Gdx.input` is a static field set by the backend (e.g., LwjglApplication, AndroidApplication).
+- Before an Application is created, or in certain headless/mock/testing environments, `Gdx.input` can legitimately be null.
+- There is no preceding code in this method that initializes or otherwise guarantees non-nullness of `Gdx.input`.
+- The method body does not change `Gdx.input`, nor does it depend on earlier calls in the same method to establish its value.
+
+Control-flow-wise:
+- The condition uses short-circuit evaluation (`||`).
+- If `Gdx.input` is null, the left-hand side `Gdx.input == null` evaluates to true and the right-hand side (the `isKeyPressed` calls) is not evaluated, thus avoiding a NullPointerException.
+- However, the very need for `Gdx.input == null` in the condition confirms that it is possible (and expected) that `Gdx.input` is null at runtime in some contexts.
+
+Therefore, along some valid executions of this method (depending on when/how the LibGDX application is initialized or what backend is used), `Gdx.input` can indeed be null.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

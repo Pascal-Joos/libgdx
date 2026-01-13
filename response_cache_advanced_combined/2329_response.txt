@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public int getRows() {
+      if (!wrap) return 1;
+      if (rowSizes == null) computeSize();
+      return rowSizes.size >> 1;
+  }
+  ```
+    ]]>
+  </code>
+</response>

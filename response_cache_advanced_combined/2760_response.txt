@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name `setStyle` clearly follows the typical setter naming convention (`setXyz`) and is semantically a setter for the `style` field. Your own definition explicitly excludes setter methods from being considered initializer methods, even if they assign to fields. It also does not match the special framework-style initializer names (onCreate, init, initialize, etc.). Therefore, under your criteria, this method should not be treated as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

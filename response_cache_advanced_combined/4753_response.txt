@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public Drawable tint(Color tint) {
+    Sprite sprite;
+    if (region instanceof AtlasRegion) sprite = new AtlasSprite((AtlasRegion) region);
+    else sprite = new Sprite(Nullability.castToNonnull(region));
+    sprite.setColor(tint);
+    sprite.setSize(getMinWidth(), getMinHeight());
+    SpriteDrawable drawable = new SpriteDrawable(sprite);
+    drawable.setLeftWidth(getLeftWidth());
+    drawable.setRightWidth(getRightWidth());
+    drawable.setTopHeight(getTopHeight());
+    drawable.setBottomHeight(getBottomHeight());
+    return drawable;
+}
+  ```
+    ]]>
+  </code>
+</response>

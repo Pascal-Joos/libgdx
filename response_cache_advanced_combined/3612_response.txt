@@ -1,0 +1,48 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the body of GetMatches, the expression in question is:
+
+    _son[ptr1] = curMatch;
+
+But note that, earlier in the method, we have:
+
+    if (_son == null) return 0;
+    int[] son = _son;
+
+From this point onward in the method:
+
+1. A *direct* null check on `_son` is performed at the very beginning:
+   - If `_son == null`, the method returns immediately.
+   - Therefore, any subsequent execution past that point implies `_son != null`.
+
+2. The method then creates a local reference:
+   - `int[] son = _son;`
+   - This `son` reference is non‑null wherever `_son` was non‑null at that moment.
+
+3. The rest of the method does not modify `_son` or `son`:
+   - There is no re-assignment to `_son` or `son` anywhere in the shown method.
+   - There are no calls shown that could change `_son` (e.g., no `_son = ...` or calls to setters that modify `_son`).
+   - Thus, during the execution of this method, `_son` remains whatever it was when the null check passed.
+
+4. Concurrency considerations:
+   - If we strictly confine ourselves to the semantics visible in this method and assume no concurrent modification of the field `_son` from another thread (or any other form of data race), then once the null check passes, `_son` is guaranteed to be non‑null for the remainder of this invocation.
+   - Under normal single-threaded or properly synchronized use, the Java Memory Model preserves this guarantee within a single method call.
+
+5. The statement in question:
+   - The line you highlighted in the narrative is `_son[ptr1] = curMatch;`.
+   - In the actual code inside the loop, the writes are via the local `son` variable:
+     
+         son[ptr1] = curMatch;
+     
+     or:
+     
+         son[ptr0] = curMatch;
+   
+   - Because `son` is an alias of `_son` and is known non‑null after the initial check, the array reference used in these assignments cannot be null.
+
+Therefore, along all code paths that reach the assignment, `_son` (and hence `son`) has already been established as non-null, and there is no reassignment that could null it out within this method. Under the usual assumption that `_son` is not concurrently set to null from other threads without synchronization, `_son` cannot be null at the assignment line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

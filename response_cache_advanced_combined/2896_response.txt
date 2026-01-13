@@ -1,0 +1,39 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public NinePatch(NinePatch ninePatch, Color color) {
+    NinePatch nonNullNinePatch = Nullability.castToNonnull(ninePatch);
+    texture = nonNullNinePatch.texture;
+
+    bottomLeft = nonNullNinePatch.bottomLeft;
+    bottomCenter = nonNullNinePatch.bottomCenter;
+    bottomRight = nonNullNinePatch.bottomRight;
+    middleLeft = nonNullNinePatch.middleLeft;
+    middleCenter = nonNullNinePatch.middleCenter;
+    middleRight = nonNullNinePatch.middleRight;
+    topLeft = nonNullNinePatch.topLeft;
+    topCenter = nonNullNinePatch.topCenter;
+    topRight = nonNullNinePatch.topRight;
+
+    leftWidth = nonNullNinePatch.leftWidth;
+    rightWidth = nonNullNinePatch.rightWidth;
+    middleWidth = nonNullNinePatch.middleWidth;
+    middleHeight = nonNullNinePatch.middleHeight;
+    topHeight = nonNullNinePatch.topHeight;
+    bottomHeight = nonNullNinePatch.bottomHeight;
+
+    padLeft = nonNullNinePatch.padLeft;
+    padTop = nonNullNinePatch.padTop;
+    padBottom = nonNullNinePatch.padBottom;
+    padRight = nonNullNinePatch.padRight;
+
+    vertices = new float[nonNullNinePatch.vertices.length];
+    System.arraycopy(nonNullNinePatch.vertices, 0, vertices, 0, nonNullNinePatch.vertices.length);
+    idx = nonNullNinePatch.idx;
+    this.color.set(color);
+}
+  ```
+    ]]>
+  </code>
+</response>

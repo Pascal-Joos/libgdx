@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void updateRelative(float percentDelta) {
+      if (target != null) target.moveBy(amountX * percentDelta, amountY * percentDelta);
+  }
+  ```
+    ]]>
+  </code>
+</response>

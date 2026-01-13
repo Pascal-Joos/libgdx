@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void writeObjectStart(String name, Class actualType, @Null Class knownType) {
+    if (writer == null) throw new SerializationException("JsonWriter not set.");
+    try {
+      writer.name(name);
+    } catch (IOException ex) {
+      throw new SerializationException(ex);
+    }
+    writeObjectStart(actualType, knownType);
+}
+  ```
+    ]]>
+  </code>
+</response>

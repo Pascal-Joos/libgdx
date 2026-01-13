@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void read(Json json, JsonValue jsonData) {
+    minParticleCount = Nullability.castToNonnull(json.readValue("minParticleCount", int.class, jsonData));
+    maxParticleCount = json.readValue("maxParticleCount", int.class, jsonData);
+  }
+  ```
+    ]]>
+  </code>
+</response>

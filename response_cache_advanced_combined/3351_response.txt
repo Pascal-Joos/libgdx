@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public synchronized int getReferenceCount(String fileName) {
+      Class type = assetTypes.get(fileName);
+      if (type == null) throw new GdxRuntimeException("Asset not loaded: " + fileName);
+      ObjectMap<String, RefCountedContainer> assetsByType = assets.get(type);
+      if (assetsByType == null) throw new GdxRuntimeException("Asset not loaded: " + fileName);
+      RefCountedContainer assetContainer = assetsByType.get(fileName);
+      if (assetContainer == null) throw new GdxRuntimeException("Asset not loaded: " + fileName);
+      return assetContainer.refCount;
+  }
+  ```
+    ]]>
+  </code>
+</response>

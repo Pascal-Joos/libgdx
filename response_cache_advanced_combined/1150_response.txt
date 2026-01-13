@@ -1,0 +1,62 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the code shown, `particleOffsets` is only checked for null once, at the very start:
+
+    if (particleIndices == null || camera == null || particleOffsets == null) {
+        return particleOffsets;
+    }
+
+If this `if` block is *not* taken, then at that point all three are non-null:
+
+- `particleIndices != null`
+- `camera != null`
+- `particleOffsets != null`
+
+The method then proceeds to:
+
+1. Use `camera.view.val` and other camera fields (safe if `camera` is non-null).
+2. Write to `distances[i]` and `particleIndices[i]` in the nested loops, guarded by:
+   
+       if (particleIndices != null) {
+           Nullability.castToNonnull(particleIndices)[i] = i;
+       }
+
+   But based on the earlier guard, this `if` is redundant for normal execution: if the method passed the top-level `if`, then `particleIndices` is already non-null.
+
+3. Call `qsort(0, count - 1);`
+   - We are not given the implementation of `qsort`, but Java code cannot arbitrarily assign `particleOffsets = null` from within `qsort` unless it has direct access to this same field and does so intentionally. There is no indication or contract here that `qsort` mutates `particleOffsets` or that any other code in this method can assign `null` to it between the initial check and the later write.
+
+At the critical line:
+
+    particleOffsets[Nullability.castToNonnull(particleIndices)[i]] = i;
+
+the only ways `particleOffsets` could be null are:
+
+- It was null when entering the method.
+  - In this case, the initial condition (`if (particleIndices == null || camera == null || particleOffsets == null)`) is true, and the method returns immediately before reaching the assignment, so the line is never executed.
+
+- It became null after the initial check (e.g., via some other method or thread mutating the same field).
+  - The provided code gives no evidence of such mutation. However, without seeing the containing class (where `particleOffsets` is declared and possibly modified elsewhere), we cannot *prove* that no other thread or method can set it to null between the early guard and the later use. In Java, if `particleOffsets` is a field shared across threads and not protected by synchronization, another thread *could* set it to null after the initial check, leading to a possible null at the line in question.
+
+Because:
+- We do not know whether `particleOffsets` is a local variable, a private field never reassigned, or a shared mutable field.
+- We do not know the threading model or whether other methods can write `null` to `particleOffsets`.
+- We do not know whether `qsort` or other code that runs before the line might mutate `particleOffsets`.
+
+we cannot conclusively rule out the possibility of it being null at that point under all circumstances, especially in a concurrent or externally mutable context.
+
+Therefore, based solely on the snippet, and without guarantees about how `particleOffsets` is declared and used elsewhere, the nullability of `particleOffsets` at the line
+
+    particleOffsets[particleIndices[i]] = i;
+
+cannot be determined with certainty.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of particleOffsets (field or local), including its type, initialization, and all assignments.]]></request>
+        <request><![CDATA[Indicate whether this code can be executed concurrently with other code that may modify particleOffsets.]]></request>
+        <request><![CDATA[Provide the implementation (or contract) of qsort to confirm whether it can change particleOffsets.]]></request>
+    </requests>
+</response>
+```

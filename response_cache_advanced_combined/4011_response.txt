@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+          public void update() {
+            if (lifeChannel == null || accelerationChannel == null || strengthChannel == null) return;
+            int lifeOffset = ParticleChannels.LifePercentOffset, strengthOffset = 0, forceOffset = 0;
+            FloatChannel nonnullLifeChannel = Nullability.castToNonnull(lifeChannel);
+            FloatChannel nonnullStrengthChannel = Nullability.castToNonnull(strengthChannel);
+            for (int i = 0, c = controller.particles.size;
+                i < c;
+                ++i, strengthOffset += nonnullStrengthChannel.strideSize,
+                    forceOffset += accelerationChannel.strideSize,
+                    lifeOffset += nonnullLifeChannel.strideSize) {
+    
+              float strength =
+                  nonnullStrengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthStartOffset]
+                      + nonnullStrengthChannel.data[strengthOffset + ParticleChannels.VelocityStrengthDiffOffset]
+                          * strengthValue.getScale(
+                              nonnullLifeChannel.data[lifeOffset]);
+              TMP_V3
+                  .set(MathUtils.random(-1, 1f), MathUtils.random(-1, 1f), MathUtils.random(-1, 1f))
+                  .nor()
+                  .scl(strength);
+              accelerationChannel.data[forceOffset + ParticleChannels.XOffset] += TMP_V3.x;
+              accelerationChannel.data[forceOffset + ParticleChannels.YOffset] += TMP_V3.y;
+              accelerationChannel.data[forceOffset + ParticleChannels.ZOffset] += TMP_V3.z;
+            }
+}
+  ```
+    ]]>
+  </code>
+</response>

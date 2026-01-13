@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean delete() {
+    if (type == FileType.Classpath)
+      throw new GdxRuntimeException("Cannot delete a classpath file: " + file);
+    if (type == FileType.Internal)
+      throw new GdxRuntimeException("Cannot delete an internal file: " + file);
+    File f = file();
+    return f != null && f.delete();
+  }
+  ```
+    ]]>
+  </code>
+</response>

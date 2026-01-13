@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public byte GetIndexByte(int index) {
+      if (_bufferBase == null) {
+        throw new IllegalStateException("Buffer not initialized");
+      }
+      return _bufferBase[_bufferOffset + _pos + index];
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void setStyle(TextFieldStyle style) {
+    // same as super(), just different textHeight. no super() so we don't do same work twice
+    if (style == null) throw new IllegalArgumentException("style cannot be null.");
+    this.style = style;
+
+    // no extra descent to fake line height
+    if (style.font != null) textHeight = style.font.getCapHeight() - style.font.getDescent();
+    if (text != null) updateDisplayText();
+    invalidateHierarchy();
+}
+  ```
+    ]]>
+  </code>
+</response>

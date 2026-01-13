@@ -1,0 +1,79 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+        public void update() {
+    
+          // Matrix3 I_t = defined by the shape, it's the inertia tensor
+          // Vector3 r = position vector
+          // Vector3 L = r.cross(v.mul(m)), It's the angular momentum, where mv it's the linear momentum
+          // Inverse(I_t) = a diagonal matrix where the diagonal is IyIz, IxIz, IxIy
+          // Vector3 w = L/I_t = inverse(I_t)*L, It's the angular velocity
+          // Quaternion spin = 0.5f*Quaternion(w, 0)*currentRotation
+          // currentRotation += spin*dt
+          // normalize(currentRotation)
+    
+          // Algorithm 1
+          // Consider a simple channel which represent an angular velocity w
+          // Sum each w for each rotation
+          // Update rotation
+    
+          // Algorithm 2
+          // Consider a channel which represent a sort of angular momentum L (r, v)
+          // Sum each L for each rotation
+          // Multiply sum by constant quantity k = m*I_to(-1) , m could be optional while I is constant
+          // and can be calculated at
+          // start
+          // Update rotation
+    
+          // Algorithm 3
+          // Consider a channel which represent a simple angular momentum L
+          // Proceed as Algorithm 2
+    
+          if (lifeChannel == null) {
+            lifeChannel = controller.particles.addChannel(ParticleChannels.Life);
+          }
+    
+          FloatChannel lifeChannelLocal = Nullability.castToNonnull(lifeChannel);
+    
+          for (int i = 0,
+                  l = ParticleChannels.LifePercentOffset,
+                  s = 0,
+                  a = 0,
+                  c = controller.particles.size * rotationalForceChannel.strideSize;
+              i < c;
+              s += strengthChannel.strideSize, i += rotationalForceChannel.strideSize,
+                  a += angularChannel.strideSize, l += lifeChannelLocal.strideSize) {
+    
+            float lifePercent = lifeChannelLocal.data[l],
+                strength =
+                    strengthChannel.data[s + ParticleChannels.VelocityStrengthStartOffset]
+                        + strengthChannel.data[s + ParticleChannels.VelocityStrengthDiffOffset]
+                            * strengthValue.getScale(lifePercent),
+                phi =
+                    angularChannel.data[a + ParticleChannels.VelocityPhiStartOffset]
+                        + angularChannel.data[a + ParticleChannels.VelocityPhiDiffOffset]
+                            * phiValue.getScale(lifePercent),
+                theta =
+                    angularChannel.data[a + ParticleChannels.VelocityThetaStartOffset]
+                        + angularChannel.data[a + ParticleChannels.VelocityThetaDiffOffset]
+                            * thetaValue.getScale(lifePercent);
+    
+            float cosTheta = MathUtils.cosDeg(theta),
+                sinTheta = MathUtils.sinDeg(theta),
+                cosPhi = MathUtils.cosDeg(phi),
+                sinPhi = MathUtils.cosDeg(phi);
+    
+            TMP_V3.set(cosTheta * sinPhi, cosPhi, sinTheta * sinPhi);
+            TMP_V3.scl(strength * MathUtils.degreesToRadians);
+    
+            rotationalForceChannel.data[i + ParticleChannels.XOffset] += TMP_V3.x;
+            rotationalForceChannel.data[i + ParticleChannels.YOffset] += TMP_V3.y;
+            rotationalForceChannel.data[i + ParticleChannels.ZOffset] += TMP_V3.z;
+          }
+}
+  ```
+    ]]>
+  </code>
+</response>

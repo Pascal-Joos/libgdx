@@ -1,0 +1,36 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, there is no guarantee that the keys of the `out` map are non-null:
+
+1. `out` is passed in as a parameter. The method does not create or populate `out`; it only:
+   - Iterates over `out.keys()` and sets `node.isAnimated = false` *only if `node != null`*:
+     ```java
+     for (final Node node : out.keys()) if (node != null) node.isAnimated = false;
+     ```
+     This loop clearly acknowledges that keys in `out` may be null.
+
+   - Iterates over `out.entries()`:
+     ```java
+     for (final ObjectMap.Entry<Node, Transform> e : out.entries()) {
+       if (e.key != null && !e.key.isAnimated) {
+         e.key.isAnimated = true;
+         e.value.lerp(e.key.translation, e.key.rotation, e.key.scale, alpha);
+       }
+     }
+     ```
+     The very presence of `if (e.key != null && ...)` indicates that null keys are possible or at least anticipated.
+
+2. The semantics and contract of `ObjectMap` (from libGDX) allow null values but generally not null keys by design. However:
+   - This method does not enforce that invariant itself.
+   - The map is externally supplied, so unless the broader codebase or API contract *strictly guarantees* that `out` never has null keys, we cannot make that assumption based solely on this method.
+
+3. Control-flow inside this method does not assign to `out` or its keys. Nothing here removes the possibility that:
+   - `out` already contained entries with `null` keys when passed in, or
+   - Other code could put entries with `null` keys into `out` before this method is called.
+
+Therefore, from the perspective of this method in isolation, `e.key` can indeed be null in the loop over `out.entries()`, which is why the null check `e.key != null` is necessary. The expression `e.key` at `if (!e.key.isAnimated) {` (conceptually, without the surrounding null check) cannot be considered safely non-null based solely on this code.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

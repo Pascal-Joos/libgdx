@@ -1,0 +1,38 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public synchronized String getDiagnostics() {
+      StringBuilder buffer = new StringBuilder(256);
+      for (Entry<String, Class> entry : assetTypes) {
+        String fileName = entry.key;
+        Class type = entry.value;
+  
+        if (buffer.length() > 0) buffer.append('\n');
+        buffer.append(fileName);
+        buffer.append(", ");
+        if (type == null) continue;
+        buffer.append(ClassReflection.getSimpleName(type));
+        buffer.append(", refs: ");
+        ObjectMap<String, RefCountedContainer> assetsByType = assets.get(type);
+        if (assetsByType == null) continue;
+        RefCountedContainer assetContainer = assetsByType.get(fileName);
+        if (assetContainer == null) continue;
+        buffer.append(assetContainer.refCount);
+  
+        Array<String> dependencies = assetDependencies.get(fileName);
+        if (dependencies != null) {
+          buffer.append(", deps: [");
+          for (String dep : dependencies) {
+            buffer.append(dep);
+            buffer.append(',');
+          }
+          buffer.append(']');
+        }
+      }
+      return buffer.toString();
+}
+  ```
+    ]]>
+  </code>
+</response>

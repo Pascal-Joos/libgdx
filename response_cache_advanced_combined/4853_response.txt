@@ -1,0 +1,57 @@
+```xml
+<response>
+    <reason><![CDATA[
+The expression in question is the enhanced-for loop variable:
+
+    for (ObjectMap.Entry<String, Matrix4> b : e.value.entries())
+
+The potential nullness you are asking about is effectively whether `e.value` can be null at this point.
+
+1. The surrounding code:
+
+    for (ObjectMap.Entry<NodePart, ArrayMap<String, Matrix4>> e : nodePartBones.entries()) {
+        if (e.key.invBoneBindTransforms == null)
+            e.key.invBoneBindTransforms = new ArrayMap<Node, Matrix4>(Node.class, Matrix4.class);
+        e.key.invBoneBindTransforms.clear();
+        ArrayMap<String, Matrix4> value = e.value;
+        if (value == null) continue;
+        for (ObjectMap.Entry<String, Matrix4> b : value.entries()) {
+            if (b.value != null)
+                e.key.invBoneBindTransforms.put(
+                    getNode(b.key),
+                    new Matrix4(Nullability.castToNonnull(b.value)).inv()
+                );
+        }
+    }
+
+2. Control flow:
+   - `e.value` is first assigned to a local variable `value`:
+     
+         ArrayMap<String, Matrix4> value = e.value;
+     
+   - There is an explicit null check:
+     
+         if (value == null) continue;
+     
+     If `value` is null, the loop immediately continues and does not execute the inner `for`.
+   - The inner loop is:
+
+         for (ObjectMap.Entry<String, Matrix4> b : value.entries()) { ... }
+
+     This loop only runs if `value` is non-null.
+
+3. Relation between `value` and `e.value`:
+   - `value` is just a local alias for `e.value`. There are no reassignments to `value` between the null check and the `for` loop.
+   - Assuming no concurrent modification to `nodePartBones`/`e` that would change `e.value` between these lines (which is the standard assumption for such code and required for the collections’ iteration contracts), the null check on `value` guarantees `e.value` was non-null when `value` was read.
+
+4. About the exact expression you cited:
+   - You wrote: `for (ObjectMap.Entry<String, Matrix4> b : e.value.entries())`
+   - In the shown code, the actual loop is over `value.entries()`, not `e.value.entries()`.
+   - Given the pattern, if the loop were written as `for (... : e.value.entries())` instead of using the `value` alias, then *without* a direct null check on `e.value` itself, static null safety would depend on what invariants `nodePartBones` provides about its values.
+   - However, in the provided method, the code uses `value` with a prior null check, so the loop source (`value.entries()`) is guaranteed non-null on all executed paths.
+
+Therefore, for the code as given, the collection being iterated in the loop (`value`) cannot be null at that point, and thus the expression being iterated over is not null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

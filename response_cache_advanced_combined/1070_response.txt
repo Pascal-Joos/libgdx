@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void init() {
+    if (controller != null) {
+      controller.particles.size = 0;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

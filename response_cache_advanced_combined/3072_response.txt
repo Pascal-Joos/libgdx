@@ -1,0 +1,43 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void set(RegularEmitter emitter) {
+    super.set(emitter);
+    if (delayValue == null) {
+        delayValue = new RangedNumericValue();
+    }
+    delayValue.load(emitter.delayValue);
+    if (durationValue == null) {
+        durationValue = new RangedNumericValue();
+    }
+    durationValue.load(emitter.durationValue);
+    if (lifeOffsetValue == null) {
+        lifeOffsetValue = new ScaledNumericValue();
+    }
+    lifeOffsetValue.load(emitter.lifeOffsetValue);
+    if (lifeValue == null) {
+        lifeValue = new ScaledNumericValue();
+    }
+    lifeValue.load(emitter.lifeValue);
+    if (emissionValue == null) {
+        emissionValue = new ScaledNumericValue();
+    }
+    emissionValue.load(emitter.emissionValue);
+    emission = emitter.emission;
+    emissionDiff = emitter.emissionDiff;
+    emissionDelta = emitter.emissionDelta;
+    lifeOffset = emitter.lifeOffset;
+    lifeOffsetDiff = emitter.lifeOffsetDiff;
+    life = emitter.life;
+    lifeDiff = emitter.lifeDiff;
+    duration = emitter.duration;
+    delay = emitter.delay;
+    durationTimer = emitter.durationTimer;
+    delayTimer = emitter.delayTimer;
+    continuous = emitter.continuous;
+}
+  ```
+    ]]>
+  </code>
+</response>

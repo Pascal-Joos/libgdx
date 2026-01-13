@@ -1,0 +1,21 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void render() {
+      if (groupStrategy == null) {
+          return;
+      }
+      groupStrategy.beforeGroups();
+      for (SortedIntList.Node<Array<Decal>> group : groupList) {
+        groupStrategy.beforeGroup(group.index, group.value);
+        ShaderProgram shader = groupStrategy.getGroupShader(group.index);
+        render(shader, group.value);
+        groupStrategy.afterGroup(group.index);
+      }
+      groupStrategy.afterGroups();
+  }
+  ```
+    ]]>
+  </code>
+</response>

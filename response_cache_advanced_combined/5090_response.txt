@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public int GetMatchLen(int index, int distance, int limit) {
+        if (_bufferBase == null) return 0;
+        if (_streamEndWasReached)
+          if ((_pos + index) + limit > _streamPos) limit = _streamPos - (_pos + index);
+        distance++;
+        // Byte *pby = _buffer + (size_t)_pos + index;
+        int pby = _bufferOffset + _pos + index;
+  
+        int i;
+        byte[] bufferBase = Nullability.castToNonnull(_bufferBase);
+        for (i = 0;
+            i < limit
+                && bufferBase[pby + i]
+                    == bufferBase[pby + i - distance];
+            i++)
+          ;
+        return i;
+}
+  ```
+    ]]>
+  </code>
+</response>

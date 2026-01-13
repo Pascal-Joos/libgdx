@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public TextureAtlas(String internalPackFile) {
+    if (Gdx.files == null) throw new GdxRuntimeException("Gdx.files is not initialized");
+    this(Gdx.files.internal(internalPackFile));
+  }
+  ```
+    ]]>
+  </code>
+</response>

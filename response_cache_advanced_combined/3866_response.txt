@@ -1,0 +1,78 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the expression at the line
+
+    region.values = Nullability.castToNonnull(values).toArray(int[].class);
+
+(i.e., the result of `values.toArray(int[].class)`) can ever be null.
+
+Relevant control flow:
+
+1. `values` is declared and initialized to null before the main parsing loop:
+   ```java
+   Page page = null;
+   Array<Object> names = null, values = null;
+   ```
+
+2. `values` is only assigned a non-null value inside the `else` branch that handles unknown region fields:
+   ```java
+   else {
+       if (names == null) {
+         names = new Array(8);
+         values = new Array(8);
+       }
+       names.add(entry[0]);
+       int[] entryValues = new int[count];
+       ...
+       Nullability.castToNonnull(values).add(entryValues);
+   }
+   ```
+   - For this block to run, a `Field` lookup must fail:
+     ```java
+     Field field = regionFields.get(entry[0]);
+     if (field != null) field.parse(region);
+     else { ... } // unknown field -> here
+     ```
+   - Inside this `else`, if `values` is null, it is set to `new Array(8)`. So whenever we add to `values`, it is guaranteed non-null in this block.
+
+3. The code that uses `values.toArray(...)` is guarded:
+   ```java
+   if (names != null && names.size > 0) {
+       region.names = names.toArray(String.class);
+       region.values = Nullability.castToNonnull(values).toArray(int[].class);
+       names.clear();
+       Nullability.castToNonnull(values).clear();
+   }
+   ```
+   - This runs only when `names != null` and `names.size > 0`.
+   - `names` becomes non-null exactly in the same place `values` is created:
+     ```java
+     if (names == null) {
+       names = new Array(8);
+       values = new Array(8);
+     }
+     names.add(entry[0]);
+     ```
+   - Therefore, the condition `names != null && names.size > 0` implies that the `else` block for unknown fields has executed at least once.
+   - On the first execution of that `else` block, both `names` and `values` are initialized together. It is impossible to reach a state where `names != null && names.size > 0` but `values` is still null, because they are created in the same `if (names == null)` block and never reassigned to null afterward.
+
+4. Between that initialization and the use-site:
+   - `values` is only passed through `Nullability.castToNonnull(values)` and `.add(...)` or `.clear()`. There are no assignments that set `values` back to null.
+   - `Array.clear()` clears contents but does not make the `Array` object itself null.
+
+5. About `Array.toArray(int[].class)`:
+   - LibGDX’s `com.badlogic.gdx.utils.Array` implementation of `toArray(Class<T> type)` allocates and returns a new array instance of the requested component type containing its elements.
+   - It does not return null; even if the `Array` is empty, it returns a zero-length array. Thus, given `values` is non-null, `values.toArray(int[].class)` is guaranteed non-null.
+
+So, given:
+
+- The only way to enter the `if (names != null && names.size > 0)` block is via the same path that creates `values`.
+- `values` is never set back to null.
+- `Array.toArray(...)` never returns null.
+
+The expression `values.toArray(int[].class)` cannot be null in the shown method.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

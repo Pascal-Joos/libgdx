@@ -1,0 +1,34 @@
+<response>
+  <reason><![CDATA[
+The call site of interest is inside `Window.hit`:
+
+```java
+Actor current = hit;
+while (current != null && current.getParent() != this) current = current.getParent();
+if (current == null) return null;
+```
+
+Here, `current` is of type `Actor`, and `getParent()` is `Actor.getParent()`:
+
+```java
+public @Null Group getParent() {
+    return parent;
+}
+```
+
+`parent` is a field of `Actor` that is explicitly allowed to be `null` (`@Null`). The method simply returns that field with no checks or guarantees of non-nullness.
+
+At this call site:
+
+- The loop condition `current != null && current.getParent() != this` does not prevent `getParent()` from being `null`. If `current.getParent()` is `null`, the expression `null != this` evaluates to `true`, so the body executes and does:
+  
+  ```java
+  current = current.getParent(); // assigns null to current
+  ```
+
+- After such an iteration, `current` becomes `null`, and the next loop test fails on `current != null`. The subsequent `if (current == null) return null;` is exactly handling that case.
+
+Because the code explicitly accounts for `current.getParent()` being `null` and uses that possibility to terminate the loop (and then return `null`), `getParent()` can indeed return `null` at this specific call site.
+  ]]></reason>
+  <value>YES</value>
+</response>

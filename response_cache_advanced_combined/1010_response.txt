@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void draw(ModelInstanceControllerRenderData data) {
+    controllersRenderData.add(data);
+    if (data.controller.particles != null) {
+      bufferedParticlesCount += data.controller.particles.size;
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

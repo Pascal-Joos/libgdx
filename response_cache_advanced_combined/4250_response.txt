@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean tap(float stageX, float stageY, int count, int button) {
+                              if (actor == null) return false;
+                              Nullability.castToNonnull(actor).stageToLocalCoordinates(tmpCoords.set(stageX, stageY));
+                              ActorGestureListener.this.tap(event, tmpCoords.x, tmpCoords.y, count, button);
+                              return true;
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,17 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public ModelMaterial getMaterial(final String name) {
+      for (final ModelMaterial m : materials)
+          if (m.id != null && m.id.equals(name)) return m;
+      ModelMaterial mat = new ModelMaterial();
+      mat.id = name;
+      mat.diffuse = new Color(Color.WHITE);
+      materials.add(mat);
+      return mat;
+  }
+  ```
+    ]]>
+  </code>
+</response>

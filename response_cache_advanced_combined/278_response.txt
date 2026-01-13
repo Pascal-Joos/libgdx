@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void render() {
+    if (screen != null && Gdx.graphics != null) screen.render(Gdx.graphics.getDeltaTime());
+  }
+  ```
+    ]]>
+  </code>
+</response>

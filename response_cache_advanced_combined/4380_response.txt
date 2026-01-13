@@ -1,0 +1,17 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, there is no prior null-check or reassignment of the field `c.maxHeight` before the line:
+
+    float maxWidth = c.maxWidth == null ? 0 : c.maxWidth.get(a),
+          maxHeight = c.maxHeight == null ? 0 : c.maxHeight.get(a);
+
+The code itself explicitly checks `c.maxHeight == null` before dereferencing it via `.get(a)`. This indicates that `c.maxHeight` is allowed by the surrounding API/logic to be null, and the method is written to handle that case safely by using `0` when it is null.
+
+Therefore, from the perspective of possible runtime values and code paths in this method, the reference `c.maxHeight` at that line can indeed be null; the null is simply guarded by the ternary operator so that `c.maxHeight.get(a)` is only evaluated when `c.maxHeight` is non-null.
+
+In other words, the expression `c.maxHeight` itself can be null; the dereference `c.maxHeight.get(a)` will not be executed when it is null because of the conditional operator, but the reference can still hold a null value.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

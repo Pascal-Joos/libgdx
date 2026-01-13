@@ -1,0 +1,43 @@
+```xml
+<response>
+    <reason><![CDATA[
+Inside the method, we have:
+
+    Stage stage = getStage();
+    boolean clampPosition =
+        keepWithinStage && stage != null && getParent() == stage.getRoot();
+
+So `clampPosition` is true only if all of the following hold:
+1. `keepWithinStage` is true,
+2. `stage != null`,
+3. `getParent() == stage.getRoot()`.
+
+In the problematic condition:
+
+    if ((edge & Align.top) != 0) {
+      float amountY = y - lastY - height;
+      if (height + amountY < minHeight) amountY = minHeight - height;
+      if (clampPosition
+          && windowY + height + amountY > Nullability.castToNonnull(stage).getHeight())
+        amountY = Nullability.castToNonnull(stage).getHeight() - windowY - height;
+      height += amountY;
+    }
+
+the subexpression of interest is:
+
+    clampPosition
+        && windowY + height + amountY > Nullability.castToNonnull(stage).getHeight()
+
+Given Java's short-circuit semantics for `&&`:
+
+- If `clampPosition` is false, the right-hand side is not evaluated at all, so `stage` is irrelevant in that case.
+- If `clampPosition` is true, then by its definition we already know `stage != null`.
+
+Therefore, whenever `Nullability.castToNonnull(stage)` is actually evaluated, the value of `stage` is guaranteed to be non-null. Thus, along all code paths where the `getHeight()` call is reached, `stage` cannot be null.
+
+The only remaining possibility would be if `getStage()` could return a "logically invalid" object or if `stage` were modified concurrently from another thread between the assignment and the use. In normal LibGDX UI code, `getStage()` returns the current `Stage` reference of the actor or `null`, and this reference is stable within this method execution (no concurrent mutation is expected in the typical single-threaded rendering/input model). Under those standard assumptions, there is no code path where `stage` is null at the point where `stage.getHeight()` is evaluated.
+
+So, within the given method and normal single-threaded LibGDX semantics, the expression `stage` at that line cannot be null.]]></reason>
+    <value>NO</value>
+</response>
+```

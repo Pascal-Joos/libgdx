@@ -1,0 +1,20 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void load(ScaledNumericValue value) {
+    super.load(value);
+    highMax = value.highMax;
+    highMin = value.highMin;
+    float[] nonnullScaling = Nullability.castToNonnull(value.scaling);
+    scaling = new float[nonnullScaling.length];
+    System.arraycopy(nonnullScaling, 0, scaling, 0, scaling.length);
+    float[] nonnullTimeline = Nullability.castToNonnull(value.timeline);
+    timeline = new float[nonnullTimeline.length];
+    System.arraycopy(nonnullTimeline, 0, timeline, 0, timeline.length);
+    relative = value.relative;
+}
+  ```
+    ]]>
+  </code>
+</response>

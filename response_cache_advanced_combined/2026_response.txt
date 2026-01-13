@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+By your own stated rule, initializer methods are framework-lifecycle methods (e.g., onCreate, init) or methods whose names start with "init" / "initialize" and that are not setters. The given method is named set, which is a canonical setter-style name and does not start with "init" or "initialize". Even though it initializes fields and is annotated with @Initializer, by your naming criteria it should still be treated as a setter, not as an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

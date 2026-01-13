@@ -1,0 +1,99 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze all control-flow paths that can reach the statement `return entries2;`.
+
+Method:
+
+public Entries<V> entries() {
+    if (Collections.allocateIterators) return new Entries(this);
+    if (entries1 == null) {
+      entries1 = new Entries(this);
+      entries2 = new Entries(this);
+    }
+    if (!entries1.valid) {
+      entries1.reset();
+      entries1.valid = true;
+      Nullability.castToNonnull(entries2).valid = false;
+      return entries1;
+    }
+    Nullability.castToNonnull(entries2).reset();
+    Nullability.castToNonnull(entries2).valid = true;
+    entries1.valid = false;
+    return entries2;
+}
+
+Key points:
+
+1. Early return:
+   - If `Collections.allocateIterators` is true, the method returns `new Entries(this)` and never reaches `return entries2;`.
+   - So, for analysis of `return entries2;`, we assume `Collections.allocateIterators == false`.
+
+2. Initialization block:
+   - Under `Collections.allocateIterators == false`, the next statement is:
+        if (entries1 == null) {
+          entries1 = new Entries(this);
+          entries2 = new Entries(this);
+        }
+   - If `entries1` is null, then inside this block we *also* assign:
+        entries2 = new Entries(this);
+     so `entries2` is definitely non-null when this `if` block executes.
+
+   - If `entries1` is not null, this block is skipped. For this path, there is no direct assignment to `entries2` in this call, so we must rely on the field’s prior state.
+
+   In a typical pattern (and as suggested by the initialization in this method), `entries1` and `entries2` start as null fields and are both initialized together in this block the *first time* `entries()` is called with `Collections.allocateIterators == false`. Once that happens:
+   - `entries1 != null` and `entries2 != null` for all subsequent calls, unless some other code somewhere else assigns `null` to these fields.
+
+   The code in this method itself never assigns `null` to `entries2`.
+
+3. Path where `return entries2;` is executed:
+   - After the initialization block:
+        if (!entries1.valid) {
+          ...
+          return entries1;
+        }
+     If `!entries1.valid`, the method returns `entries1` and never reaches `return entries2;`.
+
+   - To reach `return entries2;`, we must have:
+        !Collections.allocateIterators
+        and (entries1 != null, or it has just been initialized along with entries2)
+        and entries1.valid == true
+
+   - On the first call where `entries1` was null:
+       * entries1 and entries2 are both set to non-null `new Entries(this)`.
+       * Then the `if (!entries1.valid)` check runs. Whatever the initial value of `valid` in `Entries`, there are two cases:
+         a) If it is false, we return `entries1` early and do not reach `return entries2;`.
+         b) If it is true, we skip that `if` and run:
+              Nullability.castToNonnull(entries2).reset();
+              Nullability.castToNonnull(entries2).valid = true;
+              entries1.valid = false;
+              return entries2;
+            Here `entries2` has just been assigned `new Entries(this)` earlier in the same method, so it is definitely non-null.
+
+   - On subsequent calls (after the first):
+       * The initialization block is skipped (`entries1 != null`).
+       * At this point, under the assumption that no external code has set `entries2` to null, `entries2` is still the non-null object created previously.
+       * When we reach `return entries2;`, we have:
+            Nullability.castToNonnull(entries2).reset();
+            Nullability.castToNonnull(entries2).valid = true;
+            entries1.valid = false;
+            return entries2;
+         The castToNonnull calls imply a contract expectation that `entries2` is non-null at these points. If it were possibly null, these calls would already be unsafe.
+
+4. Can `entries2` be null at the return point?
+   - Within this method:
+     * `entries2` is only ever assigned `new Entries(this)` when it is assigned at all.
+     * It is never assigned `null`.
+     * The method structure ensures that, before any use of `entries2` via `castToNonnull` or before returning `entries2`, either:
+       - it was just initialized in this call (`entries1 == null` branch), or
+       - it must have been initialized in some earlier call to this same method where `entries1` transitioned from null to non-null, and no code here can have reset it to null afterwards.
+
+   - The only way `entries2` could be null at `return entries2;` would be if some code outside this method (not shown) assigns `null` to `entries2` after it was first initialized. There is no evidence of such behavior in the provided snippet, and the repeated `Nullability.castToNonnull(entries2)` calls strongly suggest the intended contract that `entries2` is always non-null once initialized.
+
+Given only the method as shown, and assuming no hidden external writes that violate its invariants, all execution paths that reach `return entries2;` guarantee that `entries2` has been initialized to a non-null `Entries` instance and never overwritten with null.
+
+Therefore, at the point of `return entries2;` in this method, `entries2` cannot be null under its own contract and visible control flow.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

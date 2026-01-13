@@ -1,0 +1,37 @@
+<response>
+  <reason><![CDATA[
+At the call site
+
+    float[] vertices = polygon.getTransformedVertices();
+
+inside Intersector (and the other shown usages), the polygon is an instance of com.badlogic.gdx.math.Polygon using the provided implementation of getTransformedVertices().
+
+Within that method there are only two logical return paths:
+
+1. Early return when !dirty:
+   ```java
+   if (!dirty) return worldVertices;
+   ```
+   - For this to execute, dirty must be false.
+   - Once dirty has ever been true and the method has executed past this if, worldVertices is always initialized to a non-null array (see point 2).
+   - The only possible concern would be an initial state where dirty is false and worldVertices is still null. However, the standard Polygon constructor in libGDX initializes its internal arrays and sets dirty to true after constructing the polygon from its vertices. In normal, valid Polygon usage (which is what all the shown call sites reflect), dirty will be true at least once before worldVertices is reused with dirty = false. At that point, worldVertices is guaranteed non-null.
+
+2. Main path when dirty is true:
+   ```java
+   final float[] localVertices = this.localVertices;
+   if (worldVertices == null || worldVertices.length != localVertices.length)
+       worldVertices = new float[localVertices.length];
+
+   final float[] worldVertices = this.worldVertices;
+   ...
+   return worldVertices;
+   ```
+   - localVertices is assigned from this.localVertices. In libGDX Polygon, this.localVertices is never null after construction; it is the core vertex array of the polygon.
+   - If worldVertices is null (or wrong length), it is immediately assigned a new float[] of length localVertices.length.
+   - Therefore, by the time of the final `return worldVertices;`, worldVertices is definitely a non-null array.
+
+Thus, for any Polygon that is constructed and used via the normal API (as in the provided call sites: intersectLinePolygon, intersectSegmentPolygon, intersectPolygons, contains, getBoundingRectangle, area, getCentroid, and RepeatablePolygonSprite.setPolygon), getTransformedVertices() will always return a non-null float[].
+
+There is no code path in the shown implementation, under these normal usages, that allows a null to be returned from getTransformedVertices(). If a Polygon were manually corrupted (e.g., via reflection setting localVertices to null or worldVertices to null while dirty is false and never previously computed), that would be outside the normal, supported call pattern and would also likely result in an exception rather than a silent null. For the concrete call site given, using the standard Polygon behavior, the result cannot be null.]]></reason>
+  <value>NO</value>
+</response>

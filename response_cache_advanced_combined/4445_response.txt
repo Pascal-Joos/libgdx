@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public float getSpaceLeft() {
+    if (spaceLeft == null) return 0;
+    return spaceLeft.get(actor);
+}
+  ```
+    ]]>
+  </code>
+</response>

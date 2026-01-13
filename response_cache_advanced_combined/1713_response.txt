@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void begin() {
+      if (target == null) setTarget(actor);
+      if (target == null) return;
+      startWidth = target.getWidth();
+      startHeight = target.getHeight();
+  }
+  ```
+    ]]>
+  </code>
+</response>

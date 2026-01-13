@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public boolean act(float delta) {
+      if (target == null) return false;
+      target.addAction(action);
+      return true;
+  }
+  ```
+    ]]>
+  </code>
+</response>

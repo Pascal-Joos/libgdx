@@ -1,0 +1,34 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the provided method body alone, there is no explicit null-check on either `data` or `data.controller` before the line:
+
+    for (int p = 0, c = data.controller.particles.size; p < c; ++p, ++tp) {
+
+We can infer the following from the local context:
+
+1. `data` comes from `for (BillboardControllerRenderData data : renderData)`.
+   - For `data.controller` to be non-null, two things must hold:
+     a) `renderData` must not contain any null `BillboardControllerRenderData` entries.
+     b) For every non-null `BillboardControllerRenderData` in `renderData`, its `controller` field must be non-null.
+
+2. Within this method, there is no assignment to `data.controller` and no defensive null-check like:
+   - `if (data.controller == null) continue;` or
+   - `Objects.requireNonNull(data.controller);`
+   Therefore, any guarantee of non-nullness must come from:
+   - Class invariants of `BillboardControllerRenderData` (e.g., its constructor always sets `controller` non-null and never allows it to be changed to null), and/or
+   - Invariants on how `renderData` is populated (e.g., code elsewhere that only adds properly initialized `BillboardControllerRenderData` with non-null `controller`).
+
+3. Since those invariants and the implementation of `BillboardControllerRenderData` and the producer of `renderData` are not shown, there is no way, from this snippet alone, to formally rule out the possibility that `data.controller` might be null at runtime (e.g., due to a bug, misuse, or future code changes).
+
+Thus, based solely on the given code, we cannot conclusively say that `data.controller` can never be null. Whether it *actually* can be null depends on code and contracts not present in the snippet.
+
+Therefore, the correct classification with the information given is UNKNOWN.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the definition of BillboardControllerRenderData, especially the type and initialization of its controller field.]]></request>
+        <request><![CDATA[Show where and how renderData is populated (all code paths that add or modify elements in renderData).]]></request>
+    </requests>
+</response>
+```

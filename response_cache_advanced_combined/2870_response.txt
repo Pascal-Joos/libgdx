@@ -1,0 +1,49 @@
+```xml
+<response>
+    <reason><![CDATA[
+We analyze the specific expression:
+
+    if (clampPosition && windowX + width + amountX > stage.getWidth())
+
+The potential null expression is `stage` (used as `stage.getWidth()`).
+
+Within the method:
+
+    Stage stage = getStage();
+    boolean clampPosition =
+        keepWithinStage && stage != null && getParent() == stage.getRoot();
+
+So `clampPosition` is assigned the value of a boolean expression that *includes* `stage != null`. Therefore:
+
+- If `stage` is null, the subexpression `stage != null` is `false`, making `clampPosition` `false` (regardless of the other operands).
+- If `stage` is non-null, `stage != null` is `true`, and `clampPosition` may be `true` or `false` depending on the other operands.
+
+Now consider the `if` where `stage.getWidth()` is used:
+
+    if ((edge & Align.right) != 0) {
+      float amountX = x - lastX - width;
+      if (width + amountX < minWidth) amountX = minWidth - width;
+      if (clampPosition && windowX + width + amountX > stage.getWidth())
+        amountX = stage.getWidth() - windowX - width;
+      width += amountX;
+    }
+
+The condition is a logical AND:
+
+    clampPosition && windowX + width + amountX > stage.getWidth()
+
+In Java, `&&` is short-circuiting:
+
+- First, `clampPosition` is evaluated.
+- If `clampPosition` is `false`, the right-hand side (including `stage.getWidth()`) is **not** evaluated.
+- Only when `clampPosition` is `true` will `stage.getWidth()` be evaluated.
+
+From the earlier assignment, `clampPosition` can only be `true` if `stage != null`. Thus, whenever `stage.getWidth()` is reached, `stage` is guaranteed to be non-null.
+
+Therefore, along all possible execution paths where the expression `stage.getWidth()` is evaluated in that `if`, `stage` cannot be null. When `stage` is null, `clampPosition` is `false`, and the short-circuit semantics prevent dereferencing `stage`.
+
+Hence, in this method, at that specific line, `stage` cannot be null at the point where it is dereferenced in `stage.getWidth()`.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

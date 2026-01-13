@@ -1,0 +1,5 @@
+<response>
+    <reason><![CDATA[
+The method name is `initialize`, which explicitly matches the rule “any method that has a name that starts with 'init' or 'initialize' and is not a setter method.” It does not have a setter-like name (e.g., `setXyz`), and its behavior is to set up multiple fields and call `super.initialize()`, which is characteristic of a lifecycle/initializer method rather than a simple setter. Therefore, under the described NullAway assumptions, it should be treated as an initializer method.]]></reason>
+    <value>YES</value>
+</response>

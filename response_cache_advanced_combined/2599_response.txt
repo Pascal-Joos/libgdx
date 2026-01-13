@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setLabel(Label label) {
+      if (label == null) throw new IllegalArgumentException("label cannot be null.");
+      Cell<Label> labelCell = getLabelCell();
+      if (labelCell == null) throw new IllegalStateException("labelCell cannot be null.");
+      labelCell.setActor(label);
+      this.label = label;
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public Texture load(String fileName) {
+    if (Gdx.files == null) return null;
+    Texture result = new Texture(Gdx.files.internal(fileName), useMipMaps);
+    result.setFilter(minFilter, magFilter);
+    result.setWrap(uWrap, vWrap);
+    return result;
+  }
+  ```
+    ]]>
+  </code>
+</response>

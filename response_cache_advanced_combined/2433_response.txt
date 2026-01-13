@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected @Null Drawable getBackgroundDrawable() {
+            SliderStyle style = (SliderStyle) super.getStyle();
+            if (style == null) return null;
+            if (disabled && Nullability.castToNonnull(style).disabledBackground != null) return Nullability.castToNonnull(style).disabledBackground;
+            if (isDragging() && Nullability.castToNonnull(style).backgroundDown != null) return Nullability.castToNonnull(style).backgroundDown;
+            if (mouseOver && Nullability.castToNonnull(style).backgroundOver != null) return Nullability.castToNonnull(style).backgroundOver;
+            return Nullability.castToNonnull(style).background;
+}
+  ```
+    ]]>
+  </code>
+</response>

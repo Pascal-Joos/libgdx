@@ -1,0 +1,109 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public void update() {
+                                      if ((!hasAcceleration || accellerationChannel == null) && !has2dAngularVelocity && !has3dAngularVelocity) return;
+                                
+                                      if (hasAcceleration && accellerationChannel != null)
+                                        Arrays.fill(
+                                            Nullability.castToNonnull(accellerationChannel).data,
+                                            0,
+                                            controller.particles.size * Nullability.castToNonnull(accellerationChannel).strideSize,
+                                            0);
+                                      if ((has2dAngularVelocity || has3dAngularVelocity) && angularVelocityChannel != null)
+                                        Arrays.fill(
+                                            Nullability.castToNonnull(angularVelocityChannel).data,
+                                            0,
+                                            controller.particles.size * Nullability.castToNonnull(angularVelocityChannel).strideSize,
+                                            0);
+                                  
+                                      for (int k = 0; k < velocities.size; ++k) {
+                                        velocities.items[k].update();
+                                      }
+                                  
+                                      if (hasAcceleration && accellerationChannel != null && positionChannel != null && previousPositionChannel != null) {
+                                        /*
+                                         * //Euler Integration for(int i=0, offset = 0; i < controller.particles.size; ++i, offset +=positionChannel.strideSize){
+                                         * previousPositionChannel.data[offset + ParticleChannels.XOffset] += accellerationChannel.data[offset +
+                                         * ParticleChannels.XOffset]*controller.deltaTime; previousPositionChannel.data[offset + ParticleChannels.YOffset] +=
+                                         * accellerationChannel.data[offset + ParticleChannels.YOffset]*controller.deltaTime; previousPositionChannel.data[offset
+                                         * + ParticleChannels.ZOffset] += accellerationChannel.data[offset + ParticleChannels.ZOffset]*controller.deltaTime;
+                                         *
+                                         * positionChannel.data[offset + ParticleChannels.XOffset] += previousPositionChannel.data[offset +
+                                         * ParticleChannels.XOffset]*controller.deltaTime; positionChannel.data[offset + ParticleChannels.YOffset] +=
+                                         * previousPositionChannel.data[offset + ParticleChannels.YOffset]*controller.deltaTime; positionChannel.data[offset +
+                                         * ParticleChannels.ZOffset] += previousPositionChannel.data[offset + ParticleChannels.ZOffset]*controller.deltaTime; }
+                                         */
+                                        for (int i = 0, offset = 0;
+                                            i < controller.particles.size;
+                                            ++i, offset += Nullability.castToNonnull(positionChannel).strideSize) {
+                                          float x = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.XOffset],
+                                              y = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.YOffset],
+                                              z = Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.ZOffset];
+                                          Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.XOffset] =
+                                              2 * x
+                                                  - Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.XOffset]
+                                                  + Nullability.castToNonnull(accellerationChannel).data[offset + ParticleChannels.XOffset]
+                                                      * controller.deltaTimeSqr;
+                                          Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.YOffset] =
+                                              2 * y
+                                                  - Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.YOffset]
+                                                  + Nullability.castToNonnull(accellerationChannel).data[offset + ParticleChannels.YOffset]
+                                                      * controller.deltaTimeSqr;
+                                          Nullability.castToNonnull(positionChannel).data[offset + ParticleChannels.ZOffset] =
+                                              2 * z
+                                                  - Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.ZOffset]
+                                                  + Nullability.castToNonnull(accellerationChannel).data[offset + ParticleChannels.ZOffset]
+                                                      * controller.deltaTimeSqr;
+                                          Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.XOffset] = x;
+                                          Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.YOffset] = y;
+                                          Nullability.castToNonnull(previousPositionChannel).data[offset + ParticleChannels.ZOffset] = z;
+                                        }
+                                      }
+                                  
+                                      if (has2dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
+                                        for (int i = 0, offset = 0;
+                                            i < controller.particles.size;
+                                            ++i, offset += Nullability.castToNonnull(rotationChannel).strideSize) {
+                                          float rotation = Nullability.castToNonnull(angularVelocityChannel).data[i] * controller.deltaTime;
+                                          if (rotation != 0) {
+                                            float cosBeta = MathUtils.cosDeg(rotation), sinBeta = MathUtils.sinDeg(rotation);
+                                            float currentCosine = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.CosineOffset];
+                                            float currentSine = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.SineOffset];
+                                            float newCosine = currentCosine * cosBeta - currentSine * sinBeta,
+                                                newSine = currentSine * cosBeta + currentCosine * sinBeta;
+                                            Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.CosineOffset] = newCosine;
+                                            Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.SineOffset] = newSine;
+                                          }
+                                        }
+                                      } else if (has3dAngularVelocity && rotationChannel != null && angularVelocityChannel != null) {
+                                        for (int i = 0, offset = 0, angularOffset = 0;
+                                            i < controller.particles.size;
+                                            ++i, offset += Nullability.castToNonnull(rotationChannel).strideSize,
+                                                angularOffset += Nullability.castToNonnull(angularVelocityChannel).strideSize) {
+                                  
+                                          float wx = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.XOffset],
+                                              wy = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.YOffset],
+                                              wz = Nullability.castToNonnull(angularVelocityChannel).data[angularOffset + ParticleChannels.ZOffset],
+                                              qx = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.XOffset],
+                                              qy = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.YOffset],
+                                              qz = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.ZOffset],
+                                              qw = Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.WOffset];
+                                          TMP_Q
+                                              .set(wx, wy, wz, 0)
+                                              .mul(qx, qy, qz, qw)
+                                              .mul(0.5f * controller.deltaTime)
+                                              .add(qx, qy, qz, qw)
+                                              .nor();
+                                          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.XOffset] = TMP_Q.x;
+                                          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.YOffset] = TMP_Q.y;
+                                          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.ZOffset] = TMP_Q.z;
+                                          Nullability.castToNonnull(rotationChannel).data[offset + ParticleChannels.WOffset] = TMP_Q.w;
+                                        }
+                                      }
+}
+  ```
+    ]]>
+  </code>
+</response>

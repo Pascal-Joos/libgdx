@@ -1,0 +1,13 @@
+<response>
+    <reason><![CDATA[
+By the criteria you described, initializer methods are either:
+
+1. Known framework lifecycle/setup methods (e.g., Activity.onCreate, Processor.init, Servlet.init, etc.), or
+2. Methods whose names start with "init" or "initialize", and which are not setters.
+
+The given method is named `setVertexData`, which clearly follows a setter naming pattern (`setXyz`). Even though it initializes fields, its name does not start with "init" or "initialize", and it is semantically a setter-style configuration method rather than a designated lifecycle/initialization method in a known framework.
+
+Therefore, under your rules, it should not be treated as an initializer method for NullAway.
+    ]]></reason>
+    <value>NO</value>
+</response>

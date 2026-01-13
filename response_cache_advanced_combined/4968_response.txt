@@ -1,0 +1,63 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the *array reference* `a` used in the statement
+
+    a[dest--] = a[cursor1--];
+
+can be null at that point in the method.
+
+1. The code first assigns and checks `a`:
+
+    T[] a = this.a;
+    if (a == null) {
+      throw new NullPointerException();
+    }
+    a = Nullability.castToNonnull(a);
+
+   - `a` is a local variable.
+   - It is immediately checked for null; if it were null, the method would have thrown a `NullPointerException` and exited.
+   - After the `if (a == null) { throw ... }` check, all subsequent control flow in the method is reachable only if `a != null`.
+   - `Nullability.castToNonnull(a)` is a cast/annotation helper; it does not change the runtime value of `a`, it only refines static nullability information. So after this line, the local variable `a` definitely holds a non‑null reference to the same array object as `this.a` at that time.
+
+2. There are no subsequent assignments to `a`:
+
+   After:
+
+    a = Nullability.castToNonnull(a);
+
+   there are *no further writes* to the variable `a` anywhere in the method. It is read many times (e.g., `a[dest--] = ...`, `System.arraycopy(a, ...)`), but never reassigned.
+
+   Therefore, for the remainder of the method, the local `a` continues to be the same non‑null array reference that passed the null check.
+
+3. Control‑flow paths:
+
+   - Any path that reaches the line
+
+         a[dest--] = a[cursor1--];
+
+     must have passed through:
+       * the initialization `T[] a = this.a;`
+       * the null check `if (a == null) { throw new NullPointerException(); }`
+       * and the reassignment `a = Nullability.castToNonnull(a);`
+
+   - There is no early return, `throw`, or reassignment of `a` between this null check and the `a[dest--] = a[cursor1--];` line.
+   - Thus, reaching that assignment logically implies that `a` is non‑null.
+
+4. Contracts of called methods are irrelevant to the nullness of `a`:
+
+   - `ensureCapacity(len2)`, `System.arraycopy(...)`, `gallopRight`, `gallopLeft`, comparisons via `c`, etc., may throw exceptions or affect other variables, but none of them modify the local variable `a`.
+   - No method call can reassign `a`; Java passes object references by value, and a local variable cannot be changed by called methods unless explicitly reassigned in the caller, which does not happen here.
+
+Given all of the above, at the line
+
+    a[dest--] = a[cursor1--];
+
+the local variable `a` is definitively non‑null on every reachable code path.
+
+(Individual *elements* `a[cursor1]` or `a[dest]` might be null depending on the contents of the array, but the question is specifically whether the *expression `a`* itself can be null, and the answer is no.)
+
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

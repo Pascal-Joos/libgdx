@@ -1,0 +1,34 @@
+```xml
+<response>
+    <reason><![CDATA[
+Syntactically, at the point of the call `out.writeInt(ACCEL);` the variable `out` has just been checked for null inside a synchronized block:
+
+    synchronized (this) {
+        if (!connected || out == null) return;
+    }
+
+Within that block, if `out` were null the method would have already returned, so **logically** `out` is non-null at the instant the synchronized block exits.
+
+However, the method then leaves the synchronized block before using `out`:
+
+    try {
+        out.writeInt(ACCEL);
+        ...
+    }
+
+Between the end of the `synchronized (this)` block and the call to `writeInt`, other threads can execute and potentially modify `out`. For example, another thread could set `out = null;` (or otherwise close/clear it) after the null-check but before or during the try-block. The catch block here:
+
+    } catch (Throwable t) {
+        out = null;
+        connected = false;
+    }
+
+also shows that the code expects `out` to become unusable and be reset, which further suggests it may be concurrently modified elsewhere.
+
+Because access to `out` is not consistently guarded by `synchronized (this)` for the write call itself, there is no thread-safety guarantee that `out` remains non-null from the time it was checked to the time it is used. In a multithreaded context, `out` can therefore be null at `out.writeInt(ACCEL);`.
+
+Thus, in the absence of a stronger external guarantee (e.g., that only this thread ever changes `out` and `connected`), the expression `out` **can** be null at that line.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

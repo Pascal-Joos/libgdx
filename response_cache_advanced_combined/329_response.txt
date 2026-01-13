@@ -1,0 +1,48 @@
+```xml
+<response>
+    <reason><![CDATA[
+There are two distinct uses of Gdx.input.getCurrentEventTime() in the method, and they must be analyzed along each control path.
+
+1. Inside the `if (pinching)` block:
+
+    if (pinching) {
+        pinching = false;
+        listener.pinchStop();
+        panning = true;
+        // we are in pan mode again, reset velocity tracker
+        if (Gdx.input == null) return false;
+        long eventTime = Nullability.castToNonnull(Gdx.input).getCurrentEventTime();
+        if (pointer == 0) {
+            tracker.start(pointer2.x, pointer2.y, eventTime);
+        } else {
+            tracker.start(pointer1.x, pointer1.y, eventTime);
+        }
+        return false;
+    }
+
+Here, before `Nullability.castToNonnull(Gdx.input).getCurrentEventTime()` is called, there is an explicit null check:
+
+    if (Gdx.input == null) return false;
+
+On any execution path that reaches `tracker.start(pointer1.x, pointer1.y, eventTime);`, the method has already returned early if `Gdx.input` were null. Therefore, on this path, the expression `Gdx.input` (and thus the object passed to `Nullability.castToNonnull`) is guaranteed to be non-null. Under standard Java semantics (no reflection or VM corruption), the cast helper will receive a non-null value, so `getCurrentEventTime()` is called on a non-null object. Consequently, for the specific occurrence at:
+
+    tracker.start(pointer1.x, pointer1.y, Gdx.input.getCurrentEventTime());
+
+(as written in your question but represented in the code via `eventTime`), Gdx.input cannot be null at that point because of the preceding check and immediate return.
+
+2. In the "handle fling" section:
+
+    if (Gdx.input == null) return handled;
+    long time = Nullability.castToNonnull(Gdx.input).getCurrentEventTime();
+
+Exactly the same reasoning applies here: the code checks `if (Gdx.input == null) return handled;` just before the call. Any path that reaches the `Nullability.castToNonnull(Gdx.input)` call has already ruled out `Gdx.input == null`. Hence here as well, `Gdx.input` is guaranteed non-null.
+
+3. LibGDX semantics:
+
+In addition to the direct null checks, in normal LibGDX usage, `Gdx.input` is assigned by the framework during application setup and is not expected to become null again while the application is running. The explicit null checks in this method are defensive and ensure that if, for any reason, `Gdx.input` had not been initialized, the method would return before dereferencing it.
+
+Conclusion: Along every control path that reaches the use of `Gdx.input` in the `tracker.start(...)` calls (and the fling-handling call), a null check with an immediate return has already been performed. Therefore, at those points, `Gdx.input` cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

@@ -1,0 +1,15 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected List<T> newList() {
+      return new List<T>(Nullability.castToNonnull(selectBox.style.listStyle)) {
+        public String toString(T obj) {
+          return selectBox.toString(obj);
+        }
+      };
+}
+  ```
+    ]]>
+  </code>
+</response>

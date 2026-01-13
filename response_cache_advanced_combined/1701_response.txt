@@ -1,0 +1,12 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected void begin() {
+    if (target == null) setTarget(actor);
+    if (target != null) start = target.getRotation();
+}
+  ```
+    ]]>
+  </code>
+</response>

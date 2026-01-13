@@ -1,0 +1,27 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+protected int letterUnderCursor(float x) {
+    if (text == null) return 0;
+    if (linesBreak.size > 0) {
+      if (cursorLine * 2 >= linesBreak.size) {
+        return text.length();
+      } else {
+        float[] glyphPositions = this.glyphPositions.items;
+        int start = linesBreak.items[cursorLine * 2];
+        x += glyphPositions[start];
+        int end = linesBreak.items[cursorLine * 2 + 1];
+        int i = start;
+        for (; i < end; i++) if (glyphPositions[i] > x) break;
+        if (i > 0 && glyphPositions[i] - x <= x - glyphPositions[i - 1]) return i;
+        return Math.max(0, i - 1);
+      }
+    } else {
+      return 0;
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

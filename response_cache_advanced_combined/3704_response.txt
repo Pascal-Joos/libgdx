@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public final void Init() throws IOException {
+      if (Stream == null) {
+          return;
+      }
+      Code = 0;
+      Range = -1;
+      for (int i = 0; i < 5; i++) Code = (Code << 8) | Stream.read();
+  }
+  ```
+    ]]>
+  </code>
+</response>

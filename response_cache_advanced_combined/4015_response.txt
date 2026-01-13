@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+      public void activateParticles(int startIndex, int count) {
+        if (strengthChannel == null) return;
+        strengthChannel = Nullability.castToNonnull(strengthChannel);
+        float start, diff;
+        for (int i = startIndex * strengthChannel.strideSize,
+                c = i + count * strengthChannel.strideSize;
+            i < c;
+            i += strengthChannel.strideSize) {
+          start = strengthValue.newLowValue();
+          diff = strengthValue.newHighValue();
+          if (!strengthValue.isRelative()) diff -= start;
+          strengthChannel.data[i + ParticleChannels.VelocityStrengthStartOffset] = start;
+          strengthChannel.data[i + ParticleChannels.VelocityStrengthDiffOffset] = diff;
+        }
+  }
+  ```
+    ]]>
+  </code>
+</response>

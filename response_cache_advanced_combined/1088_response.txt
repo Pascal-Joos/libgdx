@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Override
+  public void allocateChannels() {
+    if (controller != null) {
+      modelChannel = controller.particles.addChannel(ParticleChannels.ModelInstance);
+    }
+  }
+  ```
+    ]]>
+  </code>
+</response>

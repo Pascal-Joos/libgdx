@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ModelInstance(final Model model) {
+    this(Nullability.castToNonnull(model), (String[]) null);
+}
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,4 @@
+<response>
+    <reason><![CDATA[The method name `setStyle` clearly follows the setter naming convention and does not start with `init` or `initialize`. By your own criteria, methods that are setters should not be treated as initializer methods, even if they assign non-null fields or perform additional setup like calling `setBackground(getBackgroundDrawable())`. Therefore, this method should be classified as a setter, not as an initializer method for NullAway’s purposes.]]></reason>
+    <value>NO</value>
+</response>

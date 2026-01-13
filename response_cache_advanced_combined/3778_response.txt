@@ -1,0 +1,22 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public long length() {
+      File f = file();
+      if (type == FileType.Classpath || (type == FileType.Internal && (f == null || !f.exists()))) {
+        InputStream input = read();
+        try {
+          return input.available();
+        } catch (Exception ignored) {
+        } finally {
+          StreamUtils.closeQuietly(input);
+        }
+        return 0;
+      }
+      return f != null ? f.length() : 0L;
+}
+  ```
+    ]]>
+  </code>
+</response>

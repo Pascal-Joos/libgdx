@@ -1,0 +1,24 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public @Null NinePatch createPatch(String name) {
+      for (int i = 0, n = regions.size; i < n; i++) {
+        AtlasRegion region = regions.get(i);
+        if (region.name == null) return null;
+        if (Nullability.castToNonnull(region.name).equals(name)) {
+          int[] splits = region.findValue("split");
+          if (splits == null)
+            throw new IllegalArgumentException("Region does not have ninepatch splits: " + name);
+          NinePatch patch = new NinePatch(region, splits[0], splits[1], splits[2], splits[3]);
+          int[] pads = region.findValue("pad");
+          if (pads != null) patch.setPadding(pads[0], pads[1], pads[2], pads[3]);
+          return patch;
+        }
+      }
+      return null;
+  }
+  ```
+    ]]>
+  </code>
+</response>

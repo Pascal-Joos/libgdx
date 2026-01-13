@@ -1,0 +1,14 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method body, `emitter` can be null at method entry (there is no shown initialization or guarantee otherwise). However, at the specific expression:
+
+    if (emitter != null) allocateChannels(emitter.maxParticleCount);
+
+the access to `emitter` is guarded by an explicit null check in the same statement. Under Java semantics, the body of the `if` (`allocateChannels(emitter.maxParticleCount)`) is executed only when `emitter != null` evaluates to true. Therefore, along all code paths that reach the method and execute this line, `emitter` is guaranteed to be non-null at the time `emitter.maxParticleCount` is evaluated and passed to `allocateChannels`.
+
+What we cannot determine from this snippet is whether `emitter` might be null at *method entry*, but the question is specifically about whether it can be null at the point of usage in `allocateChannels(emitter.maxParticleCount);`. At that point in the control flow, it cannot be null because of the preceding null check in the same `if` statement.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

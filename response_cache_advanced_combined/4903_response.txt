@@ -1,0 +1,6 @@
+<response>
+    <reason><![CDATA[
+The method name is `load`, which does not match any of the documented special initializer patterns (e.g., framework lifecycle methods like `onCreate`, `init`, or `initialize`) and does not start with "init" or "initialize". Although it assigns to multiple fields, it is semantically more like a bulk setter or copy method rather than a designated initializer method in the NullAway sense. Under the given criteria, this should not be treated as an initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

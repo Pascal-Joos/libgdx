@@ -1,0 +1,25 @@
+```xml
+<response>
+    <reason><![CDATA[
+At the top of the method there is an explicit null check on style.font:
+
+    if (style.font == null) return;
+    final BitmapFont font = style.font;
+
+So if the method continues past this point, style.font is guaranteed to be non-null, and therefore the local variable font is also non-null at that time.
+
+Later there is another check:
+
+    if (font == null) return;
+
+This check is redundant, because given the earlier guard, font cannot be null on any execution path that reaches this line. There is no reassignment to font anywhere in the method, so its value stays the same (non-null) for the remainder of the method.
+
+All calls that use font (including via Nullability.castToNonnull(font)) occur only after those guards, on code paths that require the method not to have returned early. Therefore, when execution reaches:
+
+    float yOffset = font.isFlipped() ? -textHeight : 0;
+
+the variable font must be non-null by construction, regardless of external contracts or behaviors of other methods. Thus, the expression "font" at that line cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

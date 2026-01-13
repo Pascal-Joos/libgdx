@@ -1,0 +1,44 @@
+<response>
+  <reason><![CDATA[
+The call site is in `PluggableGroupStrategy`:
+
+```java
+public void beforeGroup(int group, Array<Decal> contents) {
+  plugs.get(group).beforeGroup(contents);
+}
+public void afterGroup(int group) {
+  plugs.get(group).afterGroup();
+}
+```
+
+`plugs` is an `IntMap` (using the `get(int key)` implementation shown), so `plugs.get(group)` is exactly the `IntMap.get(int)` method provided:
+
+```java
+public V get(int key) {
+  if (key == 0) return hasZeroValue ? zeroValue : null;
+  int i = locateKey(key);
+  return i >= 0 ? valueTable[i] : null;
+}
+```
+
+From this implementation alone:
+
+- If `group == 0` and `hasZeroValue` is `false`, the method explicitly returns `null`.
+- If `group == 0` and `hasZeroValue` is `true`, it returns `zeroValue`, which itself could be `null` (the class’ `equals` implementation explicitly allows `zeroValue` to be `null`).
+- If `group != 0`, the method calls `locateKey(group)`:
+
+  - If `locateKey(group) < 0`, the method explicitly returns `null`.
+  - If `locateKey(group) >= 0`, it returns `valueTable[i]`. The `equals` implementation for `IntMap` iterates `valueTable` and checks for `value == null`, proving that `valueTable[i]` is allowed to be `null` for existing keys.
+
+Nothing in the provided call chain constrains `group` to a particular value, nor shows any prior check to guarantee that `plugs` contains a non‑null value for that `group` key. There is also no evidence that `plugs` is always fully populated or that its values are guaranteed non‑null.
+
+Therefore, for the specific call `plugs.get(group)`:
+
+- It may return `null` because:
+  - `group` might be 0 and `hasZeroValue` is false, or `zeroValue` is null; or
+  - `locateKey(group)` may indicate the key is absent; or
+  - `valueTable[i]` for that key may simply be `null`.
+
+So at this call site, `plugs.get(group)` can be `null`.]]></reason>
+  <value>YES</value>
+</response>

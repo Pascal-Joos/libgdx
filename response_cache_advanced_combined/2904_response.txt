@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void setSprite( Sprite sprite) {
+      this.sprite = sprite;
+      setMinWidth(Nullability.castToNonnull(sprite).getWidth());
+      setMinHeight(Nullability.castToNonnull(sprite).getHeight());
+  }
+  ```
+    ]]>
+  </code>
+</response>

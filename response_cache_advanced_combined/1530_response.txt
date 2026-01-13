@@ -1,0 +1,46 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, `currentTileSet` is declared as:
+
+    TiledMapTileSet currentTileSet = null;
+
+It is only ever assigned via calls to `tilesets.getTileSet(...)`:
+
+1) In the outer loop, for elements named `"TileSheet"`:
+   currentTileSet = tilesets.getTileSet(currentChild.getAttribute("Ref"));
+
+2) Inside the `"Animated"` branch, for frame elements named `"TileSheet"`:
+   currentTileSet = tilesets.getTileSet(frame.getAttribute("Ref"));
+
+There is no null-check after these assignments, and there is no other assignment that would force `currentTileSet` to a non-null value.
+
+The problematic usage is:
+
+   frameTiles.add(
+       (StaticTiledMapTile)
+           currentTileSet.getTile(firstgid + frame.getIntAttribute("Index")));
+
+This is only guarded by the condition `if (frameName.equals("Static"))`, which does not guarantee that any prior `"TileSheet"` frame has been encountered in the same `<Frames>` block. For example, a malformed or unexpected XML structure could have:
+
+- A `<Frames>` section containing a `<Static>` element before any `<TileSheet>` element, or
+- A `<Static>` element with a `"Ref"` that does not exist in `tilesets`, causing `tilesets.getTileSet(...)` to return null (depending on implementation), or
+- A `<Frames>` element with only `<Static>` elements and no `<TileSheet>` at all.
+
+In any of these cases, `currentTileSet` would still be `null` when you reach:
+
+   currentTileSet.getTile(...)
+
+and thus the expression `currentTileSet` at that call site can in fact be null.
+
+Additionally, even outside the animated-frames loop, similar risk exists in the `"Static"` branch in the outer loop:
+
+   cell.setTile(currentTileSet.getTile(firstgid + currentChild.getIntAttribute("Index")));
+
+If the input XML has a `<Static>` tile before any `<TileSheet>` entry in the same row, or if `tilesets.getTileSet(...)` returns null, `currentTileSet` will be null there as well.
+
+Because the correctness depends entirely on the structure and validity of the external map data and on the contract of `TiledMapTileSets.getTileSet(...)` (which is not enforced or checked here), there is no guarantee in this method that `currentTileSet` is non-null at the point of use. Therefore, it *can* be null on some execution paths.
+    ]]></reason>
+    <value>YES</value>
+</response>
+```

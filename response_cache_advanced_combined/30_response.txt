@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void error(String message, Throwable exception) {
+      if (Gdx.app != null && level >= ERROR) Gdx.app.error(tag, message, exception);
+  }
+  ```
+    ]]>
+  </code>
+</response>

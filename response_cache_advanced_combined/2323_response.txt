@@ -1,0 +1,57 @@
+<response>
+  <reason><![CDATA[
+At this specific call site in `Tooltip.setContainerPosition`:
+
+```java
+container.width(container.getActor().getWidth());
+```
+
+`container` is the `Container` instance owned by the `Tooltip` / `TextTooltip`.
+
+From the provided constructor of `TextTooltip` (depth 2):
+
+```java
+public TextTooltip(@Null String text, final TooltipManager manager, TextTooltipStyle style) {
+    super(null, manager);
+
+    container.setActor(newLabel(text, style.label));
+
+    setStyle(style);
+}
+```
+
+1. `container.setActor(newLabel(text, style.label));` is executed in the constructor before `setStyle(style)`.
+2. `setStyle(style)` (depth 1) is where `setContainerPosition` will later use `container.getActor()` indirectly (through tooltip usage). Inside `setStyle`:
+   ```java
+   if (style == null) throw new NullPointerException("style cannot be null");
+   container.setBackground(style.background);
+   container.maxWidth(style.wrapWidth);
+
+   boolean wrap = style.wrapWidth != 0;
+   container.fill(wrap);
+
+   Label label = container.getActor();
+   Nullability.castToNonnull(label).setStyle(style.label);
+   Nullability.castToNonnull(label).setWrap(wrap);
+   ```
+   Here, `Label label = container.getActor();` assumes `getActor()` is non-null and immediately dereferences it via `castToNonnull(label).setStyle(...)`. If `container.getActor()` could be null at this point, this code would deterministically throw a `NullPointerException` every time a `TextTooltip` is constructed with a non-null style, which contradicts the intended usage of the API.
+
+3. The same invariant applies later when `Tooltip.setContainerPosition` is called:
+   ```java
+   container.setSize(manager.maxWidth, Integer.MAX_VALUE);
+   container.validate();
+   container.width(container.getActor().getWidth());
+   container.pack();
+   ```
+   By the time this is executed, a `TextTooltip` has been constructed with the `container` already initialized via `setActor(newLabel(...))`, and `setStyle(style)` has successfully completed (otherwise the tooltip would not be in use). Therefore, for this specific call site, `container.actor` must be the label set in the constructor, and cannot be null.
+
+Even though the method is annotated `@Null` and could in principle return null for some other usage patterns of `Container`, in this particular call chain:
+
+- `container.actor` is definitely set in the constructor,
+- there is no code shown that ever clears or replaces the actor with `null` between construction and the use in `setContainerPosition`,
+- and earlier code already dereferences `container.getActor()` under a non-null assumption.
+
+Thus, at this specific call site, `container.getActor()` cannot be null.
+]]></reason>
+  <value>NO</value>
+</response>

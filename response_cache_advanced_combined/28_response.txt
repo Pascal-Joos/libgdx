@@ -1,0 +1,29 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public ShaderProgram(String vertexShader, String fragmentShader) {
+    if (vertexShader == null) throw new IllegalArgumentException("vertex shader must not be null");
+    if (fragmentShader == null)
+      throw new IllegalArgumentException("fragment shader must not be null");
+
+    if (prependVertexCode != null && prependVertexCode.length() > 0)
+      vertexShader = prependVertexCode + vertexShader;
+    if (prependFragmentCode != null && prependFragmentCode.length() > 0)
+      fragmentShader = prependFragmentCode + fragmentShader;
+
+    this.vertexShaderSource = vertexShader;
+    this.fragmentShaderSource = fragmentShader;
+    this.matrix = BufferUtils.newFloatBuffer(16);
+
+    compileShaders(vertexShader, fragmentShader);
+    if (isCompiled()) {
+      fetchAttributes();
+      fetchUniforms();
+      if (Gdx.app != null) addManagedShader(Gdx.app, this);
+    }
+}
+  ```
+    ]]>
+  </code>
+</response>

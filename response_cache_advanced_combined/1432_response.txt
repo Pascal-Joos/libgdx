@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+private static short maxVerticeInIndices() {
+        if (indices == null) return (short) -32768;
+        short max = (short) -32768;
+        for (int i = 0; i < Nullability.castToNonnull(indices).length; i++) if (Nullability.castToNonnull(indices)[i] > max) max = Nullability.castToNonnull(indices)[i];
+        return max;
+}
+  ```
+    ]]>
+  </code>
+</response>

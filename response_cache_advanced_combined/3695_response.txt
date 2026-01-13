@@ -1,0 +1,17 @@
+<response>
+    <reason><![CDATA[
+By the criteria you described for NullAway:
+
+1. Recognized initializer methods are:
+   - Well-known framework lifecycle methods (e.g., android.app.Activity.onCreate, javax.servlet.Servlet.init, etc.), or
+   - Methods whose names start with "init" or "initialize" and are not setters.
+
+2. Your method is named `Create`, which:
+   - Does not match any of the listed framework lifecycle names.
+   - Does not start with "init" or "initialize".
+   - Is not covered by any additional naming rule you gave.
+
+Even though `Create` initializes several fields, under the rules you specified, that alone is not sufficient to classify it as an "initializer method" for NullAway’s special treatment. It will be treated as a regular method, not as a designated initializer method.
+    ]]></reason>
+    <value>NO</value>
+</response>

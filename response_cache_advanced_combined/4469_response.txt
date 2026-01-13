@@ -1,0 +1,33 @@
+```xml
+<response>
+    <reason><![CDATA[
+We are checking whether the expression `c.spaceBottom` used here:
+
+    c.computedPadBottom =
+        (c.padBottom == null ? 0 : c.padBottom.get(a))
+            + (row == rows - 1 ? 0 : (c.spaceBottom == null ? 0 : c.spaceBottom.get(a)));
+
+can possibly be null at the point it is dereferenced with `.get(a)`.
+
+In this line, `c.spaceBottom` is never used directly without a null check. Instead, it is guarded by a ternary expression:
+
+    (c.spaceBottom == null ? 0 : c.spaceBottom.get(a))
+
+So there are only two cases at runtime:
+
+1. `c.spaceBottom == null`  
+   - The ternary evaluates to `0`.  
+   - `c.spaceBottom.get(a)` is **not** executed.  
+   - No dereference of a null reference occurs.
+
+2. `c.spaceBottom != null`  
+   - The ternary evaluates the second branch.  
+   - `c.spaceBottom.get(a)` is executed, but in this branch `c.spaceBottom` is guaranteed non-null by the condition.
+
+The question of interest is not whether `c.spaceBottom` can *be* null as a field (it clearly can, because the code explicitly checks for that) but whether it can be null at the point it is *used* in `c.spaceBottom.get(a)`. Thanks to the explicit `c.spaceBottom == null ? 0 : ...` guard, the dereference only occurs when `c.spaceBottom` is known non-null.
+
+Therefore, at the point of the dereference `c.spaceBottom.get(a)`, `c.spaceBottom` cannot be null along any control-flow path in this method.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

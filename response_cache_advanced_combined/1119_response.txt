@@ -1,0 +1,38 @@
+```xml
+<response>
+    <reason><![CDATA[
+Based solely on the provided method:
+
+public final boolean set(final int uniform, final GLTexture texture) {
+    if (locations[uniform] < 0) return false;
+    program.setUniformi(locations[uniform], context.textureBinder.bind(texture));
+    return true;
+}
+
+there is no information about:
+- how `program` is initialized,
+- where it comes from (constructor, setter, factory, dependency injection),
+- whether there are invariants/guarantees in the surrounding class (e.g., "program is never null after construction"),
+- any prior null-checks on `program` before this method is called.
+
+Inside this method:
+- `program` is not assigned or checked for null.
+- The only control flow condition is based on `locations[uniform]`, which is unrelated to `program` being null.
+- Even if `locations[uniform]` is valid (≥ 0), there is no guarantee from this snippet that `program` is non-null.
+
+From standard Java semantics, `program` can be null at runtime unless:
+- it is a `final` field that is definitely initialized to a non-null value in all constructors, or
+- there is some external guarantee (e.g., framework, factory, or class invariant) that it is always non-null.
+
+Since those guarantees are not shown, we cannot statically conclude that `program` is never null. At the same time, we also cannot assert that it *can* be null without seeing its declarations and initialization paths.
+
+Therefore, with the given information, the nullability of `program` at the call site cannot be determined.
+    ]]></reason>
+    <value>UNKNOWN</value>
+    <requests>
+        <request><![CDATA[Show the declaration of the `program` field (its type, whether it is `final`, and any annotations such as `@NotNull`/`@Nullable`).]]></request>
+        <request><![CDATA[Show all constructors and any methods that assign to `program`, so we can see if it is always initialized to a non-null value.]]></request>
+        <request><![CDATA[If applicable, provide class or framework contracts/documentation that state whether `program` is guaranteed to be non-null when `set` is called.]]></request>
+    </requests>
+</response>
+```

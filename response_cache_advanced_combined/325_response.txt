@@ -1,0 +1,24 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the method
+
+    public static boolean middle() {
+        return Gdx.input != null && Gdx.input.isButtonPressed(Buttons.MIDDLE);
+    }
+
+the Java language guarantees short-circuit evaluation of the logical AND operator (`&&`).
+
+Evaluation order:
+1. `Gdx.input != null` is evaluated first.
+2. Only if this expression is `true` does the second operand `Gdx.input.isButtonPressed(Buttons.MIDDLE)` get evaluated.
+
+Therefore, on any code path where `Gdx.input` is actually `null`, the second part (`Gdx.input.isButtonPressed(...)`) will not be executed at all, and thus the dereference of `Gdx.input` in that expression cannot occur in those cases.
+
+On any code path where the second expression *is* evaluated, it is only after `Gdx.input != null` has already been confirmed `true` in the same expression evaluation, so `Gdx.input` is guaranteed to be non-null at the point of the call to `isButtonPressed`.
+
+Given only this method and standard Java semantics, `Gdx.input` at the call site `Gdx.input.isButtonPressed(Buttons.MIDDLE)` cannot be null at runtime.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

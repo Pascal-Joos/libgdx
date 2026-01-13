@@ -1,0 +1,11 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public static boolean alt() {
+      return Gdx.input != null && (Gdx.input.isKeyPressed(Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Keys.ALT_RIGHT));
+  }
+  ```
+    ]]>
+  </code>
+</response>

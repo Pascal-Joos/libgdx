@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public TextTooltipStyle(TextTooltipStyle style) {
+      label = new LabelStyle(Nullability.castToNonnull(style.label));
+      background = style.background;
+      wrapWidth = style.wrapWidth;
+}
+  ```
+    ]]>
+  </code>
+</response>

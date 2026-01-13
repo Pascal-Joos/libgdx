@@ -1,0 +1,14 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  private void set(SimpleInfluencer scaleInfluencer) {
+      if (scaleInfluencer.value == null) return;
+      if (value == null) return;
+      value.load(scaleInfluencer.value);
+      valueChannelDescriptor = scaleInfluencer.valueChannelDescriptor;
+  }
+  ```
+    ]]>
+  </code>
+</response>

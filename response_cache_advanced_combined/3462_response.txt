@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void render() {
+        groupStrategy.beforeGroups();
+        for (SortedIntList.Node<Array<Decal>> group : groupList) {
+          groupStrategy.beforeGroup(group.index, Nullability.castToNonnull(group.value));
+          ShaderProgram shader = groupStrategy.getGroupShader(group.index);
+          render(shader, Nullability.castToNonnull(group.value));
+          groupStrategy.afterGroup(group.index);
+        }
+        groupStrategy.afterGroups();
+  }
+  ```
+    ]]>
+  </code>
+</response>

@@ -1,0 +1,18 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public HttpRequestBuilder followRedirects(boolean followRedirects) {
+      validate();
+      HttpRequest localHttpRequest = httpRequest;
+      if (localHttpRequest == null) {
+        throw new IllegalStateException(
+            "A new request has not been started yet. Call HttpRequestBuilder.newRequest() first.");
+      }
+      localHttpRequest.setFollowRedirects(followRedirects);
+      return this;
+  }
+  ```
+    ]]>
+  </code>
+</response>

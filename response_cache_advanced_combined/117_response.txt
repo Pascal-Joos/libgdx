@@ -1,0 +1,16 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public void end() {
+      if (Gdx.gl == null) return;
+      if (depthFunc != 0) Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+      if (!depthMask) Gdx.gl.glDepthMask(true);
+      if (blending) Gdx.gl.glDisable(GL20.GL_BLEND);
+      if (cullFace > 0) Gdx.gl.glDisable(GL20.GL_CULL_FACE);
+      textureBinder.end();
+  }
+  ```
+    ]]>
+  </code>
+</response>

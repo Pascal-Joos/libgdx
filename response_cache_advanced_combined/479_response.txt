@@ -1,0 +1,39 @@
+<response>
+  <reason><![CDATA[
+At this call site inside `Mesh.scale`:
+
+```java
+final VertexAttribute posAttr = getVertexAttribute(Usage.Position);
+if (posAttr == null)
+  return;
+```
+
+the method `getVertexAttribute(usage)` is invoked with `usage = Usage.Position`.
+
+From the implementation:
+
+```java
+public VertexAttribute getVertexAttribute(int usage) {
+  VertexAttributes attributes = vertices.getAttributes();
+  int len = attributes.size();
+  for (int i = 0; i < len; i++)
+    if (attributes.get(i).usage == usage) return attributes.get(i);
+
+  return null;
+}
+```
+
+it will return `null` exactly when none of the vertex attributes in `vertices.getAttributes()` has `usage == Usage.Position`. There is no additional guard or precondition in `scale` ensuring that a position attribute must exist; unlike other methods (e.g. `transform`, `calculateRadiusSquared`, `MeshSpawnShapeValue.setMesh`) that explicitly throw if `getVertexAttribute(Usage.Position)` is `null`, `scale` explicitly anticipates the `null` case and exits early:
+
+```java
+if (posAttr == null)
+  return;
+```
+
+This shows that:
+- The library authors consider it valid for a `Mesh` to have no `Usage.Position` attribute.
+- In that situation, this specific call to `getVertexAttribute(Usage.Position)` will indeed yield `null`, and the method `scale` will simply return.
+
+Therefore, at this call site, `getVertexAttribute(Usage.Position)` can evaluate to `null` depending on the mesh’s vertex attributes.]]></reason>
+  <value>YES</value>
+</response>

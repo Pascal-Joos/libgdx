@@ -1,0 +1,19 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+public boolean exists() {
+    switch (type) {
+      case Internal:
+        if (file().exists()) return true;
+        // Fall through.
+      case Classpath:
+        File f = file();
+        return f != null && FileHandle.class.getResource("/" + f.getPath().replace('\\', '/')) != null;
+    }
+    return file().exists();
+}
+  ```
+    ]]>
+  </code>
+</response>

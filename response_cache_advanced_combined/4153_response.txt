@@ -1,0 +1,51 @@
+```xml
+<response>
+    <reason><![CDATA[
+From the code:
+
+  @Override
+  public void prepare() {
+    if (isPrepared) throw new GdxRuntimeException("Already prepared");
+    if (file == null && data == null)
+      throw new GdxRuntimeException("Can only load once from ETC1Data");
+    if (file != null) {
+      data = new ETC1Data(file);
+    }
+    ETC1Data nonnullData = Nullability.castToNonnull(data);
+    width = nonnullData.width;
+    height = nonnullData.height;
+    isPrepared = true;
+  }
+
+We examine all possible states at the start of prepare():
+
+1. If both file and data are null:
+   - The method throws: "Can only load once from ETC1Data".
+   - Execution stops; the later line width = data.width; is never reached.
+   - So this path does not allow data to be null at the assignment site.
+
+2. If file is non-null:
+   - The condition (file != null) is true, so data is set to new ETC1Data(file).
+   - This overwrites any previous value of data.
+   - Unless the constructor ETC1Data(file) itself can legally return or assign a null reference (which it cannot, because "new" in Java always produces a non-null reference or throws an exception), data is guaranteed non-null on this path.
+   - Therefore, at width = nonnullData.width; data is non-null.
+
+3. If file is null but data is non-null:
+   - The guard if (file == null && data == null) does not throw (because data != null).
+   - The if (file != null) { ... } block is skipped (file is null).
+   - data retains its existing non-null value.
+   - Thus at the point of Nullability.castToNonnull(data), data is still non-null.
+
+The Nullability.castToNonnull(data) call is a hint/annotation helper, not changing the runtime value. Regardless of its implementation, the prior control-flow and Java semantics ensure:
+
+- Either we have already thrown before reaching the assignment if data could be null (file == null && data == null).
+- Or data has been definitely assigned a non-null instance via "new ETC1Data(file)".
+- Or data was already non-null when entering the method and is left unchanged.
+
+Under standard Java semantics, "new ETC1Data(file)" cannot yield a null reference; it either returns a valid object or throws an exception. Therefore, along all non-exceptional paths that reach the line width = nonnullData.width;, data is non-null.
+
+Hence, at the expression corresponding to width = data.width;, data cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

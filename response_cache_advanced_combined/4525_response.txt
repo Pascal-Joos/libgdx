@@ -1,0 +1,13 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  public float getPadRight() {
+      if (actor == null) return 0;
+      Value value = padRight == null ? Nullability.castToNonnull(defaults()).getPadRightValue() : padRight;
+      return value == null ? 0 : Nullability.castToNonnull(value).get(actor);
+  }
+  ```
+    ]]>
+  </code>
+</response>

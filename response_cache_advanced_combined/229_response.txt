@@ -1,0 +1,23 @@
+```xml
+<response>
+    <reason><![CDATA[
+In this method, the only relevant code path is:
+
+    bind();
+    if (Gdx.gl30 == null)
+        throw new GdxRuntimeException(
+            "TextureArray requires a device running with GLES 3.0 compatibilty");
+    Gdx.gl30.glTexImage3D(...);
+
+Immediately before the call to `Gdx.gl30.glTexImage3D(...)`, there is an explicit null check:
+
+    if (Gdx.gl30 == null)
+        throw new GdxRuntimeException(...);
+
+If `Gdx.gl30` were null at that point, the method would throw a `GdxRuntimeException` and execution would not proceed to the `glTexImage3D` line. Therefore, along every execution path that reaches the `Gdx.gl30.glTexImage3D(...)` call, `Gdx.gl30` is guaranteed to be non-null (barring any concurrent mutation of `Gdx.gl30` between the check and the call, which typical libGDX usage and design do not involve).
+
+Thus, under normal assumptions (single-threaded or effectively immutable `Gdx.gl30` during this call), the expression `Gdx.gl30` at the `glTexImage3D` line cannot be null.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

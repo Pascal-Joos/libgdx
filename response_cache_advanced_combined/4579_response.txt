@@ -1,0 +1,34 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  @Initializer
+  void set( Cell cell) {
+    if (cell == null) return;
+    minWidth = Nullability.castToNonnull(cell).minWidth;
+    minHeight = Nullability.castToNonnull(cell).minHeight;
+    prefWidth = Nullability.castToNonnull(cell).prefWidth;
+    prefHeight = Nullability.castToNonnull(cell).prefHeight;
+    maxWidth = Nullability.castToNonnull(cell).maxWidth;
+    maxHeight = Nullability.castToNonnull(cell).maxHeight;
+    spaceTop = Nullability.castToNonnull(cell).spaceTop;
+    spaceLeft = Nullability.castToNonnull(cell).spaceLeft;
+    spaceBottom = Nullability.castToNonnull(cell).spaceBottom;
+    spaceRight = Nullability.castToNonnull(cell).spaceRight;
+    padTop = Nullability.castToNonnull(cell).padTop;
+    padLeft = Nullability.castToNonnull(cell).padLeft;
+    padBottom = Nullability.castToNonnull(cell).padBottom;
+    padRight = Nullability.castToNonnull(cell).padRight;
+    fillX = Nullability.castToNonnull(cell).fillX;
+    fillY = Nullability.castToNonnull(cell).fillY;
+    align = Nullability.castToNonnull(cell).align;
+    expandX = Nullability.castToNonnull(cell).expandX;
+    expandY = Nullability.castToNonnull(cell).expandY;
+    colspan = Nullability.castToNonnull(cell).colspan;
+    uniformX = Nullability.castToNonnull(cell).uniformX;
+    uniformY = Nullability.castToNonnull(cell).uniformY;
+  }
+  ```
+    ]]>
+  </code>
+</response>

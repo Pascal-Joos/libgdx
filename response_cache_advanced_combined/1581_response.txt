@@ -1,0 +1,26 @@
+<response>
+  <success>true</success>
+  <code><![CDATA[
+  ```java
+  protected void query(Frustum frustum, ObjectSet<T> result) {
+          if (!Intersector.intersectFrustumBounds(frustum, bounds)) {
+            return;
+          }
+          if (!leaf) {
+            if (children == null) return;
+            for (Octree.OctreeNode node : Nullability.castToNonnull(children)) {
+              node.query(frustum, result);
+            }
+          } else {
+            for (T geometry : geometries) {
+              // Filter geometries using collider
+              if (collider.intersects(frustum, geometry)) {
+                result.add(geometry);
+              }
+            }
+          }
+  }
+  ```
+    ]]>
+  </code>
+</response>

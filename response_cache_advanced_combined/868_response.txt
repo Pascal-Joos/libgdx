@@ -1,0 +1,35 @@
+<response>
+  <reason><![CDATA[
+At this call site, `node` refers to the `Node` obtained from:
+
+```java
+Node copy, node = model.getNode(nodeId, recursive);
+...
+} else if (parentTransform && copy.hasParent())
+  this.transform.mul(node.getParent().globalTransform);
+```
+
+The `getParent()` method simply returns the field `parent`:
+
+```java
+public Node getParent() {
+  return parent;
+}
+```
+
+In the constructor, `node` is the original node from the model, and `copy` is a cloned node (`copy = node.copy()`) that is then attached into the `ModelInstance`'s node hierarchy. The `else if` guard uses `copy.hasParent()`:
+
+```java
+} else if (parentTransform && copy.hasParent())
+  this.transform.mul(node.getParent().globalTransform);
+```
+
+Key point: The condition only checks `copy.hasParent()`; it does **not** check that `node` itself has a parent. The copied node can have a parent in the new instance hierarchy even if the original `node` from the `Model` had no parent (i.e., was a root node with `parent == null`). In that situation:
+
+- `copy.hasParent()` can be `true` (because `copy` has been attached under some parent in the `ModelInstance`),
+- but `node.parent` can still be `null`, since the original model node's parent was never set.
+
+The code does not assign a parent to `node` anywhere in the shown snippet, nor is there any guarantee in the provided code that `model.getNode(nodeId, recursive)` only returns nodes with non-null parents. Therefore, at this specific call site, `node.getParent()` can evaluate to `null`, making the method capable of returning `null` here.
+  ]]></reason>
+  <value>YES</value>
+</response>

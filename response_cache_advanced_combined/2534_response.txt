@@ -1,0 +1,18 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within the shown method, `style` is explicitly checked for null at the start:
+
+    if (style == null || style.handle == null) return;
+
+This is the only early-exit condition before the line:
+
+    float availableWidth = getWidth() - style.handle.getMinWidth();
+
+Because the method returns immediately if `style` is null, any subsequent execution past that `if` guarantees that `style` is non-null. Therefore, along all code paths that reach the `availableWidth` line, `style` cannot be null.
+
+Note: This reasoning assumes no concurrent modification of `style` between the null-check and the use (i.e., no other thread or callback can set `style` to null in between). Under standard single-threaded or properly synchronized usage, the expression `style` cannot be null at that line.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```

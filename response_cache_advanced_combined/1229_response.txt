@@ -1,0 +1,31 @@
+```xml
+<response>
+    <reason><![CDATA[
+Within this method, every use of rotationChannel (including in the expression
+`startIndex * rotationChannel.strideSize`) is syntactically guarded by a
+null check:
+
+- First branch:
+  `if (rotationChannel != null && has2dAngularVelocity) { ... }`
+
+- Else-if branch:
+  `} else if (rotationChannel != null && has3dAngularVelocity) { ... }`
+
+In both branches, the `for` loop header that contains
+`startIndex * Nullability.castToNonnull(rotationChannel).strideSize`
+is directly inside a block that is only entered if `rotationChannel != null`.
+
+The expression is not evaluated outside those guarded blocks. There are no
+reassignments of rotationChannel inside the blocks that could set it to null
+before the loop header is executed. Thus, along all code paths where the
+loop header is evaluated, the condition `rotationChannel != null` has
+already been checked and holds.
+
+Given only this method’s body, `rotationChannel` cannot be null at the
+point where `rotationChannel.strideSize` (or its equivalent via
+`Nullability.castToNonnull(rotationChannel).strideSize`) is used in the
+`for`-loop initializer.
+    ]]></reason>
+    <value>NO</value>
+</response>
+```
